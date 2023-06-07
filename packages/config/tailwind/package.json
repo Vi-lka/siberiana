@@ -1,0 +1,13 @@
+{
+  "name": "@siberiana/tailwind-config",
+  "private": true,
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

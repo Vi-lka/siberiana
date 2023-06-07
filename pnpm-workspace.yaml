@@ -1,0 +1,5 @@
+packages:
+  - "packages/config/*"
+  - "packages/*"
+  - "apps/*"
+  - "docs"

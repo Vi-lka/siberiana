@@ -1,0 +1,53 @@
+name: Сообщение об ошибке
+description: Сообщите об ошибке
+title: "[Ошибка]: "
+labels: ["unconfirmed_bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что нашли время заполнить отчет об ошибке!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Что случилось?
+      description: Расскажите нам, что случилось!
+      placeholder:
+        "Пожалуйста, дайте четкое и краткое описание того, что произошло."
+    validations:
+      required: true
+  - type: textarea
+    id: what-did-you-expect-to-happen
+    attributes:
+      label: Какой результат Вы ожидали?
+      description: Пожалуйста, опишите, что вы ожидали, что произойдет.
+      placeholder:
+        "Пожалуйста, предоставьте четкое и краткое описание того, что вы
+        ожидали."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Этапы воспроизведения
+      description: Как мы можем воспроизвести проблему?
+      placeholder:
+        "Предоставьте пошаговую инструкцию, как воспроизвести проблему."
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description:
+        Скопируйте и вставьте соответствующий log output. Это будет
+        автоматически преобразовано в код, поэтому обратные кавычки не нужны.
+      render: bash
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Кодекс поведения
+      description:
+        Отправляя этот вопрос, вы соглашаетесь следовать нашим [Кодекс
+        поведения](https://github.com/dkrasnovdev/siberiana/blob/main/.github/ISSUE_TEMPLATE/code-of-conduct.md)
+      options:
+        - label: Я согласен соблюдать Кодекс поведения этого проекта
+          required: true
