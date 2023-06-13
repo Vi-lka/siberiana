@@ -7,7 +7,7 @@ const nextConfig = {
     outputFileTracingRoot: path.join(__dirname, "../../"),
   },
   reactStrictMode: true,
-  transpilePackages: ["@siberiana/tailwind-config"],
+  transpilePackages: ["@siberiana/tailwind-config", "@siberiana/ui"],
   eslint: { ignoreDuringBuilds: true },
 };
 
