@@ -14,5 +14,6 @@
 Данный репозиторий содержит приложения, пакеты, документацию проекта «Сибириана»
 
 - [Next.js Client App Directory](https://github.com/dkrasnovdev/siberiana/tree/main/apps/client)
+- [shadcn/ui Components](https://ui.shadcn.com/)
 
 [Сообщить о проблеме](https://github.com/dkrasnovdev/siberiana/issues/new)
