@@ -41,16 +41,19 @@ jobs:
       - name: Check packages for common errors
         run: pnpm turbo --filter "./packages/*" build lint test typecheck
 
+      - name: Check apps for common errors
+        run: pnpm turbo --filter "./apps/*" lint test typecheck
+
       - name: Create Release
         id: changeset
         uses: changesets/action@v1.4.1
         with:
-          commit: "chore(release): 📦 version packages"
-          title: "chore(release): 📦  version packages"
+          commit: "chore(release): 📦 version"
+          title: "chore(release): 📦 version"
           publish: npx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          
       # Changeset имеет некоторые проблемы с pnpm, поэтому мы синхронизируем его вручную
       - name: Sync lockfile if necessary
         if: steps.changeset.outputs.hasChangesets == 'true'
@@ -58,5 +61,15 @@ jobs:
           git checkout changeset-release/main
           pnpm install --no-frozen-lockfile
           git add .
-          git commit -m "chore(release): 📦 sync lockfile"
+          git diff --exit-code || git commit -m "chore(release): 📦 sync lockfile"
           git push origin changeset-release/main
+
+      - name: Merge Changeset -> main
+        if: steps.changeset.outputs.hasChangesets == 'true'
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: changeset-release/main
+          target_branch: main
+          message: Merge changeset-release/main into main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
