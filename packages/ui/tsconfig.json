@@ -1,0 +1,6 @@
+{
+  "extends": "@siberiana/tsconfig/nextjs.json",
+  // Error: Module not found if set alias
+  "include": [".", "**/*.ts", "**/*.tsx"],
+  "exclude": ["dist", "build", "node_modules"]
+}
