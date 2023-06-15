@@ -7,6 +7,7 @@
     "clean": "turbo run clean && git clean -xdf node_modules",
     "dev": "turbo run dev",
     "dev:client": "turbo run dev --filter=@siberiana/client",
+    "dev:strapi": "turbo run dev --filter=@siberiana/strapi",
     "dev:docs": "turbo run dev --filter=docs",
     "lint": "turbo run lint",
     "format": "prettier --write . --ignore-path .gitignore",
