@@ -1,0 +1,21 @@
+version: '3.9'
+
+networks:
+  sibiriana-net:
+    external: true
+
+services:
+  client:
+    container_name: client
+    build:
+      context: .
+      dockerfile: ./apps/client/Dockerfile
+    restart: always
+    env_file: ./apps/client/.env
+    ports:
+      # 3000 or 5555 ???
+      - 3000:3000
+    networks:
+      - sibiriana-net
+
+#  Add more containers below (nginx, postgres, etc.)

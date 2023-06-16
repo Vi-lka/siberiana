@@ -1,7 +1,6 @@
 {
   "name": "siberiana-turbo",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean && git clean -xdf node_modules",
