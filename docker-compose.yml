@@ -1,21 +1,20 @@
-version: '3.9'
+version: "3.9"
 
 networks:
-  sibiriana-net:
+  siberiana-net:
     external: true
 
 services:
   client:
+    image: client:latest
     container_name: client
-    build:
-      context: .
-      dockerfile: ./apps/client/Dockerfile
     restart: always
-    env_file: ./apps/client/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_GO_API_URL=${NEXT_PUBLIC_GO_API_URL}
+      - NEXT_PUBLIC_GO_API_KEY=${NEXT_PUBLIC_GO_API_KEY}
+      - NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
     ports:
-      # 3000 or 5555 ???
       - 3000:3000
     networks:
-      - sibiriana-net
-
-#  Add more containers below (nginx, postgres, etc.)
+      - siberiana-net
