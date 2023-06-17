@@ -6,7 +6,9 @@ networks:
 
 services:
   client:
-    image: client:latest
+    build:
+      context: .
+      dockerfile: ./apps/client/Dockerfile
     container_name: client
     restart: always
     environment:
