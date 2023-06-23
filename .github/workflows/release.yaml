@@ -53,7 +53,7 @@ jobs:
           publish: npx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       # Changeset имеет некоторые проблемы с pnpm, поэтому мы синхронизируем его вручную
       - name: Sync lockfile if necessary
         if: steps.changeset.outputs.hasChangesets == 'true'
