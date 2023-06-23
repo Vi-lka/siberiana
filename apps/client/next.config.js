@@ -1,4 +1,5 @@
 const path = require("path");
+require("dotenv").config({ path: "../../.env" });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,6 +10,18 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@siberiana/tailwind-config", "@siberiana/ui"],
   eslint: { ignoreDuringBuilds: true },
+  env: {
+    // Reference a variable that was defined in the .env file and make it available at Build Time
+    NEXT_PUBLIC_STRAPI_API_URL: process.env.NEXT_PUBLIC_STRAPI_API_URL,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/uploads/:path*",
+        destination: `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/uploads/:path*`
+      }
+    ]
+  },
 };
 
 module.exports = nextConfig;
