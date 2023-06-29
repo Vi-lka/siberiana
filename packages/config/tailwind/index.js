@@ -14,13 +14,14 @@ module.exports = {
     extend: {
       colors: {
         //
-        // siberiana
+        // siberiana client
         //
         graphite: "#58595B",
         beaver: "#9B8579",
         beaverLight: "#F0EDEB",
         gray4: "#BDBDBD",
         gray5: "#E0E0E0",
+        dark: "#0e0e0e",
         //
         // shadcn/ui
         //
@@ -65,6 +66,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        Inter: ["var(--Inter)"],
+        EncodeSans: ["var(--EncodeSans)"],
       },
       keyframes: {
         "accordion-down": {
