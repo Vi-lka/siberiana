@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --darkBlue: #212131;
     --dark: #0e0e0e;
     --graphite: #58595b;
     --beaver: #9b8579;
@@ -94,4 +95,45 @@ html.dark .logo-svg path {
 .logo-svg path {
   transition: 0.15s ease-in-out;
   color: hsl(240, 19%, 22%);
+}
+
+.home-slider {
+  overflow: hidden;
+  position: relative;
+}
+html.dark .home-slider::before,
+html.dark .home-slider::after {
+  background: var(--darkBlue);
+}
+.home-slider::before,
+.home-slider::after {
+  position: absolute;
+  content: "";
+  width: 140vw;
+  height: 30vh;
+  border-radius: 45%;
+  background: #fff;
+  z-index: 1;
+}
+.home-slider::before {
+  top: 0;
+  transform: translate(-20vw, -25vh);
+}
+.home-slider::after {
+  bottom: 0;
+  transform: translate(-20vw, 25vh);
+}
+
+@media (max-width: 640px) {
+  .home-slider::before,
+  .home-slider::after {
+    width: 130vw;
+    height: 12vh;
+  }
+  .home-slider::before {
+    transform: translate(-15vw, -9vh);
+  }
+  .home-slider::after {
+    transform: translate(-15vw, 9vh);
+  }
 }

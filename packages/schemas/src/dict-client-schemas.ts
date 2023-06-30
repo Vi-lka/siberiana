@@ -1,17 +1,5 @@
 import { z } from "zod";
 
-//.........................IMAGE.........................//
-export const ImageSchema = z.object({
-  data: z
-    .object({
-      attributes: z.object({
-        url: z.string().trim(),
-      }),
-    })
-    .nullable(),
-});
-export type ImageType = z.infer<typeof ImageSchema>;
-
 //.........................MENU.........................//
 //......MENU SINGLE LINK.......//
 export const SingleLinkSchema = z.object({
@@ -50,20 +38,10 @@ export const MenuZoneSchema = z
   .optional();
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
-//.........................PROJECT.........................//
-export const ProjectSchema = z.object({
-  attributes: z.object({
-    Name: z.string({
-      required_error: "Name is required",
-      invalid_type_error: "Name must be a string",
-    }),
-    Content: z.string().nullable(),
-    Description: z.string().nullable(),
-    Image: ImageSchema,
-  }),
+//.........................DICTIONARY.........................//
+export const DictionarySchema = z.object({
+  menu: MenuZoneSchema,
+  loginButton: z.string().max(10),
+  homeTitle: z.string().max(100),
 });
-export type ProjectType = z.infer<typeof ProjectSchema>;
-
-//.........................PROJECTS.........................//
-export const ProjectsSchema = ProjectSchema.array();
-export type ProjectsType = z.infer<typeof ProjectsSchema>;
+export type DictionaryType = z.infer<typeof DictionarySchema>;

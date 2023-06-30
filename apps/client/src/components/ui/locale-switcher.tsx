@@ -12,12 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@siberiana/ui";
 
+import { localesCodes } from "~/lib/static/locales";
 import { useLocale } from "~/lib/utils/useLocale";
 
 export default function LocaleSwitcher() {
   const lang = useLocale();
-
-  const locales = ["ru", "en"];
 
   const pathName = usePathname();
   const redirectedPathName = (locale: string) => {
@@ -35,7 +34,7 @@ export default function LocaleSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-fit min-w-[50px]">
-        {locales.map((locale, index) => {
+        {localesCodes.map((locale, index) => {
           return (
             <Link
               key={index}

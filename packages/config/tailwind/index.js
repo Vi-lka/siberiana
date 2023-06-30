@@ -22,6 +22,7 @@ module.exports = {
         gray4: "#BDBDBD",
         gray5: "#E0E0E0",
         dark: "#0e0e0e",
+        darkBlue: "#212131",
         //
         // shadcn/ui
         //
@@ -67,7 +68,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         Inter: ["var(--Inter)"],
-        EncodeSans: ["var(--EncodeSans)"],
+        OpenSans: ["var(--OpenSans)"],
       },
       keyframes: {
         "accordion-down": {

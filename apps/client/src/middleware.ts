@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 
+import { localesCodes } from "./lib/static/locales";
+
 const defaultLocale = "ru";
 
 function getLocale(request: NextRequest) {
@@ -12,8 +14,6 @@ function getLocale(request: NextRequest) {
 
   // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages();
-
-  const localesCodes = ["ru", "en"];
 
   return matchLocale(languages, localesCodes, defaultLocale);
 }
@@ -31,8 +31,6 @@ export function middleware(request: NextRequest) {
     ].includes(pathname)
   )
     return;
-
-  const localesCodes = ["ru", "en"];
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = localesCodes.every(

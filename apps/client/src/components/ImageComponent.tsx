@@ -2,19 +2,19 @@ import React from "react";
 import Image from "next/image";
 
 export default function ImageComponent({
-  className,
   src,
+  alt,
+  className,
   width,
   height,
   fill,
-  alt,
 }: {
-  className?: string;
   src: string;
+  alt: string;
+  className?: string;
   width?: number;
   height?: number;
   fill?: boolean;
-  alt: string;
 }) {
   const imageLoader = ({
     src,

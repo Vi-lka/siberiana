@@ -5,7 +5,7 @@ export default function LogoSvg({
 }) {
   return (
     <svg
-      className="logo-svg h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
+      className="logo-svg h-[2.5rem] w-[7rem] md:h-[3.3rem] md:w-[9rem]"
       width="160"
       height="61"
       viewBox="0 0 160 61"

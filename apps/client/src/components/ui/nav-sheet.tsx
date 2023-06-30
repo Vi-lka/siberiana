@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 
-import type { GroupLinkType, SingleLinkType } from "@siberiana/schemas";
+import type {
+  GroupLinkType,
+  MenuZoneType,
+  SingleLinkType,
+} from "@siberiana/schemas";
 import {
   GroupLinkSchema,
   MenuZoneSchema,
@@ -22,17 +26,13 @@ import {
   SheetTrigger,
 } from "@siberiana/ui";
 
-import type { menusType } from "~/lib/static/menu";
-import { menus } from "~/lib/static/menu";
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
 import Icons from "./icons";
 import { ListItem } from "./nav-list-item";
 
-export default function NavSheet() {
+export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();
-
-  const menuData = menus[lang as keyof menusType];
 
   const data = MenuZoneSchema.parse(menuData);
 

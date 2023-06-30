@@ -4,7 +4,11 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import type { GroupLinkType, SingleLinkType } from "@siberiana/schemas";
+import type {
+  GroupLinkType,
+  MenuZoneType,
+  SingleLinkType,
+} from "@siberiana/schemas";
 import {
   GroupLinkSchema,
   MenuZoneSchema,
@@ -20,16 +24,12 @@ import {
   navigationMenuTriggerStyle,
 } from "@siberiana/ui";
 
-import type { menusType } from "~/lib/static/menu";
-import { menus } from "~/lib/static/menu";
 import { useLocale } from "~/lib/utils/useLocale";
 import Icons from "./icons";
 import { ListItem } from "./nav-list-item";
 
-export default function NavMenu() {
+export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();
-
-  const menuData = menus[lang as keyof menusType];
 
   const data = MenuZoneSchema.parse(menuData);
 

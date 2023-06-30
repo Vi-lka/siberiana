@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Encode_Sans, Inter } from "next/font/google";
+import { Inter, Open_Sans } from "next/font/google";
 
 import { Toaster } from "@siberiana/ui";
 
@@ -13,9 +13,9 @@ const inter = Inter({
   variable: "--Inter",
 });
 
-const encodeSans = Encode_Sans({
+const openSans = Open_Sans({
   subsets: ["latin"],
-  variable: "--EncodeSans",
+  variable: "--OpenSans",
 });
 
 export const metadata: Metadata = {
@@ -39,12 +39,12 @@ export default function RootLayout({
     <html
       lang={params.locale}
       suppressHydrationWarning
-      className={`${inter.variable} ${encodeSans.variable}`}
+      className={`${inter.variable} ${openSans.variable}`}
     >
       <body>
         <ThemeProvider attribute="class" enableSystem={true}>
           <Header lang={params.locale} />
-          <main>{children}</main>
+          <main className="pt-20">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>

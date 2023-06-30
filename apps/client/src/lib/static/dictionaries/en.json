@@ -1,0 +1,81 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "name": "Collections",
+      "url": "collections",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "image": "Library"
+    },
+    {
+      "id": 2,
+      "name": "Platform",
+      "list": [
+        {
+          "id": 1,
+          "name": "About",
+          "url": "about",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "Users"
+        },
+        {
+          "id": 2,
+          "name": "Organizations",
+          "url": "organizations",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "Landmark"
+        },
+        {
+          "id": 3,
+          "name": "Licenses",
+          "url": "licenses",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "FileBadge2"
+        },
+        {
+          "id": 4,
+          "name": "Help the project",
+          "url": "help",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "HelpingHand"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Resources",
+      "list": [
+        {
+          "id": 1,
+          "name": "Projects",
+          "url": "projects",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "Boxes"
+        },
+        {
+          "id": 2,
+          "name": "Analytics",
+          "url": "analytics",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "BarChart4"
+        },
+        {
+          "id": 3,
+          "name": "Blog",
+          "url": "blog",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "ScrollText"
+        },
+        {
+          "id": 4,
+          "name": "Services",
+          "url": "services",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "image": "CircuitBoard"
+        }
+      ]
+    }
+  ],
+  "loginButton": "Log in",
+  "homeTitle": "Explore the historical, cultural and natural heritage of Yenisei Siberia"
+}
