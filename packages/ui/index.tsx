@@ -20,3 +20,4 @@ export * from "./src/tooltip";
 export * from "./src/aspect-ratio";
 export * from "./src/dropdown-menu";
 export * from "./src/sheet";
+export * from "./src/form";

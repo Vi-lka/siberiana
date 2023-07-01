@@ -12,12 +12,12 @@ import {
 } from "@siberiana/ui";
 
 import { getDictionary } from "~/lib/utils/getDictionary";
-import LogoSvg from "./LogoSvg";
-import { DialogComponent as AuthDialog } from "./ui/dialog";
-import LocaleSwitcher from "./ui/locale-switcher";
-import NavMenu from "./ui/nav-menu";
-import NavSheet from "./ui/nav-sheet";
-import { ModeToggle } from "./ui/theme-toggle";
+import LogoSvg from "../LogoSvg";
+import { DialogComponent as AuthDialog } from "../ui/dialog";
+import { ModeToggle } from "../ui/theme-toggle";
+import LocaleSwitcher from "./locale-switcher";
+import NavMenu from "./nav-menu";
+import NavSheet from "./nav-sheet";
 
 export default async function Header({ lang }: { lang: string }) {
   const dict = await getDictionary(lang);
@@ -59,7 +59,7 @@ export default async function Header({ lang }: { lang: string }) {
                   </Label>
                   <Input
                     id="name"
-                    value="Pedro Duarte"
+                    placeholder="Pedro Duarte"
                     className="col-span-3"
                   />
                 </div>
@@ -69,7 +69,7 @@ export default async function Header({ lang }: { lang: string }) {
                   </Label>
                   <Input
                     id="username"
-                    value="@peduarte"
+                    placeholder="@peduarte"
                     className="col-span-3"
                   />
                 </div>

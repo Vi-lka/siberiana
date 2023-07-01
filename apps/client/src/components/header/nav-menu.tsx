@@ -25,7 +25,7 @@ import {
 } from "@siberiana/ui";
 
 import { useLocale } from "~/lib/utils/useLocale";
-import Icons from "./icons";
+import Icons from "../ui/icons";
 import { ListItem } from "./nav-list-item";
 
 export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {

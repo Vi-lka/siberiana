@@ -77,5 +77,10 @@
     }
   ],
   "loginButton": "Log in",
-  "homeTitle": "Explore the historical, cultural and natural heritage of Yenisei Siberia"
+  "homeTitle": "Explore the historical, cultural and natural heritage of Yenisei Siberia",
+  "search": {
+    "error": "Query must be at least 2 characters.",
+    "button": "Search",
+    "placeholder": "For example: Bronze Age"
+  }
 }

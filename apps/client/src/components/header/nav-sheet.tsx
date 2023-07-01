@@ -28,7 +28,7 @@ import {
 
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import Icons from "./icons";
+import Icons from "../ui/icons";
 import { ListItem } from "./nav-list-item";
 
 export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {

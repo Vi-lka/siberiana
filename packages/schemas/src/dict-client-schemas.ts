@@ -38,10 +38,19 @@ export const MenuZoneSchema = z
   .optional();
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
+//......SEARCH.......//
+export const SearchSchema = z.object({
+  error: z.string(),
+  button: z.string(),
+  placeholder: z.string(),
+});
+export type SearchType = z.infer<typeof SearchSchema>;
+
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
   menu: MenuZoneSchema,
   loginButton: z.string().max(10),
   homeTitle: z.string().max(100),
+  search: SearchSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

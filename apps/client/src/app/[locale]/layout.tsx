@@ -3,7 +3,7 @@ import { Inter, Open_Sans } from "next/font/google";
 
 import { Toaster } from "@siberiana/ui";
 
-import Header from "~/components/Header";
+import Header from "~/components/header/Header";
 import { ThemeProvider } from "~/components/ui/theme-provider";
 
 import "../globals.css";

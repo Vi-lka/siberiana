@@ -1,4 +1,6 @@
-import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
+import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
+
+import ButtonComponent from "./button-component";
 
 // I may be will change this without a child, and there will be a component only for authorization
 export function DialogComponent({
@@ -11,9 +13,9 @@ export function DialogComponent({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-beaverLight text-graphite hover:bg-beaver hover:text-beaverLight rounded-3xl px-10 py-6 uppercase">
+        <ButtonComponent className="rounded-3xl px-10 py-6 uppercase">
           {name}
-        </Button>
+        </ButtonComponent>
       </DialogTrigger>
       <DialogContent className="rounded-b-sm sm:max-w-[425px] sm:rounded-sm">
         {children}
