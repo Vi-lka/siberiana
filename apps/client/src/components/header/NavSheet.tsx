@@ -28,8 +28,8 @@ import {
 
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import Icons from "../ui/icons";
-import { ListItem } from "./nav-list-item";
+import Icons from "../ui/Icons";
+import { NavListItem } from "./NavListItem";
 
 export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();
@@ -90,14 +90,14 @@ function SheetMenuItem({
         </div>
 
         <ul className="flex flex-col justify-center">
-          <ListItem
+          <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
             href={`/${lang}/${menuItemResult.url}`}
             className="py-1"
           >
             {menuItemResult.description}
-          </ListItem>
+          </NavListItem>
         </ul>
       </div>
     );
@@ -123,13 +123,13 @@ function SheetMenuItem({
 
           <ul className="flex flex-col justify-around gap-1">
             {menuItemResult.list.map((item) => (
-              <ListItem
+              <NavListItem
                 key={item.id}
                 title={item.name}
                 href={`/${lang}/${item.url}`}
               >
                 {item.description}
-              </ListItem>
+              </NavListItem>
             ))}
           </ul>
         </div>

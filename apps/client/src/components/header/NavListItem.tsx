@@ -8,7 +8,7 @@ interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
   title: string;
 }
 
-export const ListItem = React.forwardRef<React.ElementRef<"a">, ListItemProps>(
+export const NavListItem = React.forwardRef<React.ElementRef<"a">, ListItemProps>(
   ({ className, title, children, ...props }, ref) => {
     return (
       <li>
@@ -33,4 +33,4 @@ export const ListItem = React.forwardRef<React.ElementRef<"a">, ListItemProps>(
     );
   },
 );
-ListItem.displayName = "ListItem";
+NavListItem.displayName = "NavListItem";

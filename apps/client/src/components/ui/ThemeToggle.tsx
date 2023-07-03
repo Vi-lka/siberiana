@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 
 import { Button } from "@siberiana/ui";
 
-export function ModeToggle() {
+export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
 
   function handleChange() {

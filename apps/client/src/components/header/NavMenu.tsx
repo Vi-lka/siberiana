@@ -25,8 +25,8 @@ import {
 } from "@siberiana/ui";
 
 import { useLocale } from "~/lib/utils/useLocale";
-import Icons from "../ui/icons";
-import { ListItem } from "./nav-list-item";
+import Icons from "../ui/Icons";
+import { NavListItem } from "./NavListItem";
 
 export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();
@@ -91,13 +91,13 @@ function NavMenuItem({
 
             <ul className="flex flex-col justify-between gap-3">
               {menuItemResult.list.map((item) => (
-                <ListItem
+                <NavListItem
                   key={item.id}
                   title={item.name}
                   href={`/${lang}/${item.url}`}
                 >
                   {item.description}
-                </ListItem>
+                </NavListItem>
               ))}
             </ul>
           </div>

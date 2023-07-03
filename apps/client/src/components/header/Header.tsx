@@ -13,11 +13,11 @@ import {
 
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
-import { DialogComponent as AuthDialog } from "../ui/dialog";
-import { ModeToggle } from "../ui/theme-toggle";
-import LocaleSwitcher from "./locale-switcher";
-import NavMenu from "./nav-menu";
-import NavSheet from "./nav-sheet";
+import { DialogComponent as AuthDialog } from "../ui/DialogComponent";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import LocaleSwitcher from "./LocaleSwitcher";
+import NavMenu from "./NavMenu";
+import NavSheet from "./NavSheet";
 
 export default async function Header({ lang }: { lang: string }) {
   const dict = await getDictionary(lang);
@@ -39,7 +39,7 @@ export default async function Header({ lang }: { lang: string }) {
         </div>
 
         <div className="flex w-1/5 items-center justify-end gap-2 xl:gap-3">
-          <ModeToggle />
+          <ThemeToggle />
           <LocaleSwitcher />
 
           {/* Desktop */}

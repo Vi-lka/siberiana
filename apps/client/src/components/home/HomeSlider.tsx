@@ -8,9 +8,9 @@ import { useKeenSlider } from "keen-slider/react";
 
 import type { SliderType } from "@siberiana/schemas";
 
-import ImageComponent from "../ui/image-component";
+import ImageComponent from "../ui/ImageComponent";
 
-export default function HomeImgSlider({ data }: { data: SliderType }) {
+export default function HomeSlider({ data }: { data: SliderType }) {
   const [created, setCreated] = React.useState<boolean>();
 
   const [sliderRef] = useKeenSlider({

@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type { DictionaryType } from "@siberiana/schemas";
 import {
   Form,
   FormControl,
@@ -15,10 +14,11 @@ import {
   FormMessage,
 } from "@siberiana/ui";
 
-import ButtonComponent from "../ui/button-component";
-import { HomeInputSearch } from "./home-input-search";
+import ButtonComponent from "../ui/ButtonComponent";
+import { HomeInputSearch } from "./HomeInputSearch";
+import type { SearchType } from "@siberiana/schemas";
 
-export default function HomeSearch({ dict }: { dict: DictionaryType }) {
+export default function HomeSearch({ text }: { text: SearchType }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
 
   const router = useRouter();
@@ -27,10 +27,10 @@ export default function HomeSearch({ dict }: { dict: DictionaryType }) {
   const SearchFormSchema = z.object({
     query: z
       .string({
-        required_error: `${dict.search.error}`,
+        required_error: `${text.error}`,
       })
       .min(2, {
-        message: `${dict.search.error}`,
+        message: `${text.error}`,
       }),
   });
 
@@ -78,20 +78,20 @@ export default function HomeSearch({ dict }: { dict: DictionaryType }) {
             <FormItem className="text-center">
               <FormControl>
                 <HomeInputSearch
-                  className="w-[85vw] rounded-3xl border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
-                  placeholder={dict.search.placeholder}
+                  className="w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
+                  placeholder={text.placeholder}
                   {...field}
                 >
                   {searchButton ? (
                     <ButtonComponent
-                      className="rounded-3xl px-2 text-[10px] uppercase sm:px-6 sm:text-sm"
+                      className="rounded-md px-2 text-[10px] uppercase sm:px-6 sm:text-sm"
                       type="submit"
                     >
-                      {dict.search.button}
+                      {text.button}
                     </ButtonComponent>
                   ) : (
                     <div className="invisible px-2 text-[10px] uppercase sm:px-6 sm:text-sm">
-                      Найти
+                      {text.button}
                     </div>
                   )}
                 </HomeInputSearch>

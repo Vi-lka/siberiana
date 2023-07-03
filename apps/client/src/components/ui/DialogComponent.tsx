@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 
-import ButtonComponent from "./button-component";
+import ButtonComponent from "./ButtonComponent";
 
 // I may be will change this without a child, and there will be a component only for authorization
 export function DialogComponent({
