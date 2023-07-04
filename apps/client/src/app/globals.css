@@ -93,8 +93,29 @@ html.dark .logo-svg path {
   transition: 0.15s ease-in-out;
 }
 .logo-svg path {
+  fill: hsl(240, 19%, 22%);
   transition: 0.15s ease-in-out;
-  color: hsl(240, 19%, 22%);
+}
+
+.auth-button .google-svg path {
+  transition: 0.15s ease-in-out;
+}
+
+.auth-button:hover .google-svg path,
+.auth-button:focus .google-svg path  {
+  fill: var(--beaverLight);
+  transition: 0.15s ease-in-out;
+}
+
+html.dark .auth-button .google-svg path {
+  fill: var(--beaverLight);
+  transition: 0.15s ease-in-out;
+}
+
+html.dark .auth-button:hover .google-svg path,
+html.dark .auth-button:focus .google-svg path  {
+  fill: var(--darkBlue);
+  transition: 0.15s ease-in-out;
 }
 
 .home-slider {

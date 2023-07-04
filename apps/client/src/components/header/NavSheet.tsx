@@ -28,8 +28,8 @@ import {
 
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import Icons from "../ui/Icons";
 import { NavListItem } from "./NavListItem";
+import Icons from "../ui/IconsSwitch";
 
 export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();

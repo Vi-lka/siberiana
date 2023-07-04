@@ -84,7 +84,7 @@
     "lastName": "Last Name",
     "email": "Email",
     "password": "Password",
-    "passwordRepeat": "Repeat the password",
+    "passwordConfirm": "Repeat the password",
     "ORCID": "ORCID",
     "regAs": "Register as a ",
     "researcher": "Researcher",
@@ -99,7 +99,8 @@
     "errors": {
       "required": "This field is required",
       "email": "Invalid email address",
-      "passwordMin": "Must be 6 or more characters long"
+      "passwordMin": "Must be 6 or more characters long",
+      "passwordMatch": "The passwords did not match"
     }
   },
   "homeTitle": "Explore the historical, cultural and natural heritage of Yenisei Siberia",

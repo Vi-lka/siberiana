@@ -55,7 +55,7 @@ export const AuthDictSchema = z.object({
   lastName: z.string(),
   email: z.string(),
   password: z.string(),
-  passwordRepeat: z.string(),
+  passwordConfirm: z.string(),
   ORCID: z.string(),
   regAs: z.string(),
   researcher: z.string(),
@@ -71,6 +71,7 @@ export const AuthDictSchema = z.object({
     required: z.string(),
     email: z.string(),
     passwordMin: z.string(),
+    passwordMatch: z.string()
   })
 });
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
