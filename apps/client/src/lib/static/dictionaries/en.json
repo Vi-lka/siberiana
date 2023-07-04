@@ -76,7 +76,32 @@
       ]
     }
   ],
-  "loginButton": "Log in",
+  "auth": {
+    "mainButton": "Log In",
+    "logIn": "Log In",
+    "signUp": "Sign Up",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "password": "Password",
+    "passwordRepeat": "Repeat the password",
+    "ORCID": "ORCID",
+    "regAs": "Register as a ",
+    "researcher": "Researcher",
+    "personalData": "By clicking the “Create Profile” button you agree to the ",
+    "personalDataLinkText": "processing of personal data",
+    "create": "Sign Up",
+    "or": "or",
+    "reset": "Forgot your username or password?",
+    "authButtons": { 
+      "google": "Continue with Google"
+    },
+    "errors": {
+      "required": "This field is required",
+      "email": "Invalid email address",
+      "passwordMin": "Must be 6 or more characters long"
+    }
+  },
   "homeTitle": "Explore the historical, cultural and natural heritage of Yenisei Siberia",
   "search": {
     "error": "Query must be at least 2 characters.",

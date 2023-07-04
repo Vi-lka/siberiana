@@ -9,9 +9,10 @@ import { useKeenSlider } from "keen-slider/react";
 import type { SliderType } from "@siberiana/schemas";
 
 import ImageComponent from "../ui/ImageComponent";
+// import { Skeleton } from "@siberiana/ui";
 
 export default function HomeSlider({ data }: { data: SliderType }) {
-  const [created, setCreated] = React.useState<boolean>();
+  // const [created, setCreated] = React.useState<boolean>();
 
   const [sliderRef] = useKeenSlider({
     loop: true,
@@ -25,26 +26,27 @@ export default function HomeSlider({ data }: { data: SliderType }) {
       spacing:
         typeof window !== "undefined" && window.innerWidth <= 740 ? 15 : 30,
     },
-    created() {
-      setCreated(true);
-    },
-    destroyed() {
-      setCreated(false);
-    },
+    // created() {
+    //   setCreated(true);
+    // },
+    // destroyed() {
+    //   setCreated(false);
+    // },
   });
 
   return (
     <>
       <div
         ref={sliderRef}
-        className="keen-slider home-slider absolute cursor-grab"
+        className="keen-slider home-slider cursor-grab"
       >
         {data.map((image, index) => (
           <div
             key={index}
             className="keen-slider__slide h-[35vh] sm:h-[40vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[55vh]"
           >
-            {created ? (
+            {/* what is more important to us? that the photos appeared only when the slider is ready(UX) or LCP */}
+            {/* {created ? ( */}
               <ImageComponent
                 src={image.attributes.url}
                 alt={
@@ -55,9 +57,9 @@ export default function HomeSlider({ data }: { data: SliderType }) {
                 fill
                 className={"object-cover"}
               />
-            ) : (
-              <div className="from-muted/50 to-muted dark:bg-accent h-full w-full bg-gradient-to-b" />
-            )}
+             {/* ) : (
+              <Skeleton className="w-full h-full" />
+            )} */}
           </div>
         ))}
       </div>

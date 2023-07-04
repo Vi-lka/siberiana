@@ -39,18 +39,48 @@ export const MenuZoneSchema = z
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
 //......SEARCH.......//
-export const SearchSchema = z.object({
+export const SearchDictSchema = z.object({
   error: z.string(),
   button: z.string(),
   placeholder: z.string(),
 });
-export type SearchType = z.infer<typeof SearchSchema>;
+export type SearchDictType = z.infer<typeof SearchDictSchema>;
+
+//......AUTH.......//
+export const AuthDictSchema = z.object({
+  mainButton: z.string(),
+  logIn: z.string(),
+  signUp: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  password: z.string(),
+  passwordRepeat: z.string(),
+  ORCID: z.string(),
+  regAs: z.string(),
+  researcher: z.string(),
+  personalData: z.string(),
+  personalDataLinkText: z.string(),
+  create: z.string(),
+  or: z.string(),
+  reset: z.string(),
+  authButtons: z.object({
+    google: z.string()
+  }),
+  errors: z.object({
+    required: z.string(),
+    email: z.string(),
+    passwordMin: z.string(),
+  })
+});
+export type AuthDictType = z.infer<typeof AuthDictSchema>;
+
 
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
   menu: MenuZoneSchema,
-  loginButton: z.string().max(10),
+  auth: AuthDictSchema,
   homeTitle: z.string().max(100),
-  search: SearchSchema,
+  search: SearchDictSchema, 
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

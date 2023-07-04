@@ -1,9 +1,10 @@
 import { Suspense } from "react";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 import HomeSearch from "~/components/home/HomeSearch";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import HomeSliderServer from "~/components/home/HomeSliderServer";
+import HomeSliderSkeleton from "~/components/skeletons/HomeSliderSkeleton";
 
 export default async function Home({
   params: { locale },
@@ -21,14 +22,14 @@ export default async function Home({
           </h1>
 
           {/* TODO:Skeleton */}
-          <Suspense fallback={<p>Loading SLIDER...</p>}>
+          <Suspense fallback={<HomeSliderSkeleton />}>
             <HomeSliderServer />
           </Suspense>
         </div>
 
         <HomeSearch text={dict.search} />
 
-        <ChevronDown className="text-beaver dark:text-beaverLight h-10 w-10 lg:h-12 lg:w-12 mt-4" />
+        <ArrowDown className="text-beaver dark:text-beaverLight h-10 w-10 lg:h-12 lg:w-12 mt-4 stroke-1" />
       </div>
     </main>
   );

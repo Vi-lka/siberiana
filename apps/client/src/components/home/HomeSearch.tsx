@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
+  Button,
   Form,
   FormControl,
   FormField,
@@ -14,11 +15,10 @@ import {
   FormMessage,
 } from "@siberiana/ui";
 
-import ButtonComponent from "../ui/ButtonComponent";
 import { HomeInputSearch } from "./HomeInputSearch";
-import type { SearchType } from "@siberiana/schemas";
+import type { SearchDictType } from "@siberiana/schemas";
 
-export default function HomeSearch({ text }: { text: SearchType }) {
+export default function HomeSearch({ text }: { text: SearchDictType }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
 
   const router = useRouter();
@@ -27,10 +27,10 @@ export default function HomeSearch({ text }: { text: SearchType }) {
   const SearchFormSchema = z.object({
     query: z
       .string({
-        required_error: `${text.error}`,
+        required_error: text.error,
       })
       .min(2, {
-        message: `${text.error}`,
+        message: text.error,
       }),
   });
 
@@ -42,7 +42,6 @@ export default function HomeSearch({ text }: { text: SearchType }) {
 
   React.useEffect(() => {
     if (watchQuery && watchQuery.length >= 2) {
-      console.log(watchQuery);
       setSearchButton(true);
     } else setSearchButton(false);
   }, [watchQuery]);
@@ -83,12 +82,13 @@ export default function HomeSearch({ text }: { text: SearchType }) {
                   {...field}
                 >
                   {searchButton ? (
-                    <ButtonComponent
-                      className="rounded-md px-2 text-[10px] uppercase sm:px-6 sm:text-sm"
+                    <Button
+                      variant={"ghost"}
+                      className="px-2 text-[10px] uppercase sm:px-6 sm:text-sm"
                       type="submit"
                     >
                       {text.button}
-                    </ButtonComponent>
+                    </Button>
                   ) : (
                     <div className="invisible px-2 text-[10px] uppercase sm:px-6 sm:text-sm">
                       {text.button}

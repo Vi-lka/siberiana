@@ -16,6 +16,7 @@ export default function ImageComponent({
   height?: number;
   fill?: boolean;
 }) {
+  
   const imageLoader = ({
     src,
     width,

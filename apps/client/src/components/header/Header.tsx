@@ -1,23 +1,12 @@
 import React from "react";
 import Link from "next/link";
-
-import {
-  Button,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  Input,
-  Label,
-} from "@siberiana/ui";
-
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
-import { DialogComponent as AuthDialog } from "../ui/DialogComponent";
 import { ThemeToggle } from "../ui/ThemeToggle";
 import LocaleSwitcher from "./LocaleSwitcher";
 import NavMenu from "./NavMenu";
 import NavSheet from "./NavSheet";
+import ButtonComponent from "../ui/ButtonComponent";
 
 export default async function Header({ lang }: { lang: string }) {
   const dict = await getDictionary(lang);
@@ -44,40 +33,11 @@ export default async function Header({ lang }: { lang: string }) {
 
           {/* Desktop */}
           <div className="hidden lg:block">
-            <AuthDialog name={dict.loginButton}>
-              <DialogHeader>
-                <DialogTitle>Войти</DialogTitle>
-                <DialogDescription>
-                  Make changes to your profile here. Click save when you`re
-                  done.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input
-                    id="name"
-                    placeholder="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    placeholder="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </AuthDialog>
+            <Link href={`${lang}/login`}>
+              <ButtonComponent className="px-10 py-6 uppercase">
+                {dict.auth.mainButton}
+              </ButtonComponent>
+            </Link>
           </div>
 
           {/* Mobile */}
