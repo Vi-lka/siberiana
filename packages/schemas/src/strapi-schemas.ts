@@ -41,10 +41,10 @@ export type SliderType = z.infer<typeof SliderSchema>;
 
 //.........................CUSTOM.........................//
 export const CustomBlockSchema = z.object({
-  Title: z.string(),
+  title: z.string(),
   url: z.string().url(),
-  TextUrl: z.string(),
-  List: z.object({
+  textUrl: z.string(),
+  list: z.object({
     title: z.string(),
     url: z.string().url(),
     img: ImageSchema
@@ -55,16 +55,16 @@ export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
 //.........................QUESTION.........................//
 export const QuestionSchema = z.object({
   attributes: z.object({
-    Title: z.string(),
-    Image: ImageSchema,
-    Tip: z.string(),
-    Variant: z.array(
+    title: z.string(),
+    image: ImageSchema,
+    tip: z.string(),
+    variants: z.array(
       z.object({
-        Title: z.string(),
-        Index: z.number()
+        title: z.string(),
+        index: z.number()
       })
     ),
-    AnswerIndex: z.number(),
+    answerIndex: z.number(),
     url: z.string().url(),
     urlName: z.string(),
   })

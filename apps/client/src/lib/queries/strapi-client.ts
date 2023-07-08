@@ -1,13 +1,16 @@
 import type { QuestionsType } from "@siberiana/schemas";
 import { GraphQLClient, gql } from "graphql-request";
 
-const query = gql`
+const graphQLClient = new GraphQLClient(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`);
+
+export const fetchQuestions = async (locale: string): Promise<QuestionsType> => {
+  return await graphQLClient.request(gql`
   query Questions {
-    questions {
+    questions(locale: "${locale}") {
       data {
         attributes {
-          Title
-          Image {
+          title
+          image {
             data {
               attributes {
                 url
@@ -15,22 +18,17 @@ const query = gql`
               }
             }
           }
-          Tip
-          Variant {
-            Title
-            Index
+          tip
+          variants {
+            title
+            index
           }
-          AnswerIndex
+          answerIndex
           url
           urlName
         }
       }
     }
   }
-`;
-
-const graphQLClient = new GraphQLClient(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`);
-
-export const fetchQuestions = async (): Promise<QuestionsType> => {
-  return await graphQLClient.request(query);
+`);
 };

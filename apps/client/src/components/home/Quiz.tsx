@@ -21,7 +21,7 @@ export default function Quiz({ text }: { text: QuizType }) {
 
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["quiz"],
-    queryFn: () => fetchQuestions(),
+    queryFn: () => fetchQuestions(locale),
   });
   
   const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
@@ -41,7 +41,7 @@ export default function Quiz({ text }: { text: QuizType }) {
   const question = data.questions.data[questionRandomId]
 
   function handleAnswer(index: number) {
-    question.attributes.AnswerIndex === index ? 
+    question.attributes.answerIndex === index ? 
       setAnswer(true) 
       : 
       setAnswer(false)
@@ -59,15 +59,15 @@ export default function Quiz({ text }: { text: QuizType }) {
         <div className='relative max-w-[800px] w-full 2xl:h-[350px] h-[300px] rounded-md overflow-hidden'>
               <Image
                 src={
-                  question.attributes.Image.data ? 
-                    getURL(question.attributes.Image.data.attributes.url, "strapi") 
+                  question.attributes.image.data ? 
+                    getURL(question.attributes.image.data.attributes.url, "strapi") 
                     : 
                     '/images/image-placeholder.png'
                 }
                 fill
                 className={"object-cover"}
                 sizes="(max-width: 1280px) 45vw, 35vw"
-                alt={question.attributes.Title}
+                alt={question.attributes.title}
                 priority={true}
               />
         </div>
@@ -75,24 +75,24 @@ export default function Quiz({ text }: { text: QuizType }) {
         <div className="flex flex-col justify-between">
           <div>
             <h1 className='font-OpenSans lg:text-2xl text-lg font-bold uppercase mb-6'>
-              {question.attributes.Title}
+              {question.attributes.title}
             </h1>
             <p className='font-Inter lg:text-sm text-xs mb-'>
-              {question.attributes.Tip}
+              {question.attributes.tip}
             </p>
           </div>
 
           {
             (answer === undefined) ? (
               <div className='grid grid-cols-2 gap-6'>
-                {question.attributes.Variant.map(elem => (
+                {question.attributes.variants.map(elem => (
                   <ButtonComponent
-                    key={elem.Index}
+                    key={elem.index}
                     className='uppercase font-Inter px-8 py-6 lg:text-sm text-xs'
                     type="button"
-                    onClick={() => handleAnswer(elem.Index)}
+                    onClick={() => handleAnswer(elem.index)}
                   >
-                    {elem.Title}
+                    {elem.title}
                   </ButtonComponent>
                 ))}
               </div>

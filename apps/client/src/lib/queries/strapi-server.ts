@@ -49,17 +49,19 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
       custom(locale: "${locale}") {
         data {
           attributes {
-            Title
-            url
-            TextUrl
-            List(sort: "order:asc") {
+            content {
               title
               url
-              img {
-                data {
-                  attributes {
-                    url
-                    alternativeText
+              textUrl
+              list(sort: "order:asc") {
+                title
+                url
+                img {
+                  data {
+                    attributes {
+                      url
+                      alternativeText
+                    }
                   }
                 }
               }
@@ -86,7 +88,7 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
   const json = await res.json();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.custom.data.attributes;
+  return json.data?.custom.data.attributes.content;
 };
 
 export const getProjects = async (locale: string): Promise<ProjectsType> => {
