@@ -17,10 +17,10 @@ export default async function Login({
         <Tabs defaultValue="signIn" className="w-full">
           <div className="bg-background w-full flex justify-center border-b-2 fixed z-40 pt-10 mt-[-8px]">
             <TabsList className="grid w-fit grid-cols-2 bg-transparent rounded-none sm:mb-0 mb-[-4px]">
-              <TabsTrigger value="signIn" className="sm:text-base text-[12px] rounded-none border-b-2 border-transparent data-[state=active]:text-dark data-[state=active]:border-beaver dark:data-[state=active]:text-white dark:data-[state=active]:border-white">
+              <TabsTrigger value="signIn" className="sm:text-base text-sm md:px-4 px-0 rounded-none border-b-2 border-transparent data-[state=active]:text-dark data-[state=active]:border-beaver dark:data-[state=active]:text-white dark:data-[state=active]:border-white">
                 {dict.auth.logIn}
               </TabsTrigger>
-              <TabsTrigger value="signUp" className="sm:text-base text-[12px] rounded-none border-b-2 border-transparent data-[state=active]:text-dark data-[state=active]:border-beaver dark:data-[state=active]:text-white dark:data-[state=active]:border-white">
+              <TabsTrigger value="signUp" className="sm:text-base text-sm md:px-4 px-0 rounded-none border-b-2 border-transparent data-[state=active]:text-dark data-[state=active]:border-beaver dark:data-[state=active]:text-white dark:data-[state=active]:border-white">
                 {dict.auth.signUp}
               </TabsTrigger>
             </TabsList>

@@ -44,23 +44,51 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
             message: text.errors.passwordMin
           }),
         researcher: z.boolean().default(false).optional(),
-        personalData: z.boolean().default(false).optional()
-      }).refine((data) => data.password === data.passwordConfirm, {
-        message: text.errors.passwordMatch,
-        path: ["passwordConfirm"], // path of error
-      });
+        ORCID: z.string().optional(),
+        personalData: z.boolean({
+          required_error: text.errors.required,
+        }).default(false)
+      }).refine((data) => data.password === data.passwordConfirm, 
+        {
+          message: text.errors.passwordMatch,
+          path: ["passwordConfirm"], // path of error
+        },
+      ).refine((data) => 
+        {
+          if ((data.researcher === true) && ((data.ORCID === undefined) || (data.ORCID === null) || (data.ORCID === ""))) return false
+
+          return true
+        },
+        {
+          message: text.errors.required,
+          path: ["ORCID"], // path of error
+        }
+      ).refine((data) => 
+      {
+        if (data.personalData === false) return false
+
+        return true
+      },
+      {
+        message: text.errors.required,
+        path: ["personalData"], // path of error
+      }
+    )
   
 
     const form = useForm<z.infer<typeof SignUpFormSchema>>({
-        resolver: zodResolver(SignUpFormSchema),
-        defaultValues: {
-            researcher: false,
-            personalData: false,
-        },
+      resolver: zodResolver(SignUpFormSchema),
+      defaultValues: {
+        researcher: false,
+        personalData: false,
+      },
     });
 
     function handleSignUp(data: z.infer<typeof SignUpFormSchema>) {
-        console.log(data)    
+      if (data.researcher === false) {
+        data.ORCID = ""
+      }
+      console.log(data)    
     }
 
     
@@ -150,6 +178,18 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                           {text.regAs} <Link href={`/${lang}/info`} className='underline'>{text.researcher}</Link>
                         </FormLabel>
                       </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ORCID"
+                  render={({ field }) => (
+                    <FormItem className="text-center mt-6 mb-0">
+                      <FormControl>
+                          <Input type='password' className='p-5 placeholder:uppercase' style={{ display: form.getValues().researcher ? "block" : "none" }} placeholder={text.ORCID} {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

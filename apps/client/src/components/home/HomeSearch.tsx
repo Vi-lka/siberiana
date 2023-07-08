@@ -84,13 +84,13 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
                   {searchButton ? (
                     <Button
                       variant={"ghost"}
-                      className="px-2 text-[10px] uppercase sm:px-6 sm:text-sm"
+                      className="px-2 uppercase sm:px-6 text-sm"
                       type="submit"
                     >
                       {text.button}
                     </Button>
                   ) : (
-                    <div className="invisible px-2 text-[10px] uppercase sm:px-6 sm:text-sm">
+                    <div className="invisible px-2 uppercase sm:px-6 text-sm">
                       {text.button}
                     </div>
                   )}

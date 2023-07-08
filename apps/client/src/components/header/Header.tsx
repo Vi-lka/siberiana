@@ -42,7 +42,7 @@ export default async function Header({ lang }: { lang: string }) {
 
           {/* Mobile */}
           <div className="block pl-2 lg:hidden">
-            <NavSheet menuData={dict.menu} />
+            <NavSheet menuData={dict.menu} authDict={dict.auth} />
           </div>
         </div>
       </div>

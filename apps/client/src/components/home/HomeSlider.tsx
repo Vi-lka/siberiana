@@ -1,37 +1,35 @@
 "use client";
 
 import React from "react";
-
 import "keen-slider/keen-slider.min.css";
-
 import { useKeenSlider } from "keen-slider/react";
-
 import type { SliderType } from "@siberiana/schemas";
+import { Skeleton } from "@siberiana/ui";
+import Image from "next/image";
+import getImageURL from "~/lib/utils/getURL";
 
-import ImageComponent from "../ui/ImageComponent";
-// import { Skeleton } from "@siberiana/ui";
 
 export default function HomeSlider({ data }: { data: SliderType }) {
-  // const [created, setCreated] = React.useState<boolean>();
+  const [created, setCreated] = React.useState<boolean>();
 
   const [sliderRef] = useKeenSlider({
     loop: true,
     dragSpeed: 0.6,
     renderMode: "performance",
     mode: "free-snap",
-    initial: 1,
+    initial: 0,
     slides: {
       origin: "center",
       perView: 2.4,
       spacing:
         typeof window !== "undefined" && window.innerWidth <= 740 ? 15 : 30,
     },
-    // created() {
-    //   setCreated(true);
-    // },
-    // destroyed() {
-    //   setCreated(false);
-    // },
+    created() {
+      setCreated(true);
+    },
+    destroyed() {
+      setCreated(false);
+    },
   });
 
   return (
@@ -45,21 +43,22 @@ export default function HomeSlider({ data }: { data: SliderType }) {
             key={index}
             className="keen-slider__slide h-[35vh] sm:h-[40vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[55vh]"
           >
-            {/* what is more important to us? that the photos appeared only when the slider is ready(UX) or LCP */}
-            {/* {created ? ( */}
-              <ImageComponent
-                src={image.attributes.url}
+            {created ? (
+              <Image
+                src={getImageURL(image.attributes.url, "strapi")}
+                fill
+                className={"object-cover"}
                 alt={
                   image.attributes.alternativeText
                     ? image.attributes.alternativeText
                     : ""
                 }
-                fill
-                className={"object-cover"}
+                priority={true}
+                sizes="(max-width: 1280px) 30vw, 35vw"
               />
-             {/* ) : (
+            ) : (
               <Skeleton className="w-full h-full" />
-            )} */}
+            )}
           </div>
         ))}
       </div>

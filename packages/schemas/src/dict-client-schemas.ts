@@ -38,7 +38,7 @@ export const MenuZoneSchema = z
   .optional();
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
-//......SEARCH.......//
+//.........................SEARCH.........................//
 export const SearchDictSchema = z.object({
   error: z.string(),
   button: z.string(),
@@ -46,7 +46,7 @@ export const SearchDictSchema = z.object({
 });
 export type SearchDictType = z.infer<typeof SearchDictSchema>;
 
-//......AUTH.......//
+//.........................AUTH.........................//
 export const AuthDictSchema = z.object({
   mainButton: z.string(),
   logIn: z.string(),
@@ -76,6 +76,27 @@ export const AuthDictSchema = z.object({
 });
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
 
+//.........................CATEGORIES.........................//
+export const CategorySchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  img: z.string()
+});
+export type CategoryType = z.infer<typeof CategorySchema>;
+
+export const CategoriesSchema = z.object({
+  title: z.string(),
+  list: CategorySchema.array()
+});
+export type CategoriesType = z.infer<typeof CategoriesSchema>;
+
+//.........................QUIZ.........................//
+export const QuizSchema = z.object({
+  right: z.string(),
+  wrong: z.string(),
+  tryAgain: z.string()
+});
+export type QuizType = z.infer<typeof QuizSchema>;
 
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
@@ -83,5 +104,7 @@ export const DictionarySchema = z.object({
   auth: AuthDictSchema,
   homeTitle: z.string().max(100),
   search: SearchDictSchema, 
+  categories: CategoriesSchema,
+  quiz: QuizSchema
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

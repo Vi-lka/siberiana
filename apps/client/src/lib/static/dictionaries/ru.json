@@ -80,16 +80,16 @@
     "mainButton": "Войти",
     "logIn": "Войти",
     "signUp": "Зарегистрироваться",
-    "firstName": "Ваше имя",
-    "lastName": "Ваша фамилия",
-    "email": "Электронная почта",
-    "password": "Пароль",
-    "passwordConfirm": "Повторите пароль",
-    "ORCID": "ORCID",
+    "firstName": "Ваше имя *",
+    "lastName": "Ваша фамилия *",
+    "email": "Электронная почта *",
+    "password": "Пароль *",
+    "passwordConfirm": "Повторите пароль *",
+    "ORCID": "ORCID *",
     "regAs": "Зарегистрироваться как ",
     "researcher": "Исследователь",
     "personalData": "Нажимая кнопку “Создать профиль” вы соглашаетесь на ",
-    "personalDataLinkText": "обработку персональных данных",
+    "personalDataLinkText": "обработку персональных данных *",
     "create": "Cоздать профиль",
     "or": "или",
     "reset": "Забыли логин или пароль?",
@@ -108,5 +108,35 @@
     "error": "Запрос должен иметь не менее 2 символов.",
     "button": "Поиск",
     "placeholder": "Например: бронзовый век"
+  },
+  "categories": {
+    "title": "Категории",
+    "list": [
+      {
+        "title": "Художественные коллекции",
+        "url": "/art",
+        "img": "/images/artCol.jpg"
+      },
+      {
+        "title": "Археологические коллекции",
+        "url": "/archaeological",
+        "img": "/images/archaeologicalCol.jpg"
+      },
+      {
+        "title": "Культурные и исторические коллекции",
+        "url": "/cultural-historical",
+        "img": "/images/cultHistorCol.jpg"
+      },
+      {
+        "title": "Естественно-научные коллекции",
+        "url": "/natural-science",
+        "img": "/images/naturalCol.jpg"
+      }
+    ]
+  },
+  "quiz": {
+    "right": "Верно!",
+    "wrong": "К сожалению, нет(",
+    "tryAgain": "Попробовать еще раз"
   }
 }

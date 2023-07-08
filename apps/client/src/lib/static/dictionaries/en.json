@@ -77,19 +77,19 @@
     }
   ],
   "auth": {
-    "mainButton": "Log In",
+    "mainButton": "LogIn",
     "logIn": "Log In",
     "signUp": "Sign Up",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "password": "Password",
-    "passwordConfirm": "Repeat the password",
-    "ORCID": "ORCID",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "email": "Email *",
+    "password": "Password *",
+    "passwordConfirm": "Repeat the password *",
+    "ORCID": "ORCID *",
     "regAs": "Register as a ",
     "researcher": "Researcher",
     "personalData": "By clicking the “Create Profile” button you agree to the ",
-    "personalDataLinkText": "processing of personal data",
+    "personalDataLinkText": "processing of personal data *",
     "create": "Sign Up",
     "or": "or",
     "reset": "Forgot your username or password?",
@@ -108,5 +108,35 @@
     "error": "Query must be at least 2 characters.",
     "button": "Search",
     "placeholder": "For example: Bronze Age"
+  },
+  "categories": {
+    "title": "Categories",
+    "list": [
+      {
+        "title": "Art collections",
+        "url": "/art",
+        "img": "/images/artCol.jpg"
+      },
+      {
+        "title": "Archaeological collections",
+        "url": "/archaeological",
+        "img": "/images/archaeologicalCol.jpg"
+      },
+      {
+        "title": "Cultural and historical collections",
+        "url": "/cultural-historical",
+        "img": "/images/cultHistorCol.jpg"
+      },
+      {
+        "title": "Natural science collections",
+        "url": "/natural-science",
+        "img": "/images/naturalCol.jpg"
+      }
+    ]
+  },
+  "quiz": {
+    "right": "Right!",
+    "wrong": "Unfortunately no(",
+    "tryAgain": "Try one more time"
   }
 }

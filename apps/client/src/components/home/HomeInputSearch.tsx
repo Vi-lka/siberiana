@@ -11,14 +11,14 @@ const HomeInputSearch = React.forwardRef<HTMLInputElement, InputSearchProps>(
     return (
       <div
         className={cn(
-          "border-input ring-offset-background hover:ring-ring flex h-10 w-full items-center rounded-md border px-3 py-2 text-sm hover:ring-2 hover:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "border-input ring-offset-background hover:ring-ring flex h-10 w-full items-center rounded-md border px-3 py-2 text-sm hover:ring-2 hover:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all",
           className,
         )}
       >
         <Search className="h-5 w-5" />
         <input
           type="search"
-          className="placeholder:text-muted-foreground ml-0 flex h-full w-full rounded-md bg-transparent p-3 text-sm outline-none placeholder:text-[10px] placeholder:uppercase disabled:cursor-not-allowed sm:ml-2 sm:placeholder:text-sm"
+          className="placeholder:text-muted-foreground ml-0 flex h-full w-full rounded-md bg-transparent p-3 sm:pl-3 pl-1 text-sm outline-none placeholder:uppercase disabled:cursor-not-allowed sm:ml-2 placeholder:text-sm"
           ref={ref}
           {...props}
         />

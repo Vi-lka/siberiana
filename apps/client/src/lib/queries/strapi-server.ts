@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { ProjectsType, SliderType } from "@siberiana/schemas";
+import type { CustomBlockType, ProjectsType, SliderType } from "@siberiana/schemas";
 
 export const getSlider = async (): Promise<SliderType> => {
   const headers = { "Content-Type": "application/json" };
@@ -9,7 +9,7 @@ export const getSlider = async (): Promise<SliderType> => {
       slider {
         data {
           attributes {
-            Image {
+            Images {
               data {
                 attributes {
                   url
@@ -38,10 +38,55 @@ export const getSlider = async (): Promise<SliderType> => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+  return json.data?.slider.data.attributes.Images.data;
+};
+
+export const getCustomBlock = async (locale: string): Promise<CustomBlockType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query Custom {
+      custom(locale: "${locale}") {
+        data {
+          attributes {
+            Title
+            url
+            TextUrl
+            List(sort: "order:asc") {
+              title
+              url
+              img {
+                data {
+                  attributes {
+                    url
+                    alternativeText
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data 'CustomBlock'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.slider.data.attributes.Image.data;
+  return json.data?.custom.data.attributes;
 };
 
 export const getProjects = async (locale: string): Promise<ProjectsType> => {
@@ -81,6 +126,8 @@ export const getProjects = async (locale: string): Promise<ProjectsType> => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
+
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   return json.data?.projects.data;

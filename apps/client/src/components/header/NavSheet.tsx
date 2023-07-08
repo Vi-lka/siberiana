@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 
 import type {
+  AuthDictType,
   GroupLinkType,
   MenuZoneType,
   SingleLinkType,
@@ -21,6 +22,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -30,8 +32,9 @@ import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
 import { NavListItem } from "./NavListItem";
 import Icons from "../ui/IconsSwitch";
+import ButtonComponent from "../ui/ButtonComponent";
 
-export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {
+export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneType, authDict: AuthDictType }) {
   const lang = useLocale();
 
   const data = MenuZoneSchema.parse(menuData);
@@ -54,11 +57,21 @@ export default function NavSheet({ menuData }: { menuData: MenuZoneType }) {
               </SheetClose>
             </Link>
           </SheetTitle>
+
+          <SheetDescription className="font-Inter">
+            <Link href={`${lang}/login`} className="">
+              <SheetClose>
+                <ButtonComponent className="px-10 py-6 mt-4 uppercase">
+                  {authDict.mainButton}
+                </ButtonComponent>
+              </SheetClose>
+            </Link>
+          </SheetDescription>
         </SheetHeader>
 
         <NavigationMenu orientation="vertical">
           <NavigationMenuList className="flex flex-col items-center">
-            <ScrollArea className="font-Inter mt-[2vh] h-[80vh] w-full p-1">
+            <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
               {data?.map((menuItem, index) => (
                 <SheetMenuItem key={index} lang={lang} menuItem={menuItem} />
               ))}

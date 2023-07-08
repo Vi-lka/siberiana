@@ -44,13 +44,15 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class" enableSystem={true}>
           <Header lang={params.locale} />
-          <main className="pt-20">{children}</main>
+          <main className="pt-20">
+            {children}
+          </main>
           <Toaster />
         </ThemeProvider>
       </body>
     </html>
   );
 }
-
+// TODO: generate locales
 // export async function generateStaticParams() {
 // }

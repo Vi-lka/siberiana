@@ -6,8 +6,6 @@ export default async function HomeSliderServer() {
 
     const slider = await getSlider();
 
-    console.log(slider)
-
   return (
     <HomeSlider data={slider} />
   )
