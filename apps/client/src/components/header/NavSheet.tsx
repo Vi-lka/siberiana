@@ -42,7 +42,7 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Menu className="h-[1.5rem] w-[1.5rem] transition-all" />
+        <Menu className="h-[2.5rem] w-[2.5rem] transition-all" />
       </SheetTrigger>
 
       <SheetContent>

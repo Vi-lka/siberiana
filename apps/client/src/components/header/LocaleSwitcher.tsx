@@ -30,7 +30,7 @@ export default function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
-          <span className="uppercase">{lang}</span>
+          <span className="uppercase text-base sm:text-sm">{lang}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-fit min-w-[50px]">
@@ -41,7 +41,7 @@ export default function LocaleSwitcher() {
               href={redirectedPathName(locale)}
               className="dark:text-beaverLight flex justify-center"
             >
-              <DropdownMenuItem className="cursor-pointer uppercase">
+              <DropdownMenuItem className="font-Inter cursor-pointer uppercase text-base sm:text-sm">
                 {locale}
               </DropdownMenuItem>
             </Link>

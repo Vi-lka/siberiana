@@ -20,9 +20,9 @@ export default function HomeSlider({ data }: { data: SliderType }) {
     initial: 0,
     slides: {
       origin: "center",
-      perView: 2.4,
+      perView: typeof window !== "undefined" && window.innerWidth <= 500 ? 1.4 : 2.4,
       spacing:
-        typeof window !== "undefined" && window.innerWidth <= 740 ? 15 : 30,
+        typeof window !== "undefined" && window.innerWidth <= 740 ? 10 : 30,
     },
     created() {
       setCreated(true);
@@ -41,7 +41,7 @@ export default function HomeSlider({ data }: { data: SliderType }) {
         {data.map((image, index) => (
           <div
             key={index}
-            className="keen-slider__slide h-[35vh] sm:h-[40vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[55vh]"
+            className="keen-slider__slide h-[40vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[55vh]"
           >
             {created ? (
               <Image
