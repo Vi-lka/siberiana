@@ -19,7 +19,25 @@ const openSans = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Сибириана",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'ru': '/ru',
+      'en': '/en',
+    },
+  },
+  openGraph: {
+    title: 'Сибириана',
+    description: 'Агрегатор культурного наследия',
+    url: process.env.NEXT_PUBLIC_URL,
+    siteName: 'Сибириана',
+    images: '/images/og-image.png',
+  },
+  title: {
+    default: "Сибириана",
+    template: "%s | Сибириана"
+  },
   description: "Агрегатор культурного наследия",
   icons: {
     icon: "/favicon.ico",

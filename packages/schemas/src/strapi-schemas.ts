@@ -5,8 +5,8 @@ export const ImageSchema = z.object({
   data: z
     .object({
       attributes: z.object({
-        url: z.string().url(),
-        alternativeText: z.string().optional(),
+        url: z.string(),
+        alternativeText: z.string().optional().nullable(),
       }),
     })
     .nullable().optional(),
@@ -32,7 +32,7 @@ export type ProjectsType = z.infer<typeof ProjectsSchema>;
 export const SliderSchema = z.array(
   z.object({
     attributes: z.object({
-      url: z.string().url(),
+      url: z.string(),
       alternativeText: z.string().nullable(),
     }),
   }),
@@ -42,15 +42,78 @@ export type SliderType = z.infer<typeof SliderSchema>;
 //.........................CUSTOM.........................//
 export const CustomBlockSchema = z.object({
   title: z.string(),
-  url: z.string().url(),
+  url: z.string(),
   textUrl: z.string(),
   list: z.object({
     title: z.string(),
-    url: z.string().url(),
+    url: z.string(),
     img: ImageSchema
   }).array()
 })
 export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
+
+//.........................ORGANIZATIONS.........................//
+export const OrganizationBySlugSchema = z.object({
+  title: z.string(),
+  slug: z.string(),
+  image: ImageSchema,
+  consortium: z.boolean(),
+  url: z.string().url().nullable(),
+  collections: z.object({
+    title: z.string(),
+    url: z.string().url(),
+    textUrl: z.string(),
+    list: z.object({
+      title: z.string(),
+      url: z.string().url(),
+      img: ImageSchema
+    }).array()
+  }).nullable(),
+  exhibits: z.object({
+    title: z.string(),
+    url: z.string().url(),
+    textUrl: z.string(),
+    list: z.object({
+      name: z.string(),
+      description: z.string(),
+      url: z.string().url(),
+      image: ImageSchema
+    }).array()
+  }).nullable(),
+  events: z.object({
+    title: z.string(),
+    url: z.string().url().nullable(),
+    textUrl: z.string().nullable(),
+    list: z.object({
+      name: z.string(),
+      dateStart: z.string(),
+      dateEnd: z.string(),
+      cost: z.number().nullable(),
+      url: z.string().url(),
+      address: z.string(),
+      image: ImageSchema
+    }).array()
+  }).nullable(),
+  contacts: z.object({
+    title: z.string(),
+    map: z.string(),
+    schedule: z.object({
+      monday: z.string(),
+      tuesday: z.string(),
+      wednesday: z.string(),
+      thursday: z.string(),
+      friday: z.string(),
+      saturday: z.string(),
+      sunday: z.string()
+    })
+  }).nullable()
+})
+export type OrganizationBySlugType = z.infer<typeof OrganizationBySlugSchema>;
+
+export const OrganizationsSchema = z.object({
+  attributes: OrganizationBySlugSchema
+}).array();
+export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
 
 //.........................QUESTION.........................//
 export const QuestionSchema = z.object({
@@ -65,7 +128,7 @@ export const QuestionSchema = z.object({
       })
     ),
     answerIndex: z.number(),
-    url: z.string().url(),
+    url: z.string(),
     urlName: z.string(),
   })
 });

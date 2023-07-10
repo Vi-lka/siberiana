@@ -5,7 +5,8 @@ import ButtonComponent from '../ui/ButtonComponent'
 import { useQuery } from '@tanstack/react-query'
 import { fetchQuestions } from '~/lib/queries/strapi-client'
 import QuizSkeleton from '../skeletons/QuizSkeleton'
-import type { QuizType } from '@siberiana/schemas'
+import { QuestionsSchema  } from '@siberiana/schemas'
+import type {QuizType} from '@siberiana/schemas';
 import { useLocale } from '~/lib/utils/useLocale'
 import Link from 'next/link'
 import Image from "next/image"
@@ -19,11 +20,13 @@ export default function Quiz({ text }: { text: QuizType }) {
 
   const locale = useLocale()
 
+  // Get all questions TODO: if fetchQuestions() returns random we will get only one question
   const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["quiz"],
     queryFn: () => fetchQuestions(locale),
   });
   
+  // Get random question
   const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
     () => ({
       questionRandomId: data ? 
@@ -35,10 +38,15 @@ export default function Quiz({ text }: { text: QuizType }) {
     [data, tryAgain]
   );
 
+  // Check for data
   if (isLoading || isFetching) return <QuizSkeleton />
   if ((data === undefined) || error) return null
 
-  const question = data.questions.data[questionRandomId]
+  // Check data validation
+  const dataSave = QuestionsSchema.parse(data);
+
+  // Set question
+  const question = dataSave.questions.data[questionRandomId]
 
   function handleAnswer(index: number) {
     question.attributes.answerIndex === index ? 
@@ -54,7 +62,6 @@ export default function Quiz({ text }: { text: QuizType }) {
   }
 
   return (
-    data ? (
       <div className='hidden md:grid grid-cols-2 gap-6 justify-center'>
         <div className='relative max-w-[800px] w-full 2xl:h-[350px] h-[300px] rounded-md overflow-hidden'>
               <Image
@@ -102,7 +109,7 @@ export default function Quiz({ text }: { text: QuizType }) {
                   {text.right}
                 </h1>
 
-                <Link href={`${locale}/objects?${question.attributes.url}`}>
+                <Link href={`${locale}${question.attributes.url}`}>
                   <ButtonComponent
                     className='uppercase font-Inter w-fit px-8 py-6 lg:text-sm text-xs'
                   >
@@ -127,6 +134,5 @@ export default function Quiz({ text }: { text: QuizType }) {
           }
         </div>   
       </div>
-    ) : null
   )
 }

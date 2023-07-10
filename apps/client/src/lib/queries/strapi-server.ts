@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { CustomBlockType, ProjectsType, SliderType } from "@siberiana/schemas";
+import type { CustomBlockType, OrganizationBySlugType, OrganizationsType, ProjectsType, SliderType } from "@siberiana/schemas";
 
 export const getSlider = async (): Promise<SliderType> => {
   const headers = { "Content-Type": "application/json" };
@@ -9,7 +9,7 @@ export const getSlider = async (): Promise<SliderType> => {
       slider {
         data {
           attributes {
-            Images {
+            Images(sort: "order:asc") {
               data {
                 attributes {
                   url
@@ -45,7 +45,7 @@ export const getSlider = async (): Promise<SliderType> => {
 export const getCustomBlock = async (locale: string): Promise<CustomBlockType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
-    query Custom {
+    query CustomBlock {
       custom(locale: "${locale}") {
         data {
           attributes {
@@ -60,7 +60,6 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
                   data {
                     attributes {
                       url
-                      alternativeText
                     }
                   }
                 }
@@ -81,7 +80,7 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data 'CustomBlock'");
+    throw new Error("Failed to fetch data 'Custom Block'");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -89,6 +88,163 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   return json.data?.custom.data.attributes.content;
+};
+
+export const getOrganizations = async (locale: string): Promise<OrganizationsType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query Organizations {
+      organizations(locale: "${locale}", sort: "order:asc") {
+        data {
+          attributes {
+            title
+            slug
+            image {
+              data {
+                attributes {
+                  url
+                }
+              }
+            }
+            consortium
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data 'Organizations'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+  return json.data?.organizations.data;
+};
+
+export const getOrganizationBySlug = async (slug: string): Promise<OrganizationBySlugType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query OrganizationBySlug {
+      organizations(
+        filters: {
+          slug: {
+            eq: "${slug}",
+          }
+        }
+      ) {
+        data {
+          attributes {
+            title
+            slug
+            image {
+              data {
+                attributes {
+                  url
+                }
+              }
+            }
+            consortium
+            url
+            collections {
+              title
+              url
+              textUrl
+              list(sort: "order:asc") {
+                title
+                img {
+                  data {
+                    attributes {
+                      url
+                    }
+                  }
+                }
+                url
+              }
+            }
+            exhibits {
+              title
+              url
+              textUrl
+              list(sort: "order:asc") {
+                name
+                description
+                url
+                image {
+                  data {
+                    attributes {
+                      url
+                    }
+                  }
+                }
+              }
+            }
+            events {
+              title
+              url
+              textUrl
+              list(sort: "order:asc") {
+                name
+                dateStart
+                dateEnd
+                cost
+                url
+                address
+                image {
+                  data {
+                    attributes {
+                      url
+                    }
+                  }
+                }
+              }
+            }
+            contacts {
+              title
+              map
+              schedule {
+                monday
+                tuesday
+                wednesday
+                thursday
+                friday
+                saturday
+                sunday
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data 'Organization By Slug'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+  return json.data?.organizations.data[0].attributes;
 };
 
 export const getProjects = async (locale: string): Promise<ProjectsType> => {
