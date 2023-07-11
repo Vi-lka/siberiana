@@ -31,8 +31,7 @@ export const metadata: Metadata = {
     title: 'Сибириана',
     description: 'Агрегатор культурного наследия',
     url: process.env.NEXT_PUBLIC_URL,
-    siteName: 'Сибириана',
-    images: '/images/og-image.png',
+    siteName: 'Сибириана'
   },
   title: {
     default: "Сибириана",

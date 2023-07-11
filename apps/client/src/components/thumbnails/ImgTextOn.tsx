@@ -36,16 +36,16 @@ export default function ImgTextOn(props: Props) {
       <div className={"relative flex w-full"}>
         <Image
             src={image}
-            width={props.width ? props.width : 350}
-            height={props.height ? props.height : 350}
+            width={props.width ? props.width : 320}
+            height={props.height ? props.height : 320}
             fill={props.fill}
             onError={() => setImage('/images/image-placeholder.png')}
             priority={true}
             className={"w-full object-cover"}
             alt={props.title}
         />
-        <div className="absolute bottom-0 w-full h-full bg-black bg-opacity-20"/>
-        <h2 className="text-white xl:text-xl lg:text-base md:text-sm font-bold uppercase absolute bottom-0 w-[85%] lg:ml-[7.5%] ml-[4%] mb-[7.5%] p-[5%] z-10">
+        <div className="absolute bottom-0 w-full h-full bg-black bg-opacity-25"/>
+        <h2 className="text-white xl:text-xl lg:text-base md:text-[12px] text-base font-bold uppercase absolute bottom-0 w-[85%] lg:ml-[7.5%] ml-[4%] mb-[7.5%] p-[5%] z-10">
           {props.title}
         </h2>
       </div>

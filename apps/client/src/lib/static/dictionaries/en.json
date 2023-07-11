@@ -1,4 +1,7 @@
 {
+  "breadcrumbs": {
+    "home": "Home"
+  },
   "menu": [
     {
       "id": 1,
@@ -115,7 +118,7 @@
       {
         "title": "Art collections",
         "url": "/art",
-        "img": "/images/artCol.jpg"
+        "img": "/images/artCol.JPG"
       },
       {
         "title": "Archaeological collections",
@@ -138,5 +141,10 @@
     "right": "Right!",
     "wrong": "Unfortunately no(",
     "tryAgain": "Try one more time"
+  },
+  "organizations": {
+    "title": "Organizations",
+    "url": "/organizations",
+    "textUrl": "All organizations"
   }
 }

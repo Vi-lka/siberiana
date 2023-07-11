@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import React, { Suspense } from "react";
 
 import { getProjects } from "~/lib/queries/strapi-server";
+
+export const metadata: Metadata = {
+  title: "Коллекции"
+};
 
 export default async function Collections({
   params: { locale },

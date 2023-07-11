@@ -13,7 +13,7 @@ services:
     container_name: client
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
       - NEXT_PUBLIC_GO_API_URL=${NEXT_PUBLIC_GO_API_URL}
       - GO_API_KEY=${GO_API_KEY}
       - NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}

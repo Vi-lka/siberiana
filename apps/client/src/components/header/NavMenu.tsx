@@ -31,12 +31,12 @@ import Icons from "../ui/IconsSwitch";
 export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {
   const lang = useLocale();
 
-  const data = MenuZoneSchema.parse(menuData);
+  const dataResult = MenuZoneSchema.parse(menuData);
 
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        {data?.map((menuItem, index) => (
+        {dataResult.map((menuItem, index) => (
           <NavMenuItem key={index} lang={lang} menuItem={menuItem} />
         ))}
       </NavigationMenuList>

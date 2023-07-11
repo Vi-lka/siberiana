@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function RowBlockSkeleton() {
   return (
-    <div className="max-w-[1600px] w-[85%] mx-auto mt-16 mb-24">
+    <div className="max-w-[1600px] w-[85%] mx-auto mb-24">
         <div className="flex justify-between items-center mb-10">
             <Skeleton className="h-full py-4 md:w-[40%] w-[65%]" />
             <Skeleton className="h-full py-4 w-[20%]" />

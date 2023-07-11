@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+//.........................BREADCRUMBS.........................//
+export const BreadcrumbsDictSchema = z.object({
+  home: z.string(),
+});
+export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
+
 //.........................MENU.........................//
 //......MENU SINGLE LINK.......//
 export const SingleLinkSchema = z.object({
@@ -35,7 +41,6 @@ export type GroupLinkType = z.infer<typeof GroupLinkSchema>;
 export const MenuZoneSchema = z
   .union([SingleLinkSchema, GroupLinkSchema])
   .array()
-  .optional();
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
 //.........................SEARCH.........................//
@@ -98,6 +103,14 @@ export const QuizSchema = z.object({
 });
 export type QuizType = z.infer<typeof QuizSchema>;
 
+//.........................ORGANIZATIONS.........................//
+export const OrganizationsDictSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  textUrl: z.string()
+});
+export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
+
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
   menu: MenuZoneSchema,
@@ -105,6 +118,8 @@ export const DictionarySchema = z.object({
   homeTitle: z.string().max(100),
   search: SearchDictSchema, 
   categories: CategoriesSchema,
-  quiz: QuizSchema
+  quiz: QuizSchema,
+  organizations: OrganizationsDictSchema,
+  breadcrumbs: BreadcrumbsDictSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

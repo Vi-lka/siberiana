@@ -22,7 +22,7 @@ export default function HomeSlider({ data }: { data: SliderType }) {
       origin: "center",
       perView: typeof window !== "undefined" && window.innerWidth <= 500 ? 1.4 : 2.4,
       spacing:
-        typeof window !== "undefined" && window.innerWidth <= 740 ? 10 : 30,
+        typeof window !== "undefined" && window.innerWidth <= 740 ? 10 : 24,
     },
     created() {
       setCreated(true);
@@ -54,7 +54,7 @@ export default function HomeSlider({ data }: { data: SliderType }) {
                     : ""
                 }
                 priority={true}
-                sizes="(max-width: 1280px) 30vw, 35vw"
+                sizes="(max-width: 500px) 65vw, 35vw"
               />
             ) : (
               <Skeleton className="w-full h-full" />

@@ -80,20 +80,24 @@ export const OrganizationBySlugSchema = z.object({
       image: ImageSchema
     }).array()
   }).nullable(),
-  events: z.object({
-    title: z.string(),
-    url: z.string().url().nullable(),
-    textUrl: z.string().nullable(),
-    list: z.object({
-      name: z.string(),
-      dateStart: z.string(),
-      dateEnd: z.string(),
-      cost: z.number().nullable(),
-      url: z.string().url(),
-      address: z.string(),
-      image: ImageSchema
-    }).array()
-  }).nullable(),
+  events_organization: z.object({
+    data: z.object({
+      attributes: z.object({
+        title: z.string(),
+        url: z.string().url().nullable(),
+        textUrl: z.string().nullable(),
+        list: z.object({
+          name: z.string(),
+          dateStart: z.string(),
+          dateEnd: z.string(),
+          cost: z.number().nullable(),
+          url: z.string().url(),
+          address: z.string(),
+          image: ImageSchema
+        }).array()
+      })
+    }).nullable()
+  }),
   contacts: z.object({
     title: z.string(),
     map: z.string(),
@@ -111,7 +115,12 @@ export const OrganizationBySlugSchema = z.object({
 export type OrganizationBySlugType = z.infer<typeof OrganizationBySlugSchema>;
 
 export const OrganizationsSchema = z.object({
-  attributes: OrganizationBySlugSchema
+  attributes: z.object({
+    title: z.string(),
+    slug: z.string(),
+    image: ImageSchema,
+    consortium: z.boolean()
+  })
 }).array();
 export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
 

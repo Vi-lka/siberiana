@@ -87,14 +87,14 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
   const json = await res.json();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.custom.data.attributes.content;
+  return json.data?.custom.data?.attributes.content;
 };
 
 export const getOrganizations = async (locale: string): Promise<OrganizationsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
-      organizations(locale: "${locale}", sort: "order:asc") {
+      organizations(locale: "${locale}", sort: "order:asc", pagination: {limit: 5}) {
         data {
           attributes {
             title
@@ -127,6 +127,8 @@ export const getOrganizations = async (locale: string): Promise<OrganizationsTyp
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
+
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   return json.data?.organizations.data;
@@ -189,21 +191,25 @@ export const getOrganizationBySlug = async (slug: string): Promise<OrganizationB
                 }
               }
             }
-            events {
-              title
-              url
-              textUrl
-              list(sort: "order:asc") {
-                name
-                dateStart
-                dateEnd
-                cost
-                url
-                address
-                image {
-                  data {
-                    attributes {
-                      url
+            events_organization {
+              data {
+                attributes {
+                  title
+                  url
+                  textUrl
+                  list(sort: "order:asc") {
+                    name
+                    dateStart
+                    dateEnd
+                    cost
+                    url
+                    address
+                    image {
+                      data {
+                        attributes {
+                          url
+                        }
+                      }
                     }
                   }
                 }

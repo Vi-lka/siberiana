@@ -37,7 +37,7 @@ import ButtonComponent from "../ui/ButtonComponent";
 export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneType, authDict: AuthDictType }) {
   const lang = useLocale();
 
-  const data = MenuZoneSchema.parse(menuData);
+  const dataResult = MenuZoneSchema.parse(menuData);
 
   return (
     <Sheet>
@@ -72,7 +72,7 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
         <NavigationMenu orientation="vertical">
           <NavigationMenuList className="flex flex-col items-center">
             <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
-              {data?.map((menuItem, index) => (
+              {dataResult.map((menuItem, index) => (
                 <SheetMenuItem key={index} lang={lang} menuItem={menuItem} />
               ))}
             </ScrollArea>

@@ -1,4 +1,7 @@
 {
+  "breadcrumbs": {
+    "home": "Главная"
+  },
   "menu": [
     {
       "id": 1,
@@ -115,7 +118,7 @@
       {
         "title": "Художественные коллекции",
         "url": "/art",
-        "img": "/images/artCol.jpg"
+        "img": "/images/artCol.JPG"
       },
       {
         "title": "Археологические коллекции",
@@ -138,5 +141,10 @@
     "right": "Верно!",
     "wrong": "К сожалению, нет(",
     "tryAgain": "Попробовать еще раз"
+  },
+  "organizations": {
+    "title": "Oрганизации",
+    "url": "/organizations",
+    "textUrl": "Все организации"
   }
 }

@@ -2,8 +2,7 @@
 
 import React from 'react'
 import ButtonComponent from '../ui/ButtonComponent'
-import { useQuery } from '@tanstack/react-query'
-import { fetchQuestions } from '~/lib/queries/strapi-client'
+import { useQuestions } from '~/lib/queries/strapi-client'
 import QuizSkeleton from '../skeletons/QuizSkeleton'
 import { QuestionsSchema  } from '@siberiana/schemas'
 import type {QuizType} from '@siberiana/schemas';
@@ -20,11 +19,8 @@ export default function Quiz({ text }: { text: QuizType }) {
 
   const locale = useLocale()
 
-  // Get all questions TODO: if fetchQuestions() returns random we will get only one question
-  const { data, isLoading, isFetching, error } = useQuery({
-    queryKey: ["quiz"],
-    queryFn: () => fetchQuestions(locale),
-  });
+  // Get all questions TODO: if useQuestions() returns random we will get only one question
+  const { data, isLoading, error } = useQuestions(locale)
   
   // Get random question
   const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
@@ -39,14 +35,16 @@ export default function Quiz({ text }: { text: QuizType }) {
   );
 
   // Check for data
-  if (isLoading || isFetching) return <QuizSkeleton />
+  if (isLoading) return <QuizSkeleton />
   if ((data === undefined) || error) return null
 
   // Check data validation
-  const dataSave = QuestionsSchema.parse(data);
+  const dataResult = QuestionsSchema.parse(data);
+
+  console.log(dataResult)
 
   // Set question
-  const question = dataSave.questions.data[questionRandomId]
+  const question = dataResult.questions.data[questionRandomId]
 
   function handleAnswer(index: number) {
     question.attributes.answerIndex === index ? 
@@ -58,7 +56,7 @@ export default function Quiz({ text }: { text: QuizType }) {
   function handleWrong() {
     setAnswer(undefined)
     setTryAgain(!tryAgain)
-    // void refetch(); // TODO: if fetchQuestions() returns random
+    // void refetch(); // TODO: if useQuestions() returns random
   }
 
   return (
