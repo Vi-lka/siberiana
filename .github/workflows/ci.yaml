@@ -2,6 +2,10 @@ name: CI
 
 on: [push, pull_request]
 
+env:
+  NEXT_PUBLIC_STRAPI_API_URL: http://localhost:1337
+  NEXT_PUBLIC_STRAPI_DOMAIN: localhost
+
 jobs:
   build:
     runs-on: ubuntu-latest
