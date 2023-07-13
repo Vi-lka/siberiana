@@ -154,5 +154,8 @@
     "title": "Organizations",
     "url": "/organizations",
     "textUrl": "All organizations"
+  },
+  "tooltips": {
+    "consortium": "Consortium"
   }
 }

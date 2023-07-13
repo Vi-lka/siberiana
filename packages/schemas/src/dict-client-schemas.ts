@@ -49,10 +49,10 @@ export const GroupLinkSchema = z.object({
 export type GroupLinkType = z.infer<typeof GroupLinkSchema>;
 
 //......MENU ZONE.......//
-export const MenuZoneSchema = z
+export const MenuDictSchema = z
   .union([SingleLinkSchema, GroupLinkSchema])
   .array();
-export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
+export type MenuDictType = z.infer<typeof MenuDictSchema>;
 
 //.........................SEARCH.........................//
 export const SearchDictSchema = z.object({
@@ -93,26 +93,26 @@ export const AuthDictSchema = z.object({
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
 
 //.........................CATEGORIES.........................//
-export const CategorySchema = z.object({
+export const CategoryDictSchema = z.object({
   title: z.string(),
   url: z.string(),
   img: z.string(),
 });
-export type CategoryType = z.infer<typeof CategorySchema>;
+export type CategoryType = z.infer<typeof CategoryDictSchema>;
 
-export const CategoriesSchema = z.object({
+export const CategoriesDictSchema = z.object({
   title: z.string(),
-  list: CategorySchema.array(),
+  list: CategoryDictSchema.array(),
 });
-export type CategoriesType = z.infer<typeof CategoriesSchema>;
+export type CategoriesDictType = z.infer<typeof CategoriesDictSchema>;
 
 //.........................QUIZ.........................//
-export const QuizSchema = z.object({
+export const QuizDictSchema = z.object({
   right: z.string(),
   wrong: z.string(),
   tryAgain: z.string(),
 });
-export type QuizType = z.infer<typeof QuizSchema>;
+export type QuizDictType = z.infer<typeof QuizDictSchema>;
 
 //.........................ORGANIZATIONS.........................//
 export const OrganizationsDictSchema = z.object({
@@ -122,16 +122,23 @@ export const OrganizationsDictSchema = z.object({
 });
 export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
 
+//.........................TOOLTIPS.........................//
+export const TooltipsDictSchema = z.object({
+  consortium: z.string(),
+});
+export type TooltipsDictType = z.infer<typeof TooltipsDictSchema>;
+
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
   breadcrumbs: BreadcrumbsDictSchema,
   errors: ErrorsDictSchema,
-  menu: MenuZoneSchema,
+  menu: MenuDictSchema,
   auth: AuthDictSchema,
   homeTitle: z.string().max(100),
   search: SearchDictSchema,
-  categories: CategoriesSchema,
-  quiz: QuizSchema,
+  categories: CategoriesDictSchema,
+  quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,
+  tooltips: TooltipsDictSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

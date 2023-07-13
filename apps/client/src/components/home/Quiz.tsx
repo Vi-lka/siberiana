@@ -6,7 +6,7 @@ import Link from "next/link";
 import type { ZodError } from "zod";
 
 import { QuestionsSchema } from "@siberiana/schemas";
-import type { ErrorsDictType, QuizType } from "@siberiana/schemas";
+import type { ErrorsDictType, QuizDictType } from "@siberiana/schemas";
 
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
@@ -20,7 +20,7 @@ export default function Quiz({
   text,
   errorText,
 }: {
-  text: QuizType;
+  text: QuizDictType;
   errorText: ErrorsDictType;
 }) {
   const [answer, setAnswer] = React.useState<boolean>();

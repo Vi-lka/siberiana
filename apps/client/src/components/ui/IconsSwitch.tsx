@@ -10,6 +10,7 @@ import {
   ScrollText,
   Users,
 } from "lucide-react";
+import { PiHandshakeLight } from 'react-icons/pi'
 
 export default function Icons({
   icon,
@@ -45,6 +46,9 @@ export default function Icons({
 
     case "CircuitBoard":
       return <CircuitBoard className={className} />;
+
+    case "Consortium":
+      return <PiHandshakeLight className={className} />;
 
     default:
       return icon;

@@ -1,7 +1,7 @@
 import React from "react";
 import { ZodError } from "zod";
 
-import type { ErrorsDictType } from "@siberiana/schemas";
+import type { DictionaryType } from "@siberiana/schemas";
 
 import { getOrganizations } from "~/lib/queries/strapi-server";
 import ImgTextOn from "../thumbnails/ImgTextOn";
@@ -9,19 +9,19 @@ import ErrorToast from "../ui/ErrorToast";
 
 export default async function OrganizationsBlock({
   locale,
-  errorText,
+  dict,
 }: {
   locale: string;
-  errorText: ErrorsDictType;
+  dict: DictionaryType;
 }) {
   try {
     await getOrganizations(locale);
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
-      return <ErrorToast dict={errorText} error={error.issues} />;
+      return <ErrorToast dict={dict.errors} error={error.issues} />;
     } else {
-      return <ErrorToast dict={errorText} error={(error as Error).message} />;
+      return <ErrorToast dict={dict.errors} error={(error as Error).message} />;
     }
   }
 
@@ -50,9 +50,12 @@ export default async function OrganizationsBlock({
   }
 
   return (
-    <div className="grid aspect-auto grid-flow-row-dense grid-cols-1 grid-rows-5 gap-6 md:aspect-[4/2] md:grid-cols-4 md:grid-rows-2">
+    <div className="grid aspect-auto grid-flow-row-dense md:aspect-[4/2] md:grid-cols-4 md:grid-rows-2 grid-cols-1 grid-rows-5 gap-6">
       {dataResult.map((org, index) => (
         <ImgTextOn
+          showIcon={org.attributes.consortium}
+          icon="Consortium"
+          tooltip={dict.tooltips.consortium}
           key={index}
           className={handleClassName(index)}
           title={org.attributes.title}

@@ -8,6 +8,8 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import type { UrlOrigins } from "~/lib/utils/getURL";
 import getURL from "~/lib/utils/getURL";
+import Icons from "../ui/IconsSwitch";
+import { TooltipProvider, Tooltip, TooltipTrigger, Button, TooltipContent } from "@siberiana/ui";
 
 type Props = {
   title: string;
@@ -18,7 +20,13 @@ type Props = {
   fill?: boolean;
   origin?: UrlOrigins;
   className?: string;
-};
+} & ({
+  showIcon: true;
+  icon: string;
+  tooltip: string;
+} | {
+  showIcon: false;
+})
 
 export default function ImgTextOn(props: Props) {
   const [image, setImage] = React.useState(
@@ -46,8 +54,25 @@ export default function ImgTextOn(props: Props) {
           className={"w-full object-cover"}
           alt={props.title}
         />
+        {props.showIcon && 
+          <TooltipProvider>
+            <Tooltip delayDuration={300}>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" className="absolute z-10 lg:top-6 lg:right-6 top-3 right-3 lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full">
+                  <Icons
+                    icon={props.icon}
+                    className="w-full h-full"
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans">
+                <p>{props.tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        }
         <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-25" />
-        <h2 className="absolute bottom-0 z-10 mb-[7.5%] ml-[4%] w-[85%] p-[5%] text-base font-bold uppercase text-white md:text-[12px] lg:ml-[7.5%] lg:text-base xl:text-xl">
+        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] text-base font-bold uppercase text-white md:text-[12px] lg:text-base xl:text-xl">
           {props.title}
         </h2>
       </div>

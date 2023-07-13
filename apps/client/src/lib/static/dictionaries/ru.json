@@ -154,5 +154,8 @@
     "title": "Oрганизации",
     "url": "/organizations",
     "textUrl": "Все организации"
+  },
+  "tooltips": {
+    "consortium": "Консорциум"
   }
 }

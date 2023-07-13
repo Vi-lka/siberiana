@@ -7,12 +7,11 @@ import { Menu } from "lucide-react";
 import type {
   AuthDictType,
   GroupLinkType,
-  MenuZoneType,
+  MenuDictType,
   SingleLinkType,
 } from "@siberiana/schemas";
 import {
   GroupLinkSchema,
-  MenuZoneSchema,
   SingleLinkSchema,
 } from "@siberiana/schemas";
 import {
@@ -40,12 +39,10 @@ export default function NavSheet({
   menuDict,
   authDict,
 }: {
-  menuDict: MenuZoneType;
+  menuDict: MenuDictType;
   authDict: AuthDictType;
 }) {
   const locale = useLocale();
-
-  const dictResult = MenuZoneSchema.parse(menuDict);
 
   return (
     <Sheet>
@@ -83,7 +80,7 @@ export default function NavSheet({
         <NavigationMenu orientation="vertical">
           <NavigationMenuList className="flex flex-col items-center">
             <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
-              {dictResult.map((menuItem, index) => (
+              {menuDict.map((menuItem, index) => (
                 <SheetMenuItem
                   key={index}
                   locale={locale}

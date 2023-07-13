@@ -17,6 +17,7 @@ export default function Breadcrumbs({
   data,
 }: {
   dict: BreadcrumbsDictType;
+  // TODO: Add another types for different data
   data?: OrganizationBySlugType;
 }) {
   const pathname = usePathname();
@@ -27,7 +28,9 @@ export default function Breadcrumbs({
   const getTextGenerator = React.useCallback(
     (subpath: string | null) => {
       if (subpath) {
-        if (subpath === data?.slug) return data?.title;
+        if (subpath === data?.slug) {
+          return data?.title
+        }
         else
           return {
             organizations: dict.organizations,

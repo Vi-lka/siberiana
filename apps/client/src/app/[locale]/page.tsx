@@ -2,9 +2,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
-
 import { DictionarySchema } from "@siberiana/schemas";
-
 import CustomBlock from "~/components/home/CustomBlock";
 import HomeSearch from "~/components/home/HomeSearch";
 import HomeSliderServer from "~/components/home/HomeSliderServer";
@@ -17,7 +15,7 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export default async function Home({
   params: { locale },
@@ -52,9 +50,10 @@ export default async function Home({
           {dictResult.categories.title}
         </h1>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
           {dictResult.categories.list.map((category, index) => (
             <ImgTextOn
+              showIcon={false}
               key={index}
               title={category.title}
               src={category.img}
@@ -93,7 +92,7 @@ export default async function Home({
         </div>
 
         <Suspense fallback={<GridBlockSkeleton />}>
-          <OrganizationsBlock locale={locale} errorText={dictResult.errors} />
+          <OrganizationsBlock locale={locale} dict={dictResult} />
         </Suspense>
       </div>
     </main>

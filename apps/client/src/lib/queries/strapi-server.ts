@@ -2,6 +2,7 @@ import "server-only";
 
 import {
   CustomBlockSchema,
+  OrganizationBySlugSchema,
   OrganizationsSchema,
   SliderSchema,
 } from "@siberiana/schemas";
@@ -282,14 +283,22 @@ export const getOrganizationBySlug = async (
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Organization By Slug'");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.organizations.data[0].attributes;
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const data = OrganizationBySlugSchema.parse(json.data?.organizations.data[0].attributes);
+
+  return data;
 };
 
 export const getProjects = async (locale: string): Promise<ProjectsType> => {

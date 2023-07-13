@@ -6,12 +6,11 @@ import { usePathname } from "next/navigation";
 
 import type {
   GroupLinkType,
-  MenuZoneType,
+  MenuDictType,
   SingleLinkType,
 } from "@siberiana/schemas";
 import {
   GroupLinkSchema,
-  MenuZoneSchema,
   SingleLinkSchema,
 } from "@siberiana/schemas";
 import {
@@ -28,15 +27,13 @@ import { useLocale } from "~/lib/utils/useLocale";
 import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
 
-export default function NavMenu({ menuDict }: { menuDict: MenuZoneType }) {
+export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
   const locale = useLocale();
-
-  const dictResult = MenuZoneSchema.parse(menuDict);
 
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        {dictResult.map((menuItem, index) => (
+        {menuDict.map((menuItem, index) => (
           <NavMenuItem key={index} locale={locale} menuItem={menuItem} />
         ))}
       </NavigationMenuList>
