@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 import type {
@@ -15,6 +16,7 @@ import {
   SingleLinkSchema,
 } from "@siberiana/schemas";
 import {
+  buttonVariants,
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
@@ -27,17 +29,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import { NavListItem } from "./NavListItem";
 import Icons from "../ui/IconsSwitch";
-import ButtonComponent from "../ui/ButtonComponent";
+import NavListItem from "./NavListItem";
 
-export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneType, authDict: AuthDictType }) {
-  const lang = useLocale();
+export default function NavSheet({
+  menuDict,
+  authDict,
+}: {
+  menuDict: MenuZoneType;
+  authDict: AuthDictType;
+}) {
+  const locale = useLocale();
 
-  const dataResult = MenuZoneSchema.parse(menuData);
+  const dictResult = MenuZoneSchema.parse(menuDict);
 
   return (
     <Sheet>
@@ -49,7 +57,7 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
         <SheetHeader>
           <SheetTitle className="mt-5 flex justify-center">
             <Link
-              href={`/${lang}`}
+              href={`${locale}`}
               className="relative h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
             >
               <SheetClose>
@@ -58,12 +66,15 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
             </Link>
           </SheetTitle>
 
-          <SheetDescription className="font-Inter">
-            <Link href={`${lang}/login`} className="">
-              <SheetClose>
-                <ButtonComponent className="px-10 py-6 mt-4 uppercase">
-                  {authDict.mainButton}
-                </ButtonComponent>
+          <SheetDescription className="font-Inter text-center">
+            <Link href={`${locale}/login`}>
+              <SheetClose
+                className={cn(
+                  buttonVariants(),
+                  "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase",
+                )}
+              >
+                {authDict.mainButton}
               </SheetClose>
             </Link>
           </SheetDescription>
@@ -72,8 +83,12 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
         <NavigationMenu orientation="vertical">
           <NavigationMenuList className="flex flex-col items-center">
             <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
-              {dataResult.map((menuItem, index) => (
-                <SheetMenuItem key={index} lang={lang} menuItem={menuItem} />
+              {dictResult.map((menuItem, index) => (
+                <SheetMenuItem
+                  key={index}
+                  locale={locale}
+                  menuItem={menuItem}
+                />
               ))}
             </ScrollArea>
           </NavigationMenuList>
@@ -84,12 +99,25 @@ export default function NavSheet({ menuData, authDict }: { menuData: MenuZoneTyp
 }
 
 function SheetMenuItem({
-  lang,
+  locale,
   menuItem,
 }: {
-  lang: string;
+  locale: string;
   menuItem: SingleLinkType | GroupLinkType;
 }) {
+  const pathName = usePathname();
+
+  // Remove query parameters
+  const pathWithoutQuery = pathName.split("?")[0];
+
+  // Ex:"/my/nested/path" --> ["my", "nested", "path"]
+  const pathNestedRoutes = pathWithoutQuery
+    .split("/")
+    .filter((v) => v.length > 0);
+
+  // Remove locale
+  const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
+
   if (SingleLinkSchema.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLinkType;
 
@@ -106,8 +134,10 @@ function SheetMenuItem({
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
-            href={`/${lang}/${menuItemResult.url}`}
-            className="py-1"
+            href={`${locale}${menuItemResult.url}`}
+            active={pathCurrentPage === `${menuItemResult.url}`}
+            className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 py-1"
+            sheet
           >
             {menuItemResult.description}
           </NavListItem>
@@ -139,7 +169,10 @@ function SheetMenuItem({
               <NavListItem
                 key={item.id}
                 title={item.name}
-                href={`/${lang}/${item.url}`}
+                href={`${locale}${item.url}`}
+                active={pathCurrentPage === `${item.url}`}
+                className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                sheet
               >
                 {item.description}
               </NavListItem>

@@ -1,12 +1,20 @@
 {
   "breadcrumbs": {
-    "home": "Home"
+    "home": "Home",
+    "organizations": "Organizations",
+    "objects": "All objects",
+    "archaeological": "Archaeological collections",
+    "archaeology": "Archaeology"
+  },
+  "errors": {
+    "title": "Uh oh! Something went wrong:",
+    "tryAgain": "Try again"
   },
   "menu": [
     {
       "id": 1,
       "name": "Collections",
-      "url": "collections",
+      "url": "/collections",
       "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
       "image": "Library"
     },
@@ -17,28 +25,28 @@
         {
           "id": 1,
           "name": "About",
-          "url": "about",
+          "url": "/about",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "Users"
         },
         {
           "id": 2,
           "name": "Organizations",
-          "url": "organizations",
+          "url": "/organizations",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "Landmark"
         },
         {
           "id": 3,
           "name": "Licenses",
-          "url": "licenses",
+          "url": "/licenses",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "FileBadge2"
         },
         {
           "id": 4,
           "name": "Help the project",
-          "url": "help",
+          "url": "/help",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "HelpingHand"
         }
@@ -51,28 +59,28 @@
         {
           "id": 1,
           "name": "Projects",
-          "url": "projects",
+          "url": "/projects",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "Boxes"
         },
         {
           "id": 2,
           "name": "Analytics",
-          "url": "analytics",
+          "url": "/analytics",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "BarChart4"
         },
         {
           "id": 3,
           "name": "Blog",
-          "url": "blog",
+          "url": "/blog",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "ScrollText"
         },
         {
           "id": 4,
           "name": "Services",
-          "url": "services",
+          "url": "/services",
           "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
           "image": "CircuitBoard"
         }
@@ -96,7 +104,7 @@
     "create": "Sign Up",
     "or": "or",
     "reset": "Forgot your username or password?",
-    "authButtons": { 
+    "authButtons": {
       "google": "Continue with Google"
     },
     "errors": {

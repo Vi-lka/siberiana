@@ -1,22 +1,29 @@
-import React from 'react'
-import ButtonComponent from '../ui/ButtonComponent'
-import type { AuthDictType } from '@siberiana/schemas'
-import GoogleSvg from '../GoogleSvg'
-import { cn } from '@siberiana/ui/src/lib/utils'
+import React from "react";
 
-export default function AuthButtons({ text, className }: { text: AuthDictType, className?: string }) {
+import type { AuthDictType } from "@siberiana/schemas";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
+import GoogleSvg from "../GoogleSvg";
+import ButtonComponent from "../ui/ButtonComponent";
+
+export default function AuthButtons({
+  text,
+  className,
+}: {
+  text: AuthDictType;
+  className?: string;
+}) {
   return (
-    <div 
-      className={cn(
-        "flex flex-col justify-between gap-6 w-full",
-        className,
-      )}
+    <div
+      className={cn("flex w-full flex-col justify-between gap-6", className)}
     >
-        <ButtonComponent className='auth-button sm:px-10 px-4 py-6 uppercase' onClick={() => console.log("Sign In with Google")}>
-          <GoogleSvg className='w-5 h-5 mr-2' />
-          {text.authButtons.google}
-        </ButtonComponent>
+      <ButtonComponent
+        className="auth-button px-4 py-6 uppercase sm:px-10"
+        onClick={() => console.log("Sign In with Google")}
+      >
+        <GoogleSvg className="mr-2 h-5 w-5" />
+        {text.authButtons.google}
+      </ButtonComponent>
     </div>
-  )
+  );
 }

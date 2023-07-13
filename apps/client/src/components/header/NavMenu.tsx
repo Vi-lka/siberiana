@@ -25,19 +25,19 @@ import {
 } from "@siberiana/ui";
 
 import { useLocale } from "~/lib/utils/useLocale";
-import { NavListItem } from "./NavListItem";
 import Icons from "../ui/IconsSwitch";
+import NavListItem from "./NavListItem";
 
-export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {
-  const lang = useLocale();
+export default function NavMenu({ menuDict }: { menuDict: MenuZoneType }) {
+  const locale = useLocale();
 
-  const dataResult = MenuZoneSchema.parse(menuData);
+  const dictResult = MenuZoneSchema.parse(menuDict);
 
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        {dataResult.map((menuItem, index) => (
-          <NavMenuItem key={index} lang={lang} menuItem={menuItem} />
+        {dictResult.map((menuItem, index) => (
+          <NavMenuItem key={index} locale={locale} menuItem={menuItem} />
         ))}
       </NavigationMenuList>
     </NavigationMenu>
@@ -45,22 +45,33 @@ export default function NavMenu({ menuData }: { menuData: MenuZoneType }) {
 }
 
 function NavMenuItem({
-  lang,
+  locale,
   menuItem,
 }: {
-  lang: string;
+  locale: string;
   menuItem: SingleLinkType | GroupLinkType;
 }) {
   const pathName = usePathname();
+
+  // Remove query parameters
+  const pathWithoutQuery = pathName.split("?")[0];
+
+  // Ex:"/my/nested/path" --> ["my", "nested", "path"]
+  const pathNestedRoutes = pathWithoutQuery
+    .split("/")
+    .filter((v) => v.length > 0);
+
+  // Remove locale
+  const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
   if (SingleLinkSchema.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLinkType;
 
     return (
       <NavigationMenuItem className="uppercase">
-        <Link href={`/${lang}/${menuItemResult.url}`} legacyBehavior passHref>
+        <Link href={`${locale}${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
-            active={pathName === `/${lang}/${menuItemResult.url}`}
+            active={pathCurrentPage === `${menuItemResult.url}`}
             className={navigationMenuTriggerStyle()}
           >
             {menuItemResult.name}
@@ -94,7 +105,9 @@ function NavMenuItem({
                 <NavListItem
                   key={item.id}
                   title={item.name}
-                  href={`/${lang}/${item.url}`}
+                  href={`${locale}${item.url}`}
+                  active={pathCurrentPage === `${item.url}`}
+                  className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 >
                   {item.description}
                 </NavListItem>

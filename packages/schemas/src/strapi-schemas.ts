@@ -9,7 +9,8 @@ export const ImageSchema = z.object({
         alternativeText: z.string().optional().nullable(),
       }),
     })
-    .nullable().optional(),
+    .nullable()
+    .optional(),
 });
 export type ImageType = z.infer<typeof ImageSchema>;
 
@@ -40,16 +41,23 @@ export const SliderSchema = z.array(
 export type SliderType = z.infer<typeof SliderSchema>;
 
 //.........................CUSTOM.........................//
-export const CustomBlockSchema = z.object({
-  title: z.string(),
-  url: z.string(),
-  textUrl: z.string(),
-  list: z.object({
+export const CustomBlockSchema = z.object(
+  {
     title: z.string(),
-    url: z.string(),
-    img: ImageSchema
-  }).array()
-})
+    url: z.string().url(),
+    textUrl: z.string(),
+    list: z
+      .object({
+        title: z.string(),
+        url: z.string().url(),
+        img: ImageSchema,
+      })
+      .array(),
+  },
+  {
+    required_error: "Custom Block missing",
+  },
+);
 export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
 
 //.........................ORGANIZATIONS.........................//
@@ -59,69 +67,85 @@ export const OrganizationBySlugSchema = z.object({
   image: ImageSchema,
   consortium: z.boolean(),
   url: z.string().url().nullable(),
-  collections: z.object({
-    title: z.string(),
-    url: z.string().url(),
-    textUrl: z.string(),
-    list: z.object({
+  collections: z
+    .object({
       title: z.string(),
       url: z.string().url(),
-      img: ImageSchema
-    }).array()
-  }).nullable(),
-  exhibits: z.object({
-    title: z.string(),
-    url: z.string().url(),
-    textUrl: z.string(),
-    list: z.object({
-      name: z.string(),
-      description: z.string(),
-      url: z.string().url(),
-      image: ImageSchema
-    }).array()
-  }).nullable(),
-  events_organization: z.object({
-    data: z.object({
-      attributes: z.object({
-        title: z.string(),
-        url: z.string().url().nullable(),
-        textUrl: z.string().nullable(),
-        list: z.object({
-          name: z.string(),
-          dateStart: z.string(),
-          dateEnd: z.string(),
-          cost: z.number().nullable(),
+      textUrl: z.string(),
+      list: z
+        .object({
+          title: z.string(),
           url: z.string().url(),
-          address: z.string(),
-          image: ImageSchema
-        }).array()
-      })
-    }).nullable()
-  }),
-  contacts: z.object({
-    title: z.string(),
-    map: z.string(),
-    schedule: z.object({
-      monday: z.string(),
-      tuesday: z.string(),
-      wednesday: z.string(),
-      thursday: z.string(),
-      friday: z.string(),
-      saturday: z.string(),
-      sunday: z.string()
+          img: ImageSchema,
+        })
+        .array(),
     })
-  }).nullable()
-})
+    .nullable(),
+  exhibits: z
+    .object({
+      title: z.string(),
+      url: z.string().url(),
+      textUrl: z.string(),
+      list: z
+        .object({
+          name: z.string(),
+          description: z.string(),
+          url: z.string().url(),
+          image: ImageSchema,
+        })
+        .array(),
+    })
+    .nullable(),
+  events_organization: z.object({
+    data: z
+      .object({
+        attributes: z.object({
+          title: z.string(),
+          url: z.string().url().nullable(),
+          textUrl: z.string().nullable(),
+          list: z
+            .object({
+              name: z.string(),
+              dateStart: z.string(),
+              dateEnd: z.string(),
+              cost: z.number().nullable(),
+              url: z.string().url(),
+              address: z.string(),
+              image: ImageSchema,
+            })
+            .array(),
+        }),
+      })
+      .nullable(),
+  }),
+  contacts: z
+    .object({
+      title: z.string(),
+      map: z.string(),
+      schedule: z.object({
+        monday: z.string(),
+        tuesday: z.string(),
+        wednesday: z.string(),
+        thursday: z.string(),
+        friday: z.string(),
+        saturday: z.string(),
+        sunday: z.string(),
+      }),
+    })
+    .nullable(),
+});
 export type OrganizationBySlugType = z.infer<typeof OrganizationBySlugSchema>;
 
-export const OrganizationsSchema = z.object({
-  attributes: z.object({
-    title: z.string(),
-    slug: z.string(),
-    image: ImageSchema,
-    consortium: z.boolean()
+export const OrganizationsSchema = z
+  .object({
+    attributes: z.object({
+      title: z.string(),
+      slug: z.string(),
+      image: ImageSchema,
+      consortium: z.boolean(),
+    }),
   })
-}).array();
+  .array();
 export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
 
 //.........................QUESTION.........................//
@@ -133,19 +157,19 @@ export const QuestionSchema = z.object({
     variants: z.array(
       z.object({
         title: z.string(),
-        index: z.number()
-      })
+        index: z.number(),
+      }),
     ),
     answerIndex: z.number(),
-    url: z.string(),
+    url: z.string().url(),
     urlName: z.string(),
-  })
+  }),
 });
 export type QuestionType = z.infer<typeof QuestionSchema>;
 
 export const QuestionsSchema = z.object({
   questions: z.object({
-    data: QuestionSchema.array()
-  })
+    data: QuestionSchema.array(),
+  }),
 });
 export type QuestionsType = z.infer<typeof QuestionsSchema>;

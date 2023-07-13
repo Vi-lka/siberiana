@@ -1,13 +1,16 @@
 "use client";
 
 import React from "react";
+
 import "keen-slider/keen-slider.min.css";
+
+import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
+
 import type { SliderType } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
-import Image from "next/image";
-import getImageURL from "~/lib/utils/getURL";
 
+import getImageURL from "~/lib/utils/getURL";
 
 export default function HomeSlider({ data }: { data: SliderType }) {
   const [created, setCreated] = React.useState<boolean>();
@@ -20,7 +23,8 @@ export default function HomeSlider({ data }: { data: SliderType }) {
     initial: 0,
     slides: {
       origin: "center",
-      perView: typeof window !== "undefined" && window.innerWidth <= 500 ? 1.4 : 2.4,
+      perView:
+        typeof window !== "undefined" && window.innerWidth <= 500 ? 1.4 : 2.4,
       spacing:
         typeof window !== "undefined" && window.innerWidth <= 740 ? 10 : 24,
     },
@@ -34,10 +38,7 @@ export default function HomeSlider({ data }: { data: SliderType }) {
 
   return (
     <>
-      <div
-        ref={sliderRef}
-        className="keen-slider home-slider cursor-grab"
-      >
+      <div ref={sliderRef} className="keen-slider home-slider cursor-grab">
         {data.map((image, index) => (
           <div
             key={index}
@@ -57,7 +58,7 @@ export default function HomeSlider({ data }: { data: SliderType }) {
                 sizes="(max-width: 500px) 65vw, 35vw"
               />
             ) : (
-              <Skeleton className="w-full h-full" />
+              <Skeleton className="h-full w-full" />
             )}
           </div>
         ))}

@@ -1,23 +1,39 @@
-import { DictionarySchema } from '@siberiana/schemas';
-import React from 'react'
-import Breadcrumbs from '~/components/ui/Breadcrumbs';
-import { getDictionary } from '~/lib/utils/getDictionary';
+import React from "react";
+import type { Metadata } from "next";
+import { ZodError } from "zod";
+
+import { DictionarySchema } from "@siberiana/schemas";
+
+import ErrorToast from "~/components/ui/ErrorToast";
+import { getOrganizations } from "~/lib/queries/strapi-server";
+import { getDictionary } from "~/lib/utils/getDictionary";
+
+export const metadata: Metadata = {
+  title: "Организации",
+};
 
 export default async function Organizations({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
 
-    const dict = await getDictionary(locale);
+  try {
+    await getOrganizations(locale);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.log(error.issues);
+      return <ErrorToast dict={dictResult.errors} error={error.issues} />;
+    } else {
+      return (
+        <ErrorToast dict={dictResult.errors} error={(error as Error).message} />
+      );
+    }
+  }
 
-    const dataResult = DictionarySchema.parse(dict);
+  const dataResult = await getOrganizations(locale);
 
-  return (
-    <main className="font-Inter flex flex-col">
-        <div className="font-OpenSans max-w-[1600px] w-[85%] mx-auto mt-16 mb-24">
-            <Breadcrumbs dict={dataResult.breadcrumbs} />
-        </div>
-    </main>
-  )
+  return <div className="">{dataResult.toString()}</div>;
 }

@@ -1,14 +1,29 @@
-import React from 'react'
-import HomeSlider from './HomeSlider'
-import { getSlider } from '~/lib/queries/strapi-server';
-import { SliderSchema } from '@siberiana/schemas';
+import React from "react";
+import { ZodError } from "zod";
 
-export default async function HomeSliderServer() {
+import type { ErrorsDictType } from "@siberiana/schemas";
 
-  const slider = await getSlider();
-  const dataResult = SliderSchema.parse(slider);
+import { getSlider } from "~/lib/queries/strapi-server";
+import ErrorToast from "../ui/ErrorToast";
+import HomeSlider from "./HomeSlider";
 
-  return (
-    <HomeSlider data={dataResult} />
-  )
+export default async function HomeSliderServer({
+  errorText,
+}: {
+  errorText: ErrorsDictType;
+}) {
+  try {
+    await getSlider();
+  } catch (error) {
+    if (error instanceof ZodError) {
+      console.log(error.issues);
+      return <ErrorToast dict={errorText} error={error.issues} />;
+    } else {
+      return <ErrorToast dict={errorText} error={(error as Error).message} />;
+    }
+  }
+
+  const dataResult = await getSlider();
+
+  return <HomeSlider data={dataResult} />;
 }

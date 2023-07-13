@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import type { SearchDictType } from "@siberiana/schemas";
 import {
   Button,
   Form,
@@ -16,7 +17,6 @@ import {
 } from "@siberiana/ui";
 
 import { HomeInputSearch } from "./HomeInputSearch";
-import type { SearchDictType } from "@siberiana/schemas";
 
 export default function HomeSearch({ text }: { text: SearchDictType }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
@@ -84,13 +84,13 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
                   {searchButton ? (
                     <Button
                       variant={"ghost"}
-                      className="px-2 uppercase sm:px-6 text-sm"
+                      className="px-2 text-sm uppercase sm:px-6"
                       type="submit"
                     >
                       {text.button}
                     </Button>
                   ) : (
-                    <div className="invisible px-2 uppercase sm:px-6 text-sm">
+                    <div className="invisible px-2 text-sm uppercase sm:px-6">
                       {text.button}
                     </div>
                   )}

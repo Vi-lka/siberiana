@@ -3,8 +3,19 @@ import { z } from "zod";
 //.........................BREADCRUMBS.........................//
 export const BreadcrumbsDictSchema = z.object({
   home: z.string(),
+  organizations: z.string(),
+  objects: z.string(),
+  archaeological: z.string(),
+  archaeology: z.string(),
 });
 export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
+
+//.........................ERRORS.........................//
+export const ErrorsDictSchema = z.object({
+  title: z.string(),
+  tryAgain: z.string(),
+});
+export type ErrorsDictType = z.infer<typeof ErrorsDictSchema>;
 
 //.........................MENU.........................//
 //......MENU SINGLE LINK.......//
@@ -40,7 +51,7 @@ export type GroupLinkType = z.infer<typeof GroupLinkSchema>;
 //......MENU ZONE.......//
 export const MenuZoneSchema = z
   .union([SingleLinkSchema, GroupLinkSchema])
-  .array()
+  .array();
 export type MenuZoneType = z.infer<typeof MenuZoneSchema>;
 
 //.........................SEARCH.........................//
@@ -70,14 +81,14 @@ export const AuthDictSchema = z.object({
   or: z.string(),
   reset: z.string(),
   authButtons: z.object({
-    google: z.string()
+    google: z.string(),
   }),
   errors: z.object({
     required: z.string(),
     email: z.string(),
     passwordMin: z.string(),
-    passwordMatch: z.string()
-  })
+    passwordMatch: z.string(),
+  }),
 });
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
 
@@ -85,13 +96,13 @@ export type AuthDictType = z.infer<typeof AuthDictSchema>;
 export const CategorySchema = z.object({
   title: z.string(),
   url: z.string(),
-  img: z.string()
+  img: z.string(),
 });
 export type CategoryType = z.infer<typeof CategorySchema>;
 
 export const CategoriesSchema = z.object({
   title: z.string(),
-  list: CategorySchema.array()
+  list: CategorySchema.array(),
 });
 export type CategoriesType = z.infer<typeof CategoriesSchema>;
 
@@ -99,7 +110,7 @@ export type CategoriesType = z.infer<typeof CategoriesSchema>;
 export const QuizSchema = z.object({
   right: z.string(),
   wrong: z.string(),
-  tryAgain: z.string()
+  tryAgain: z.string(),
 });
 export type QuizType = z.infer<typeof QuizSchema>;
 
@@ -107,19 +118,20 @@ export type QuizType = z.infer<typeof QuizSchema>;
 export const OrganizationsDictSchema = z.object({
   title: z.string(),
   url: z.string(),
-  textUrl: z.string()
+  textUrl: z.string(),
 });
 export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
 
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
+  breadcrumbs: BreadcrumbsDictSchema,
+  errors: ErrorsDictSchema,
   menu: MenuZoneSchema,
   auth: AuthDictSchema,
   homeTitle: z.string().max(100),
-  search: SearchDictSchema, 
+  search: SearchDictSchema,
   categories: CategoriesSchema,
   quiz: QuizSchema,
   organizations: OrganizationsDictSchema,
-  breadcrumbs: BreadcrumbsDictSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

@@ -1,6 +1,17 @@
 import "server-only";
 
-import type { CustomBlockType, OrganizationBySlugType, OrganizationsType, ProjectsType, SliderType } from "@siberiana/schemas";
+import {
+  CustomBlockSchema,
+  OrganizationsSchema,
+  SliderSchema,
+} from "@siberiana/schemas";
+import type {
+  CustomBlockType,
+  OrganizationBySlugType,
+  OrganizationsType,
+  ProjectsType,
+  SliderType,
+} from "@siberiana/schemas";
 
 export const getSlider = async (): Promise<SliderType> => {
   const headers = { "Content-Type": "application/json" };
@@ -32,17 +43,27 @@ export const getSlider = async (): Promise<SliderType> => {
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Slider'");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.slider.data.attributes.Images.data;
+  const data = SliderSchema.parse(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    json.data?.slider.data.attributes.Images.data,
+  );
+
+  return data;
 };
 
-export const getCustomBlock = async (locale: string): Promise<CustomBlockType> => {
+export const getCustomBlock = async (
+  locale: string,
+): Promise<CustomBlockType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query CustomBlock {
@@ -80,17 +101,27 @@ export const getCustomBlock = async (locale: string): Promise<CustomBlockType> =
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Custom Block'");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.custom.data?.attributes.content;
+  const data = CustomBlockSchema.parse(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    json.data?.custom.data?.attributes.content,
+  );
+
+  return data;
 };
 
-export const getOrganizations = async (locale: string): Promise<OrganizationsType> => {
+export const getOrganizations = async (
+  locale: string,
+): Promise<OrganizationsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
@@ -122,6 +153,10 @@ export const getOrganizations = async (locale: string): Promise<OrganizationsTyp
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Organizations'");
   }
 
@@ -130,11 +165,15 @@ export const getOrganizations = async (locale: string): Promise<OrganizationsTyp
 
   // await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.organizations.data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const data = OrganizationsSchema.parse(json.data?.organizations.data);
+
+  return data;
 };
 
-export const getOrganizationBySlug = async (slug: string): Promise<OrganizationBySlugType> => {
+export const getOrganizationBySlug = async (
+  slug: string,
+): Promise<OrganizationBySlugType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query OrganizationBySlug {

@@ -16,7 +16,7 @@ import { localesCodes } from "~/lib/static/locales";
 import { useLocale } from "~/lib/utils/useLocale";
 
 export default function LocaleSwitcher() {
-  const lang = useLocale();
+  const localeCurrent = useLocale();
 
   const pathName = usePathname();
   const redirectedPathName = (locale: string) => {
@@ -30,7 +30,9 @@ export default function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
-          <span className="uppercase text-base sm:text-sm">{lang}</span>
+          <span className="text-base uppercase sm:text-sm">
+            {localeCurrent}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="w-fit min-w-[50px]">
@@ -41,7 +43,7 @@ export default function LocaleSwitcher() {
               href={redirectedPathName(locale)}
               className="dark:text-beaverLight flex justify-center"
             >
-              <DropdownMenuItem className="font-Inter cursor-pointer uppercase text-base sm:text-sm">
+              <DropdownMenuItem className="font-Inter cursor-pointer text-base uppercase sm:text-sm">
                 {locale}
               </DropdownMenuItem>
             </Link>

@@ -5,7 +5,14 @@ import { Button } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 type ButtonComponentProps = {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | null
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | null;
   size?: "default" | "sm" | "lg" | null;
   className?: string;
   type?: "submit" | "reset" | "button";

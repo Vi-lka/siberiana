@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 //  to avoid props drilling (lang/locale) for client components
 import { usePathname } from "next/navigation";

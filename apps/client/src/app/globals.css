@@ -107,7 +107,7 @@ html.dark .logo-svg path {
 }
 
 .auth-button:hover .google-svg path,
-.auth-button:focus .google-svg path  {
+.auth-button:focus .google-svg path {
   fill: var(--beaverLight);
   transition: 0.15s ease-in-out;
 }
@@ -118,7 +118,7 @@ html.dark .auth-button .google-svg path {
 }
 
 html.dark .auth-button:hover .google-svg path,
-html.dark .auth-button:focus .google-svg path  {
+html.dark .auth-button:focus .google-svg path {
   fill: var(--darkBlue);
   transition: 0.15s ease-in-out;
 }

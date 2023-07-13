@@ -21,21 +21,21 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
   alternates: {
-    canonical: '/',
+    canonical: "/",
     languages: {
-      'ru': '/ru',
-      'en': '/en',
+      ru: "/ru",
+      en: "/en",
     },
   },
   openGraph: {
-    title: 'Сибириана',
-    description: 'Агрегатор культурного наследия',
+    title: "Сибириана",
+    description: "Агрегатор культурного наследия",
     url: process.env.NEXT_PUBLIC_URL,
-    siteName: 'Сибириана'
+    siteName: "Сибириана",
   },
   title: {
     default: "Сибириана",
-    template: "%s | Сибириана"
+    template: "%s | Сибириана",
   },
   description: "Агрегатор культурного наследия",
   icons: {
@@ -60,10 +60,8 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider attribute="class" enableSystem={true}>
-          <Header lang={params.locale} />
-          <main className="pt-20">
-            {children}
-          </main>
+          <Header locale={params.locale} />
+          <main className="pt-20">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
