@@ -1,5 +1,12 @@
 # @siberiana/ui
 
+## 0.2.0
+
+### Minor Changes
+
+- 67b8562: Add Sheet
+- 62cede7: Add form component + react-hook-form dependence
+
 ## 0.1.0
 
 ### Minor Changes
