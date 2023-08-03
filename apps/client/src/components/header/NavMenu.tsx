@@ -66,7 +66,7 @@ function NavMenuItem({
 
     return (
       <NavigationMenuItem className="uppercase">
-        <Link href={`${locale}${menuItemResult.url}`} legacyBehavior passHref>
+        <Link href={`/${locale}${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
             active={pathCurrentPage === `${menuItemResult.url}`}
             className={navigationMenuTriggerStyle()}
@@ -98,11 +98,11 @@ function NavMenuItem({
             </div>
 
             <ul className="flex flex-col justify-between gap-3">
-              {menuItemResult.list.map((item) => (
+              {menuItemResult.list.map((item, index) => (
                 <NavListItem
-                  key={item.id}
+                  key={index}
                   title={item.name}
-                  href={`${locale}${item.url}`}
+                  href={`/${locale}${item.url}`}
                   active={pathCurrentPage === `${item.url}`}
                   className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 >

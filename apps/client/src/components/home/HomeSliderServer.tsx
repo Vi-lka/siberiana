@@ -17,9 +17,9 @@ export default async function HomeSliderServer({
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
-      return <ErrorToast dict={errorText} error={error.issues} />;
+      return <ErrorToast dict={errorText} error={error.issues} place="Slider" />;
     } else {
-      return <ErrorToast dict={errorText} error={(error as Error).message} />;
+      return <ErrorToast dict={errorText} error={(error as Error).message} place="Slider" />;
     }
   }
 

@@ -13,6 +13,7 @@ import type {
   ProjectsType,
   SliderType,
 } from "@siberiana/schemas";
+import { notFound } from "next/navigation";
 
 export const getSlider = async (): Promise<SliderType> => {
   const headers = { "Content-Type": "application/json" };
@@ -112,6 +113,11 @@ export const getCustomBlock = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!json.data.custom.data) {
+    notFound()
+  }
+
   const data = CustomBlockSchema.parse(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     json.data?.custom.data?.attributes.content,
@@ -122,11 +128,25 @@ export const getCustomBlock = async (
 
 export const getOrganizations = async (
   locale: string,
+  page: number,
+  per: number
 ): Promise<OrganizationsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
-      organizations(locale: "${locale}", sort: "order:asc", pagination: {limit: 5}) {
+      organizations(
+        locale: "${locale}", 
+        sort: "order:asc", 
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
         data {
           attributes {
             title
@@ -164,21 +184,28 @@ export const getOrganizations = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 500));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = OrganizationsSchema.parse(json.data?.organizations.data);
+  if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
+    notFound()
+  }
 
-  return data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const organizations = OrganizationsSchema.parse(json.data?.organizations);
+
+  return organizations;
 };
 
 export const getOrganizationBySlug = async (
+  locale: string,
   slug: string,
 ): Promise<OrganizationBySlugType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query OrganizationBySlug {
       organizations(
+        locale: "${locale}",
         filters: {
           slug: {
             eq: "${slug}",
@@ -292,8 +319,12 @@ export const getOrganizationBySlug = async (
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
-
-    // await new Promise((resolve) => setTimeout(resolve, 2000));
+  
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (json.data.organizations.data.length === 0) {
+    notFound()
+  }
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const data = OrganizationBySlugSchema.parse(json.data?.organizations.data[0].attributes);

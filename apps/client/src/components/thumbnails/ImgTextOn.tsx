@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,6 +14,7 @@ import { TooltipProvider, Tooltip, TooltipTrigger, Button, TooltipContent } from
 type Props = {
   title: string;
   url: string;
+  target?: string;
   src?: string;
   width?: number;
   height?: number;
@@ -29,21 +30,28 @@ type Props = {
 })
 
 export default function ImgTextOn(props: Props) {
-  const [image, setImage] = React.useState(
-    props.src
-      ? getURL(props.src, props.origin)
-      : "/images/image-placeholder.png",
-  );
+  const [image, setImage] = React.useState("/images/image-placeholder.png");
+
+  useEffect(() => {
+    if (props.src) {
+      setImage(getURL(props.src, props.origin))
+    } else {
+      setImage("/images/image-placeholder.png")
+    }
+  }, [props.origin, props.src])
+
+  console.log(props.url)
 
   return (
     <Link
       href={props.url}
+      target={props.target}
       className={cn(
-        "bg-beaverLight ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:scale-105 hover:ring-4 hover:ring-offset-2",
+        "bg-beaverLight ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:-translate-y-2 hover:scale-[1.04] hover:ring-4 hover:ring-offset-2",
         props.className,
       )}
     >
-      <div className={"relative flex w-full"}>
+      <div className="relative flex w-full">
         <Image
           src={image}
           width={props.width ? props.width : 320}
@@ -72,7 +80,7 @@ export default function ImgTextOn(props: Props) {
           </TooltipProvider>
         }
         <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-25" />
-        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] text-base font-bold uppercase text-white md:text-[12px] lg:text-base xl:text-xl">
+        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] font-bold uppercase text-white xl:text-xl lg:text-base md:text-[12px] text-base">
           {props.title}
         </h2>
       </div>

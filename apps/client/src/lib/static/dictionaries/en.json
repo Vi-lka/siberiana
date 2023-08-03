@@ -1,4 +1,8 @@
 {
+  "siteInfo": {
+    "siteName": "Sibiriana",
+    "siteDescription": "Cultural Heritage Aggregator"
+  },
   "breadcrumbs": {
     "home": "Home",
     "organizations": "Organizations",
@@ -6,9 +10,23 @@
     "archaeological": "Archaeological collections",
     "archaeology": "Archaeology"
   },
+  "pagination": {
+    "showMore": "Show more",
+    "page": "Page",
+    "of": "of",
+    "firstPage": "Go to first page",
+    "lastPage": "Go to last page",
+    "previousPage": "Go to previous page",
+    "nextPage": "Go to next page"
+  },
   "errors": {
     "title": "Uh oh! Something went wrong:",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "notFound": {
+      "title": "Not Found",
+      "description": "Could not find requested resource",
+      "goBack": "Go Back"
+    }
   },
   "menu": [
     {
@@ -153,7 +171,17 @@
   "organizations": {
     "title": "Organizations",
     "url": "/organizations",
-    "textUrl": "All organizations"
+    "textUrl": "All organizations",
+    "goTo": "Go to the official website"
+  },
+  "schedule": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
   },
   "tooltips": {
     "consortium": "Consortium"

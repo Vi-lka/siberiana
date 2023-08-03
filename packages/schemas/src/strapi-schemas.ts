@@ -60,6 +60,32 @@ export const CustomBlockSchema = z.object(
 );
 export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
 
+//.........................QUESTION.........................//
+export const QuestionSchema = z.object({
+  attributes: z.object({
+    title: z.string(),
+    image: ImageSchema,
+    tip: z.string(),
+    variants: z.array(
+      z.object({
+        title: z.string(),
+        index: z.number(),
+      }),
+    ),
+    answerIndex: z.number(),
+    url: z.string().url(),
+    urlName: z.string(),
+  }),
+});
+export type QuestionType = z.infer<typeof QuestionSchema>;
+
+export const QuestionsSchema = z.object({
+  questions: z.object({
+    data: QuestionSchema.array(),
+  }),
+});
+export type QuestionsType = z.infer<typeof QuestionsSchema>;
+
 //.........................ORGANIZATIONS.........................//
 export const OrganizationBySlugSchema = z.object({
   title: z.string(),
@@ -88,8 +114,8 @@ export const OrganizationBySlugSchema = z.object({
       textUrl: z.string(),
       list: z
         .object({
-          name: z.string(),
-          description: z.string(),
+          name: z.string().nullable(),
+          description: z.string().nullable(),
           url: z.string().url(),
           image: ImageSchema,
         })
@@ -108,7 +134,7 @@ export const OrganizationBySlugSchema = z.object({
               name: z.string(),
               dateStart: z.string(),
               dateEnd: z.string(),
-              cost: z.number().nullable(),
+              cost: z.string().nullable(),
               url: z.string().url(),
               address: z.string(),
               image: ImageSchema,
@@ -136,40 +162,24 @@ export const OrganizationBySlugSchema = z.object({
 });
 export type OrganizationBySlugType = z.infer<typeof OrganizationBySlugSchema>;
 
-export const OrganizationsSchema = z
-  .object({
-    attributes: z.object({
-      title: z.string(),
-      slug: z.string(),
-      image: ImageSchema,
-      consortium: z.boolean(),
-    }),
-  })
-  .array();
-export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
-
-//.........................QUESTION.........................//
-export const QuestionSchema = z.object({
+export const OrganizationSingleSchema = z.object({
   attributes: z.object({
     title: z.string(),
+    slug: z.string(),
     image: ImageSchema,
-    tip: z.string(),
-    variants: z.array(
-      z.object({
-        title: z.string(),
-        index: z.number(),
-      }),
-    ),
-    answerIndex: z.number(),
-    url: z.string().url(),
-    urlName: z.string(),
+    consortium: z.boolean(),
   }),
-});
-export type QuestionType = z.infer<typeof QuestionSchema>;
+})
+export type OrganizationSingleType = z.infer<typeof OrganizationSingleSchema>;
 
-export const QuestionsSchema = z.object({
-  questions: z.object({
-    data: QuestionSchema.array(),
+export const OrganizationsSchema = z.object({
+  meta: z.object({
+    pagination: z.object({
+      total: z.number(),
+    })
   }),
+  data: OrganizationSingleSchema.array()
 });
-export type QuestionsType = z.infer<typeof QuestionsSchema>;
+export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
+
+

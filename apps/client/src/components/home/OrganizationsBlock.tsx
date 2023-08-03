@@ -15,17 +15,17 @@ export default async function OrganizationsBlock({
   dict: DictionaryType;
 }) {
   try {
-    await getOrganizations(locale);
+    await getOrganizations(locale, 1, 5);
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
-      return <ErrorToast dict={dict.errors} error={error.issues} />;
+      return <ErrorToast dict={dict.errors} error={error.issues} place="OrganizationsHome" />;
     } else {
-      return <ErrorToast dict={dict.errors} error={(error as Error).message} />;
+      return <ErrorToast dict={dict.errors} error={(error as Error).message} place="OrganizationsHome" />;
     }
   }
 
-  const dataResult = await getOrganizations(locale);
+  const dataResult = await getOrganizations(locale, 1, 5);
 
   function handleClassName(index: number) {
     switch (index) {
@@ -50,8 +50,8 @@ export default async function OrganizationsBlock({
   }
 
   return (
-    <div className="grid aspect-auto grid-flow-row-dense md:aspect-[4/2] md:grid-cols-4 md:grid-rows-2 grid-cols-1 grid-rows-5 gap-6">
-      {dataResult.map((org, index) => (
+    <div className="md:w-full w-[85%] mx-auto grid aspect-auto grid-flow-row-dense md:aspect-[4/2] md:grid-cols-4 md:grid-rows-2 grid-cols-1 grid-rows-5 gap-6">
+      {dataResult.data.map((org, index) => (
         <ImgTextOn
           showIcon={org.attributes.consortium}
           icon="Consortium"
@@ -60,7 +60,7 @@ export default async function OrganizationsBlock({
           className={handleClassName(index)}
           title={org.attributes.title}
           src={org.attributes.image.data?.attributes.url}
-          url={`${locale}/organizations/${org.attributes.slug}`}
+          url={`/${locale}/organizations/${org.attributes.slug}`}
           origin={"strapi"}
           width={450}
           height={450}

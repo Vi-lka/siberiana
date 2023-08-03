@@ -5,20 +5,18 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
-import type {
-  BreadcrumbsDictType,
-  OrganizationBySlugType,
-} from "@siberiana/schemas";
+import type { BreadcrumbsDictType } from "@siberiana/schemas";
 
 import { useLocale } from "~/lib/utils/useLocale";
 
 export default function Breadcrumbs({
   dict,
-  data,
+  slug,
+  title
 }: {
   dict: BreadcrumbsDictType;
-  // TODO: Add another types for different data
-  data?: OrganizationBySlugType;
+  slug?: string,
+  title?: string
 }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -28,8 +26,8 @@ export default function Breadcrumbs({
   const getTextGenerator = React.useCallback(
     (subpath: string | null) => {
       if (subpath) {
-        if (subpath === data?.slug) {
-          return data?.title
+        if (subpath === slug) {
+          return title
         }
         else
           return {
@@ -40,7 +38,7 @@ export default function Breadcrumbs({
           }[subpath];
       }
     },
-    [dict, data],
+    [dict, slug, title],
   );
 
   const breadcrumbs = React.useMemo(
@@ -131,15 +129,15 @@ function Crumb({
 
   // The last crumb is rendered as normal text
   if (last) {
-    return <span className="px-3 py-2 font-semibold">{text}</span>;
+    return <span className="sm:px-3 sm:py-2 p-1 font-semibold lg:text-base md:text-sm text-xs">{text}</span>;
   }
 
   return (
     <>
-      <Link href={href} className="hover:bg-accent rounded-md px-3 py-2 ">
+      <Link href={href} className="hover:bg-accent rounded-md sm:px-3 sm:py-2 p-1 lg:text-base md:text-sm text-xs">
         {text}
       </Link>
-      <ChevronRight className="mx-1 h-5 w-5" />
+      <ChevronRight className="sm:mx-1 h-5 w-5" />
     </>
   );
 }

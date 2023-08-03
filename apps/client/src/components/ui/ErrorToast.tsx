@@ -10,9 +10,11 @@ import { ToastAction, useToast } from "@siberiana/ui";
 
 export default function ErrorToast({
   error,
+  place,
   dict,
 }: {
   error: string | ZodIssue[];
+  place: string,
   dict: ErrorsDictType;
 }) {
   const { toast } = useToast();
@@ -37,7 +39,7 @@ export default function ErrorToast({
     toast({
       variant: "destructive",
       title: dict.title,
-      description: messageError,
+      description: <p>In {place}: {messageError}</p>,
       className: "font-Inter",
       action: (
         <ToastAction
@@ -49,7 +51,7 @@ export default function ErrorToast({
         </ToastAction>
       ),
     });
-  }, [dict, messageError, router, toast]);
+  }, [dict, messageError, place, router, toast]);
 
   return null;
 }

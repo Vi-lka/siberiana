@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+//.........................SITEINFO.........................//
+export const SiteInfoSchema = z.object({
+  siteName: z.string(),
+  siteDescription: z.string(),
+});
+export type SiteInfoType = z.infer<typeof SiteInfoSchema>;
+
 //.........................BREADCRUMBS.........................//
 export const BreadcrumbsDictSchema = z.object({
   home: z.string(),
@@ -10,10 +17,27 @@ export const BreadcrumbsDictSchema = z.object({
 });
 export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
 
+//.........................PAGINATION.........................//
+export const PaginationDictSchema = z.object({
+  showMore: z.string(),
+  page: z.string(),
+  of: z.string(),
+  firstPage: z.string(),
+  lastPage: z.string(),
+  previousPage: z.string(),
+  nextPage: z.string()
+});
+export type PaginationDictType = z.infer<typeof PaginationDictSchema>;
+
 //.........................ERRORS.........................//
 export const ErrorsDictSchema = z.object({
   title: z.string(),
   tryAgain: z.string(),
+  notFound: z.object({
+    title: z.string(),
+    description: z.string(),
+    goBack: z.string()
+  })
 });
 export type ErrorsDictType = z.infer<typeof ErrorsDictSchema>;
 
@@ -119,8 +143,21 @@ export const OrganizationsDictSchema = z.object({
   title: z.string(),
   url: z.string(),
   textUrl: z.string(),
+  goTo: z.string(),
 });
 export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
+
+//.........................SCHEDULE.........................//
+export const ScheduleDictSchema = z.object({
+  monday: z.string(),
+  tuesday: z.string(),
+  wednesday: z.string(),
+  thursday: z.string(),
+  friday: z.string(),
+  saturday: z.string(),
+  sunday: z.string(),
+});
+export type ScheduleDictType = z.infer<typeof ScheduleDictSchema>;
 
 //.........................TOOLTIPS.........................//
 export const TooltipsDictSchema = z.object({
@@ -130,7 +167,9 @@ export type TooltipsDictType = z.infer<typeof TooltipsDictSchema>;
 
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
+  siteInfo: SiteInfoSchema,
   breadcrumbs: BreadcrumbsDictSchema,
+  pagination: PaginationDictSchema,
   errors: ErrorsDictSchema,
   menu: MenuDictSchema,
   auth: AuthDictSchema,
@@ -139,6 +178,7 @@ export const DictionarySchema = z.object({
   categories: CategoriesDictSchema,
   quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,
+  schedule: ScheduleDictSchema,
   tooltips: TooltipsDictSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

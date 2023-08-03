@@ -24,7 +24,7 @@ export default function getLinkDir(link: string, locale: string): string {
   ).hostname.replace("www.", "");
 
   if (domain === "localhost" || domain === nextDomain) {
-    return `${locale}/${internalLink}`;
+    return `/${locale}/${internalLink}`;
   } else {
     console.log("OUT: ", url.href);
     return url.href;

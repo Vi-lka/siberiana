@@ -15,8 +15,6 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
-export const runtime = "edge";
-
 export default async function Home({
   params: { locale },
 }: {
@@ -50,14 +48,14 @@ export default async function Home({
           {dictResult.categories.title}
         </h1>
 
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+        <div className="md:w-full w-[85%] mx-auto grid md:grid-cols-4 grid-cols-1 gap-6">
           {dictResult.categories.list.map((category, index) => (
             <ImgTextOn
               showIcon={false}
               key={index}
               title={category.title}
               src={category.img}
-              url={`${locale}${category.url}`}
+              url={`/${locale}${category.url}`}
               origin={"next"}
             />
           ))}
@@ -70,8 +68,12 @@ export default async function Home({
       </div>
 
       {/* CUSTOM */}
-      <Suspense fallback={<RowBlockSkeleton />}>
-        <CustomBlock locale={locale} errorText={dictResult.errors} />
+      <Suspense fallback={
+        <div className="mx-auto mb-24 w-[85%] max-w-[1600px]">
+          <RowBlockSkeleton />
+        </div>
+      }>
+        <CustomBlock locale={locale} />
       </Suspense>
 
       {/* ORGANIZATIONS */}

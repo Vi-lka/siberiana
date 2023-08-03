@@ -12,10 +12,12 @@ type ButtonComponentProps = {
     | "secondary"
     | "ghost"
     | "link"
+    | "hidden"
     | null;
   size?: "default" | "sm" | "lg" | null;
   className?: string;
   type?: "submit" | "reset" | "button";
+  disabled?: boolean;
   onClick?: () => void;
 };
 
@@ -31,6 +33,7 @@ export default function ButtonComponent(
       )}
       size={props.size}
       type={props.type}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.children}

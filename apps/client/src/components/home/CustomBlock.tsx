@@ -1,31 +1,20 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ZodError } from "zod";
-
-import type { ErrorsDictType } from "@siberiana/schemas";
-
 import { getCustomBlock } from "~/lib/queries/strapi-server";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import ImgTextOn from "../thumbnails/ImgTextOn";
-import ErrorToast from "../ui/ErrorToast";
+import ErrorHandler from "../ui/ErrorHandler";
 
 export default async function CustomBlock({
   locale,
-  errorText,
 }: {
   locale: string;
-  errorText: ErrorsDictType;
 }) {
   try {
     await getCustomBlock(locale);
   } catch (error) {
-    if (error instanceof ZodError) {
-      console.log(error.issues);
-      return <ErrorToast dict={errorText} error={error.issues} />;
-    } else {
-      return <ErrorToast dict={errorText} error={(error as Error).message} />;
-    }
+    return <ErrorHandler locale={locale} error={error} place="Custom" />
   }
 
   const dataResult = await getCustomBlock(locale);
@@ -46,7 +35,7 @@ export default async function CustomBlock({
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div className="md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
         {dataResult.list.map((elem, index) => (
           <ImgTextOn
             showIcon={false}

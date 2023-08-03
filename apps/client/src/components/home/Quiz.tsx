@@ -42,22 +42,25 @@ export default function Quiz({
     [data, tryAgain],
   );
 
+  console.log(data)
   // Check for data
   if (isLoading) return <QuizSkeleton />;
-  if (data === undefined || error)
+  if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId]) || error){
     return (
       <ErrorToast
         dict={errorText}
         error={error ? error.message : "Quiz Data is undefined"}
+        place="Quiz"
       />
     );
+  }
 
   // Validate data
   try {
     QuestionsSchema.parse(data);
   } catch (error) {
     console.log((error as ZodError).issues);
-    return <ErrorToast dict={errorText} error={(error as ZodError).issues} />;
+    return <ErrorToast dict={errorText} error={(error as ZodError).issues} place="Quiz" />;
   }
 
   const dataResult = data;

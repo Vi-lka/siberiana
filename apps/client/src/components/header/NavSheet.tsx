@@ -54,7 +54,7 @@ export default function NavSheet({
         <SheetHeader>
           <SheetTitle className="mt-5 flex justify-center">
             <Link
-              href={`${locale}`}
+              href={`/${locale}`}
               className="relative h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
             >
               <SheetClose>
@@ -64,7 +64,7 @@ export default function NavSheet({
           </SheetTitle>
 
           <SheetDescription className="font-Inter text-center">
-            <Link href={`${locale}/login`}>
+            <Link href={`/${locale}/login`}>
               <SheetClose
                 className={cn(
                   buttonVariants(),
@@ -131,7 +131,7 @@ function SheetMenuItem({
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
-            href={`${locale}${menuItemResult.url}`}
+            href={`/${locale}${menuItemResult.url}`}
             active={pathCurrentPage === `${menuItemResult.url}`}
             className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 py-1"
             sheet
@@ -166,7 +166,7 @@ function SheetMenuItem({
               <NavListItem
                 key={item.id}
                 title={item.name}
-                href={`${locale}${item.url}`}
+                href={`/${locale}${item.url}`}
                 active={pathCurrentPage === `${item.url}`}
                 className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet

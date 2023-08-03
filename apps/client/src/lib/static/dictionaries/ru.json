@@ -1,4 +1,8 @@
 {
+  "siteInfo": {
+    "siteName": "Сибириана",
+    "siteDescription": "Агрегатор культурного наследия"
+  },
   "breadcrumbs": {
     "home": "Главная",
     "organizations": "Организации",
@@ -6,9 +10,23 @@
     "archaeological": "Археологические коллекции",
     "archaeology": "Археология"
   },
+  "pagination": {
+    "showMore": "Показать ещё",
+    "page": "Страница",
+    "of": "из",
+    "firstPage": "Перейти на первую страницу",
+    "lastPage": "Перейти на последнюю страницу",
+    "previousPage": "Перейти на предыдущую страницу",
+    "nextPage": "Перейти на следующую страницу"
+  },
   "errors": {
     "title": "Ошибка! Что-то пошло не так:",
-    "tryAgain": "Попробовать снова"
+    "tryAgain": "Попробовать снова",
+    "notFound": {
+      "title": "Не найдено",
+      "description": "Не удалось найти запрошенный ресурс",
+      "goBack": "Вернуться"
+    }
   },
   "menu": [
     {
@@ -153,7 +171,17 @@
   "organizations": {
     "title": "Oрганизации",
     "url": "/organizations",
-    "textUrl": "Все организации"
+    "textUrl": "Все организации",
+    "goTo": "Перейти на официальный сайт"
+  },
+  "schedule": {
+    "monday": "Понедельник",
+    "tuesday": "Вторник",
+    "wednesday": "Среда",
+    "thursday": "Четверг",
+    "friday": "Пятница",
+    "saturday": "Суббота",
+    "sunday": "Воскресенье"
   },
   "tooltips": {
     "consortium": "Консорциум"
