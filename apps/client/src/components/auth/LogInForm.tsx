@@ -20,23 +20,23 @@ import { useLocale } from "~/lib/utils/useLocale";
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
-export default function LogInForm({ text }: { text: AuthDictType }) {
+export default function LogInForm({ dict }: { dict: AuthDictType }) {
   const lang = useLocale();
 
   const LogInFormSchema = z.object({
     email: z
       .string({
-        required_error: text.errors.required,
+        required_error: dict.errors.required,
       })
       .email({
-        message: text.errors.email,
+        message: dict.errors.email,
       }),
     password: z
       .string({
-        required_error: text.errors.required,
+        required_error: dict.errors.required,
       })
       .min(6, {
-        message: text.errors.passwordMin,
+        message: dict.errors.passwordMin,
       }),
   });
 
@@ -65,7 +65,7 @@ export default function LogInForm({ text }: { text: AuthDictType }) {
                   <Input
                     type="email"
                     className="mb-0 p-5 placeholder:uppercase"
-                    placeholder={text.email}
+                    placeholder={dict.email}
                     {...field}
                   />
                 </FormControl>
@@ -82,7 +82,7 @@ export default function LogInForm({ text }: { text: AuthDictType }) {
                   <Input
                     type="password"
                     className="mb-0 mt-6 p-5 placeholder:uppercase"
-                    placeholder={text.password}
+                    placeholder={dict.password}
                     {...field}
                   />
                 </FormControl>
@@ -92,21 +92,21 @@ export default function LogInForm({ text }: { text: AuthDictType }) {
           />
           <div className="mt-6 flex flex-col-reverse items-center justify-between sm:flex-row">
             <Link href={`/${lang}/reset`} className="text-sm underline">
-              {text.reset}
+              {dict.reset}
             </Link>
             <ButtonComponent
               type="submit"
               className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
             >
-              {text.logIn}
+              {dict.logIn}
             </ButtonComponent>
           </div>
         </form>
       </Form>
 
-      <p className="mb-5 mt-5 text-center">{text.or}</p>
+      <p className="mb-5 mt-5 text-center">{dict.or}</p>
 
-      <AuthButtons text={text} />
+      <AuthButtons dict={dict} />
     </div>
   );
 }

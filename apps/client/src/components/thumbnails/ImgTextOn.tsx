@@ -8,7 +8,6 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import type { UrlOrigins } from "~/lib/utils/getURL";
 import getURL from "~/lib/utils/getURL";
-import Icons from "../ui/IconsSwitch";
 import { TooltipProvider, Tooltip, TooltipTrigger, Button, TooltipContent } from "@siberiana/ui";
 
 type Props = {
@@ -21,13 +20,17 @@ type Props = {
   fill?: boolean;
   origin?: UrlOrigins;
   className?: string;
-} & ({
-  showIcon: true;
-  icon: string;
+} & (TrueShowIconProps | FalseShowIconProps)
+
+type TrueShowIconProps = {
+  showIcon?: true;
+  children: React.ReactNode
   tooltip: string;
-} | {
-  showIcon: false;
-})
+}
+
+type FalseShowIconProps = {
+  showIcon?: false;
+}
 
 export default function ImgTextOn(props: Props) {
   const [image, setImage] = React.useState("/images/image-placeholder.png");
@@ -39,8 +42,6 @@ export default function ImgTextOn(props: Props) {
       setImage("/images/image-placeholder.png")
     }
   }, [props.origin, props.src])
-
-  console.log(props.url)
 
   return (
     <Link
@@ -62,15 +63,12 @@ export default function ImgTextOn(props: Props) {
           className={"w-full object-cover"}
           alt={props.title}
         />
-        {props.showIcon && 
+        {props.showIcon ? (
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
                 <Button variant="ghost" className="absolute z-10 lg:top-6 lg:right-6 top-3 right-3 lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full">
-                  <Icons
-                    icon={props.icon}
-                    className="w-full h-full"
-                  />
+                  {props.children}
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans">
@@ -78,7 +76,7 @@ export default function ImgTextOn(props: Props) {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        }
+        ) : null}
         <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-25" />
         <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] font-bold uppercase text-white xl:text-xl lg:text-base md:text-[12px] text-base">
           {props.title}

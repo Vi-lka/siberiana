@@ -14,6 +14,7 @@ import { ClientHydration } from "../ui/ClientHydration";
 import { Skeleton } from "@siberiana/ui";
 
 export default async function Header({ locale }: { locale: string }) {
+  
   const dict = await getDictionary(locale);
 
   const dictResult = DictionarySchema.parse(dict);

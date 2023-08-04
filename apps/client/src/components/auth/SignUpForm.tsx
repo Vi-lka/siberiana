@@ -22,48 +22,48 @@ import { useLocale } from "~/lib/utils/useLocale";
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
-export default function SignUpForm({ text }: { text: AuthDictType }) {
+export default function SignUpForm({ dict }: { dict: AuthDictType }) {
   const lang = useLocale();
 
   const SignUpFormSchema = z
     .object({
       lastName: z.string({
-        required_error: text.errors.required,
+        required_error: dict.errors.required,
       }),
       firstName: z.string({
-        required_error: text.errors.required,
+        required_error: dict.errors.required,
       }),
       email: z
         .string({
-          required_error: text.errors.required,
+          required_error: dict.errors.required,
         })
         .email({
-          message: text.errors.email,
+          message: dict.errors.email,
         }),
       password: z
         .string({
-          required_error: text.errors.required,
+          required_error: dict.errors.required,
         })
         .min(6, {
-          message: text.errors.passwordMin,
+          message: dict.errors.passwordMin,
         }),
       passwordConfirm: z
         .string({
-          required_error: text.errors.required,
+          required_error: dict.errors.required,
         })
         .min(6, {
-          message: text.errors.passwordMin,
+          message: dict.errors.passwordMin,
         }),
       researcher: z.boolean().default(false).optional(),
       ORCID: z.string().optional(),
       personalData: z
         .boolean({
-          required_error: text.errors.required,
+          required_error: dict.errors.required,
         })
         .default(false),
     })
     .refine((data) => data.password === data.passwordConfirm, {
-      message: text.errors.passwordMatch,
+      message: dict.errors.passwordMatch,
       path: ["passwordConfirm"], // path of error
     })
     .refine(
@@ -77,7 +77,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
         return true;
       },
       {
-        message: text.errors.required,
+        message: dict.errors.required,
         path: ["ORCID"], // path of error
       },
     )
@@ -88,7 +88,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
         return true;
       },
       {
-        message: text.errors.required,
+        message: dict.errors.required,
         path: ["personalData"], // path of error
       },
     );
@@ -124,7 +124,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                 <FormControl>
                   <Input
                     className="p-5 placeholder:uppercase"
-                    placeholder={text.lastName}
+                    placeholder={dict.lastName}
                     {...field}
                   />
                 </FormControl>
@@ -140,7 +140,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                 <FormControl>
                   <Input
                     className="p-5 placeholder:uppercase"
-                    placeholder={text.firstName}
+                    placeholder={dict.firstName}
                     {...field}
                   />
                 </FormControl>
@@ -157,7 +157,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                   <Input
                     type="email"
                     className="p-5 placeholder:uppercase"
-                    placeholder={text.email}
+                    placeholder={dict.email}
                     {...field}
                   />
                 </FormControl>
@@ -174,7 +174,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                   <Input
                     type="password"
                     className="p-5 placeholder:uppercase"
-                    placeholder={text.password}
+                    placeholder={dict.password}
                     {...field}
                   />
                 </FormControl>
@@ -191,7 +191,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                   <Input
                     type="password"
                     className="p-5 placeholder:uppercase"
-                    placeholder={text.passwordConfirm}
+                    placeholder={dict.passwordConfirm}
                     {...field}
                   />
                 </FormControl>
@@ -217,9 +217,9 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel className="text-[12px] sm:text-sm">
-                    {text.regAs}{" "}
+                    {dict.regAs}{" "}
                     <Link href={`/${lang}/info`} className="underline">
-                      {text.researcher}
+                      {dict.researcher}
                     </Link>
                   </FormLabel>
                 </div>
@@ -239,7 +239,7 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                     style={{
                       display: form.getValues().researcher ? "block" : "none",
                     }}
-                    placeholder={text.ORCID}
+                    placeholder={dict.ORCID}
                     {...field}
                   />
                 </FormControl>
@@ -265,9 +265,9 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <FormLabel className="text-[12px] sm:text-sm">
-                    {text.personalData}{" "}
+                    {dict.personalData}{" "}
                     <Link href={`/${lang}/policy`} className="underline">
-                      {text.personalDataLinkText}
+                      {dict.personalDataLinkText}
                     </Link>
                   </FormLabel>
                 </div>
@@ -280,15 +280,15 @@ export default function SignUpForm({ text }: { text: AuthDictType }) {
               type="submit"
               className="w-full px-10 py-6 text-sm uppercase"
             >
-              {text.create}
+              {dict.create}
             </ButtonComponent>
           </div>
         </form>
       </Form>
 
-      <p className="mb-5 mt-5 text-center lg:w-[5%]">{text.or}</p>
+      <p className="mb-5 mt-5 text-center lg:w-[5%]">{dict.or}</p>
 
-      <AuthButtons text={text} className="gap-12 lg:w-[45%]" />
+      <AuthButtons dict={dict} className="gap-12 lg:w-[45%]" />
     </div>
   );
 }

@@ -14,7 +14,7 @@ export default async function Login({
 }) {
   const dict = await getDictionary(locale);
 
-  const dataResult = DictionarySchema.parse(dict);
+  const dictResult = DictionarySchema.parse(dict);
 
   return (
     <div className="font-Inter flex justify-center">
@@ -25,13 +25,13 @@ export default async function Login({
               value="signIn"
               className="data-[state=active]:text-dark data-[state=active]:border-beaver rounded-none border-b-2 border-transparent px-0 text-sm dark:data-[state=active]:border-white dark:data-[state=active]:text-white sm:text-base md:px-4"
             >
-              {dataResult.auth.logIn}
+              {dictResult.auth.logIn}
             </TabsTrigger>
             <TabsTrigger
               value="signUp"
               className="data-[state=active]:text-dark data-[state=active]:border-beaver rounded-none border-b-2 border-transparent px-0 text-sm dark:data-[state=active]:border-white dark:data-[state=active]:text-white sm:text-base md:px-4"
             >
-              {dataResult.auth.signUp}
+              {dictResult.auth.signUp}
             </TabsTrigger>
           </TabsList>
         </div>
@@ -39,13 +39,13 @@ export default async function Login({
           value="signIn"
           className="mx-auto mt-24 max-w-[600px] px-8 pb-8 pt-8 sm:px-20"
         >
-          <LogInForm text={dataResult.auth} />
+          <LogInForm dict={dictResult.auth} />
         </TabsContent>
         <TabsContent
           value="signUp"
           className="mx-auto mt-24 max-w-[600px] px-8 pb-8 pt-8 sm:px-20 lg:max-w-[1200px]"
         >
-          <SignUpForm text={dataResult.auth} />
+          <SignUpForm dict={dictResult.auth} />
         </TabsContent>
       </Tabs>
     </div>

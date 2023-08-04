@@ -17,9 +17,12 @@ import {
 } from "@siberiana/ui";
 
 import { HomeInputSearch } from "./HomeInputSearch";
+import { Loader2 } from "lucide-react";
 
-export default function HomeSearch({ text }: { text: SearchDictType }) {
+export default function HomeSearch({ dict }: { dict: SearchDictType }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
+
+  const [isPending, startTransition] = React.useTransition()
 
   const router = useRouter();
   const pathname = usePathname();
@@ -27,10 +30,10 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
   const SearchFormSchema = z.object({
     query: z
       .string({
-        required_error: text.error,
+        required_error: dict.error,
       })
       .min(2, {
-        message: text.error,
+        message: dict.error,
       }),
   });
 
@@ -55,9 +58,8 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
       const params = new URLSearchParams(window.location.search);
       if (inputValue.length > 0) {
         params.set("search", inputValue);
-        React.startTransition(() => {
+        startTransition(() => {
           router.push(`${pathname}/objects?${params.toString()}`);
-          console.log(`${pathname}/objects?${params.toString()}`);
         });
       } else {
         params.delete("search");
@@ -65,6 +67,8 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
     },
     [pathname, router],
   );
+
+  if (isPending) return <Loader2 className='animate-spin' />;
 
   return (
     <Form {...form}>
@@ -78,7 +82,7 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
               <FormControl>
                 <HomeInputSearch
                   className="w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
-                  placeholder={text.placeholder}
+                  placeholder={dict.placeholder}
                   {...field}
                 >
                   {searchButton ? (
@@ -87,11 +91,11 @@ export default function HomeSearch({ text }: { text: SearchDictType }) {
                       className="px-2 text-sm uppercase sm:px-6"
                       type="submit"
                     >
-                      {text.button}
+                      {dict.button}
                     </Button>
                   ) : (
                     <div className="invisible px-2 text-sm uppercase sm:px-6">
-                      {text.button}
+                      {dict.button}
                     </div>
                   )}
                 </HomeInputSearch>

@@ -26,7 +26,15 @@ export default async function Organization({
     try {
       await getOrganizationBySlug(locale, slug);
     } catch (error) {
-      return <ErrorHandler locale={locale} error={error} place="Organization" notFound />
+      return (
+        <ErrorHandler 
+          locale={locale} 
+          error={error} 
+          place="Organization" 
+          notFound 
+          goBack 
+        />
+      )
     }
     
     const dataResult = await getOrganizationBySlug(locale, slug);
@@ -47,7 +55,7 @@ export default async function Organization({
             </h1>
 
             <div className="flex md:gap-6 gap-3">
-              {dataResult.consortium && 
+              {dataResult.consortium ? (
                 <TooltipProvider>
                   <Tooltip delayDuration={300}>
                     <TooltipTrigger asChild>
@@ -59,24 +67,24 @@ export default async function Organization({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans">
-                      <p>{dict.tooltips.consortium}</p>
+                      <p>{dictResult.tooltips.consortium}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              }
+              ) : null}
 
-              {dataResult.url && 
+              {dataResult.url ? (
                 <Link href={getLinkDir(dataResult.url, locale)} target="_blank">
                   <ButtonComponent className="md:px-10 md:py-6 py-[22px] px-[10px] uppercase xl:text-sm text-xs">
-                    <p className="md:block hidden">{dict.organizations.goTo}</p>
+                    <p className="md:block hidden">{dictResult.organizations.goTo}</p>
                     <ArrowUpRight className="md:h-5 md:w-5 h-6 w-6 md:ml-4 ml-0 stroke-1" />
                   </ButtonComponent>
                 </Link>
-              }
+              ) : null}
             </div>
           </div>
      
-          {dataResult.image.data && (
+          {dataResult.image.data ? (
             <div className="relative flex lg:w-[40%] w-full aspect-[2/1] overflow-hidden rounded-md">
               <Image
                 src={getURL(dataResult.image.data.attributes.url, "strapi")}
@@ -88,11 +96,11 @@ export default async function Organization({
               />
               <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-10" />
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* COLLECTIONS */}
-        {dataResult.collections && (
+        {dataResult.collections ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
@@ -124,10 +132,10 @@ export default async function Organization({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* EXHIBITS */}
-        {dataResult.exhibits && (
+        {dataResult.exhibits ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
@@ -155,29 +163,29 @@ export default async function Organization({
                   origin={"strapi"}
                 >
                   <p className="w-full uppercase xl:text-sm text-[12px]">
-                    {elem.name && (
+                    {elem.name ? (
                         <>
                             <span className="font-bold">{elem.name}</span>
                             <br/>
                         </>
-                    )}
+                    ) : null}
                     {elem.description}
                   </p>
                 </ImgTextBelow>
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* EVENTS */}
-        {dataResult.events_organization.data && (
+        {dataResult.events_organization.data ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
                 {dataResult.events_organization.data.attributes.title}
               </h2>
 
-              {dataResult.events_organization.data.attributes.url && (
+              {dataResult.events_organization.data.attributes.url ? (
                 <Link
                   href={getLinkDir(dataResult.events_organization.data.attributes.url, locale)}
                   target="_blank"
@@ -186,7 +194,7 @@ export default async function Organization({
                   <p className="hidden md:block">{dataResult.events_organization.data.attributes.textUrl}</p>
                   <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
                 </Link>
-              )}
+              ) : null}
             </div>
 
             <div className="font-Inter md:w-full w-[85%] mx-auto grid md:grid-cols-2 grid-cols-1 gap-7">
@@ -204,7 +212,7 @@ export default async function Organization({
                 >
                   <div className="flex md:flex-row flex-col justify-between gap-1">
                     <p className="md:w-[45%] uppercase xl:text-sm text-[12px]">
-                      <span className="font-bold">{new Date(elem.dateStart).toLocaleDateString(locale)} – {new Date(elem.dateEnd).toLocaleDateString(locale)}</span> {elem.cost && `• ${elem.cost}`} 
+                      <span className="font-bold">{new Date(elem.dateStart).toLocaleDateString(locale)} – {new Date(elem.dateEnd).toLocaleDateString(locale)}</span> {elem.cost ? (`${elem.cost} • ${elem.cost}`) : null } 
                       <br/>
                       {elem.name}
                     </p>
@@ -218,10 +226,10 @@ export default async function Organization({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* CONTACTS */}
-        {dataResult.contacts && (
+        {dataResult.contacts ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
@@ -235,29 +243,29 @@ export default async function Organization({
               <div>
                 <div className="font-Inter md:text-base text-sm w-fit grid grid-cols-2 gap-14 mb-6">
                   <div className="w-fit">
-                    {Object.entries(dict.schedule).map(([key, val]) => (
+                    {Object.entries(dictResult.schedule).map(([key, val]) => (
                       <p key={key} className="">{val}</p>
                     ))}
                   </div>
                   <div className="w-fit">
-                  {Object.entries(dataResult.contacts.schedule).map(([key, val]) => (
+                    {Object.entries(dataResult.contacts.schedule).map(([key, val]) => (
                       <p key={key} className="">{val}</p>
                     ))}
                   </div>
                 </div>
 
-                {dataResult.url && 
+                {dataResult.url ? ( 
                   <Link href={getLinkDir(dataResult.url, locale)} target="_blank">
                     <ButtonComponent className="md:px-10 md:py-6 py-5 px-3 uppercase xl:text-sm text-xs">
-                      <p className="">{dict.organizations.goTo}</p>
+                      <p className="">{dictResult.organizations.goTo}</p>
                       <ArrowUpRight className="h-5 w-5 md:ml-4 ml-1 stroke-1" />
                     </ButtonComponent>
                   </Link>
-                }
+                ) : null}
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </>
     );
 }

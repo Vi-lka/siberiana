@@ -29,6 +29,25 @@ export const PaginationDictSchema = z.object({
 });
 export type PaginationDictType = z.infer<typeof PaginationDictSchema>;
 
+//.........................SORT.........................//
+export const SortDictSchema = z.object({
+  placeholder: z.string(),
+  asc: z.string(),
+  desc: z.string(),
+  ascText: z.string(),
+  descText: z.string(),
+  byName: z.string(),
+  reset: z.string()
+});
+export type SortDictType = z.infer<typeof SortDictSchema>;
+
+//.......SORTDATA.......//
+export const SortDataSchema = z.object({
+  val: z.string(),
+  text: z.string(),
+});
+export type SortDataType = z.infer<typeof SortDataSchema>;
+
 //.........................ERRORS.........................//
 export const ErrorsDictSchema = z.object({
   title: z.string(),
@@ -170,6 +189,7 @@ export const DictionarySchema = z.object({
   siteInfo: SiteInfoSchema,
   breadcrumbs: BreadcrumbsDictSchema,
   pagination: PaginationDictSchema,
+  sort: SortDictSchema,
   errors: ErrorsDictSchema,
   menu: MenuDictSchema,
   auth: AuthDictSchema,

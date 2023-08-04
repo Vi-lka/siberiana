@@ -38,7 +38,6 @@ export default async function CustomBlock({
       <div className="md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
         {dataResult.list.map((elem, index) => (
           <ImgTextOn
-            showIcon={false}
             key={index}
             className={"aspect-square"}
             title={elem.title}

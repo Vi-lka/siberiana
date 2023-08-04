@@ -5,37 +5,43 @@ import ErrorToast from './ErrorToast';
 import { DictionarySchema } from '@siberiana/schemas';
 import NotFound from './NotFound';
 
-export default async function ErrorHandler({ 
-    locale, 
-    error,
-    place,
-    notFound = false
-}: { 
+type Props = {
     locale: string, 
     error: unknown,
     place: string,
-    notFound?: boolean
-}) {
+    children?: React.ReactNode
+} & (TrueNotFoundProps | FalseNotFoundProps)
 
-    const dict = await getDictionary(locale);
+type TrueNotFoundProps = {
+    notFound?: true,
+    goBack: boolean,
+}
+
+type FalseNotFoundProps = {
+    notFound?: false,
+}
+
+export default async function ErrorHandler(props: Props) {
+
+    const dict = await getDictionary(props.locale);
     const dictResult = DictionarySchema.parse(dict);
 
-    if (error instanceof ZodError) {
+    if (props.error instanceof ZodError) {
 
-        console.log(error.issues);
-
-        return <ErrorToast dict={dictResult.errors} error={error.issues} place={place} />;
+        return <ErrorToast dict={dictResult.errors} error={props.error.issues} place={props.place} />;
 
     } else {
 
-        console.log(error);
+        if (props.notFound) {
+            if ((props.error as Error).message === 'NEXT_NOT_FOUND') {
 
-        if (notFound) {
-            if ((error as Error).message === 'NEXT_NOT_FOUND') {
-
-                return <NotFound dict={dictResult.errors} />
+                return (
+                    <NotFound dict={dictResult.errors} goBack={props.goBack}>
+                        {props.children}
+                    </NotFound>
+                )
             
-            } else return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place={place} />
+            } else return <ErrorToast dict={dictResult.errors} error={(props.error as Error).message} place={props.place} />
         } else return null
 
     }

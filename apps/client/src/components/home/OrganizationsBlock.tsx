@@ -6,6 +6,7 @@ import type { DictionaryType } from "@siberiana/schemas";
 import { getOrganizations } from "~/lib/queries/strapi-server";
 import ImgTextOn from "../thumbnails/ImgTextOn";
 import ErrorToast from "../ui/ErrorToast";
+import { PiHandshakeLight } from "react-icons/pi";
 
 export default async function OrganizationsBlock({
   locale,
@@ -54,7 +55,6 @@ export default async function OrganizationsBlock({
       {dataResult.data.map((org, index) => (
         <ImgTextOn
           showIcon={org.attributes.consortium}
-          icon="Consortium"
           tooltip={dict.tooltips.consortium}
           key={index}
           className={handleClassName(index)}
@@ -64,7 +64,9 @@ export default async function OrganizationsBlock({
           origin={"strapi"}
           width={450}
           height={450}
-        />
+        >
+          <PiHandshakeLight className='w-full h-full' />
+        </ImgTextOn>
       ))}
     </div>
   );

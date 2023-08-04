@@ -33,11 +33,11 @@ export default async function Home({
           </h1>
 
           <Suspense fallback={<HomeSliderSkeleton />}>
-            <HomeSliderServer errorText={dictResult.errors} />
+            <HomeSliderServer errorDict={dictResult.errors} />
           </Suspense>
         </div>
 
-        <HomeSearch text={dictResult.search} />
+        <HomeSearch dict={dictResult.search} />
 
         <ArrowDown className="text-beaver dark:text-beaverLight mt-4 h-10 w-10 stroke-1 lg:h-12 lg:w-12" />
       </div>
@@ -51,7 +51,6 @@ export default async function Home({
         <div className="md:w-full w-[85%] mx-auto grid md:grid-cols-4 grid-cols-1 gap-6">
           {dictResult.categories.list.map((category, index) => (
             <ImgTextOn
-              showIcon={false}
               key={index}
               title={category.title}
               src={category.img}
@@ -64,7 +63,7 @@ export default async function Home({
 
       {/* QUIZ */}
       <div className="mx-auto mb-24 w-[85%] max-w-[1600px]">
-        <Quiz text={dictResult.quiz} errorText={dictResult.errors} />
+        <Quiz qiuzDict={dictResult.quiz} errorDict={dictResult.errors} />
       </div>
 
       {/* CUSTOM */}

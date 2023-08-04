@@ -19,6 +19,15 @@
     "previousPage": "Go to previous page",
     "nextPage": "Go to next page"
   },
+  "sort": {
+    "placeholder": "Sort by:",
+    "asc": "asc",
+    "desc": "desc",
+    "ascText": "A-Z",
+    "descText": "Z-A",
+    "byName": "Name",
+    "reset": "Reset"
+  },
   "errors": {
     "title": "Uh oh! Something went wrong:",
     "tryAgain": "Try again",

@@ -129,17 +129,30 @@ export const getCustomBlock = async (
 export const getOrganizations = async (
   locale: string,
   page: number,
-  per: number
+  per: number,
+  sort = "order:asc",
+  search = "",
+  consortium?: boolean,
 ): Promise<OrganizationsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
       organizations(
         locale: "${locale}", 
-        sort: "order:asc", 
+        sort: "${sort}", 
         pagination: {
           page: ${page},
           pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          },
+          ${consortium ? (
+            `consortium: {
+              eqi: true
+            }`
+          ) : ''}
         }
       ) {
         meta {
@@ -184,7 +197,7 @@ export const getOrganizations = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 500));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
