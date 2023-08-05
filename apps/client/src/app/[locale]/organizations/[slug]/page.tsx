@@ -6,7 +6,6 @@ import ImgTextBelow from "~/components/thumbnails/ImgTextBelow";
 import ImgTextOn from "~/components/thumbnails/ImgTextOn";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import ButtonComponent from "~/components/ui/ButtonComponent";
-import Icons from "~/components/ui/IconsSwitch";
 import { getOrganizationBySlug } from "~/lib/queries/strapi-server";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import getLinkDir from "~/lib/utils/getLinkDir";
@@ -14,6 +13,7 @@ import MapHtml from "./MapHtml";
 import Image from "next/image";
 import getURL from "~/lib/utils/getURL";
 import ErrorHandler from "~/components/ui/ErrorHandler";
+import { PiHandshakeLight } from "react-icons/pi";
 
 export default async function Organization({
     params: { locale, slug },
@@ -60,10 +60,7 @@ export default async function Organization({
                   <Tooltip delayDuration={300}>
                     <TooltipTrigger asChild>
                       <Button variant="ghost" className="lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full">
-                        <Icons
-                          icon="Consortium"
-                          className="w-full h-full"
-                        />
+                        <PiHandshakeLight className='w-full h-full' />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans">

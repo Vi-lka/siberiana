@@ -28,7 +28,7 @@ export default async function Organizations({
   const dict = await getDictionary(locale);
   const dictResult = DictionarySchema.parse(dict);
 
-  const defaultPageSize = 1
+  const defaultPageSize = 10
 
   const page = searchParams['page'] ?? '1'
   const per = searchParams['per'] ?? defaultPageSize
@@ -53,10 +53,12 @@ export default async function Organizations({
         goBack={false}
       >
         <Breadcrumbs dict={dictResult.breadcrumbs} />
-        <div className="my-10 flex gap-4 md:flex-row flex-col items-start justify-between">
+
+        <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col items-start justify-between">
           <h1 className="text-foreground text-2xl font-bold uppercase">
             {dictResult.organizations.title}
           </h1>
+
           <div className="flex flex-grow gap-6 items-center justify-end md:w-fit w-full">
             <ToggleFilter 
               tooltip={dictResult.tooltips.consortium} 
@@ -65,16 +67,16 @@ export default async function Organizations({
               <PiHandshakeLight className="h-6 w-6" />
             </ToggleFilter>
 
-            <SearchField 
-              dict={dictResult.search}
-            />
-
             <Sort 
               dict={dictResult.sort}
               data={sortData}
             />
           </div>
         </div>
+
+        <SearchField 
+          placeholder={dictResult.search.button}
+        />
       </ErrorHandler>
     )
   }
@@ -84,22 +86,19 @@ export default async function Organizations({
   return (
     <div>
       <Breadcrumbs dict={dictResult.breadcrumbs} />
-      <div className="my-10 flex gap-4 md:flex-row flex-col items-start justify-between">
+
+      <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
           {dictResult.organizations.title}
         </h1>
-        <div className="flex flex-grow gap-6 items-center justify-end md:w-fit w-full">
 
-          <ToggleFilter 
-            tooltip={dictResult.tooltips.consortium} 
-            param={'consortium'}
-          >
-            <PiHandshakeLight className="h-6 w-6" />
-          </ToggleFilter>
-
-          <SearchField 
-            dict={dictResult.search}
-          />
+        <div className="flex flex-grow gap-6 items-center md:justify-end justify-between md:w-fit w-full">
+            <ToggleFilter 
+              tooltip={dictResult.tooltips.consortium} 
+              param={'consortium'}
+            >
+              <PiHandshakeLight className="h-6 w-6" />
+            </ToggleFilter>
 
           <Sort 
             dict={dictResult.sort}
@@ -108,7 +107,11 @@ export default async function Organizations({
         </div>
       </div>
 
-      <div className="md:w-full w-[85%] mx-auto mb-12 grid md:grid-cols-2 grid-cols-1 gap-6">
+      <SearchField 
+        placeholder={dictResult.search.button}
+      />
+
+      <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}

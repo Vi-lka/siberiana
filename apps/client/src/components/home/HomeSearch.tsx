@@ -22,6 +22,8 @@ import { Loader2 } from "lucide-react";
 export default function HomeSearch({ dict }: { dict: SearchDictType }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
 
+  const [focus, setFocus] = React.useState<boolean>(false)
+
   const [isPending, startTransition] = React.useTransition()
 
   const router = useRouter();
@@ -81,9 +83,13 @@ export default function HomeSearch({ dict }: { dict: SearchDictType }) {
             <FormItem className="text-center">
               <FormControl>
                 <HomeInputSearch
-                  className="w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
+                  className={focus ? 
+                    'w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw] ring-ring ring-2 ring-offset-2' : 
+                    'w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]'}
                   placeholder={dict.placeholder}
                   {...field}
+                  onFocus={() => setFocus(true)}
+                  onBlur={() => setFocus(false)}
                 >
                   {searchButton ? (
                     <Button

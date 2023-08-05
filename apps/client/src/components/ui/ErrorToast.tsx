@@ -53,5 +53,5 @@ export default function ErrorToast({
     });
   }, [dict, messageError, place, router, toast]);
 
-  return null;
+  return null
 }

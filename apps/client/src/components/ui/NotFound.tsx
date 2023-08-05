@@ -22,7 +22,7 @@ export default function NotFound({
     <>
         {children}
         
-        <div className='flex flex-col items-center text-center gap-10 w-max mx-auto'>
+        <div className='flex flex-col items-center text-center gap-10 w-max mx-auto mt-10'>
             <div className='flex flex-col items-center text-center gap-4'>
                 <SearchX size={36} />
 

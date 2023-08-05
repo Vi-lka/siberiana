@@ -72,11 +72,13 @@ export default async function Home({
           <RowBlockSkeleton />
         </div>
       }>
-        <CustomBlock locale={locale} />
+        <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
+          <CustomBlock locale={locale} />
+        </div>
       </Suspense>
 
       {/* ORGANIZATIONS */}
-      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
         <div className="mb-10 flex items-center justify-between">
           <h1 className="text-foreground text-2xl font-bold uppercase">
             {dictResult.organizations.title}

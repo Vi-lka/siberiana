@@ -197,7 +197,7 @@ export const getOrganizations = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {

@@ -20,7 +20,7 @@ export default async function CustomBlock({
   const dataResult = await getCustomBlock(locale);
 
   return (
-    <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+    <>
       <div className="mb-10 flex items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
           {dataResult.title}
@@ -47,6 +47,6 @@ export default async function CustomBlock({
           />
         ))}
       </div>
-    </div>
+    </>
   );
 }

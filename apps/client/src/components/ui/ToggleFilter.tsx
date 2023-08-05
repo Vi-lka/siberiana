@@ -38,24 +38,26 @@ export default function ToggleFilter({
         [param, pathname, router],
     );
 
-    if (isPending) return <Loader2 className='animate-spin mr-3' />
+    if (isPending) return <Loader2 className='animate-spin md:mr-3 md:ml-0 ml-3' />
 
   return (
     <TooltipProvider>
-        <Tooltip delayDuration={300}>
-            <TooltipTrigger>
-                <Toggle 
-                    aria-label={tooltip}
-                    pressed={Boolean(currentParam)}
-                    onPressedChange={handleToggleParams}
-                >
-                    {children}
-                </Toggle>
-            </TooltipTrigger>
-            <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans">
-                <p>{tooltip}</p>
-            </TooltipContent>
-        </Tooltip>
+      <Tooltip delayDuration={300}>
+        <Toggle 
+          aria-label={tooltip}
+          pressed={Boolean(currentParam)}
+          onPressedChange={handleToggleParams}
+          asChild
+        >
+          <TooltipTrigger>
+            {children}
+          </TooltipTrigger>
+        </Toggle>
+
+        <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans">
+            <p>{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
     </TooltipProvider>
   )
 }

@@ -1,31 +1,21 @@
 "use client"
 
-import type { SearchDictType } from '@siberiana/schemas'
 import { Button } from '@siberiana/ui'
 import React from 'react'
 import { Loader2, Search, X } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import { InputSearch } from './InputSearch'
-import { motion } from "framer-motion"
 
-const variants = {
-  open: { width: '70%' },
-  closed: { width: 'auto' },
-}
-
-export default function SearchField({ dict }: { dict: SearchDictType }) {
+export default function SearchField({ placeholder }: { placeholder: string }) {
 
     const [inputValue, setInputValue] = React.useState<string>("")
     const [debouncedValue, setDebouncedValue] = React.useState<string>("")
     const [mounted, setMounted] = React.useState<boolean>(false)
 
-    const [focus, setFocus] = React.useState<boolean>()
+    const [focus, setFocus] = React.useState<boolean>(false)
 
-    React.useEffect(() => {
-      if (inputValue.length > 0) setFocus(true)
-    }, [inputValue.length])
+    const inputRef = React.createRef<HTMLInputElement>();
     
-
     const router = useRouter();
     const pathname = usePathname();
 
@@ -45,6 +35,11 @@ export default function SearchField({ dict }: { dict: SearchDictType }) {
         },
         [pathname, router],
     );
+
+    // EFFECT: Set Focus
+    React.useEffect(() => {
+      if (inputValue.length > 0) inputRef.current?.focus()
+    }, [inputRef, inputValue.length])
 
     // EFFECT: Set Initial Params
     React.useEffect(() => {
@@ -77,51 +72,39 @@ export default function SearchField({ dict }: { dict: SearchDictType }) {
     }, [debouncedValue, handleSearchParams, mounted])
     
   return (
-    <motion.div 
-      className='relative w-[70%]'
-      animate={focus ? "open" : "closed"}
-      variants={variants}
-    >
-
-        {/* <Button
-            className='w-fit h-fit' 
-            variant='ghost'
-        >
-            <Search className="h-5 w-5" />
-        </Button>  */}
-
-        <InputSearch
-          value={inputValue}
-          onChange={(e) => {
-            setInputValue(e.target.value)
-          }}
-          placeholder={dict.button}
-          onFocus={() => {
-            console.log('focus')
-            setFocus(true)}}
-          onBlur={() => setFocus(false)}
-          autoFocus
-          className='w-full transition-all'
-        >
-          <Search className="h-4 w-4" />
-        </InputSearch>
-        {isPending ? (
-          <div className="absolute top-2 right-2">
-            <Loader2 className='animate-spin' />
-          </div>
-        ) : null}
-        {inputValue.length > 0 ? (
-            <Button 
-                variant='ghost'
-                className="absolute top-2 right-2 w-fit h-fit p-0"
-                onClick={() => {
-                    setDebouncedValue('')
-                    setInputValue('')
-                }}
-            >
-                <X />
-            </Button>
-        ) : null}
-    </motion.div>
+    <div className='relative'>
+      <InputSearch
+        ref={inputRef}
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value)
+        }}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        placeholder={placeholder}
+        className={focus ? 'w-full ring-ring ring-2 ring-offset-2' : 'w-full'}
+      >
+        <Search className="h-4 w-4" />
+      </InputSearch>
+      
+      {isPending ? (
+        <div className="absolute top-2 right-2">
+          <Loader2 className='animate-spin' />
+        </div>
+      ) : null}
+      
+      {inputValue.length > 0 ? (
+          <Button 
+              variant='ghost'
+              className="absolute top-2 right-2 w-fit h-fit p-0"
+              onClick={() => {
+                  setDebouncedValue('')
+                  setInputValue('')
+              }}
+          >
+              <X />
+          </Button>
+      ) : null}
+    </div>
   )
 }

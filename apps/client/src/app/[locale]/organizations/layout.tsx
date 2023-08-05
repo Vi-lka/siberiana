@@ -13,7 +13,7 @@ export default function OrganizationsLayout({
 
   return (
     <main className="font-Inter flex flex-col">
-      <div className="font-OpenSans mx-auto mt-16 w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto mt-10 w-[85%] max-w-[1600px]">
         {children}
       </div>
     </main>
