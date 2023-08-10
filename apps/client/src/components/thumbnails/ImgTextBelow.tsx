@@ -8,11 +8,12 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import type { UrlOrigins } from "~/lib/utils/getURL";
 import getURL from "~/lib/utils/getURL";
+import { usePalette } from 'react-palette'
 
 type Props = {
   title: string | null;
   children?: React.ReactNode;
-  url: string;
+  href: string;
   target?: string;
   src?: string;
   width?: number;
@@ -20,24 +21,41 @@ type Props = {
   fill?: boolean;
   origin?: UrlOrigins;
   className?: string;
+  classNameImage?: string;
 }
 
 export default function ImgTextBelow(props: Props) {
-  const [image, setImage] = React.useState(
-    props.src
-      ? getURL(props.src, props.origin)
-      : "/images/image-placeholder.png",
-  );
+  const [image, setImage] = React.useState("/images/image-placeholder.png");
+  const [isPlaceholder, setIsPlaceholder] = React.useState(true);
+
+  React.useEffect(() => {
+    if (props.src) {
+      setImage(getURL(props.src, props.origin))
+    } else {
+      setImage("/images/image-placeholder.png")
+    }
+  }, [props.origin, props.src])
+
+  React.useEffect(() => {
+    if (image === "/images/image-placeholder.png") {
+      setIsPlaceholder(true)
+    } else {
+      setIsPlaceholder(false)
+    }
+  }, [image])
+
+  const { data } = usePalette(getURL(props.src, props.origin))
 
   return (
     <div className="flex flex-col gap-3 h-fit">
         <Link
-          href={props.url}
+          href={props.href}
           target={props.target}
           className={cn(
-            "bg-beaverLight ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:-translate-y-2 hover:scale-[1.04] hover:ring-4 hover:ring-offset-2",
+            "bg-background ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:-translate-y-2 hover:scale-[1.04] hover:ring-4 hover:ring-offset-2",
             props.className,
           )}
+          style={{backgroundColor: data.lightVibrant}}
         >
           <div className="relative flex w-full">
             <Image
@@ -47,10 +65,15 @@ export default function ImgTextBelow(props: Props) {
               fill={props.fill}
               onError={() => setImage("/images/image-placeholder.png")}
               priority={true}
-              className={"w-full object-cover"}
+              className={
+                (props.classNameImage && !isPlaceholder) ? 
+                  props.classNameImage 
+                  : 
+                  "w-full object-cover"
+              }
               alt={props.title ? props.title : ""}
             />
-            <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-10" />
+            {/* <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-10" /> */}
           </div>
         </Link>
         

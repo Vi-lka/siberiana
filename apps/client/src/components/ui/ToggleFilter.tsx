@@ -32,7 +32,7 @@ export default function ToggleFilter({
             params.delete(param);
           }
           startTransition(() => {
-            router.push(`${pathname}?${params.toString()}`);
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
           });
         },
         [param, pathname, router],

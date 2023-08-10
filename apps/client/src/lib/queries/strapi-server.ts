@@ -4,6 +4,7 @@ import {
   CustomBlockSchema,
   OrganizationBySlugSchema,
   OrganizationsSchema,
+  ProjectsSchema,
   SliderSchema,
 } from "@siberiana/schemas";
 import type {
@@ -197,8 +198,6 @@ export const getOrganizations = async (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
-
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
     notFound()
@@ -345,17 +344,40 @@ export const getOrganizationBySlug = async (
   return data;
 };
 
-export const getProjects = async (locale: string): Promise<ProjectsType> => {
+export const getProjects = async (
+  locale: string,
+  page: number,
+  per: number,
+  sort = "order:asc",
+  search = ""
+): Promise<ProjectsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Projects {
-      projects(sort: "order:asc", locale: "${locale}") {
+      projects(
+        locale: "${locale}",
+        sort: "${sort}",
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          }
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
         data {
           attributes {
-            Name
-            Description
-            Content
-            Image {
+            title
+            description
+            url
+            image {
               data {
                 attributes {
                   url
@@ -377,14 +399,26 @@ export const getProjects = async (locale: string): Promise<ProjectsType> => {
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Projects'");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
+    notFound()
+  }
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.projects.data;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const projects = ProjectsSchema.parse(json.data?.projects);
+
+  return projects;
 };

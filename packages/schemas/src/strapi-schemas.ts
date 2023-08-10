@@ -14,21 +14,6 @@ export const ImageSchema = z.object({
 });
 export type ImageType = z.infer<typeof ImageSchema>;
 
-//.........................PROJECT.........................//
-export const ProjectSchema = z.object({
-  attributes: z.object({
-    Name: z.string(),
-    Content: z.string().nullable(),
-    Description: z.string().nullable(),
-    Image: ImageSchema,
-  }),
-});
-export type ProjectType = z.infer<typeof ProjectSchema>;
-
-//.........................PROJECTS.........................//
-export const ProjectsSchema = ProjectSchema.array();
-export type ProjectsType = z.infer<typeof ProjectsSchema>;
-
 //.........................SLIDER.........................//
 export const SliderSchema = z.array(
   z.object({
@@ -181,5 +166,29 @@ export const OrganizationsSchema = z.object({
   data: OrganizationSingleSchema.array()
 });
 export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
+
+
+
+
+//.........................PROJECTS.........................//
+export const ProjectSingleSchema = z.object({
+  attributes: z.object({
+    title: z.string(),
+    description: z.string().nullable(),
+    url: z.string().url(),
+    image: ImageSchema,
+  }),
+})
+export type ProjectSingleType = z.infer<typeof ProjectSingleSchema>;
+
+export const ProjectsSchema = z.object({
+  meta: z.object({
+    pagination: z.object({
+      total: z.number(),
+    })
+  }),
+  data: ProjectSingleSchema.array()
+});
+export type ProjectsType = z.infer<typeof ProjectsSchema>;
 
 

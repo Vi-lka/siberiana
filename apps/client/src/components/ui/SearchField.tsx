@@ -30,7 +30,7 @@ export default function SearchField({ placeholder }: { placeholder: string }) {
             params.delete("search");
           }
           startTransition(() => {
-            router.push(`${pathname}?${params.toString()}`);
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
           });
         },
         [pathname, router],

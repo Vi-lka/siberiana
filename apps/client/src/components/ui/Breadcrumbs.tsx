@@ -32,6 +32,7 @@ export default function Breadcrumbs({
         else
           return {
             organizations: dict.organizations,
+            projects: dict.projects,
             objects: dict.objects,
             archaeological: dict.archaeological,
             archaeology: dict.archaeology,

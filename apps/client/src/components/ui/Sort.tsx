@@ -29,7 +29,7 @@ export default function Sort({
           if (value.length > 0) {
             params.set("sort", value);
             startTransition(() => {
-              router.push(`${pathname}?${params.toString()}`);
+              router.push(`${pathname}?${params.toString()}`, { scroll: false });
             });
           } else {
             params.delete("sort");
@@ -61,7 +61,7 @@ export default function Sort({
                     const params = new URLSearchParams(window.location.search);
                     params.delete("sort");
                     startTransition(() => {
-                        router.push(`${pathname}?${params.toString()}`);
+                        router.push(`${pathname}?${params.toString()}`, { scroll: false });
                     });
                 }}
             >

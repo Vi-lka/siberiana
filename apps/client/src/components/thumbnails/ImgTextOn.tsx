@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -35,7 +35,7 @@ type FalseShowIconProps = {
 export default function ImgTextOn(props: Props) {
   const [image, setImage] = React.useState("/images/image-placeholder.png");
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (props.src) {
       setImage(getURL(props.src, props.origin))
     } else {
@@ -78,7 +78,7 @@ export default function ImgTextOn(props: Props) {
           </TooltipProvider>
         ) : null}
         <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-25" />
-        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] font-bold uppercase text-white xl:text-xl lg:text-base md:text-[12px] text-base">
+        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] font-bold uppercase text-white xl:text-xl lg:text-base md:text-xs text-base">
           {props.title}
         </h2>
       </div>

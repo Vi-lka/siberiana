@@ -132,7 +132,7 @@ function SheetMenuItem({
             key={menuItemResult.id}
             title={menuItemResult.name}
             href={`/${locale}${menuItemResult.url}`}
-            active={pathCurrentPage === `${menuItemResult.url}`}
+            active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
             className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 py-1"
             sheet
           >
@@ -167,7 +167,7 @@ function SheetMenuItem({
                 key={item.id}
                 title={item.name}
                 href={`/${locale}${item.url}`}
-                active={pathCurrentPage === `${item.url}`}
+                active={pathCurrentPage === `${item.url.replace('/','')}`}
                 className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
               >

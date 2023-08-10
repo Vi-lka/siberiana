@@ -156,10 +156,10 @@ export default async function Organization({
                   className={"aspect-square"}
                   title={elem.name}
                   src={elem.image.data?.attributes.url}
-                  url={getLinkDir(elem.url, locale)}
+                  href={getLinkDir(elem.url, locale)}
                   origin={"strapi"}
                 >
-                  <p className="w-full uppercase xl:text-sm text-[12px]">
+                  <p className="w-full uppercase xl:text-sm text-xs">
                     {elem.name ? (
                         <>
                             <span className="font-bold">{elem.name}</span>
@@ -201,20 +201,20 @@ export default async function Organization({
                   className={"aspect-[2.04/1]"}
                   title={elem.name}
                   src={elem.image.data?.attributes.url}
-                  url={getLinkDir(elem.url, locale)}
+                  href={getLinkDir(elem.url, locale)}
                   target="_blank"
                   origin={"strapi"}
                   width={450}
                   height={450}
                 >
                   <div className="flex md:flex-row flex-col justify-between gap-1">
-                    <p className="md:w-[45%] uppercase xl:text-sm text-[12px]">
+                    <p className="md:w-[45%] uppercase xl:text-sm text-xs">
                       <span className="font-bold">{new Date(elem.dateStart).toLocaleDateString(locale)} – {new Date(elem.dateEnd).toLocaleDateString(locale)}</span> {elem.cost ? (`${elem.cost} • ${elem.cost}`) : null } 
                       <br/>
                       {elem.name}
                     </p>
 
-                    <p className="flex justify-end gap-3 xl:text-sm text-[12px]">
+                    <p className="flex justify-end gap-3 xl:text-sm text-xs">
                       <MapPin className="md:h-5 md:w-5 h-4 w-4" />
                       {elem.address}
                     </p>

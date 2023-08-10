@@ -6,6 +6,7 @@
   "breadcrumbs": {
     "home": "Главная",
     "organizations": "Организации",
+    "projects": "Проекты",
     "objects": "Все объекты",
     "archaeological": "Археологические коллекции",
     "archaeology": "Археология"
@@ -182,6 +183,12 @@
     "url": "/organizations",
     "textUrl": "Все организации",
     "goTo": "Перейти на официальный сайт"
+  },
+  "projects": {
+    "title": "Проекты",
+    "url": "/projects",
+    "textUrl": "Все проекты",
+    "goTo": "Перейти на сайт проекта"
   },
   "schedule": {
     "monday": "Понедельник",

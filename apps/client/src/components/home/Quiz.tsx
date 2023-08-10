@@ -42,7 +42,6 @@ export default function Quiz({
     [data, tryAgain],
   );
 
-  console.log(data)
   // Check for data
   if (isLoading) return <QuizSkeleton />;
   if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId]) || error){

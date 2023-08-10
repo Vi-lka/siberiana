@@ -11,6 +11,7 @@ export type SiteInfoType = z.infer<typeof SiteInfoSchema>;
 export const BreadcrumbsDictSchema = z.object({
   home: z.string(),
   organizations: z.string(),
+  projects: z.string(),
   objects: z.string(),
   archaeological: z.string(),
   archaeology: z.string(),
@@ -166,6 +167,15 @@ export const OrganizationsDictSchema = z.object({
 });
 export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
 
+//.........................PROJECTS.........................//
+export const ProjectsDictSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  textUrl: z.string(),
+  goTo: z.string(),
+});
+export type ProjectsDictType = z.infer<typeof ProjectsDictSchema>;
+
 //.........................SCHEDULE.........................//
 export const ScheduleDictSchema = z.object({
   monday: z.string(),
@@ -198,6 +208,7 @@ export const DictionarySchema = z.object({
   categories: CategoriesDictSchema,
   quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,
+  projects: ProjectsDictSchema,
   schedule: ScheduleDictSchema,
   tooltips: TooltipsDictSchema,
 });

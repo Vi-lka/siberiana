@@ -216,7 +216,7 @@ export default function SignUpForm({ dict }: { dict: AuthDictType }) {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="text-[12px] sm:text-sm">
+                  <FormLabel className="text-xs sm:text-sm">
                     {dict.regAs}{" "}
                     <Link href={`/${lang}/info`} className="underline">
                       {dict.researcher}
@@ -264,7 +264,7 @@ export default function SignUpForm({ dict }: { dict: AuthDictType }) {
                   />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel className="text-[12px] sm:text-sm">
+                  <FormLabel className="text-xs sm:text-sm">
                     {dict.personalData}{" "}
                     <Link href={`/${lang}/policy`} className="underline">
                       {dict.personalDataLinkText}

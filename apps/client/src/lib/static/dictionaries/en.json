@@ -6,6 +6,7 @@
   "breadcrumbs": {
     "home": "Home",
     "organizations": "Organizations",
+    "projects": "Projects",
     "objects": "All objects",
     "archaeological": "Archaeological collections",
     "archaeology": "Archaeology"
@@ -182,6 +183,12 @@
     "url": "/organizations",
     "textUrl": "All organizations",
     "goTo": "Go to the official website"
+  },
+  "projects": {
+    "title": "Projects",
+    "url": "/projects",
+    "textUrl": "All projects",
+    "goTo": "Go to the project website"
   },
   "schedule": {
     "monday": "Monday",

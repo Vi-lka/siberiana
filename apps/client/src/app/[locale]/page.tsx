@@ -12,6 +12,8 @@ import HomeSliderSkeleton from "~/components/skeletons/HomeSliderSkeleton";
 import RowBlockSkeleton from "~/components/skeletons/RowBlockSkeleton";
 import ImgTextOn from "~/components/thumbnails/ImgTextOn";
 import { getDictionary } from "~/lib/utils/getDictionary";
+import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
+import ProjectsBlock from "~/components/home/ProjectsBlock";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
@@ -96,6 +98,28 @@ export default async function Home({
 
         <Suspense fallback={<GridBlockSkeleton />}>
           <OrganizationsBlock locale={locale} dict={dictResult} />
+        </Suspense>
+      </div>
+
+      {/* PROJECTS */}
+      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
+        <div className="mb-10 flex items-center justify-between">
+          <h1 className="text-foreground text-2xl font-bold uppercase">
+            {dictResult.projects.title}
+          </h1>
+          <Link
+            href={`${locale}${dictResult.projects.url}`}
+            className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
+          >
+            <p className="hidden md:block">
+              {dictResult.projects.textUrl}
+            </p>
+            <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
+          </Link>
+        </div>
+        
+        <Suspense fallback={<RowBigBlockSkeleton />}>
+          <ProjectsBlock locale={locale} dict={dictResult} />
         </Suspense>
       </div>
     </main>

@@ -26,6 +26,7 @@ import {
 import { useLocale } from "~/lib/utils/useLocale";
 import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
   const locale = useLocale();
@@ -61,6 +62,18 @@ function NavMenuItem({
   // Remove locale
   const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
+  function isNavStyle(menuItem: GroupLinkType) {
+    const result = menuItem.list.find((item) => {
+      if (pathCurrentPage === item.url.replace('/','')) {
+          return true; // stop searching
+      } else return false
+    })
+
+    if (result) return true
+
+    return false
+  }
+
   if (SingleLinkSchema.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLinkType;
 
@@ -68,7 +81,7 @@ function NavMenuItem({
       <NavigationMenuItem className="uppercase">
         <Link href={`/${locale}${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
-            active={pathCurrentPage === `${menuItemResult.url}`}
+            active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
             className={navigationMenuTriggerStyle()}
           >
             {menuItemResult.name}
@@ -81,7 +94,12 @@ function NavMenuItem({
 
     return (
       <NavigationMenuItem>
-        <NavigationMenuTrigger className="uppercase">
+        <NavigationMenuTrigger 
+          className={cn(
+            "uppercase",
+            isNavStyle(menuItemResult) ? "bg-accent/50 font-semibold" : ""
+          )}
+        >
           {menuItemResult.name}
         </NavigationMenuTrigger>
 
@@ -103,7 +121,7 @@ function NavMenuItem({
                   key={index}
                   title={item.name}
                   href={`/${locale}${item.url}`}
-                  active={pathCurrentPage === `${item.url}`}
+                  active={pathCurrentPage === `${item.url.replace('/','')}`}
                   className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 >
                   {item.description}
