@@ -1,0 +1,25 @@
+version: "3.9"
+
+networks:
+  siberiana-net:
+    name: siberiana-net
+    external: true
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: ./apps/client/Dockerfile
+    container_name: client
+    restart: always
+    environment:
+      - NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+      - NEXT_PUBLIC_GO_API_URL=${NEXT_PUBLIC_GO_API_URL}
+      - GO_API_KEY=${GO_API_KEY}
+      - NEXT_PUBLIC_STRAPI_API_URL=${NEXT_PUBLIC_STRAPI_API_URL}
+      - NEXT_PUBLIC_STRAPI_DOMAIN=${NEXT_PUBLIC_STRAPI_DOMAIN}
+      - REVALIDATE_TOKEN=${REVALIDATE_TOKEN}
+    ports:
+      - 3000:3000
+    networks:
+      - siberiana-net

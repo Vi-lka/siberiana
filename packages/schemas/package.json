@@ -1,0 +1,17 @@
+{
+  "name": "@siberiana/schemas",
+  "private": true,
+  "version": "0.1.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@siberiana/tsconfig": "0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
