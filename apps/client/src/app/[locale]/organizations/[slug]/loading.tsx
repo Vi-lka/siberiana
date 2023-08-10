@@ -28,16 +28,28 @@ export default function LoadingOrganizationBySlug() {
 
       {/* COLLECTIONS */}
       <div className="mb-24">
+        <div className="mb-10 flex items-center justify-between">
+          <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+          <Skeleton className="h-full w-[20%] py-5" />
+        </div>
         <RowBlockSkeleton />
       </div>
 
       {/* EXHIBITS */}
       <div className="mb-24">
+        <div className="mb-10 flex items-center justify-between">
+          <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+          <Skeleton className="h-full w-[20%] py-5" />
+        </div>
         <RowBlockBelowSkeleton />
       </div>
 
       {/* EVENTS */}
       <div className="mb-24">
+        <div className="mb-10 flex items-center justify-between">
+          <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+          <Skeleton className="h-full w-[20%] py-5" />
+        </div>
         <RowBigBlockBelowSkeleton />
       </div>
 

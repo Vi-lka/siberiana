@@ -12,11 +12,11 @@ export async function generateMetadata(
   const dict = await getDictionary(locale);
 
   return {
-    title: dict.breadcrumbs.projects
+    title: dict.breadcrumbs.faq
   }
 }
 
-export default function ProjectsLayout({
+export default function FAQLayout({
   children,
 }: {
   children: React.ReactNode;

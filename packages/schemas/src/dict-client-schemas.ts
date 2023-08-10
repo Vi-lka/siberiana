@@ -12,9 +12,12 @@ export const BreadcrumbsDictSchema = z.object({
   home: z.string(),
   organizations: z.string(),
   projects: z.string(),
+  services: z.string(),
+  about: z.string(),
   objects: z.string(),
   archaeological: z.string(),
   archaeology: z.string(),
+  faq: z.string(),
 });
 export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
 
@@ -176,6 +179,15 @@ export const ProjectsDictSchema = z.object({
 });
 export type ProjectsDictType = z.infer<typeof ProjectsDictSchema>;
 
+//.........................SERVICES.........................//
+export const ServicesDictSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  textUrl: z.string(),
+  goTo: z.string(),
+});
+export type ServicesDictType = z.infer<typeof ServicesDictSchema>;
+
 //.........................SCHEDULE.........................//
 export const ScheduleDictSchema = z.object({
   monday: z.string(),
@@ -194,6 +206,26 @@ export const TooltipsDictSchema = z.object({
 });
 export type TooltipsDictType = z.infer<typeof TooltipsDictSchema>;
 
+//.........................FAQ.........................//
+export const FAQDictSchema = z.object({
+  title: z.string(),
+  subTitle: z.string(),
+  techSupport: z.string()
+});
+export type FAQDictType = z.infer<typeof FAQDictSchema>;
+
+//.........................FOOTER.........................//
+export const FooterDictSchema = z.object({
+  links: z.object({
+    name: z.string(),
+    url: z.string()
+  }).array(),
+  allRightRes: z.string(),
+  privacyPol: z.string(),
+  termsOfUse: z.string(),
+});
+export type FooterDictType = z.infer<typeof FooterDictSchema>;
+
 //.........................DICTIONARY.........................//
 export const DictionarySchema = z.object({
   siteInfo: SiteInfoSchema,
@@ -209,7 +241,10 @@ export const DictionarySchema = z.object({
   quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,
   projects: ProjectsDictSchema,
+  services: ServicesDictSchema,
   schedule: ScheduleDictSchema,
   tooltips: TooltipsDictSchema,
+  faq: FAQDictSchema,
+  footer: FooterDictSchema,
 });
 export type DictionaryType = z.infer<typeof DictionarySchema>;

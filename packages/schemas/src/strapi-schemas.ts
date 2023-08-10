@@ -167,9 +167,6 @@ export const OrganizationsSchema = z.object({
 });
 export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
 
-
-
-
 //.........................PROJECTS.........................//
 export const ProjectSingleSchema = z.object({
   attributes: z.object({
@@ -190,5 +187,51 @@ export const ProjectsSchema = z.object({
   data: ProjectSingleSchema.array()
 });
 export type ProjectsType = z.infer<typeof ProjectsSchema>;
+
+//.........................SERVICES.........................//
+export const ServiceSingleSchema = z.object({
+  attributes: z.object({
+    title: z.string(),
+    description: z.string().nullable(),
+    url: z.string().url(),
+    image: ImageSchema,
+  }),
+})
+export type ServiceSingleType = z.infer<typeof ServiceSingleSchema>;
+
+export const ServicesSchema = z.object({
+  meta: z.object({
+    pagination: z.object({
+      total: z.number(),
+    })
+  }),
+  data: ProjectSingleSchema.array()
+});
+export type ServicesType = z.infer<typeof ServicesSchema>;
+
+//.........................ABOUT.........................//
+export const AboutSchema = z.object({
+  title: z.string(),
+  description: z.string().nullable(),
+  team: z.object({
+    name: z.string(),
+    description: z.string(),
+    image: ImageSchema
+  }).array()
+})
+export type AboutType = z.infer<typeof AboutSchema>;
+
+//.........................FAQ.........................//
+export const FAQSchema = z.object({
+  category: z.object({
+    title: z.string(),
+    item: z.object({
+      question: z.string(),
+      answer: z.string()
+    }).array()
+  }).array()
+})
+export type FAQType = z.infer<typeof FAQSchema>;
+
 
 

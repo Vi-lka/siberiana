@@ -7,9 +7,12 @@
     "home": "Home",
     "organizations": "Organizations",
     "projects": "Projects",
+    "services": "Services",
+    "about": "About",
     "objects": "All objects",
     "archaeological": "Archaeological collections",
-    "archaeology": "Archaeology"
+    "archaeology": "Archaeology",
+    "faq": "FAQ"
   },
   "pagination": {
     "showMore": "Show more",
@@ -190,6 +193,12 @@
     "textUrl": "All projects",
     "goTo": "Go to the project website"
   },
+  "services": {
+    "title": "Services",
+    "url": "/services",
+    "textUrl": "All services",
+    "goTo": "Go to the service"
+  },
   "schedule": {
     "monday": "Monday",
     "tuesday": "Tuesday",
@@ -201,5 +210,29 @@
   },
   "tooltips": {
     "consortium": "Consortium"
+  },
+  "faq": {
+    "title": "FAQ",
+    "subTitle": "You can leave a personal appeal on the page",
+    "techSupport": "Technical support"
+  },
+  "footer": {
+    "links": [
+      {
+        "name": "FAQ",
+        "url": "/faq"
+      },
+      {
+        "name": "Help the project",
+        "url": "/help"
+      },
+      {
+        "name": "Technical support",
+        "url": "/tech-support"
+      }
+    ],
+    "allRightRes": "All rights reserved.",
+    "privacyPol": "Privacy policy",
+    "termsOfUse": "Terms of use"
   }
 }

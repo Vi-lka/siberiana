@@ -24,11 +24,16 @@ export default function SearchField({ placeholder }: { placeholder: string }) {
     const handleSearchParams = React.useCallback(
         (inputValue: string) => {
           const params = new URLSearchParams(window.location.search);
+
+          // reset pagination(page) to prevent zero results
+          params.set("page", '1')
+
           if (inputValue.length > 0) {
             params.set("search", inputValue);
           } else {
             params.delete("search");
           }
+          
           startTransition(() => {
             router.push(`${pathname}?${params.toString()}`, { scroll: false });
           });

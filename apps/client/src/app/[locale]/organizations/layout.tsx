@@ -1,9 +1,20 @@
 import React from "react";
 import type { Metadata } from "next";
+import { getDictionary } from "~/lib/utils/getDictionary";
 
-export const metadata: Metadata = {
-  title: "Организации",
-};
+export async function generateMetadata(
+  { params }: {params: { locale: string }},
+): Promise<Metadata> {
+  // read route params
+  const locale = params.locale
+ 
+  // fetch data
+  const dict = await getDictionary(locale);
+
+  return {
+    title: dict.breadcrumbs.organizations
+  }
+}
 
 export default function OrganizationsLayout({
   children,
@@ -12,7 +23,7 @@ export default function OrganizationsLayout({
 }) {
 
   return (
-    <main className="font-Inter flex flex-col">
+    <main className="flex flex-col">
       <div className="font-OpenSans mx-auto mt-10 w-[85%] max-w-[1600px]">
         {children}
       </div>

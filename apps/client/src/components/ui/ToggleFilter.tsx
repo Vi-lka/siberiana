@@ -26,11 +26,16 @@ export default function ToggleFilter({
     const handleToggleParams = React.useCallback(
         (pressed: boolean) => {
           const params = new URLSearchParams(window.location.search);
+
+          // reset pagination(page) to prevent zero results
+          params.set("page", '1')
+
           if (pressed === true) {
             params.set(param, pressed.toString());
           } else {
             params.delete(param);
           }
+          
           startTransition(() => {
             router.push(`${pathname}?${params.toString()}`, { scroll: false });
           });

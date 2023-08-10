@@ -1,17 +1,23 @@
 import "server-only";
 
 import {
+  AboutSchema,
   CustomBlockSchema,
+  FAQSchema,
   OrganizationBySlugSchema,
   OrganizationsSchema,
   ProjectsSchema,
+  ServicesSchema,
   SliderSchema,
 } from "@siberiana/schemas";
 import type {
+  AboutType,
   CustomBlockType,
+  FAQType,
   OrganizationBySlugType,
   OrganizationsType,
   ProjectsType,
+  ServicesType,
   SliderType,
 } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
@@ -336,7 +342,6 @@ export const getOrganizationBySlug = async (
   if (json.data.organizations.data.length === 0) {
     notFound()
   }
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const data = OrganizationBySlugSchema.parse(json.data?.organizations.data[0].attributes);
@@ -408,17 +413,198 @@ export const getProjects = async (
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
-
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
   
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
     notFound()
   }
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const projects = ProjectsSchema.parse(json.data?.projects);
 
   return projects;
+};
+
+export const getServices = async (
+  locale: string,
+  page: number,
+  per: number,
+  sort = "order:asc",
+  search = ""
+): Promise<ServicesType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query Services {
+      services(
+        locale: "${locale}",
+        sort: "${sort}",
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          }
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
+        data {
+          attributes {
+            title
+            description
+            url
+            image {
+              data {
+                attributes {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Services'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+  
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if ((json.data.services.meta.pagination.total === 0) || (json.data.services.data.length === 0)) {
+    notFound()
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const services = ServicesSchema.parse(json.data?.services);
+
+  return services;
+};
+
+export const getAbout = async (locale: string,): Promise<AboutType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query About {
+      about(locale: "${locale}") {
+        data {
+          attributes {
+            description 
+            title
+            team {
+              name
+              description
+              image {
+                data {
+                  attributes {
+                    url
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'About'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+  
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!json.data.about.data) {
+    notFound()
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const about = AboutSchema.parse(json.data?.about.data.attributes);
+
+  return about;
+};
+
+export const getFAQ = async (locale: string,): Promise<FAQType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query FAQ {
+      faq(locale: "${locale}") {
+        data {
+          attributes {
+            category {
+              title
+              item {
+                question
+                answer
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'FAQ'");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const json = await res.json();
+
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!json.data.faq.data) {
+    notFound()
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const faq = FAQSchema.parse(json.data?.faq.data.attributes);
+
+  return faq;
 };

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { DictionarySchema } from "@siberiana/schemas";
 import CustomBlock from "~/components/home/CustomBlock";
 import HomeSearch from "~/components/home/HomeSearch";
@@ -14,6 +13,7 @@ import ImgTextOn from "~/components/thumbnails/ImgTextOn";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import ProjectsBlock from "~/components/home/ProjectsBlock";
+import { Skeleton } from "@siberiana/ui";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
@@ -54,6 +54,7 @@ export default async function Home({
           {dictResult.categories.list.map((category, index) => (
             <ImgTextOn
               key={index}
+              className={"aspect-square"}
               title={category.title}
               src={category.img}
               url={`/${locale}${category.url}`}
@@ -69,56 +70,46 @@ export default async function Home({
       </div>
 
       {/* CUSTOM */}
-      <Suspense fallback={
-        <div className="mx-auto mb-24 w-[85%] max-w-[1600px]">
-          <RowBlockSkeleton />
-        </div>
-      }>
-        <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-          <CustomBlock locale={locale} />
-        </div>
-      </Suspense>
+      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
+        <Suspense fallback={
+          <>
+            <div className="mb-10 flex items-center justify-between">
+              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+              <Skeleton className="h-full w-[20%] py-5" />
+            </div>
+            <RowBlockSkeleton />
+          </>
+        }>
+            <CustomBlock locale={locale} />
+        </Suspense>
+      </div>
 
       {/* ORGANIZATIONS */}
       <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-        <div className="mb-10 flex items-center justify-between">
-          <h1 className="text-foreground text-2xl font-bold uppercase">
-            {dictResult.organizations.title}
-          </h1>
-          <Link
-            href={`${locale}${dictResult.organizations.url}`}
-            className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
-          >
-            <p className="hidden md:block">
-              {dictResult.organizations.textUrl}
-            </p>
-            <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
-          </Link>
-        </div>
-
-        <Suspense fallback={<GridBlockSkeleton />}>
+        <Suspense fallback={
+          <>
+            <div className="mb-10 flex items-center justify-between">
+              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+              <Skeleton className="h-full w-[20%] py-5" />
+            </div>
+            <GridBlockSkeleton />
+          </>
+        }>
           <OrganizationsBlock locale={locale} dict={dictResult} />
         </Suspense>
       </div>
 
       {/* PROJECTS */}
       <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-        <div className="mb-10 flex items-center justify-between">
-          <h1 className="text-foreground text-2xl font-bold uppercase">
-            {dictResult.projects.title}
-          </h1>
-          <Link
-            href={`${locale}${dictResult.projects.url}`}
-            className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
-          >
-            <p className="hidden md:block">
-              {dictResult.projects.textUrl}
-            </p>
-            <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
-          </Link>
-        </div>
-        
-        <Suspense fallback={<RowBigBlockSkeleton />}>
+        <Suspense fallback={
+          <>
+            <div className="mb-10 flex items-center justify-between">
+              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+              <Skeleton className="h-full w-[20%] py-5" />
+            </div>
+            <RowBigBlockSkeleton />
+          </>
+        }>
           <ProjectsBlock locale={locale} dict={dictResult} />
         </Suspense>
       </div>

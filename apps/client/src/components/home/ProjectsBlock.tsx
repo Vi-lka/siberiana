@@ -31,6 +31,20 @@ export default async function ProjectsBlock({
 
   return (
     <>
+      <div className="mb-10 flex items-center justify-between">
+        <h1 className="text-foreground text-2xl font-bold uppercase">
+          {dict.projects.title}
+        </h1>
+        <Link
+          href={`${locale}${dict.projects.url}`}
+          className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
+        >
+          <p className="hidden md:block">
+            {dict.projects.textUrl}
+          </p>
+          <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
+        </Link>
+      </div>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.data.map((proj, index) => (
             <ImgTextBelow

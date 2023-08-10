@@ -33,9 +33,12 @@ export default function Breadcrumbs({
           return {
             organizations: dict.organizations,
             projects: dict.projects,
+            services: dict.services,
+            about: dict.about,
             objects: dict.objects,
             archaeological: dict.archaeological,
             archaeology: dict.archaeology,
+            faq: dict.faq,
           }[subpath];
       }
     },
