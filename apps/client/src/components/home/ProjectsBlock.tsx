@@ -6,7 +6,7 @@ import { ZodError } from 'zod';
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
-import ErrorToast from '../ui/ErrorToast';
+import ErrorToast from '../errors/ErrorToast';
 
 export default async function ProjectsBlock({
   locale,

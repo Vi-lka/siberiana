@@ -12,6 +12,7 @@
     "objects": "Все объекты",
     "archaeological": "Археологические коллекции",
     "archaeology": "Археология",
+    "account": "Личный кабинет",
     "faq": "Часто задаваемые вопросы"
   },
   "pagination": {
@@ -119,8 +120,8 @@
     }
   ],
   "auth": {
-    "mainButton": "Войти",
-    "logIn": "Войти",
+    "signIn": "Войти",
+    "signOut": "Выйти",
     "signUp": "Зарегистрироваться",
     "firstName": "Ваше имя *",
     "lastName": "Ваша фамилия *",
@@ -210,6 +211,20 @@
   },
   "tooltips": {
     "consortium": "Консорциум"
+  },
+  "account": {
+    "barTitle": "Мой аккаунт",
+    "profile": "Личный кабинет",
+    "settings": "Настройки",
+    "favourites": "Избранное",
+    "collections": "Коллекции",
+    "publications": "Публикации",
+    "signOut": "Выйти",
+    "roles": {
+      "admin": "Администратор",
+      "research": "Исследователь",
+      "moder": "Модератор"
+    }
   },
   "faq": {
     "title": "Часто задаваемые вопросы",

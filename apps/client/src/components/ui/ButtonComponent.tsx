@@ -18,7 +18,7 @@ type ButtonComponentProps = {
   className?: string;
   type?: "submit" | "reset" | "button";
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function ButtonComponent(

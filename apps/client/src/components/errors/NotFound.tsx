@@ -3,7 +3,7 @@
 import type { ErrorsDictType } from '@siberiana/schemas'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import ButtonComponent from './ButtonComponent'
+import ButtonComponent from '../ui/ButtonComponent'
 import { SearchX, Undo2  } from 'lucide-react'
 
 export default function NotFound({ 

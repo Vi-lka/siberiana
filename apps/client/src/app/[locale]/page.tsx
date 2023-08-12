@@ -25,6 +25,7 @@ export default async function Home({
   const dict = await getDictionary(locale);
   const dictResult = DictionarySchema.parse(dict);
 
+
   return (
     <main className="font-Inter flex flex-col">
       {/* HERO */}

@@ -34,13 +34,17 @@ import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
 import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
+import { signIn } from "next-auth/react";
+import type { Session } from "next-auth";
 
 export default function NavSheet({
   menuDict,
   authDict,
+  session
 }: {
   menuDict: MenuDictType;
   authDict: AuthDictType;
+  session: Session | null
 }) {
   const locale = useLocale();
 
@@ -64,22 +68,29 @@ export default function NavSheet({
           </SheetTitle>
 
           <SheetDescription className="font-Inter text-center">
-            <Link href={`/${locale}/login`}>
+            {!!session ? null : (
               <SheetClose
                 className={cn(
                   buttonVariants(),
                   "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase",
                 )}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onClick={() => signIn("keycloak")}
               >
-                {authDict.mainButton}
+                {authDict.signIn}
               </SheetClose>
-            </Link>
+            )}
           </SheetDescription>
         </SheetHeader>
 
         <NavigationMenu orientation="vertical">
           <NavigationMenuList className="flex flex-col items-center">
-            <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
+            <ScrollArea 
+              className={cn(
+                "font-Inter mt-[2vh] w-full p-1",
+                !!session ? "h-[80vh]" : "h-[72vh]",
+              )}
+            >
               {menuDict.map((menuItem, index) => (
                 <SheetMenuItem
                   key={index}
@@ -87,6 +98,7 @@ export default function NavSheet({
                   menuItem={menuItem}
                 />
               ))}
+              <div className="h-20"/>
             </ScrollArea>
           </NavigationMenuList>
         </NavigationMenu>

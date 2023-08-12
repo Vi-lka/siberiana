@@ -12,6 +12,7 @@
     "objects": "All objects",
     "archaeological": "Archaeological collections",
     "archaeology": "Archaeology",
+    "account": "Personal account",
     "faq": "FAQ"
   },
   "pagination": {
@@ -119,8 +120,8 @@
     }
   ],
   "auth": {
-    "mainButton": "LogIn",
-    "logIn": "Log In",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
     "signUp": "Sign Up",
     "firstName": "First Name *",
     "lastName": "Last Name *",
@@ -210,6 +211,20 @@
   },
   "tooltips": {
     "consortium": "Consortium"
+  },
+  "account": {
+    "barTitle": "My Account",
+    "profile": "Personal account",
+    "settings": "Settings",
+    "favourites": "Favourites",
+    "collections": "Collections",
+    "publications": "Publications",
+    "signOut": "Sign Out",
+    "roles": {
+      "admin": "Administrator",
+      "research": "Researcher",
+      "moder": "Moderator"
+    }
   },
   "faq": {
     "title": "FAQ",

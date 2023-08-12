@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import type { ErrorsDictType } from "@siberiana/schemas";
 
 import { getSlider } from "~/lib/queries/strapi-server";
-import ErrorToast from "../ui/ErrorToast";
+import ErrorToast from "../errors/ErrorToast";
 import HomeSlider from "./HomeSlider";
 
 export default async function HomeSliderServer({

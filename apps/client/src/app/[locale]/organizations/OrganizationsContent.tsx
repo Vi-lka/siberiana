@@ -2,7 +2,7 @@ import type { DictionaryType } from '@siberiana/schemas';
 import React from 'react'
 import { PiHandshakeLight } from 'react-icons/pi';
 import ImgTextOn from '~/components/thumbnails/ImgTextOn';
-import ErrorHandler from '~/components/ui/ErrorHandler';
+import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getOrganizations } from '~/lib/queries/strapi-server';
 

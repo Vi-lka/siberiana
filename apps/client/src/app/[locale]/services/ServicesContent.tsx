@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
-import ErrorHandler from '~/components/ui/ErrorHandler';
+import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getServices } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';

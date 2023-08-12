@@ -5,19 +5,24 @@ import { DictionarySchema } from "@siberiana/schemas";
 
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
-import ButtonComponent from "../ui/ButtonComponent";
-import { ThemeToggle } from "../ui/ThemeToggle";
+import { ThemeToggle } from "../providers/ThemeToggle";
 import LocaleSwitcher from "./LocaleSwitcher";
 import NavMenu from "./NavMenu";
 import NavSheet from "./NavSheet";
-import { ClientHydration } from "../ui/ClientHydration";
+import { ClientHydration } from "../providers/ClientHydration";
 import { Skeleton } from "@siberiana/ui";
+import { SignInButton } from "../auth/NextAuthButtons";
+import { getServerSession } from "next-auth";
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
+import AccountBar from "./AccountBar";
 
 export default async function Header({ locale }: { locale: string }) {
   
   const dict = await getDictionary(locale);
 
   const dictResult = DictionarySchema.parse(dict);
+
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="font-Inter text-graphite dark:text-beaverLight dark:bg-darkBlue fixed z-50 w-full bg-white px-4 py-4 md:px-0">
@@ -53,24 +58,27 @@ export default async function Header({ locale }: { locale: string }) {
             <ThemeToggle />
             <LocaleSwitcher />
           </ClientHydration>
-
+          
+          {!!session ? (
+            <AccountBar locale={locale} />
+          ) : null}
+          
           {/* Desktop */}
-          <div className="hidden lg:block">
-            <Link href={`/${locale}/login`}>
-              <ButtonComponent className="px-10 py-6 uppercase">
-                {dictResult.auth.mainButton}
-              </ButtonComponent>
-            </Link>
-          </div>
+          {!!session ? null : (
+            <div className="hidden lg:block">
+              <SignInButton className="px-10 py-6 uppercase" dict={dictResult.auth} />
+            </div>
+          )}
 
           {/* Mobile */}
           <div className="block pl-2 lg:hidden">
             <ClientHydration fallback={
               <Skeleton className="h-[2.5rem] w-[2.5rem]"/>
             }>
-              <NavSheet menuDict={dictResult.menu} authDict={dictResult.auth} />
+              <NavSheet menuDict={dictResult.menu} authDict={dictResult.auth} session={session} />
             </ClientHydration>
           </div>
+
         </div>
       </div>
     </div>

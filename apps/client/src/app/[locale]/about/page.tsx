@@ -3,17 +3,23 @@ import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getAbout } from "~/lib/queries/strapi-server";
-import ErrorHandler from "~/components/ui/ErrorHandler";
+import ErrorHandler from "~/components/errors/ErrorHandler";
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from "rehype-raw";
 import Member from "./Member";
+import { getServerSession } from "next-auth";
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 
 export default async function About({
   params: { locale },
 }: {
   params: { locale: string },
 }) {
+
+  const session = await getServerSession(authOptions);
+
+  if (!session) return "Ops! Go Sign In)"
 
   const dict = await getDictionary(locale);
   const dictResult = DictionarySchema.parse(dict);

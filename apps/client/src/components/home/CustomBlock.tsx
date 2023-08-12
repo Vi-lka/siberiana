@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { getCustomBlock } from "~/lib/queries/strapi-server";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import ImgTextOn from "../thumbnails/ImgTextOn";
-import ErrorHandler from "../ui/ErrorHandler";
+import ErrorHandler from "../errors/ErrorHandler";
 
 export default async function CustomBlock({
   locale,

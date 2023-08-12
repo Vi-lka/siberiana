@@ -17,6 +17,7 @@ export const BreadcrumbsDictSchema = z.object({
   objects: z.string(),
   archaeological: z.string(),
   archaeology: z.string(),
+  account: z.string(),
   faq: z.string(),
 });
 export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
@@ -111,8 +112,8 @@ export type SearchDictType = z.infer<typeof SearchDictSchema>;
 
 //.........................AUTH.........................//
 export const AuthDictSchema = z.object({
-  mainButton: z.string(),
-  logIn: z.string(),
+  signIn: z.string(),
+  signOut: z.string(),
   signUp: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -206,6 +207,23 @@ export const TooltipsDictSchema = z.object({
 });
 export type TooltipsDictType = z.infer<typeof TooltipsDictSchema>;
 
+//.........................ACCOUNT.........................//
+export const AccountDictSchema = z.object({
+  barTitle: z.string(),
+  profile: z.string(),
+  settings: z.string(),
+  favourites: z.string(),
+  collections: z.string(),
+  publications: z.string(),
+  signOut: z.string(),
+  roles: z.object({
+    admin: z.string(),
+    research: z.string(),
+    moder: z.string()
+  })
+});
+export type AccountDictType = z.infer<typeof AccountDictSchema>;
+
 //.........................FAQ.........................//
 export const FAQDictSchema = z.object({
   title: z.string(),
@@ -244,6 +262,7 @@ export const DictionarySchema = z.object({
   services: ServicesDictSchema,
   schedule: ScheduleDictSchema,
   tooltips: TooltipsDictSchema,
+  account: AccountDictSchema,
   faq: FAQDictSchema,
   footer: FooterDictSchema,
 });

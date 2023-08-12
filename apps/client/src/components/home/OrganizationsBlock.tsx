@@ -5,7 +5,7 @@ import type { DictionaryType } from "@siberiana/schemas";
 
 import { getOrganizations } from "~/lib/queries/strapi-server";
 import ImgTextOn from "../thumbnails/ImgTextOn";
-import ErrorToast from "../ui/ErrorToast";
+import ErrorToast from "../errors/ErrorToast";
 import { PiHandshakeLight } from "react-icons/pi";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";

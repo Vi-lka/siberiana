@@ -12,7 +12,7 @@ import getLinkDir from "~/lib/utils/getLinkDir";
 import MapHtml from "./MapHtml";
 import Image from "next/image";
 import getURL from "~/lib/utils/getURL";
-import ErrorHandler from "~/components/ui/ErrorHandler";
+import ErrorHandler from "~/components/errors/ErrorHandler";
 import { PiHandshakeLight } from "react-icons/pi";
 
 export default async function Organization({

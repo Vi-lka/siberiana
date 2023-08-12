@@ -14,7 +14,7 @@ import getURL from "~/lib/utils/getURL";
 import { useLocale } from "~/lib/utils/useLocale";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
 import ButtonComponent from "../ui/ButtonComponent";
-import ErrorToast from "../ui/ErrorToast";
+import ErrorToast from "../errors/ErrorToast";
 
 export default function Quiz({
   qiuzDict,

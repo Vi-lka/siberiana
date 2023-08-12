@@ -6,7 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 import Breadcrumbs from '~/components/ui/Breadcrumbs';
-import ErrorHandler from '~/components/ui/ErrorHandler';
+import ErrorHandler from '~/components/errors/ErrorHandler';
 import { getFAQ } from '~/lib/queries/strapi-server';
 import { getDictionary } from '~/lib/utils/getDictionary';
 

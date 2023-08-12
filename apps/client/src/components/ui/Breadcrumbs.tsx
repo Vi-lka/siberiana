@@ -38,6 +38,7 @@ export default function Breadcrumbs({
             objects: dict.objects,
             archaeological: dict.archaeological,
             archaeology: dict.archaeology,
+            account: dict.account,
             faq: dict.faq,
           }[subpath];
       }
