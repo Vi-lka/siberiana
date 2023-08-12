@@ -98,7 +98,7 @@ export default function LogInForm({ dict }: { dict: AuthDictType }) {
               type="submit"
               className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
             >
-              {dict.logIn}
+              {dict.signIn}
             </ButtonComponent>
           </div>
         </form>

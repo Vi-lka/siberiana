@@ -25,7 +25,7 @@ export default async function LoginUnused({
               value="signIn"
               className="data-[state=active]:text-dark data-[state=active]:border-beaver rounded-none border-b-2 border-transparent px-0 text-sm dark:data-[state=active]:border-white dark:data-[state=active]:text-white sm:text-base md:px-4"
             >
-              {dictResult.auth.logIn}
+              {dictResult.auth.signIn}
             </TabsTrigger>
             <TabsTrigger
               value="signUp"
