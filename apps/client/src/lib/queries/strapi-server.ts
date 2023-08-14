@@ -337,6 +337,8 @@ export const getOrganizationBySlug = async (
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (json.data.organizations.data.length === 0) {
@@ -595,8 +597,6 @@ export const getFAQ = async (locale: string,): Promise<FAQType> => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
-
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (!json.data.faq.data) {

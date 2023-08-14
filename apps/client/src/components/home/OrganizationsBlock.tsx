@@ -1,7 +1,7 @@
 import React from "react";
 import { ZodError } from "zod";
 
-import type { DictionaryType } from "@siberiana/schemas";
+import { DictionarySchema } from "@siberiana/schemas";
 
 import { getOrganizations } from "~/lib/queries/strapi-server";
 import ImgTextOn from "../thumbnails/ImgTextOn";
@@ -9,22 +9,25 @@ import ErrorToast from "../errors/ErrorToast";
 import { PiHandshakeLight } from "react-icons/pi";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { getDictionary } from "~/lib/utils/getDictionary";
 
 export default async function OrganizationsBlock({
   locale,
-  dict,
 }: {
   locale: string;
-  dict: DictionaryType;
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
+
   try {
     await getOrganizations(locale, 1, 5);
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
-      return <ErrorToast dict={dict.errors} error={error.issues} place="OrganizationsHome" />;
+      return <ErrorToast dict={dictResult.errors} error={error.issues} place="OrganizationsHome" />;
     } else {
-      return <ErrorToast dict={dict.errors} error={(error as Error).message} place="OrganizationsHome" />;
+      return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="OrganizationsHome" />;
     }
   }
 
@@ -56,14 +59,14 @@ export default async function OrganizationsBlock({
     <>
       <div className="mb-10 flex items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
-          {dict.organizations.title}
+          {dictResult.organizations.title}
         </h1>
         <Link
-          href={`${locale}${dict.organizations.url}`}
+          href={`/${locale}/organizations`}
           className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
         >
           <p className="hidden md:block">
-            {dict.organizations.textUrl}
+            {dictResult.organizations.textUrl}
           </p>
           <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
         </Link>
@@ -73,7 +76,7 @@ export default async function OrganizationsBlock({
         {dataResult.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}
-            tooltip={dict.tooltips.consortium}
+            tooltip={dictResult.tooltips.consortium}
             key={index}
             className={handleClassName(index)}
             title={org.attributes.title}

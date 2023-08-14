@@ -4,17 +4,29 @@ import { ArrowRight } from "lucide-react";
 import { getCustomBlock } from "~/lib/queries/strapi-server";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import ImgTextOn from "../thumbnails/ImgTextOn";
-import ErrorHandler from "../errors/ErrorHandler";
+import ErrorToast from "../errors/ErrorToast";
+import { getDictionary } from "~/lib/utils/getDictionary";
+import { DictionarySchema } from "@siberiana/schemas";
+import { ZodError } from "zod";
 
 export default async function CustomBlock({
   locale,
 }: {
   locale: string;
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
+
   try {
     await getCustomBlock(locale);
   } catch (error) {
-    return <ErrorHandler locale={locale} error={error} place="Custom" />
+    if (error instanceof ZodError) {
+      console.log(error.issues);
+      return <ErrorToast dict={dictResult.errors} error={error.issues} place="Custom" />;
+    } else {
+      return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="Custom" />;
+    }
   }
 
   const dataResult = await getCustomBlock(locale);

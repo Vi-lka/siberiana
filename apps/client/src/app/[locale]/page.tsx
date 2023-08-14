@@ -9,11 +9,11 @@ import OrganizationsBlock from "~/components/home/OrganizationsBlock";
 import GridBlockSkeleton from "~/components/skeletons/GridBlockSkeleton";
 import HomeSliderSkeleton from "~/components/skeletons/HomeSliderSkeleton";
 import RowBlockSkeleton from "~/components/skeletons/RowBlockSkeleton";
-import ImgTextOn from "~/components/thumbnails/ImgTextOn";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import ProjectsBlock from "~/components/home/ProjectsBlock";
 import { Skeleton } from "@siberiana/ui";
+import CategoriesBlock from "~/components/home/CategoriesBlock";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
@@ -24,7 +24,6 @@ export default async function Home({
 }) {
   const dict = await getDictionary(locale);
   const dictResult = DictionarySchema.parse(dict);
-
 
   return (
     <main className="font-Inter flex flex-col">
@@ -46,23 +45,18 @@ export default async function Home({
       </div>
 
       {/* CATEGORIES */}
-      <div className="font-OpenSans mx-auto mb-24 mt-16 w-[85%] max-w-[1600px]">
-        <h1 className="text-foreground mb-10 text-2xl font-bold uppercase">
-          {dictResult.categories.title}
-        </h1>
-
-        <div className="md:w-full w-[85%] mx-auto grid md:grid-cols-4 grid-cols-1 gap-6">
-          {dictResult.categories.list.map((category, index) => (
-            <ImgTextOn
-              key={index}
-              className={"aspect-square"}
-              title={category.title}
-              src={category.img}
-              url={`/${locale}${category.url}`}
-              origin={"next"}
-            />
-          ))}
-        </div>
+      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
+        <Suspense fallback={
+          <>
+            <div className="mb-10 flex items-center justify-between">
+              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+              <Skeleton className="h-full w-[20%] py-5" />
+            </div>
+            <RowBlockSkeleton />
+          </>
+        }>
+            <CategoriesBlock locale={locale} />
+        </Suspense>
       </div>
 
       {/* QUIZ */}
@@ -96,7 +90,7 @@ export default async function Home({
             <GridBlockSkeleton />
           </>
         }>
-          <OrganizationsBlock locale={locale} dict={dictResult} />
+          <OrganizationsBlock locale={locale} />
         </Suspense>
       </div>
 
@@ -111,7 +105,7 @@ export default async function Home({
             <RowBigBlockSkeleton />
           </>
         }>
-          <ProjectsBlock locale={locale} dict={dictResult} />
+          <ProjectsBlock locale={locale} />
         </Suspense>
       </div>
     </main>

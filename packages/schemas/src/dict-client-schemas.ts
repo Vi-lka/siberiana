@@ -10,14 +10,17 @@ export type SiteInfoType = z.infer<typeof SiteInfoSchema>;
 //.........................BREADCRUMBS.........................//
 export const BreadcrumbsDictSchema = z.object({
   home: z.string(),
+  categories: z.string(),
+  collections: z.string(),
+  objects: z.string(),
+  archaeological: z.string(),
+  archaeology: z.string(),
   organizations: z.string(),
   projects: z.string(),
   services: z.string(),
   about: z.string(),
-  objects: z.string(),
-  archaeological: z.string(),
-  archaeology: z.string(),
   account: z.string(),
+  settings: z.string(),
   faq: z.string(),
 });
 export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
@@ -61,7 +64,9 @@ export const ErrorsDictSchema = z.object({
     title: z.string(),
     description: z.string(),
     goBack: z.string()
-  })
+  }),
+  sessionTitle: z.string(),
+  sessionDescription: z.string()
 });
 export type ErrorsDictType = z.infer<typeof ErrorsDictSchema>;
 
@@ -141,16 +146,11 @@ export const AuthDictSchema = z.object({
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
 
 //.........................CATEGORIES.........................//
-export const CategoryDictSchema = z.object({
-  title: z.string(),
-  url: z.string(),
-  img: z.string(),
-});
-export type CategoryType = z.infer<typeof CategoryDictSchema>;
 
 export const CategoriesDictSchema = z.object({
   title: z.string(),
-  list: CategoryDictSchema.array(),
+  textUrl: z.string(),
+  goTo: z.string(),
 });
 export type CategoriesDictType = z.infer<typeof CategoriesDictSchema>;
 
@@ -165,7 +165,6 @@ export type QuizDictType = z.infer<typeof QuizDictSchema>;
 //.........................ORGANIZATIONS.........................//
 export const OrganizationsDictSchema = z.object({
   title: z.string(),
-  url: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
@@ -174,7 +173,6 @@ export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
 //.........................PROJECTS.........................//
 export const ProjectsDictSchema = z.object({
   title: z.string(),
-  url: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
@@ -183,7 +181,6 @@ export type ProjectsDictType = z.infer<typeof ProjectsDictSchema>;
 //.........................SERVICES.........................//
 export const ServicesDictSchema = z.object({
   title: z.string(),
-  url: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
@@ -252,9 +249,9 @@ export const DictionarySchema = z.object({
   sort: SortDictSchema,
   errors: ErrorsDictSchema,
   menu: MenuDictSchema,
-  auth: AuthDictSchema,
   homeTitle: z.string().max(100),
   search: SearchDictSchema,
+  auth: AuthDictSchema,
   categories: CategoriesDictSchema,
   quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,

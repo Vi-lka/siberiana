@@ -6,9 +6,19 @@ import { DictionarySchema } from "@siberiana/schemas";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getDictionary } from "~/lib/utils/getDictionary";
 
-export const metadata: Metadata = {
-  title: "Объекты",
-};
+export async function generateMetadata(
+  { params }: {params: { locale: string }},
+): Promise<Metadata> {
+  // read route params
+  const locale = params.locale
+  
+  // fetch data
+  const dict = await getDictionary(locale);
+
+  return {
+    title: dict.breadcrumbs.objects
+  }
+}
 
 export default async function Objects({
   params: { locale },

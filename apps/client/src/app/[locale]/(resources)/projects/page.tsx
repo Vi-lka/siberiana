@@ -5,10 +5,10 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import Sort from "~/components/ui/Sort";
 import SearchField from "~/components/ui/SearchField";
-import ServicesContent from "./ServicesContent";
+import ProjectsContent from "./ProjectsContent";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 
-export default async function Services({
+export default async function Projects({
   params: { locale },
   searchParams,
 }: {
@@ -30,7 +30,7 @@ export default async function Services({
 
       <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
-          {dictResult.services.title}
+          {dictResult.projects.title}
         </h1>
 
         <div className="flex flex-grow gap-6 items-center md:justify-end justify-between md:w-fit w-full">
@@ -50,7 +50,7 @@ export default async function Services({
           <RowBigBlockSkeleton />
         </div>
       }>
-        <ServicesContent locale={locale} searchParams={searchParams} dict={dictResult} />
+        <ProjectsContent locale={locale} searchParams={searchParams} />
       </Suspense>
     </div>
   );

@@ -1,4 +1,4 @@
-import type { DictionaryType } from '@siberiana/schemas';
+import { DictionarySchema } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -7,16 +7,18 @@ import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getServices } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
+import { getDictionary } from '~/lib/utils/getDictionary';
 
 export default async function ServicesContent({
   locale,
   searchParams,
-  dict
 }: {
   locale: string,
   searchParams: { [key: string]: string | string[] | undefined },
-  dict: DictionaryType
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
 
   const defaultPageSize = 10
 
@@ -71,7 +73,7 @@ export default async function ServicesContent({
                       target="_blank"
                       className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
                     >
-                        <p className="hidden md:block">{dict.services.goTo}</p>
+                        <p className="hidden md:block">{dictResult.services.goTo}</p>
                         <ArrowRight className="stroke-1 h-6 w-6" />
                     </Link>
                 </div>
@@ -81,7 +83,7 @@ export default async function ServicesContent({
 
       <div className="mb-24">
         <PaginationControls
-          dict={dict.pagination}
+          dict={dictResult.pagination}
           length={dataResult.meta.pagination.total}
           defaultPageSize={defaultPageSize}
         />

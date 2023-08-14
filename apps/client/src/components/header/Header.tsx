@@ -60,7 +60,10 @@ export default async function Header({ locale }: { locale: string }) {
           </ClientHydration>
           
           {!!session ? (
-            <AccountBar locale={locale} />
+            <AccountBar 
+              dict={dictResult.account}
+              session={session} 
+            />
           ) : null}
           
           {/* Desktop */}

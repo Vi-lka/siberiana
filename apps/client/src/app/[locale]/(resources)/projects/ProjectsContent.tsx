@@ -1,4 +1,3 @@
-import type { DictionaryType } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -7,16 +6,19 @@ import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
+import { getDictionary } from '~/lib/utils/getDictionary';
+import { DictionarySchema } from '@siberiana/schemas';
 
 export default async function ProjectsContent({
   locale,
   searchParams,
-  dict
 }: {
   locale: string,
   searchParams: { [key: string]: string | string[] | undefined },
-  dict: DictionaryType
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
 
   const defaultPageSize = 10
 
@@ -81,7 +83,7 @@ export default async function ProjectsContent({
 
       <div className="mb-24">
         <PaginationControls
-          dict={dict.pagination}
+          dict={dictResult.pagination}
           length={dataResult.meta.pagination.total}
           defaultPageSize={defaultPageSize}
         />

@@ -5,14 +5,17 @@
   },
   "breadcrumbs": {
     "home": "Home",
+    "categories": "Categories",
+    "collections": "Collections",
+    "objects": "Objects",
+    "archaeological": "Archaeological collections",
+    "archaeology": "Archaeology",
     "organizations": "Organizations",
     "projects": "Projects",
     "services": "Services",
     "about": "About",
-    "objects": "All objects",
-    "archaeological": "Archaeological collections",
-    "archaeology": "Archaeology",
-    "account": "Personal account",
+    "account": "Profile",
+    "settings": "Settings",
     "faq": "FAQ"
   },
   "pagination": {
@@ -40,7 +43,9 @@
       "title": "Not Found",
       "description": "Could not find requested resource",
       "goBack": "Go Back"
-    }
+    },
+    "sessionTitle": "Access denied",
+    "sessionDescription": "Your session has expired. Please sign in again."
   },
   "menu": [
     {
@@ -152,51 +157,28 @@
     "button": "Search",
     "placeholder": "For example: Bronze Age"
   },
-  "categories": {
-    "title": "Categories",
-    "list": [
-      {
-        "title": "Art collections",
-        "url": "/art",
-        "img": "/images/artCol.JPG"
-      },
-      {
-        "title": "Archaeological collections",
-        "url": "/archaeological",
-        "img": "/images/archaeologicalCol.jpg"
-      },
-      {
-        "title": "Cultural and historical collections",
-        "url": "/cultural-historical",
-        "img": "/images/cultHistorCol.jpg"
-      },
-      {
-        "title": "Natural science collections",
-        "url": "/natural-science",
-        "img": "/images/naturalCol.jpg"
-      }
-    ]
-  },
   "quiz": {
     "right": "Right!",
     "wrong": "Unfortunately no(",
     "tryAgain": "Try one more time"
   },
+  "categories": {
+    "title": "Categories",
+    "textUrl": "All categories",
+    "goTo": "More"
+  },
   "organizations": {
     "title": "Organizations",
-    "url": "/organizations",
     "textUrl": "All organizations",
     "goTo": "Go to the official website"
   },
   "projects": {
     "title": "Projects",
-    "url": "/projects",
     "textUrl": "All projects",
     "goTo": "Go to the project website"
   },
   "services": {
     "title": "Services",
-    "url": "/services",
     "textUrl": "All services",
     "goTo": "Go to the service"
   },
@@ -214,7 +196,7 @@
   },
   "account": {
     "barTitle": "My Account",
-    "profile": "Personal account",
+    "profile": "Profile",
     "settings": "Settings",
     "favourites": "Favourites",
     "collections": "Collections",

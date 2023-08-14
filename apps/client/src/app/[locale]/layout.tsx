@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 import { Inter, Open_Sans } from "next/font/google";
 import { Toaster } from "@siberiana/ui";
 import Header from "~/components/header/Header";
-import { ThemeProvider } from "~/components/providers/ThemeProvider";
 import Footer from "~/components/Footer";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import AuthProvider from "~/components/providers/AuthProvider";
+import Providers from "~/components/providers/Providers";
 
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
@@ -66,6 +65,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
+
   return (
     <html
       lang={params.locale}
@@ -73,18 +73,20 @@ export default function RootLayout({
       className={`${inter.variable} ${openSans.variable}`}
     >
       <body className="m min-h-screen m-0 flex flex-col">
-        <AuthProvider>
-          <ThemeProvider attribute="class" enableSystem={true}>
-            <Header locale={params.locale} />
-            <main className="pt-20 flex-1">{children}</main>
-            <Footer locale={params.locale} />
-            <Toaster />
-          </ThemeProvider>
-        </AuthProvider>
+        <Providers>
+          <Header locale={params.locale} />
+          <main className="pt-20 flex-1">            
+            {children}
+          </main>
+          <Footer locale={params.locale} />
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
 }
-// TODO: generate locales
-// export async function generateStaticParams() {
-// }
+
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function generateStaticParams() {
+  return [{ locale: 'ru' }, { locale: 'en' }]
+}

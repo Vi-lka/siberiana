@@ -1,20 +1,22 @@
-import type { DictionaryType } from '@siberiana/schemas';
 import React from 'react'
 import { PiHandshakeLight } from 'react-icons/pi';
 import ImgTextOn from '~/components/thumbnails/ImgTextOn';
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getOrganizations } from '~/lib/queries/strapi-server';
+import { getDictionary } from '~/lib/utils/getDictionary';
+import { DictionarySchema } from '@siberiana/schemas';
 
 export default async function OrganizationsContent({
   locale,
   searchParams,
-  dict
 }: {
   locale: string,
   searchParams: { [key: string]: string | string[] | undefined },
-  dict: DictionaryType
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
 
   const defaultPageSize = 10
 
@@ -46,7 +48,7 @@ export default async function OrganizationsContent({
         {dataResult.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}
-            tooltip={dict.tooltips.consortium}
+            tooltip={dictResult.tooltips.consortium}
             key={index}
             className={"md:aspect-[2/1] aspect-square"}
             title={org.attributes.title}
@@ -63,7 +65,7 @@ export default async function OrganizationsContent({
 
       <div className="mb-24">
         <PaginationControls
-          dict={dict.pagination}
+          dict={dictResult.pagination}
           length={dataResult.meta.pagination.total}
           defaultPageSize={defaultPageSize}
         />

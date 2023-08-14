@@ -1,15 +1,15 @@
-import type { DictionaryType } from "@siberiana/schemas";
+import type { AccountDictType } from "@siberiana/schemas";
 
-export default function getUserRole(role: string, dict: DictionaryType): string {
+export default function getUserRole(role: string, dict: AccountDictType): string {
     switch (role) {
         case "administrator":
-          return dict.account.roles.admin;
+          return dict.roles.admin;
     
         case "researcher":
-          return dict.account.roles.research;
+          return dict.roles.research;
     
         case "moderator":
-          return dict.account.roles.moder;
+          return dict.roles.moder;
     
         default:
           return role;

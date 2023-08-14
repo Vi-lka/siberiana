@@ -1,4 +1,4 @@
-import type { DictionaryType } from '@siberiana/schemas';
+import { DictionarySchema } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -7,23 +7,25 @@ import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
 import ErrorToast from '../errors/ErrorToast';
+import { getDictionary } from '~/lib/utils/getDictionary';
 
 export default async function ProjectsBlock({
   locale,
-  dict
 }: {
   locale: string,
-  dict: DictionaryType
 }) {
+
+  const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
   
   try {
     await getProjects(locale, 1, 2);
   } catch (error) {
     if (error instanceof ZodError) {
         console.log(error.issues);
-        return <ErrorToast dict={dict.errors} error={error.issues} place="ProjectsBlock" />;
+        return <ErrorToast dict={dictResult.errors} error={error.issues} place="ProjectsBlock" />;
       } else {
-        return <ErrorToast dict={dict.errors} error={(error as Error).message} place="ProjectsBlock" />;
+        return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="ProjectsBlock" />;
       }
   }
 
@@ -33,14 +35,14 @@ export default async function ProjectsBlock({
     <>
       <div className="mb-10 flex items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
-          {dict.projects.title}
+          {dictResult.projects.title}
         </h1>
         <Link
-          href={`${locale}${dict.projects.url}`}
+          href={`/${locale}/projects`}
           className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
         >
           <p className="hidden md:block">
-            {dict.projects.textUrl}
+            {dictResult.projects.textUrl}
           </p>
           <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
         </Link>
@@ -73,7 +75,7 @@ export default async function ProjectsBlock({
                       target="_blank"
                       className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
                     >
-                        <p className="hidden md:block">{dict.projects.goTo}</p>
+                        <p className="hidden md:block">{dictResult.projects.goTo}</p>
                         <ArrowRight className="stroke-1 h-6 w-6" />
                     </Link>
                 </div>

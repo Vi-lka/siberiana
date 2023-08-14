@@ -5,14 +5,17 @@
   },
   "breadcrumbs": {
     "home": "Главная",
+    "categories": "Категории",
+    "collections": "Коллекции",
+    "objects": "Объекты",
+    "archaeological": "Археологические коллекции",
+    "archaeology": "Археология",
     "organizations": "Организации",
     "projects": "Проекты",
     "services": "Сервисы",
     "about": "О нас",
-    "objects": "Все объекты",
-    "archaeological": "Археологические коллекции",
-    "archaeology": "Археология",
     "account": "Личный кабинет",
+    "settings": "Настройки",
     "faq": "Часто задаваемые вопросы"
   },
   "pagination": {
@@ -40,7 +43,9 @@
       "title": "Не найдено",
       "description": "Не удалось найти запрошенный ресурс",
       "goBack": "Вернуться"
-    }
+    },
+    "sessionTitle": "Доступ запрещен",
+    "sessionDescription": "Срок действия вашего сеанса истек. Пожалуйста, войдите в систему еще раз."
   },
   "menu": [
     {
@@ -152,51 +157,28 @@
     "button": "Поиск",
     "placeholder": "Например: бронзовый век"
   },
-  "categories": {
-    "title": "Категории",
-    "list": [
-      {
-        "title": "Художественные коллекции",
-        "url": "/art",
-        "img": "/images/artCol.JPG"
-      },
-      {
-        "title": "Археологические коллекции",
-        "url": "/archaeological",
-        "img": "/images/archaeologicalCol.jpg"
-      },
-      {
-        "title": "Культурные и исторические коллекции",
-        "url": "/cultural-historical",
-        "img": "/images/cultHistorCol.jpg"
-      },
-      {
-        "title": "Естественно-научные коллекции",
-        "url": "/natural-science",
-        "img": "/images/naturalCol.jpg"
-      }
-    ]
-  },
   "quiz": {
     "right": "Верно!",
     "wrong": "К сожалению, нет(",
     "tryAgain": "Попробовать еще раз"
   },
+  "categories": {
+    "title": "Категории",
+    "textUrl": "Все категории",
+    "goTo": "Узнать больше"
+  },
   "organizations": {
     "title": "Oрганизации",
-    "url": "/organizations",
     "textUrl": "Все организации",
     "goTo": "Перейти на официальный сайт"
   },
   "projects": {
     "title": "Проекты",
-    "url": "/projects",
     "textUrl": "Все проекты",
     "goTo": "Перейти на сайт проекта"
   },
   "services": {
     "title": "Сервисы",
-    "url": "/services",
     "textUrl": "Все сервисы",
     "goTo": "Узнать больше"
   },

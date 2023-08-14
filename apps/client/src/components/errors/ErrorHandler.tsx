@@ -26,6 +26,8 @@ export default async function ErrorHandler(props: Props) {
     const dict = await getDictionary(props.locale);
     const dictResult = DictionarySchema.parse(dict);
 
+    console.log("Handler: ",  props.error)
+
     if (props.error instanceof ZodError) {
 
         return <ErrorToast dict={dictResult.errors} error={props.error.issues} place={props.place} />;

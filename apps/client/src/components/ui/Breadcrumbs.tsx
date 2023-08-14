@@ -31,14 +31,17 @@ export default function Breadcrumbs({
         }
         else
           return {
+            categories: dict.categories,
+            collections: dict.collections,
+            objects: dict.objects,
+            archaeological: dict.archaeological,
+            archaeology: dict.archaeology,
             organizations: dict.organizations,
             projects: dict.projects,
             services: dict.services,
             about: dict.about,
-            objects: dict.objects,
-            archaeological: dict.archaeological,
-            archaeology: dict.archaeology,
             account: dict.account,
+            settings: dict.settings,
             faq: dict.faq,
           }[subpath];
       }
