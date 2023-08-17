@@ -36,7 +36,6 @@ export default async function Organization({
         />
       )
     }
-    
     const dataResult = await getOrganizationBySlug(locale, slug);
     
     return (

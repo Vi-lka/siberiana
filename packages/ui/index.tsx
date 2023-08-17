@@ -23,3 +23,4 @@ export * from "./src/sheet";
 export * from "./src/form";
 export * from "./src/alert";
 export * from "./src/accordion";
+export * from "./src/separator";

@@ -8,8 +8,6 @@
     "categories": "Категории",
     "collections": "Коллекции",
     "objects": "Объекты",
-    "archaeological": "Археологические коллекции",
-    "archaeology": "Археология",
     "organizations": "Организации",
     "projects": "Проекты",
     "services": "Сервисы",
@@ -50,10 +48,30 @@
   "menu": [
     {
       "id": 1,
-      "name": "Коллекции",
-      "url": "/collections",
-      "description": "Изучай наследие Енисейской Сибири",
-      "image": "Library"
+      "name": "Обзор",
+      "list": [
+        {
+          "id": 1,
+          "name": "Категории",
+          "url": "/categories",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 2,
+          "name": "Коллекции",
+          "url": "/collections",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 3,
+          "name": "Объекты",
+          "url": "/objects",
+          "description": "",
+          "image": "Library"
+        }
+      ]
     },
     {
       "id": 2,

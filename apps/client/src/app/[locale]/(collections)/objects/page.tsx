@@ -1,39 +1,77 @@
 import React from "react";
-import type { Metadata } from "next";
-
 import { DictionarySchema } from "@siberiana/schemas";
-
-import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getDictionary } from "~/lib/utils/getDictionary";
-
-export async function generateMetadata(
-  { params }: {params: { locale: string }},
-): Promise<Metadata> {
-  // read route params
-  const locale = params.locale
-  
-  // fetch data
-  const dict = await getDictionary(locale);
-
-  return {
-    title: dict.breadcrumbs.objects
-  }
-}
+import { getCategories, getCollections } from "~/lib/queries/api-collections";
+import ErrorHandler from "~/components/errors/ErrorHandler";
+import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 
 export default async function Objects({
   params: { locale },
+  searchParams
 }: {
   params: { locale: string };
+  searchParams: { [key: string]: string | string[] | undefined },
 }) {
   const dict = await getDictionary(locale);
+  const dictResult = DictionarySchema.parse(dict);
 
-  const dataResult = DictionarySchema.parse(dict);
+  // const defaultPageSize = 10
+  
+  // const page = searchParams['page'] ?? '1'
+  // const per = searchParams['per'] ?? defaultPageSize
+  // const search = searchParams['search'] as string | undefined
+  const categories = searchParams['category'] as string | undefined
+  const collections = searchParams['collection'] as string | undefined
+  
+  // const first = Number(per)
+  // const offset = (Number(page) - 1) * Number(per)
+
+  // For filters and titles
+  try {
+    await getCategories({ first: null });
+  } catch (error) {
+    return (
+      <ErrorHandler 
+        locale={locale} 
+        error={error} 
+        place="Categories" 
+        notFound 
+        goBack={false}
+      />
+    )
+  }
+  const categoriesResult = await getCategories({ first: null });
+
+  try {
+    await getCollections({ first: null, categories });
+  } catch (error) {
+    console.error(error)
+      return (
+        <ErrorHandler 
+          locale={locale} 
+          error={error} 
+          place="Collections" 
+          notFound 
+          goBack={false}
+        />
+      )
+  }
+  const collectionsResult = await getCollections({ first: null, categories });
+
+  // Get category title
+  const categorySingle = categoriesResult.edges.find(el => el.node.slug === categories)
+  // Get collection title
+  const collectionSingle = collectionsResult?.edges.find(el => el.node.slug === collections)
 
   return (
-    <main className="font-Inter flex flex-col">
-      <div className="font-OpenSans mx-auto mb-24 mt-16 w-[85%] max-w-[1600px]">
-        <Breadcrumbs dict={dataResult.breadcrumbs} />
-      </div>
-    </main>
+    <div>
+      <BreadcrumbsCollections 
+        dict={dictResult.breadcrumbs}
+        categorySlug={categorySingle?.node.slug}
+        categoryTitle={categorySingle?.node.displayName as string}
+        collectionSlug={collectionSingle?.node.slug}
+        collectionTitle={collectionSingle?.node.displayName as string}
+      />
+    </div>
   );
 }

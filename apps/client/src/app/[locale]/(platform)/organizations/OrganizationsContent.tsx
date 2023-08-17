@@ -39,7 +39,6 @@ export default async function OrganizationsContent({
       />
     )
   }
-
   const dataResult = await getOrganizations(locale, Number(page), Number(per), sort, search, Boolean(consortium));
 
   return (
@@ -58,7 +57,7 @@ export default async function OrganizationsContent({
             width={600}
             height={400}
           >
-             <PiHandshakeLight className='w-full h-full' />
+            <PiHandshakeLight className='w-full h-full' />
           </ImgTextOn>
         ))}
       </div>

@@ -12,11 +12,11 @@ export async function generateMetadata(
   const dict = await getDictionary(locale);
 
   return {
-    title: dict.breadcrumbs.collections
+    title: dict.breadcrumbs.objects
   }
 }
 
-export default function CategoriesLayout({
+export default function ObjectsLayout({
   children,
 }: {
   children: React.ReactNode;

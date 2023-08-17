@@ -18,7 +18,7 @@ export default async function CategoriesBlock({
     const dictResult = DictionarySchema.parse(dict);
 
     try {
-        await getCategories(4);
+        await getCategories({ first: 4 });
     } catch (error) {
         if (error instanceof ZodError) {
             console.log(error.issues);
@@ -28,7 +28,7 @@ export default async function CategoriesBlock({
         }
     }
     
-    const dataResult = await getCategories(4);
+    const dataResult = await getCategories({ first: 4 });
 
   return (
     <>
@@ -52,9 +52,9 @@ export default async function CategoriesBlock({
           key={index}
           className={"aspect-square"}
           title={category.node.displayName}
-          // src={}
+          src={category.node.primaryImageURL}
           origin={"storage"}
-          url={`/${locale}/categories/${category.node.id}`}
+          url={`/${locale}/collections?category=${category.node.slug}`}
         />
       ))}
     </div>

@@ -75,7 +75,7 @@ export default function RootLayout({
       <body className="m min-h-screen m-0 flex flex-col">
         <Providers>
           <Header locale={params.locale} />
-          <main className="pt-20 flex-1">            
+          <main className="pt-20 flex-1"> 
             {children}
           </main>
           <Footer locale={params.locale} />

@@ -13,8 +13,6 @@ export const BreadcrumbsDictSchema = z.object({
   categories: z.string(),
   collections: z.string(),
   objects: z.string(),
-  archaeological: z.string(),
-  archaeology: z.string(),
   organizations: z.string(),
   projects: z.string(),
   services: z.string(),

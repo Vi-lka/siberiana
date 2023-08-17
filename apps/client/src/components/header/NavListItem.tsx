@@ -7,7 +7,6 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
   className?: string;
   title: string;
-  children: React.ReactNode;
   href: string | undefined;
   active?: boolean;
   sheet?: boolean;
@@ -16,7 +15,6 @@ interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
 export default function NavListItem({
   className,
   title,
-  children,
   href,
   active,
   sheet = false,
@@ -35,12 +33,9 @@ export default function NavListItem({
             )}
           >
             <SheetClose className="space-y-1 px-3 py-2 text-left">
-              <div className="text-dark dark:text-foreground text-base font-medium leading-none md:text-lg">
+              <div className="text-dark dark:text-foreground text-base font-normal leading-none md:text-lg">
                 {title}
               </div>
-              <p className="text-graphite dark:text-beaver line-clamp-2 text-xs leading-snug">
-                {children}
-              </p>
             </SheetClose>
           </NavigationMenuLink>
         </Link>
@@ -57,12 +52,9 @@ export default function NavListItem({
             className,
           )}
         >
-          <div className="text-dark dark:text-foreground text-base font-medium leading-none md:text-lg">
+          <div className="text-dark dark:text-foreground text-base font-normal leading-none md:text-lg">
             {title}
           </div>
-          <p className="text-graphite dark:text-beaver line-clamp-2 text-xs leading-snug">
-            {children}
-          </p>
         </NavigationMenuLink>
       </Link>
     </li>

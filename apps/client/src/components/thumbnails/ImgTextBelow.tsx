@@ -3,12 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { cn } from "@siberiana/ui/src/lib/utils";
-
 import type { UrlOrigins } from "~/lib/utils/getURL";
 import getURL from "~/lib/utils/getURL";
-import { usePalette } from 'react-palette'
 
 type Props = {
   title: string | null;
@@ -44,8 +41,6 @@ export default function ImgTextBelow(props: Props) {
     }
   }, [image])
 
-  const { data } = usePalette(getURL(props.src, props.origin))
-
   return (
     <div className="flex flex-col gap-3 h-fit">
         <Link
@@ -55,7 +50,6 @@ export default function ImgTextBelow(props: Props) {
             "bg-background ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:-translate-y-2 hover:scale-[1.04] hover:ring-4 hover:ring-offset-2",
             props.className,
           )}
-          style={{backgroundColor: data.lightVibrant}}
         >
           <div className="relative flex w-full">
             <Image

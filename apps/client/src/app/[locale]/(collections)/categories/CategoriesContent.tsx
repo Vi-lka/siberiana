@@ -7,6 +7,7 @@ import { getCategories } from '~/lib/queries/api-collections';
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import getShortDescription from '~/lib/utils/getShortDescription';
 
 export default async function CategoriesContent({
   locale,
@@ -29,7 +30,7 @@ export default async function CategoriesContent({
   const offset = (Number(page) - 1) * Number(per)
   
   try {
-    await getCategories(Number(first), offset, search);
+    await getCategories({ first: Number(first), offset, search });
   } catch (error) {
     return (
       <ErrorHandler 
@@ -41,51 +42,41 @@ export default async function CategoriesContent({
       />
     )
   }
-
-  const dataResult = await getCategories(Number(first), offset, search);
-
-  function getShortDescription(description: string) {
-    const array = description.split(" ")
-    if (array.length >= 30) {
-        return array.slice(0, 30).join(" ") + "..."
-    } else return array.join(" ")
-  }
+  const dataResult = await getCategories({ first: Number(first), offset, search });
 
   return (
     <>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.edges.map((category, index) => (
-            <ImgTextBelow
-                key={index}
-                className={"aspect-[2.7/1]"}
-                classNameImage={'w-full object-contain'}
-                title={category.node.displayName}
-                // src={}
-                origin={"storage"}
-                href={`/${locale}/categories/${category.node.id}`}
-                width={700}
-                height={300}
-            >
-                <div className="flex flex-col gap-3">
-                    <p className="uppercase font-bold lg:text-xl text-base">
-                        {category.node.displayName}
-                    </p>
+          <ImgTextBelow
+            key={index}
+            className={"aspect-[2.7/1]"}
+            classNameImage={'w-full object-contain'}
+            title={category.node.displayName}
+            src={category.node.primaryImageURL}
+            origin={"storage"}
+            href={`/${locale}/collections?category=${category.node.slug}`}
+            width={810}
+            height={300}
+          >
+            <div className="flex flex-col gap-3">
+              <p className="uppercase font-bold lg:text-xl text-base">
+                {category.node.displayName} {category.node.id}
+              </p>
 
-                    {category.node.description ? (
-                        <p className="font-Inter xl:text-sm text-xs">
-                            {getShortDescription(category.node.description)}
-                        </p>
-                    ) : null}
-
-                    <Link
-                      href={`/${locale}/categories/${category.node.id}`}
-                      className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
-                    >
-                        <p className="hidden md:block">{dictResult.categories.goTo}</p>
-                        <ArrowRight className="stroke-1 h-6 w-6" />
-                    </Link>
-                </div>
-            </ImgTextBelow>
+              <p className="font-Inter xl:text-sm text-xs">
+                {getShortDescription(category.node.description)}
+              </p>
+                
+              <Link
+                href={`/${locale}/collections?category=${category.node.slug}`}
+                className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
+              >
+                <p className="hidden md:block">{dictResult.categories.goTo}</p>
+                <ArrowRight className="stroke-1 h-6 w-6" />
+              </Link>
+            </div>
+          </ImgTextBelow>
         ))}
       </div>
 

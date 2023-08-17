@@ -24,7 +24,6 @@ import {
 } from "@siberiana/ui";
 
 import { useLocale } from "~/lib/utils/useLocale";
-import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -104,28 +103,16 @@ function NavMenuItem({
         </NavigationMenuTrigger>
 
         <NavigationMenuContent>
-          <div className="flex w-[450px] gap-1 p-4">
-            <div className="from-muted/50 to-muted dark:bg-accent flex min-w-[80px] max-w-[90px] flex-col justify-between gap-3 rounded-md bg-gradient-to-b p-4">
-              {menuItemResult.list.map((item, index) => (
-                <Icons
-                  key={index}
-                  icon={item.image}
-                  className="text-dark dark:text-beaverLight h-[50px] w-[50px] p-1"
-                />
-              ))}
-            </div>
-
-            <ul className="flex flex-col justify-between gap-3">
+          <div className="flex w-[385px] gap-1 p-4">
+            <ul className="flex flex-col justify-between gap-3 w-full">
               {menuItemResult.list.map((item, index) => (
                 <NavListItem
                   key={index}
                   title={item.name}
                   href={`/${locale}${item.url}`}
                   active={pathCurrentPage === `${item.url.replace('/','')}`}
-                  className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
-                >
-                  {item.description}
-                </NavListItem>
+                  className="w-full data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                />
               ))}
             </ul>
           </div>

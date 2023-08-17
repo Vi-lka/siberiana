@@ -8,8 +8,6 @@
     "categories": "Categories",
     "collections": "Collections",
     "objects": "Objects",
-    "archaeological": "Archaeological collections",
-    "archaeology": "Archaeology",
     "organizations": "Organizations",
     "projects": "Projects",
     "services": "Services",
@@ -50,10 +48,30 @@
   "menu": [
     {
       "id": 1,
-      "name": "Collections",
-      "url": "/collections",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-      "image": "Library"
+      "name": "Explore",
+      "list": [
+        {
+          "id": 1,
+          "name": "Categories",
+          "url": "/categories",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 2,
+          "name": "Collections",
+          "url": "/collections",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 3,
+          "name": "Objects",
+          "url": "/objects",
+          "description": "",
+          "image": "Library"
+        }
+      ]
     },
     {
       "id": 2,

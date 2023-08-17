@@ -9,7 +9,7 @@ import CategoriesContent from "./CategoriesContent";
 export default async function Categories({
     params: { locale },
     searchParams,
-  }: {
+}: {
     params: { locale: string },
     searchParams: { [key: string]: string | string[] | undefined },
 }) {

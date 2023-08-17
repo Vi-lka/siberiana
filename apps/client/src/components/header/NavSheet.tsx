@@ -20,6 +20,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
   ScrollArea,
+  Separator,
   Sheet,
   SheetClose,
   SheetContent,
@@ -32,7 +33,6 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
 import { signIn } from "next-auth/react";
 import type { Session } from "next-auth";
@@ -56,7 +56,7 @@ export default function NavSheet({
 
       <SheetContent>
         <SheetHeader>
-          <SheetTitle className="mt-5 flex justify-center">
+          <SheetTitle className="mt-5 flex">
             <Link
               href={`/${locale}`}
               className="relative h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
@@ -83,8 +83,8 @@ export default function NavSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <NavigationMenu orientation="vertical">
-          <NavigationMenuList className="flex flex-col items-center">
+        <NavigationMenu orientation="vertical" className="block w-full">
+          <NavigationMenuList className="flex flex-col w-full">
             <ScrollArea 
               className={cn(
                 "font-Inter mt-[2vh] w-full p-1",
@@ -132,24 +132,15 @@ function SheetMenuItem({
 
     return (
       <div className="mb-1 mt-6 flex w-full gap-1 py-2">
-        <div className="from-muted/50 to-muted dark:bg-accent flex flex-col justify-center rounded-md bg-gradient-to-b px-1 py-2">
-          <Icons
-            icon={menuItemResult.image}
-            className="text-dark dark:text-beaverLight h-[50px] w-[50px] p-1"
-          />
-        </div>
-
-        <ul className="flex flex-col justify-center">
+        <ul className="flex flex-col justify-center w-full">
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
             href={`/${locale}${menuItemResult.url}`}
             active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
-            className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 py-1"
+            className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
-          >
-            {menuItemResult.description}
-          </NavListItem>
+          />
         </ul>
       </div>
     );
@@ -158,33 +149,23 @@ function SheetMenuItem({
 
     return (
       <NavigationMenuItem>
-        <h4 className="text-dark dark:text-beaverLight mb-1 mt-6 text-base font-medium uppercase">
+        <h4 className="text-dark dark:text-beaverLight mb-1 mt-6 text-base font-semibold uppercase">
           {menuItemResult.name}
         </h4>
 
-        <div className="flex w-full gap-1 py-2">
-          <div className="from-muted/50 to-muted dark:bg-accent flex flex-col justify-around gap-1 rounded-md bg-gradient-to-b px-1 py-2">
-            {menuItemResult.list.map((item, index) => (
-              <Icons
-                key={index}
-                icon={item.image}
-                className="text-dark dark:text-beaverLight h-[50px] w-[50px] p-1"
-              />
-            ))}
-          </div>
+        <Separator className="h-[2px]" />
 
-          <ul className="flex flex-col justify-around gap-1">
+        <div className="flex w-full gap-1 py-2">
+          <ul className="flex flex-col justify-around gap-1 w-11/12">
             {menuItemResult.list.map((item) => (
               <NavListItem
                 key={item.id}
                 title={item.name}
                 href={`/${locale}${item.url}`}
                 active={pathCurrentPage === `${item.url.replace('/','')}`}
-                className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
-              >
-                {item.description}
-              </NavListItem>
+              />
             ))}
           </ul>
         </div>

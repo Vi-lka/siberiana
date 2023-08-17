@@ -55,8 +55,8 @@ export default function ImgTextOn(props: Props) {
       <div className="relative flex w-full">
         <Image
           src={image}
-          width={props.width ? props.width : 320}
-          height={props.height ? props.height : 320}
+          width={props.width ? props.width : 400}
+          height={props.height ? props.height : 400}
           fill={props.fill}
           onError={() => setImage("/images/image-placeholder.png")}
           priority={true}

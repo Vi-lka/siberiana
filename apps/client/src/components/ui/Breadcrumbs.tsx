@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import type { BreadcrumbsDictType } from "@siberiana/schemas";
@@ -19,7 +19,6 @@ export default function Breadcrumbs({
   title?: string
 }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const locale = useLocale();
 
@@ -34,8 +33,6 @@ export default function Breadcrumbs({
             categories: dict.categories,
             collections: dict.collections,
             objects: dict.objects,
-            archaeological: dict.archaeological,
-            archaeology: dict.archaeology,
             organizations: dict.organizations,
             projects: dict.projects,
             services: dict.services,
@@ -76,38 +73,12 @@ export default function Breadcrumbs({
         ...crumblist,
       ];
 
-      // Add Category param
-      const pathWithCategory = searchParams.get("category")
-        ? [
-            ...pathWithHome,
-            {
-              href: `/${locale}/objects?category=${searchParams.get(
-                "category",
-              )}`,
-              title: getTextGenerator(searchParams.get("category")),
-            },
-          ]
-        : pathWithHome;
-
-      // Add Collection param
-      const pathWithCollection = searchParams.get("collection")
-        ? [
-            ...pathWithCategory,
-            {
-              href: `/${locale}/objects?category=${searchParams.get(
-                "category",
-              )}&collection=${searchParams.get("collection")}`,
-              title: getTextGenerator(searchParams.get("collection")),
-            },
-          ]
-        : pathWithCategory;
-
       // Full path
-      const pathFull = pathWithCollection;
+      const pathFull = pathWithHome;
 
       return pathFull;
     },
-    [dict.home, getTextGenerator, locale, pathname, searchParams],
+    [dict.home, getTextGenerator, locale, pathname],
   );
 
   return (
