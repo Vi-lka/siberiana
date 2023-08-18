@@ -7,8 +7,6 @@ import { ChevronRight } from "lucide-react";
 
 import type { BreadcrumbsDictType } from "@siberiana/schemas";
 
-import { useLocale } from "~/lib/utils/useLocale";
-
 type Props = {
   dict: BreadcrumbsDictType;
   title?: string
@@ -32,7 +30,6 @@ type NoCollectionType ={
 
 
 export default function BreadcrumbsCollections(props: Props) {
-  const locale = useLocale();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -68,9 +65,6 @@ export default function BreadcrumbsCollections(props: Props) {
         .split("/")
         .filter((v) => v.length > 0);
 
-      // Remove locale
-      pathNestedRoutes.shift();
-
       const pathReplaced = pathNestedRoutes
 
       // Replace if single category
@@ -92,14 +86,14 @@ export default function BreadcrumbsCollections(props: Props) {
       // Create crumb list
       const crumblist = pathReplaced.map((subpath, index) => {
         const href =
-          `/${locale}/` + pathReplaced.slice(0, index + 1).join("/");
+          `/` + pathReplaced.slice(0, index + 1).join("/");
         const title = getTitleGenerator(subpath);
         return { href, title };
       });
 
       // Add Home Page
       const pathWithHome = [
-        { href: `/${locale}`, title: `${props.dict.home}` },
+        { href: `/`, title: `${props.dict.home}` },
         ...crumblist,
       ];
 
@@ -109,21 +103,18 @@ export default function BreadcrumbsCollections(props: Props) {
         ? [
             ...pathWithHome,
             {
-              href: `/${locale}/collections?category=${category}`,
+              href: `/collections?category=${category}`,
               title: getTitleGenerator(category),
             },
           ]
         : pathWithHome;
-
-        console.log(collection)
-        console.log(props.collectionSlug)
 
       // Add Collection param
       const pathWithCollection = ((collection === props.collectionSlug))
         ? [
             ...pathWithCategory,
             {
-              href: `/${locale}/objects?category=${category}&collection=${collection}`,
+              href: `/objects?category=${category}&collection=${collection}`,
               title: getTitleGenerator(collection),
             },
           ]
@@ -134,7 +125,7 @@ export default function BreadcrumbsCollections(props: Props) {
 
       return pathFull;
     },
-    [pathname, category, props, locale, getTitleGenerator, collection],
+    [pathname, category, props, getTitleGenerator, collection],
   );
 
   return (

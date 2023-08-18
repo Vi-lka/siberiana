@@ -1,48 +1,47 @@
-import { DictionarySchema } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
-import { ZodError } from 'zod';
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
+import ErrorHandler from '~/components/errors/ErrorHandler';
+import PaginationControls from '~/components/ui/PaginationControls';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
-import ErrorToast from '../errors/ErrorToast';
 import { getDictionary } from '~/lib/utils/getDictionary';
+import { DictionarySchema } from '@siberiana/schemas';
 
-export default async function ProjectsBlock() {
+export default async function ProjectsContent({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined },
+}) {
 
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
+
+  const defaultPageSize = 10
+
+  const page = searchParams['page'] ?? '1'
+  const per = searchParams['per'] ?? defaultPageSize
+  const sort = searchParams['sort'] as string | undefined
+  const search = searchParams['search'] as string | undefined
   
   try {
-    await getProjects({page: 1, per: 2});
+    await getProjects({ page: Number(page), per: Number(per), sort, search });
   } catch (error) {
-    if (error instanceof ZodError) {
-        console.log(error.issues);
-        return <ErrorToast dict={dictResult.errors} error={error.issues} place="ProjectsBlock" />;
-      } else {
-        return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="ProjectsBlock" />;
-      }
+    return (
+      <ErrorHandler
+        error={error} 
+        place="Projects" 
+        notFound 
+        goBack={false}
+      />
+    )
   }
 
-  const dataResult = await getProjects({page: 1, per: 2});
+  const dataResult = await getProjects({ page: Number(page), per: Number(per), sort, search });
 
   return (
     <>
-      <div className="mb-10 flex items-center justify-between">
-        <h1 className="text-foreground text-2xl font-bold uppercase">
-          {dictResult.projects.title}
-        </h1>
-        <Link
-          href={`/projects`}
-          className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
-        >
-          <p className="hidden md:block">
-            {dictResult.projects.textUrl}
-          </p>
-          <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
-        </Link>
-      </div>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.data.map((proj, index) => (
             <ImgTextBelow
@@ -71,12 +70,20 @@ export default async function ProjectsBlock() {
                       target="_blank"
                       className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
                     >
-                        <p className="hidden md:block">{dictResult.projects.goTo}</p>
+                        <p className="hidden md:block">{dict.projects.goTo}</p>
                         <ArrowRight className="stroke-1 h-6 w-6" />
                     </Link>
                 </div>
             </ImgTextBelow>
         ))}
+      </div>
+
+      <div className="mb-24">
+        <PaginationControls
+          dict={dictResult.pagination}
+          length={dataResult.meta.pagination.total}
+          defaultPageSize={defaultPageSize}
+        />
       </div>
     </>
   )

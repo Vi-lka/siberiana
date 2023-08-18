@@ -5,7 +5,6 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import type { AuthDictType } from "@siberiana/schemas";
 import {
   Form,
@@ -15,13 +14,10 @@ import {
   FormMessage,
   Input,
 } from "@siberiana/ui";
-
-import { useLocale } from "~/lib/utils/useLocale";
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
 export default function LogInForm({ dict }: { dict: AuthDictType }) {
-  const lang = useLocale();
 
   const LogInFormSchema = z.object({
     email: z
@@ -91,7 +87,7 @@ export default function LogInForm({ dict }: { dict: AuthDictType }) {
             )}
           />
           <div className="mt-6 flex flex-col-reverse items-center justify-between sm:flex-row">
-            <Link href={`/${lang}/reset`} className="text-sm underline">
+            <Link href={`/reset`} className="text-sm underline">
               {dict.reset}
             </Link>
             <ButtonComponent

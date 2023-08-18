@@ -23,18 +23,16 @@ import {
   navigationMenuTriggerStyle,
 } from "@siberiana/ui";
 
-import { useLocale } from "~/lib/utils/useLocale";
 import NavListItem from "./NavListItem";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
-  const locale = useLocale();
 
   return (
     <NavigationMenu>
       <NavigationMenuList>
         {menuDict.map((menuItem, index) => (
-          <NavMenuItem key={index} locale={locale} menuItem={menuItem} />
+          <NavMenuItem key={index} menuItem={menuItem} />
         ))}
       </NavigationMenuList>
     </NavigationMenu>
@@ -42,10 +40,8 @@ export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
 }
 
 function NavMenuItem({
-  locale,
   menuItem,
 }: {
-  locale: string;
   menuItem: SingleLinkType | GroupLinkType;
 }) {
   const pathName = usePathname();
@@ -58,7 +54,6 @@ function NavMenuItem({
     .split("/")
     .filter((v) => v.length > 0);
 
-  // Remove locale
   const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
   function isNavStyle(menuItem: GroupLinkType) {
@@ -78,7 +73,7 @@ function NavMenuItem({
 
     return (
       <NavigationMenuItem className="uppercase">
-        <Link href={`/${locale}${menuItemResult.url}`} legacyBehavior passHref>
+        <Link href={`${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
             active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
             className={navigationMenuTriggerStyle()}
@@ -109,7 +104,7 @@ function NavMenuItem({
                 <NavListItem
                   key={index}
                   title={item.name}
-                  href={`/${locale}${item.url}`}
+                  href={`${item.url}`}
                   active={pathCurrentPage === `${item.url.replace('/','')}`}
                   className="w-full data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 />

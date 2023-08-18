@@ -5,9 +5,9 @@ import React from 'react'
 import { getDictionary } from '~/lib/utils/getDictionary';
 import { SignInButton } from '../auth/NextAuthButtons';
 
-export default async function NoSession({ locale }: { locale: string }) {
+export default async function NoSession() {
 
-    const dict = await getDictionary(locale);
+    const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
   return (

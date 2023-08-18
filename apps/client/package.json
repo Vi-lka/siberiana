@@ -11,7 +11,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@formatjs/intl-localematcher": "^0.4.0",
     "@hookform/resolvers": "^3.1.1",
     "@siberiana/schemas": "*",
     "@siberiana/ui": "*",
@@ -22,7 +21,6 @@
     "graphql-request": "^6.1.0",
     "jotai": "^2.3.1",
     "keen-slider": "^6.8.5",
-    "negotiator": "^0.6.3",
     "next": "13.4.12",
     "next-auth": "^4.22.5",
     "next-themes": "^0.2.1",
@@ -46,7 +44,6 @@
     "@siberiana/eslint-config": "0.1.0",
     "@siberiana/tailwind-config": "0.1.0",
     "@siberiana/tsconfig": "0.1.0",
-    "@types/negotiator": "^0.6.1",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",

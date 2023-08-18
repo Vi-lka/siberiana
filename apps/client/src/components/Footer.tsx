@@ -5,9 +5,9 @@ import React from 'react'
 import { getDictionary } from '~/lib/utils/getDictionary';
 import SFUSvg from './SFUSvg';
 
-export default async function Footer({ locale }: { locale: string }) {
+export default async function Footer() {
 
-    const dict = await getDictionary(locale);
+    const dict = await getDictionary();
 
     const dictResult = DictionarySchema.parse(dict);
 
@@ -45,7 +45,7 @@ export default async function Footer({ locale }: { locale: string }) {
                     {dictResult.footer.links.map((link, index) => (
                         <Link
                             key={index}
-                            href={`/${locale}${link.url}`}
+                            href={`${link.url}`}
                             className="uppercase xl:text-sm text-xs hover:underline underline-offset-2"
                         >
                           {link.name}
@@ -62,10 +62,10 @@ export default async function Footer({ locale }: { locale: string }) {
                 </p>
 
                 <div className="flex gap-6 lg:flex-row flex-col justify-end items-center">
-                    <Link href={`/${locale}`} className="text-xs underline underline-offset-2">
+                    <Link href={`/`} className="text-xs underline underline-offset-2">
                         {dictResult.footer.privacyPol}
                     </Link>
-                    <Link href={`/${locale}`} className="text-xs underline underline-offset-2">
+                    <Link href={`/`} className="text-xs underline underline-offset-2">
                         {dictResult.footer.termsOfUse}
                     </Link>
                 </div>

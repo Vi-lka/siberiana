@@ -7,8 +7,6 @@ import { ChevronRight } from "lucide-react";
 
 import type { BreadcrumbsDictType } from "@siberiana/schemas";
 
-import { useLocale } from "~/lib/utils/useLocale";
-
 export default function Breadcrumbs({
   dict,
   slug,
@@ -19,8 +17,6 @@ export default function Breadcrumbs({
   title?: string
 }) {
   const pathname = usePathname();
-
-  const locale = useLocale();
 
   const getTextGenerator = React.useCallback(
     (subpath: string | null) => {
@@ -56,20 +52,17 @@ export default function Breadcrumbs({
         .split("/")
         .filter((v) => v.length > 0);
 
-      // Remove locale
-      pathNestedRoutes.shift();
-
       // Create crumb list
       const crumblist = pathNestedRoutes.map((subpath, index) => {
         const href =
-          `/${locale}/` + pathNestedRoutes.slice(0, index + 1).join("/");
+          `/` + pathNestedRoutes.slice(0, index + 1).join("/");
         const title = getTextGenerator(subpath);
         return { href, title };
       });
 
       // Add Home Page
       const pathWithHome = [
-        { href: `/${locale}`, title: `${dict.home}` },
+        { href: `/`, title: `${dict.home}` },
         ...crumblist,
       ];
 
@@ -78,7 +71,7 @@ export default function Breadcrumbs({
 
       return pathFull;
     },
-    [dict.home, getTextGenerator, locale, pathname],
+    [dict.home, getTextGenerator, pathname],
   );
 
   return (

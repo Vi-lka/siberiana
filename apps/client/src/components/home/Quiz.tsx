@@ -4,14 +4,11 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ZodError } from "zod";
-
 import { QuestionsSchema } from "@siberiana/schemas";
 import type { ErrorsDictType, QuizDictType } from "@siberiana/schemas";
-
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import getURL from "~/lib/utils/getURL";
-import { useLocale } from "~/lib/utils/useLocale";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
 import ButtonComponent from "../ui/ButtonComponent";
 import ErrorToast from "../errors/ErrorToast";
@@ -26,10 +23,8 @@ export default function Quiz({
   const [answer, setAnswer] = React.useState<boolean>();
   const [tryAgain, setTryAgain] = React.useState<boolean>();
 
-  const locale = useLocale();
-
   // Get all questions TODO: if useQuestions() returns random we will get only one question
-  const { data, isLoading, error } = useQuestions(locale);
+  const { data, isLoading, error } = useQuestions();
 
   // Get random question
   const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
@@ -125,7 +120,7 @@ export default function Quiz({
               {qiuzDict.right}
             </h1>
 
-            <Link href={getLinkDir(question.attributes.url, locale)}>
+            <Link href={getLinkDir(question.attributes.url)}>
               <ButtonComponent className="font-Inter w-fit px-8 py-6 text-xs uppercase lg:text-sm">
                 {question.attributes.urlName}
               </ButtonComponent>

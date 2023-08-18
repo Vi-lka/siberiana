@@ -6,7 +6,6 @@ import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
 import { ThemeToggle } from "../providers/ThemeToggle";
-import LocaleSwitcher from "./LocaleSwitcher";
 import NavMenu from "./NavMenu";
 import NavSheet from "./NavSheet";
 import { ClientHydration } from "../providers/ClientHydration";
@@ -16,9 +15,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import AccountBar from "./AccountBar";
 
-export default async function Header({ locale }: { locale: string }) {
+export default async function Header() {
   
-  const dict = await getDictionary(locale);
+  const dict = await getDictionary();
 
   const dictResult = DictionarySchema.parse(dict);
 
@@ -29,7 +28,7 @@ export default async function Header({ locale }: { locale: string }) {
       <div className="mx-auto flex w-[95%] max-w-[1600px] items-center justify-between md:w-[85%]">
         <div className="flex w-1/5">
           <Link
-            href={`/${locale}`}
+            href={`/`}
             className="relative h-[2.5rem] w-[7rem] md:h-[3.5rem] md:w-[9rem]"
           >
             <LogoSvg isAdaptive />
@@ -52,11 +51,9 @@ export default async function Header({ locale }: { locale: string }) {
           <ClientHydration fallback={
             <div className="flex gap-6 mr-2">
               <Skeleton className="w-6 p-4"/>
-              <Skeleton className="w-6 p-4"/>
             </div>
           }>
             <ThemeToggle />
-            <LocaleSwitcher />
           </ClientHydration>
           
           {!!session ? (

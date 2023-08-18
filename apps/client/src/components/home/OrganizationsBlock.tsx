@@ -11,17 +11,13 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getDictionary } from "~/lib/utils/getDictionary";
 
-export default async function OrganizationsBlock({
-  locale,
-}: {
-  locale: string;
-}) {
+export default async function OrganizationsBlock() {
 
-  const dict = await getDictionary(locale);
+  const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
   try {
-    await getOrganizations(locale, 1, 5);
+    await getOrganizations({ page: 1, per: 5 });
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
@@ -31,7 +27,7 @@ export default async function OrganizationsBlock({
     }
   }
 
-  const dataResult = await getOrganizations(locale, 1, 5);
+  const dataResult = await getOrganizations({ page: 1, per: 5 });
 
   function handleClassName(index: number) {
     switch (index) {
@@ -62,7 +58,7 @@ export default async function OrganizationsBlock({
           {dictResult.organizations.title}
         </h1>
         <Link
-          href={`/${locale}/organizations`}
+          href={`/organizations`}
           className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
         >
           <p className="hidden md:block">
@@ -81,7 +77,7 @@ export default async function OrganizationsBlock({
             className={handleClassName(index)}
             title={org.attributes.title}
             src={org.attributes.image.data?.attributes.url}
-            url={`/${locale}/organizations/${org.attributes.slug}`}
+            url={`/organizations/${org.attributes.slug}`}
             origin={"strapi"}
             width={450}
             height={450}
