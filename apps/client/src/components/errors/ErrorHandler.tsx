@@ -6,7 +6,6 @@ import { DictionarySchema } from '@siberiana/schemas';
 import NotFound from './NotFound';
 
 type Props = {
-    locale: string, 
     error: unknown,
     place: string,
     children?: React.ReactNode
@@ -23,7 +22,7 @@ type FalseNotFoundProps = {
 
 export default async function ErrorHandler(props: Props) {
 
-    const dict = await getDictionary(props.locale);
+    const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
     console.log("Handler: ",  props.error)

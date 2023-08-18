@@ -18,12 +18,10 @@ import {
   Input,
 } from "@siberiana/ui";
 
-import { useLocale } from "~/lib/utils/useLocale";
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
 export default function SignUpForm({ dict }: { dict: AuthDictType }) {
-  const lang = useLocale();
 
   const SignUpFormSchema = z
     .object({
@@ -218,7 +216,7 @@ export default function SignUpForm({ dict }: { dict: AuthDictType }) {
                 <div className="space-y-1 leading-none">
                   <FormLabel className="text-xs sm:text-sm">
                     {dict.regAs}{" "}
-                    <Link href={`/${lang}/info`} className="underline">
+                    <Link href={`/info`} className="underline">
                       {dict.researcher}
                     </Link>
                   </FormLabel>
@@ -266,7 +264,7 @@ export default function SignUpForm({ dict }: { dict: AuthDictType }) {
                 <div className="space-y-1 leading-none">
                   <FormLabel className="text-xs sm:text-sm">
                     {dict.personalData}{" "}
-                    <Link href={`/${lang}/policy`} className="underline">
+                    <Link href={`/policy`} className="underline">
                       {dict.personalDataLinkText}
                     </Link>
                   </FormLabel>

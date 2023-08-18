@@ -9,17 +9,13 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 import { DictionarySchema } from "@siberiana/schemas";
 import { ZodError } from "zod";
 
-export default async function CustomBlock({
-  locale,
-}: {
-  locale: string;
-}) {
+export default async function CustomBlock() {
 
-  const dict = await getDictionary(locale);
+  const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
   try {
-    await getCustomBlock(locale);
+    await getCustomBlock();
   } catch (error) {
     if (error instanceof ZodError) {
       console.log(error.issues);
@@ -29,7 +25,7 @@ export default async function CustomBlock({
     }
   }
 
-  const dataResult = await getCustomBlock(locale);
+  const dataResult = await getCustomBlock();
 
   return (
     <>
@@ -39,7 +35,7 @@ export default async function CustomBlock({
         </h1>
 
         <Link
-          href={getLinkDir(dataResult.url, locale)}
+          href={getLinkDir(dataResult.url)}
           className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
         >
           <p className="hidden md:block">{dataResult.textUrl}</p>
@@ -54,7 +50,7 @@ export default async function CustomBlock({
             className={"aspect-square"}
             title={elem.title}
             src={elem.img.data?.attributes.url}
-            url={getLinkDir(elem.url, locale)}
+            url={getLinkDir(elem.url)}
             origin={"strapi"}
           />
         ))}

@@ -70,13 +70,11 @@ export const getSlider = async (): Promise<SliderType> => {
   return data;
 };
 
-export const getCustomBlock = async (
-  locale: string,
-): Promise<CustomBlockType> => {
+export const getCustomBlock = async (): Promise<CustomBlockType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query CustomBlock {
-      custom(locale: "${locale}") {
+      custom {
         data {
           attributes {
             content {
@@ -133,19 +131,23 @@ export const getCustomBlock = async (
   return data;
 };
 
-export const getOrganizations = async (
-  locale: string,
-  page: number,
-  per: number,
+export const getOrganizations = async ({
+  page,
+  per,
   sort = "order:asc",
   search = "",
+  consortium
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string,
   consortium?: boolean,
-): Promise<OrganizationsType> => {
+}): Promise<OrganizationsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
       organizations(
-        locale: "${locale}", 
         sort: "${sort}", 
         pagination: {
           page: ${page},
@@ -216,14 +218,12 @@ export const getOrganizations = async (
 };
 
 export const getOrganizationBySlug = async (
-  locale: string,
   slug: string,
 ): Promise<OrganizationBySlugType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query OrganizationBySlug {
       organizations(
-        locale: "${locale}",
         filters: {
           slug: {
             eq: "${slug}",
@@ -337,8 +337,6 @@ export const getOrganizationBySlug = async (
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const json = await res.json();
-
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (json.data.organizations.data.length === 0) {
@@ -351,18 +349,21 @@ export const getOrganizationBySlug = async (
   return data;
 };
 
-export const getProjects = async (
-  locale: string,
-  page: number,
-  per: number,
+export const getProjects = async ({
+  page,
+  per,
   sort = "order:asc",
   search = ""
-): Promise<ProjectsType> => {
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string,
+}): Promise<ProjectsType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Projects {
       projects(
-        locale: "${locale}",
         sort: "${sort}",
         pagination: {
           page: ${page},
@@ -427,18 +428,21 @@ export const getProjects = async (
   return projects;
 };
 
-export const getServices = async (
-  locale: string,
-  page: number,
-  per: number,
+export const getServices = async ({
+  page,
+  per,
   sort = "order:asc",
   search = ""
-): Promise<ServicesType> => {
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string
+}): Promise<ServicesType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Services {
       services(
-        locale: "${locale}",
         sort: "${sort}",
         pagination: {
           page: ${page},
@@ -503,11 +507,11 @@ export const getServices = async (
   return services;
 };
 
-export const getAbout = async (locale: string,): Promise<AboutType> => {
+export const getAbout = async (): Promise<AboutType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query About {
-      about(locale: "${locale}") {
+      about {
         data {
           attributes {
             description 
@@ -559,11 +563,11 @@ export const getAbout = async (locale: string,): Promise<AboutType> => {
   return about;
 };
 
-export const getFAQ = async (locale: string,): Promise<FAQType> => {
+export const getFAQ = async (): Promise<FAQType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query FAQ {
-      faq(locale: "${locale}") {
+      faq {
         data {
           attributes {
             category {

@@ -1,8 +1,8 @@
-export default function getLinkDir(link: string, locale: string): string {
+export default function getLinkDir(link: string): string {
   try {
     new URL(link);
   } catch (error) {
-    return `${locale}${link}`;
+    return link;
   }
 
   const url = new URL(link);
@@ -10,9 +10,6 @@ export default function getLinkDir(link: string, locale: string): string {
 
   // Ex:"/my/nested/path" --> ["my", "nested", "path"]
   const pathNestedRoutes = url.pathname.split("/").filter((v) => v.length > 0);
-
-  // Remove locale
-  pathNestedRoutes.shift();
 
   const path = pathNestedRoutes.join("/");
   const search = url.search;
@@ -24,7 +21,7 @@ export default function getLinkDir(link: string, locale: string): string {
   ).hostname.replace("www.", "");
 
   if (domain === "localhost" || domain === nextDomain) {
-    return `/${locale}/${internalLink}`;
+    return `/${internalLink}`;
   } else {
     console.log("OUT: ", url.href);
     return url.href;

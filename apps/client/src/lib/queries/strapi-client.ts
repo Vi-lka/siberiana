@@ -8,10 +8,10 @@ import type { QuestionsType } from "@siberiana/schemas";
 const fetcher = (query: string): Promise<QuestionsType> =>
   request(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, query);
 
-export function useQuestions(locale: string) {
+export function useQuestions() {
   const { data, error, isLoading } = useSWR<QuestionsType, Error>(
     `query Questions {
-      questions(locale: "${locale}") {
+      questions {
         data {
           attributes {
             title

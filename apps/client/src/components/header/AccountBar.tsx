@@ -9,7 +9,6 @@ import { ClientHydration } from '../providers/ClientHydration';
 import { signOut } from 'next-auth/react';
 import { useAtom } from 'jotai';
 import { tabAccountAtom } from '~/lib/utils/atoms';
-import { useLocale } from '~/lib/utils/useLocale';
 
 export default function AccountBar({ 
     dict,
@@ -18,7 +17,6 @@ export default function AccountBar({
     dict: AccountDictType,
     session: Session | null
 }) {
-    const locale = useLocale();
 
     const matchesName = session?.user.name.match(/\b(\w)/g)
     const acronymName = matchesName?.join('')
@@ -46,29 +44,29 @@ export default function AccountBar({
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                    <Link href={`/${locale}/account`}>
+                    <Link href={`/account`}>
                         <DropdownMenuItem className='cursor-pointer'>{dict.profile}</DropdownMenuItem>
                     </Link>
-                    <Link href={`/${locale}/account/settings`}>
+                    <Link href={`/account/settings`}>
                         <DropdownMenuItem className='cursor-pointer'>{dict.settings}</DropdownMenuItem>
                     </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                    <Link href={`/${locale}/account`}>
+                    <Link href={`/account`}>
                         <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("favourites")}>
                             {dict.favourites}
                         </DropdownMenuItem>
                     </Link>
 
-                    <Link href={`/${locale}/account`}>
+                    <Link href={`/account`}>
                         <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("collections")}>
                             {dict.collections}
                         </DropdownMenuItem>    
                     </Link>
 
-                    <Link href={`/${locale}/account`}>
+                    <Link href={`/account`}>
                         <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("publications")}>
                             {dict.publications}
                         </DropdownMenuItem>

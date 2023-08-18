@@ -8,13 +8,9 @@ import ErrorToast from '../errors/ErrorToast';
 import { ZodError } from 'zod';
 import ImgTextOn from '../thumbnails/ImgTextOn';
 
-export default async function CategoriesBlock({
-    locale,
-  }: {
-    locale: string;
-}) {
+export default async function CategoriesBlock() {
 
-    const dict = await getDictionary(locale);
+    const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
     try {
@@ -32,13 +28,13 @@ export default async function CategoriesBlock({
 
   return (
     <>
-    <div className="mb-10 flex items-center justify-between">
+    <div className="mt-24 mb-10 flex items-center justify-between">
       <h1 className="text-foreground text-2xl font-bold uppercase">
         {dictResult.categories.title}
       </h1>
 
       <Link
-        href={`/${locale}/categories`}
+        href={`/categories`}
         className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
       >
         <p className="hidden md:block">{dictResult.categories.textUrl}</p>
@@ -54,7 +50,7 @@ export default async function CategoriesBlock({
           title={category.node.displayName}
           src={category.node.primaryImageURL}
           origin={"storage"}
-          url={`/${locale}/collections?category=${category.node.slug}`}
+          url={`/collections?category=${category.node.slug}`}
         />
       ))}
     </div>

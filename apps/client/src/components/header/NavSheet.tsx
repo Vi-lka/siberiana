@@ -30,8 +30,6 @@ import {
   SheetTrigger,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-
-import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
 import NavListItem from "./NavListItem";
 import { signIn } from "next-auth/react";
@@ -46,7 +44,6 @@ export default function NavSheet({
   authDict: AuthDictType;
   session: Session | null
 }) {
-  const locale = useLocale();
 
   return (
     <Sheet>
@@ -56,9 +53,9 @@ export default function NavSheet({
 
       <SheetContent>
         <SheetHeader>
-          <SheetTitle className="mt-5 flex">
+          <SheetTitle className="mt-5">
             <Link
-              href={`/${locale}`}
+              href={`/`}
               className="relative h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
             >
               <SheetClose>
@@ -94,7 +91,6 @@ export default function NavSheet({
               {menuDict.map((menuItem, index) => (
                 <SheetMenuItem
                   key={index}
-                  locale={locale}
                   menuItem={menuItem}
                 />
               ))}
@@ -108,10 +104,8 @@ export default function NavSheet({
 }
 
 function SheetMenuItem({
-  locale,
   menuItem,
 }: {
-  locale: string;
   menuItem: SingleLinkType | GroupLinkType;
 }) {
   const pathName = usePathname();
@@ -124,7 +118,6 @@ function SheetMenuItem({
     .split("/")
     .filter((v) => v.length > 0);
 
-  // Remove locale
   const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
   if (SingleLinkSchema.safeParse(menuItem).success) {
@@ -136,7 +129,7 @@ function SheetMenuItem({
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
-            href={`/${locale}${menuItemResult.url}`}
+            href={`${menuItemResult.url}`}
             active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
             className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
@@ -161,7 +154,7 @@ function SheetMenuItem({
               <NavListItem
                 key={item.id}
                 title={item.name}
-                href={`/${locale}${item.url}`}
+                href={`${item.url}`}
                 active={pathCurrentPage === `${item.url.replace('/','')}`}
                 className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
