@@ -1,5 +1,5 @@
-import type { CategoriesType, CategoryNodeType, CollectionsType } from "@siberiana/schemas";
-import { CategoriesSchema, CategoryNodeSchema, CollectionsSchema } from "@siberiana/schemas";
+import type { CategoriesType, CategoryNodeType, CollectionsType, ObjectsType } from "@siberiana/schemas";
+import { CategoriesSchema, CategoryNodeSchema, CollectionsSchema, ObjectsSchema } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 
@@ -10,7 +10,7 @@ export const getCategories = async ({
 }: {
   first: number | null,
   offset?: number | null,
-  search?: string;
+  search?: string,
 }): Promise<CategoriesType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -48,7 +48,7 @@ export const getCategories = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) {
@@ -59,15 +59,12 @@ export const getCategories = async ({
     throw new Error("Failed to fetch data 'Categories'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { data: { categories: CategoriesType } };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.categories.totalCount === 0) || (json.data.categories.edges.length === 0)) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const categories = CategoriesSchema.parse(json.data?.categories);
 
   return categories;
@@ -102,7 +99,7 @@ export const getCategoryByID = async (id: string): Promise<CategoryNodeType> => 
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
   });
   
   if (!res.ok) {
@@ -112,16 +109,21 @@ export const getCategoryByID = async (id: string): Promise<CategoryNodeType> => 
     // Throw an error
     throw new Error("Failed to fetch data 'Category'");
   }
-  
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
-  
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
+  const json = await res.json() as {
+    data: {
+      categories: {
+        edges: {
+          node: CategoryNodeType
+        }[]
+      }
+    }
+  };
+
   if ((json.data.categories.edges.length === 0)) {
     notFound()
   }
-  
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
   const category = CategoryNodeSchema.parse(json.data?.categories.edges[0].node);
   
   return category;
@@ -131,11 +133,13 @@ export const getCollections = async ({
   first,
   offset = 0,
   search = "",
+  sort = "CREATED_AT:DESC",
   categories
 }: {
   first: number | null,
   offset?: number | null,
-  search?: string;
+  search?: string,
+  sort?: string,
   categories?: string
 }): Promise<CollectionsType> => {
   const headers = { "Content-Type": "application/json" };
@@ -143,7 +147,11 @@ export const getCollections = async ({
     query Collections {
       collections(
         first: ${first}, 
-        offset: ${offset}, 
+        offset: ${offset},
+        orderBy: [{
+          field: ${sort.split(':')[0]},
+          direction: ${sort.split(':')[1]}
+        }],
         where: {
           ${!!categories ? (
             `hasCategoryWith: [
@@ -180,7 +188,7 @@ export const getCollections = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) {
@@ -191,18 +199,167 @@ export const getCollections = async ({
     throw new Error("Failed to fetch data 'Collections'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { data: { collections: CollectionsType } };
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.collections.totalCount === 0) || (json.data.collections.edges.length === 0)) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const collections = CollectionsSchema.parse(json.data?.collections);
 
   return collections;
+};
+
+export const getObjects = async ({
+  first,
+  offset = 0,
+  search = "",
+  categories,
+  collections,
+}: {
+  first: number | null,
+  offset?: number | null,
+  search?: string,
+  categories?: string,
+  collections?: string,
+}): Promise<ObjectsType> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query Objects {
+      artifacts(
+        first: ${first}, 
+        offset: ${offset}, 
+        where: {
+          hasCollectionWith: [
+            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
+            ${!!categories ? `{
+              hasCategoryWith: [
+                {slugIn: [${getMultiFilter(categories)}]}
+              ]
+            },` : ''}
+          ]
+          or: [ 
+            {displayNameContainsFold: "${search}"}, 
+            {hasCollectionWith: [
+              {or: [
+                {displayNameContainsFold: "${search}"},
+                {hasCategoryWith: [
+                  {displayNameContainsFold: "${search}"}
+                ]}
+              ]}
+            ]}, 
+          ]
+        }
+      ) {
+        totalCount
+        edges {
+          node {
+            __typename
+            id
+            displayName
+            primaryImageURL
+          }
+        }
+      }
+      books(
+        first: ${first}, 
+        offset: ${offset}, 
+        where: {
+          hasCollectionWith: [
+            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
+            ${!!categories ? `{
+              hasCategoryWith: [
+                {slugIn: [${getMultiFilter(categories)}]}
+              ]
+            },` : ''}
+          ]
+          or: [ 
+            {displayNameContainsFold: "${search}"}, 
+            {hasCollectionWith: [
+              {or: [
+                {displayNameContainsFold: "${search}"},
+                {hasCategoryWith: [
+                  {displayNameContainsFold: "${search}"}
+                ]}
+              ]}
+            ]}, 
+          ]
+        }
+      ) {
+        totalCount
+        edges {
+          node {
+            __typename
+            id
+            displayName
+            primaryImageURL
+          }
+        }
+      }
+      protectedAreaPictures(
+        first: ${first}, 
+        offset: ${offset}, 
+        where: {
+          hasCollectionWith: [
+            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
+            ${!!categories ? `{
+              hasCategoryWith: [
+                {slugIn: [${getMultiFilter(categories)}]}
+              ]
+            },` : ''}
+          ]
+          or: [ 
+            {displayNameContainsFold: "${search}"}, 
+            {hasCollectionWith: [
+              {or: [
+                {displayNameContainsFold: "${search}"},
+                {hasCategoryWith: [
+                  {displayNameContainsFold: "${search}"}
+                ]}
+              ]}
+            ]}, 
+          ]
+        }
+      ) {
+        totalCount
+        edges {
+          node {
+            __typename
+            id
+            displayName
+            primaryImageURL
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Objects'");
+  }
+
+  const json = await res.json() as { data: ObjectsType };
+
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const allCount = json.data.artifacts.totalCount + json.data.books.totalCount + json.data.protectedAreaPictures.totalCount
+  if (allCount === 0) {
+    notFound()
+  }
+
+  const objects = ObjectsSchema.parse(json.data);
+
+  return objects;
 };

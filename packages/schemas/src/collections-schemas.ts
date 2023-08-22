@@ -45,3 +45,29 @@ export const CollectionsSchema = z.object({
     }).array()
 });
 export type CollectionsType = z.infer<typeof CollectionsSchema>;
+
+//.........................OBJECTS.........................//
+const OBJECTTYPES = [ "Artifact", "Book", "ProtectedAreaPicture" ] as const
+
+export const ObjectNodeSchema = z.object({
+    __typename: z.enum(OBJECTTYPES),
+    id: z.string(),
+    displayName: z.string(),
+    primaryImageURL: z.string(),
+});
+export type ObjectNodeType = z.infer<typeof ObjectNodeSchema>;
+
+export const ObjectsArraySchema = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: ObjectNodeSchema
+    }).array()
+});
+export type ObjectsArrayType = z.infer<typeof ObjectsArraySchema>;
+
+export const ObjectsSchema = z.object({
+    artifacts: ObjectsArraySchema,
+    books: ObjectsArraySchema,
+    protectedAreaPictures: ObjectsArraySchema
+});
+export type ObjectsType = z.infer<typeof ObjectsSchema>;

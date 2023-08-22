@@ -14,20 +14,15 @@ export default async function About() {
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
-  try {
-    await getAbout();
-  } catch (error) {
-    return (
-      <ErrorHandler 
-        error={error} 
-        place="Projects" 
-        notFound 
-        goBack={false}
-      />
-    )
-  }
-
-  const dataResult = await getAbout();
+  const [ dataResult ] = await Promise.allSettled([ getAbout() ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="About" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   return (
     <div>
@@ -41,16 +36,16 @@ export default async function About() {
                     rehypePlugins={[rehypeRaw]}
                     transformImageUri={uri => `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${uri}`}
                 >
-                  {dataResult.description ? dataResult.description : ""}
+                  {dataResult.value.description ? dataResult.value.description : ""}
                 </ReactMarkdown>
             </div>
 
             <h1 className="text-foreground text-2xl font-bold uppercase">
-                {dataResult.title}
+                {dataResult.value.title}
             </h1>
 
             <div className="md:w-full w-[85%] mx-auto mb-24 grid md:grid-cols-4 grid-cols-1 gap-6">
-                {dataResult.team.map((member, index) => (
+                {dataResult.value.team.map((member, index) => (
                     <Member 
                         key={index}
                         title={member.name}

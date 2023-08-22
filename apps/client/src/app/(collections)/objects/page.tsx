@@ -1,9 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import { getCategories, getCollections } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
+import SearchField from "~/components/ui/filters/SearchField";
+import RowBlockSkeleton from "~/components/skeletons/RowBlockSkeleton";
+import ObjectsContent from "./ObjectsContent";
 
 export default async function Objects({
   searchParams
@@ -25,39 +28,31 @@ export default async function Objects({
   // const offset = (Number(page) - 1) * Number(per)
 
   // For filters and titles
-  try {
-    await getCategories({ first: null });
-  } catch (error) {
-    return (
-      <ErrorHandler 
-        error={error} 
-        place="Categories" 
-        notFound 
-        goBack={false}
-      />
-    )
-  }
-  const categoriesResult = await getCategories({ first: null });
-
-  try {
-    await getCollections({ first: null, categories });
-  } catch (error) {
-    console.error(error)
-      return (
-        <ErrorHandler 
-          error={error} 
-          place="Collections" 
-          notFound 
-          goBack={false}
-        />
-      )
-  }
-  const collectionsResult = await getCollections({ first: null, categories });
+  const [ categoriesResult, collectionsResult ] = await Promise.allSettled([ 
+    getCategories({ first: null }),
+    getCollections({ first: null, categories })
+  ])
+  if (categoriesResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={categoriesResult.reason as unknown} 
+      place="Categories in Objects"
+      notFound 
+      goBack={false}
+    />
+  )
+  if (collectionsResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={collectionsResult.reason as unknown} 
+      place="Collections in Objects" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   // Get category title
-  const categorySingle = categoriesResult.edges.find(el => el.node.slug === categories)
+  const categorySingle = categoriesResult.value.edges.find(el => el.node.slug === categories)
   // Get collection title
-  const collectionSingle = collectionsResult?.edges.find(el => el.node.slug === collections)
+  const collectionSingle = collectionsResult.value.edges.find(el => el.node.slug === collections)
 
   return (
     <div>
@@ -68,6 +63,45 @@ export default async function Objects({
         collectionSlug={collectionSingle?.node.slug}
         collectionTitle={collectionSingle?.node.displayName as string}
       />
+      
+      <div className="mt-10 mb-4 flex gap-4 flex-row items-center justify-between">
+        <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
+          {!!collectionSingle 
+            ? collectionSingle.node.displayName 
+            : !!categorySingle 
+              ? categorySingle.node.displayName
+              : dictResult.breadcrumbs.objects}
+        </h1>
+      </div>
+
+      {!!collectionSingle 
+        ? (
+          <p className="font-Inter md:text-base text-sm my-4">
+            {collectionSingle.node.description}
+          </p>
+        )
+        : !!categorySingle 
+          ? (
+            <p className="font-Inter md:text-base text-sm my-4">
+              {categorySingle.node.description}
+            </p>
+          )
+          : null
+      }
+  
+      <SearchField 
+        placeholder={dictResult.search.button}
+      />
+
+      <Suspense fallback={
+        <div className="my-12">
+          {Array(4).map((_, index) => (
+            <RowBlockSkeleton key={index} />
+          ))}
+        </div>
+      }>
+        <ObjectsContent searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

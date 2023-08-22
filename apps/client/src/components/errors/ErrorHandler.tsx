@@ -25,7 +25,7 @@ export default async function ErrorHandler(props: Props) {
     const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
-    console.log("Handler: ",  props.error)
+    console.log("ErrorHandler: ",  props.error)
 
     if (props.error instanceof ZodError) {
 
@@ -43,7 +43,7 @@ export default async function ErrorHandler(props: Props) {
                 )
             
             } else return <ErrorToast dict={dictResult.errors} error={(props.error as Error).message} place={props.place} />
-        } else return null
+        } else return <ErrorToast dict={dictResult.errors} error={(props.error as Error).message} place={props.place} />
 
     }
 }

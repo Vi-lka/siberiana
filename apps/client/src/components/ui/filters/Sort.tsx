@@ -1,11 +1,11 @@
 "use client"
 
 import type { SortDataType, SortDictType } from '@siberiana/schemas'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@siberiana/ui'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator } from '@siberiana/ui'
 import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
-import ButtonComponent from './ButtonComponent'
+import ButtonComponent from '../ButtonComponent'
 
 export default function Sort({ 
     dict,
@@ -45,18 +45,34 @@ export default function Sort({
       value={sort}
       onValueChange={handleSortParams}
     >
-      <SelectTrigger className="w-fit border-none">
+      <SelectTrigger className="w-fit border-none font-Inter">
         <SelectValue placeholder={dict.placeholder} />
       </SelectTrigger>
-      <SelectContent side="top">
-        {data.map((elem) => (
-          <SelectItem key={elem.val} value={`${elem.val}`} className='font-Inter cursor-pointer'>
-            {elem.text}
-          </SelectItem>
+      <SelectContent side="bottom" >
+        {data.map((elem, index) => (
+          elem.val 
+            ? (
+              <SelectItem 
+                key={index} 
+                value={`${elem.val}`} 
+                className='font-Inter cursor-pointer'
+                // Prevent propagation: https://github.com/radix-ui/primitives/issues/1658#issuecomment-1664079551
+                ref={(ref) => {
+                  if (!ref) return;
+                  ref.ontouchstart = (e) => {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                {elem.text}
+              </SelectItem>
+            ) 
+            : <Separator key={index} className='my-1' />
         ))}
-        {sort ? (
+        {sort 
+          ? (
             <ButtonComponent 
-                className='w-full h-8 px-2 py-0 mt-4 rounded-sm font-Inter font-normal text-xs uppercase'
+                className='w-full h-8 px-2 py-0 mt-4 rounded-sm font-Inter font-normal text-xs uppercase z-[100]'
                 onClick={() => {
                     const params = new URLSearchParams(window.location.search);
                     params.delete("sort");
@@ -67,7 +83,8 @@ export default function Sort({
             >
                 {dict.reset}
             </ButtonComponent>
-        ) : null}
+          ) 
+          : null}
       </SelectContent>
     </Select>
   )

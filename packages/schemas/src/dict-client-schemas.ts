@@ -43,14 +43,15 @@ export const SortDictSchema = z.object({
   ascText: z.string(),
   descText: z.string(),
   byName: z.string(),
+  byAdded: z.string(),
   reset: z.string()
 });
 export type SortDictType = z.infer<typeof SortDictSchema>;
 
 //.......SORTDATA.......//
 export const SortDataSchema = z.object({
-  val: z.string(),
-  text: z.string(),
+  val: z.string().optional(),
+  text: z.string().optional(),
 });
 export type SortDataType = z.infer<typeof SortDataSchema>;
 

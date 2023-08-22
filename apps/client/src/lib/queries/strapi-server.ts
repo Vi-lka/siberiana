@@ -48,7 +48,11 @@ export const getSlider = async (): Promise<SliderType> => {
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -59,11 +63,21 @@ export const getSlider = async (): Promise<SliderType> => {
     throw new Error("Failed to fetch data 'Slider'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      slider: {
+        data: {
+          attributes: {
+            Images: {
+              data: SliderType
+            }
+          }
+        }
+      }
+    }
+  };
 
   const data = SliderSchema.parse(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     json.data?.slider.data.attributes.Images.data,
   );
 
@@ -104,7 +118,11 @@ export const getCustomBlock = async (): Promise<CustomBlockType> => {
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -115,16 +133,23 @@ export const getCustomBlock = async (): Promise<CustomBlockType> => {
     throw new Error("Failed to fetch data 'Custom Block'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      custom: {
+        data: {
+          attributes: {
+            content: CustomBlockType
+          } 
+        }
+      }
+    }
+  };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (!json.data.custom.data) {
     notFound()
   }
 
   const data = CustomBlockSchema.parse(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     json.data?.custom.data?.attributes.content,
   );
 
@@ -192,7 +217,11 @@ export const getOrganizations = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -203,16 +232,13 @@ export const getOrganizations = async ({
     throw new Error("Failed to fetch data 'Organizations'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {data: { organizations: OrganizationsType}};
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const organizations = OrganizationsSchema.parse(json.data?.organizations);
+  const organizations = OrganizationsSchema.parse(json.data.organizations);
 
   return organizations;
 };
@@ -335,15 +361,20 @@ export const getOrganizationBySlug = async (
     throw new Error("Failed to fetch data 'Organization By Slug'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { 
+    data: { 
+      organizations: { 
+        data: { 
+          attributes: OrganizationBySlugType 
+        }[] 
+      }
+    }
+  };
   
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (json.data.organizations.data.length === 0) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const data = OrganizationBySlugSchema.parse(json.data?.organizations.data[0].attributes);
 
   return data;
@@ -403,7 +434,11 @@ export const getProjects = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -414,15 +449,12 @@ export const getProjects = async ({
     throw new Error("Failed to fetch data 'Projects'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { data: { projects: ProjectsType } };
   
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const projects = ProjectsSchema.parse(json.data?.projects);
 
   return projects;
@@ -482,7 +514,11 @@ export const getServices = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -493,15 +529,12 @@ export const getServices = async ({
     throw new Error("Failed to fetch data 'Services'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { data: { services: ServicesType } };
   
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if ((json.data.services.meta.pagination.total === 0) || (json.data.services.data.length === 0)) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const services = ServicesSchema.parse(json.data?.services);
 
   return services;
@@ -549,15 +582,20 @@ export const getAbout = async (): Promise<AboutType> => {
     throw new Error("Failed to fetch data 'About'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      about: {
+        data: {
+          attributes: AboutType
+        }
+      }
+    }
+  };
   
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (!json.data.about.data) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const about = AboutSchema.parse(json.data?.about.data.attributes);
 
   return about;
@@ -599,15 +637,20 @@ export const getFAQ = async (): Promise<FAQType> => {
     throw new Error("Failed to fetch data 'FAQ'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      faq: {
+        data: {
+          attributes: FAQType
+        }
+      }
+    }
+  };
   
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   if (!json.data.faq.data) {
     notFound()
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const faq = FAQSchema.parse(json.data?.faq.data.attributes);
 
   return faq;

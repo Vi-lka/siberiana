@@ -23,37 +23,29 @@ export default async function OrganizationsContent({
   const sort = searchParams['sort'] as string | undefined
   const search = searchParams['search'] as string | undefined
   const consortium = searchParams['consortium'] as string | undefined
-  
-  try {
-    await getOrganizations({ 
+
+  const [ dataResult ] = await Promise.allSettled([ 
+    getOrganizations({ 
       page: Number(page), 
       per: Number(per), 
       sort, 
       search, 
       consortium: Boolean(consortium) 
-    });
-  } catch (error) {
-    return (
-      <ErrorHandler 
-        error={error} 
-        place="Organizations" 
-        notFound 
-        goBack={false}
-      />
-    )
-  }
-  const dataResult = await getOrganizations({ 
-    page: Number(page), 
-    per: Number(per), 
-    sort, 
-    search, 
-    consortium: Boolean(consortium) 
-  });
+    }) 
+  ])
+  if (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Organizations" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   return (
     <>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
-        {dataResult.data.map((org, index) => (
+        {dataResult.value.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}
             tooltip={dictResult.tooltips.consortium}
@@ -74,7 +66,7 @@ export default async function OrganizationsContent({
       <div className="mb-24">
         <PaginationControls
           dict={dictResult.pagination}
-          length={dataResult.meta.pagination.total}
+          length={dataResult.value.meta.pagination.total}
           defaultPageSize={defaultPageSize}
         />
       </div>

@@ -26,25 +26,21 @@ export default async function CategoriesContent({
 
   const first = per
   const offset = (Number(page) - 1) * Number(per)
-  
-  try {
-    await getCategories({ first: Number(first), offset, search });
-  } catch (error) {
-    return (
-      <ErrorHandler 
-        error={error} 
-        place="Categories" 
-        notFound 
-        goBack={false}
-      />
-    )
-  }
-  const dataResult = await getCategories({ first: Number(first), offset, search });
+
+  const [ dataResult ] = await Promise.allSettled([ getCategories({ first: Number(first), offset, search }) ])
+  if (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Categories" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   return (
     <>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
-        {dataResult.edges.map((category, index) => (
+        {dataResult.value.edges.map((category, index) => (
           <ImgTextBelow
             key={index}
             className={"aspect-[2.7/1]"}
@@ -58,7 +54,7 @@ export default async function CategoriesContent({
           >
             <div className="flex flex-col gap-3">
               <p className="uppercase font-bold lg:text-xl text-base">
-                {category.node.displayName} {category.node.id}
+                {category.node.displayName}
               </p>
 
               <p className="font-Inter xl:text-sm text-xs">
@@ -80,7 +76,7 @@ export default async function CategoriesContent({
       <div className="mb-24">
         <PaginationControls
           dict={dictResult.pagination}
-          length={dataResult.totalCount}
+          length={dataResult.value.totalCount}
           defaultPageSize={defaultPageSize}
         />
       </div>

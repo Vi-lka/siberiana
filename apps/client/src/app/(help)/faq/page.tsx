@@ -15,20 +15,16 @@ export default async function FAQ() {
     const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
-    try {
-      await getFAQ();
-    } catch (error) {
-      return (
-        <ErrorHandler 
-          error={error} 
-          place="Projects" 
-          notFound 
-          goBack={false}
-        />
-      )
-    }
-  
-    const dataResult = await getFAQ();
+    const [ dataResult ] = await Promise.allSettled([ getFAQ() ])
+    if  (dataResult.status === 'rejected') return (
+      <ErrorHandler 
+        error={dataResult.reason as unknown} 
+        place="FAQ" 
+        notFound 
+        goBack={false}
+      />
+    )
+    
 
   return (
     <div>
@@ -53,7 +49,7 @@ export default async function FAQ() {
             </div>
 
             <div>
-              {dataResult.category.map((category, index) => (
+              {dataResult.value.category.map((category, index) => (
                 <div
                   key={index}
                   className="mb-14"

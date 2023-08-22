@@ -27,11 +27,12 @@
   },
   "sort": {
     "placeholder": "Сортировать по:",
-    "asc": "asc",
-    "desc": "desc",
-    "ascText": "А-Я",
-    "descText": "Я-А",
+    "asc": "asc↓",
+    "desc": "desc↑",
+    "ascText": "А-Я↓",
+    "descText": "Я-А↑",
     "byName": "Название",
+    "byAdded": "Добавлено",
     "reset": "Сброс"
   },
   "errors": {

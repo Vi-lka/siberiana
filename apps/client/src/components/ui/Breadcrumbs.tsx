@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
-
 import type { BreadcrumbsDictType } from "@siberiana/schemas";
 
 export default function Breadcrumbs({
@@ -75,7 +74,7 @@ export default function Breadcrumbs({
   );
 
   return (
-    <div className="font-Inter flex items-center">
+    <div className="font-Inter flex items-center flex-wrap">
       {breadcrumbs.map((crumb, index) => (
         <Crumb
           key={index}

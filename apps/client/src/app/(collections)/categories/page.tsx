@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { DictionarySchema } from "@siberiana/schemas";
-import SearchField from "~/components/ui/SearchField";
+import SearchField from "~/components/ui/filters/SearchField";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import CategoriesContent from "./CategoriesContent";
 

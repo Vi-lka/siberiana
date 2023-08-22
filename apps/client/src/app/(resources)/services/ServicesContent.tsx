@@ -24,26 +24,21 @@ export default async function ServicesContent({
   const per = searchParams['per'] ?? defaultPageSize
   const sort = searchParams['sort'] as string | undefined
   const search = searchParams['search'] as string | undefined
-  
-  try {
-    await getServices({ page: Number(page), per: Number(per), sort, search });
-  } catch (error) {
-    return (
-      <ErrorHandler 
-        error={error} 
-        place="Services" 
-        notFound 
-        goBack={false}
-      />
-    )
-  }
 
-  const dataResult = await getServices({ page: Number(page), per: Number(per), sort, search });
+  const [ dataResult ] = await Promise.allSettled([ getServices({  page: Number(page), per: Number(per), sort, search }) ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Services" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   return (
     <>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
-        {dataResult.data.map((service, index) => (
+        {dataResult.value.data.map((service, index) => (
             <ImgTextBelow
                 key={index}
                 className={"aspect-[2.7/1]"}
@@ -81,7 +76,7 @@ export default async function ServicesContent({
       <div className="mb-24">
         <PaginationControls
           dict={dictResult.pagination}
-          length={dataResult.meta.pagination.total}
+          length={dataResult.value.meta.pagination.total}
           defaultPageSize={defaultPageSize}
         />
       </div>

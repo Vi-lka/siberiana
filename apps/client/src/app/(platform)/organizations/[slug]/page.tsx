@@ -23,37 +23,33 @@ export default async function Organization({
     const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
-    try {
-      await getOrganizationBySlug(slug);
-    } catch (error) {
-      return (
-        <ErrorHandler 
-          error={error} 
-          place="Organization" 
-          notFound 
-          goBack 
-        />
-      )
-    }
-    const dataResult = await getOrganizationBySlug(slug);
+    const [ dataResult ] = await Promise.allSettled([ getOrganizationBySlug(slug) ])
+    if (dataResult.status === 'rejected') return (
+      <ErrorHandler 
+        error={dataResult.reason as unknown} 
+        place="Organization" 
+        notFound 
+        goBack={false}
+      />
+    )
     
     return (
       <>
         <Breadcrumbs 
           dict={dictResult.breadcrumbs} 
           slug={slug} 
-          title={dataResult.title} 
+          title={dataResult.value.title} 
         />
 
         {/* TITLE */}
         <div className="mt-12 mb-24 flex lg:flex-row flex-col-reverse gap-6 justify-between lg:items-center">
           <div className="flex flex-col gap-6 lg:w-[60%] sm:w-[80%] w-full">
             <h1 className="font-OpenSans font-bold xl:text-4xl md:text-3xl text-2xl w-full leading-snug">
-              {dataResult.title}
+              {dataResult.value.title}
             </h1>
 
             <div className="flex md:gap-6 gap-3">
-              {dataResult.consortium ? (
+              {dataResult.value.consortium ? (
                 <TooltipProvider>
                   <Tooltip delayDuration={300}>
                     <TooltipTrigger asChild>
@@ -68,8 +64,8 @@ export default async function Organization({
                 </TooltipProvider>
               ) : null}
 
-              {dataResult.url ? (
-                <Link href={getLinkDir(dataResult.url)} target="_blank">
+              {dataResult.value.url ? (
+                <Link href={getLinkDir(dataResult.value.url)} target="_blank">
                   <ButtonComponent className="md:px-10 md:py-6 py-[22px] px-[10px] uppercase xl:text-sm text-xs">
                     <p className="md:block hidden">{dictResult.organizations.goTo}</p>
                     <ArrowUpRight className="md:h-5 md:w-5 h-6 w-6 md:ml-4 ml-0 stroke-1" />
@@ -79,15 +75,15 @@ export default async function Organization({
             </div>
           </div>
      
-          {dataResult.image.data ? (
+          {dataResult.value.image.data ? (
             <div className="relative flex lg:w-[40%] w-full aspect-[2/1] overflow-hidden rounded-md">
               <Image
-                src={getURL(dataResult.image.data.attributes.url, "strapi")}
+                src={getURL(dataResult.value.image.data.attributes.url, "strapi")}
                 width={800}
                 height={400}
                 priority={true}
                 className={"w-full object-cover"}
-                alt={dataResult.title}
+                alt={dataResult.value.title}
               />
               <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-10" />
             </div>
@@ -95,25 +91,25 @@ export default async function Organization({
         </div>
 
         {/* COLLECTIONS */}
-        {dataResult.collections ? (
+        {dataResult.value.collections ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
-                {dataResult.collections.title}
+                {dataResult.value.collections.title}
               </h2>
 
               <Link
-                href={getLinkDir(dataResult.collections.url)}
+                href={getLinkDir(dataResult.value.collections.url)}
                 target="_blank"
                 className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
               >
-                <p className="hidden md:block">{dataResult.collections.textUrl}</p>
+                <p className="hidden md:block">{dataResult.value.collections.textUrl}</p>
                 <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
               </Link>
             </div>
 
             <div className="md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
-              {dataResult.collections.list.map((elem, index) => (
+              {dataResult.value.collections.list.map((elem, index) => (
                 <ImgTextOn
                   key={index}
                   className={"aspect-square"}
@@ -129,25 +125,25 @@ export default async function Organization({
         ) : null}
 
         {/* EXHIBITS */}
-        {dataResult.exhibits ? (
+        {dataResult.value.exhibits ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
-                {dataResult.exhibits.title}
+                {dataResult.value.exhibits.title}
               </h2>
 
               <Link
-                href={getLinkDir(dataResult.exhibits.url)}
+                href={getLinkDir(dataResult.value.exhibits.url)}
                 target="_blank"
                 className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
               >
-                <p className="hidden md:block">{dataResult.exhibits.textUrl}</p>
+                <p className="hidden md:block">{dataResult.value.exhibits.textUrl}</p>
                 <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
               </Link>
             </div>
 
             <div className="font-Inter md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
-              {dataResult.exhibits.list.map((elem, index) => (
+              {dataResult.value.exhibits.list.map((elem, index) => (
                 <ImgTextBelow
                   key={index}
                   className={"aspect-square"}
@@ -172,27 +168,27 @@ export default async function Organization({
         ) : null}
 
         {/* EVENTS */}
-        {dataResult.events_organization.data ? (
+        {dataResult.value.events_organization.data ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
-                {dataResult.events_organization.data.attributes.title}
+                {dataResult.value.events_organization.data.attributes.title}
               </h2>
 
-              {dataResult.events_organization.data.attributes.url ? (
+              {dataResult.value.events_organization.data.attributes.url ? (
                 <Link
-                  href={getLinkDir(dataResult.events_organization.data.attributes.url)}
+                  href={getLinkDir(dataResult.value.events_organization.data.attributes.url)}
                   target="_blank"
                   className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
                 >
-                  <p className="hidden md:block">{dataResult.events_organization.data.attributes.textUrl}</p>
+                  <p className="hidden md:block">{dataResult.value.events_organization.data.attributes.textUrl}</p>
                   <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
                 </Link>
               ) : null}
             </div>
 
             <div className="font-Inter md:w-full w-[85%] mx-auto grid md:grid-cols-2 grid-cols-1 gap-7">
-              {dataResult.events_organization.data.attributes.list.map((elem, index) => (
+              {dataResult.value.events_organization.data.attributes.list.map((elem, index) => (
                 <ImgTextBelow
                   key={index}
                   className={"aspect-[2.04/1]"}
@@ -223,16 +219,16 @@ export default async function Organization({
         ) : null}
 
         {/* CONTACTS */}
-        {dataResult.contacts ? (
+        {dataResult.value.contacts ? (
           <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <h2 className="text-foreground text-2xl font-bold uppercase">
-                {dataResult.contacts.title}
+                {dataResult.value.contacts.title}
               </h2>
             </div>
 
             <div className="flex justify-start lg:flex-row flex-col gap-7">
-              <MapHtml map={dataResult.contacts.map} />
+              <MapHtml map={dataResult.value.contacts.map} />
 
               <div>
                 <div className="font-Inter md:text-base text-sm w-fit grid grid-cols-2 gap-14 mb-6">
@@ -242,14 +238,14 @@ export default async function Organization({
                     ))}
                   </div>
                   <div className="w-fit">
-                    {Object.entries(dataResult.contacts.schedule).map(([key, val]) => (
+                    {Object.entries(dataResult.value.contacts.schedule).map(([key, val]) => (
                       <p key={key} className="">{val}</p>
                     ))}
                   </div>
                 </div>
 
-                {dataResult.url ? ( 
-                  <Link href={getLinkDir(dataResult.url)} target="_blank">
+                {dataResult.value.url ? ( 
+                  <Link href={getLinkDir(dataResult.value.url)} target="_blank">
                     <ButtonComponent className="md:px-10 md:py-6 py-5 px-3 uppercase xl:text-sm text-xs">
                       <p className="">{dictResult.organizations.goTo}</p>
                       <ArrowUpRight className="h-5 w-5 md:ml-4 ml-1 stroke-1" />

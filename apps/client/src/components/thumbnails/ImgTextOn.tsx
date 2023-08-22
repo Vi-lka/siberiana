@@ -67,11 +67,11 @@ export default function ImgTextOn(props: Props) {
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
-                <Button variant="ghost" className="absolute z-10 lg:top-6 lg:right-6 top-3 right-3 lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full">
+                <Button variant="ghost" className="absolute z-10 lg:top-6 lg:right-6 top-3 right-3 lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full cursor-help">
                   {props.children}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans">
+              <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans cursor-help">
                 <p>{props.tooltip}</p>
               </TooltipContent>
             </Tooltip>

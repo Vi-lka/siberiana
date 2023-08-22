@@ -24,3 +24,6 @@ export * from "./src/form";
 export * from "./src/alert";
 export * from "./src/accordion";
 export * from "./src/separator";
+export * from "./src/badge";
+export * from "./src/command";
+export * from "./src/popover";

@@ -3,8 +3,8 @@ import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
-import Sort from "~/components/ui/Sort";
-import SearchField from "~/components/ui/SearchField";
+import Sort from "~/components/ui/filters/Sort";
+import SearchField from "~/components/ui/filters/SearchField";
 import ServicesContent from "./ServicesContent";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 
@@ -31,7 +31,7 @@ export default async function Services({
           {dictResult.services.title}
         </h1>
 
-        <div className="flex flex-grow gap-6 items-center md:justify-end justify-between md:w-fit w-full">
+        <div className="flex gap-6 items-center justify-end md:w-fit w-full">
           <Sort 
             dict={dictResult.sort}
             data={sortData}

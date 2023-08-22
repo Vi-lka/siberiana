@@ -24,24 +24,20 @@ export default async function CollectionsContent({
   const per = searchParams['per'] ?? defaultPageSize
   const search = searchParams['search'] as string | undefined
   const categories = searchParams['category'] as string | undefined
+  const sort = searchParams['sort'] as string | undefined
   
   const first = Number(per)
   const offset = (Number(page) - 1) * Number(per)
 
-  try {
-      await getCollections({ first, offset, search, categories });
-  } catch (error) {
-    console.error(error)
-      return (
-        <ErrorHandler 
-          error={error} 
-          place="Collections" 
-          notFound 
-          goBack={false}
-        />
-      )
-  }
-  const dataResult = await getCollections({ first, offset, search, categories });
+  const [ dataResult ] = await Promise.allSettled([ getCollections({ first, offset, search, categories, sort }) ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Collections" 
+      notFound 
+      goBack={false}
+    />
+  )
 
   function getCollectionHref(category: string | undefined, collection: string): string {
     if (!!category && category.length > 0) {
@@ -50,11 +46,13 @@ export default async function CollectionsContent({
 
     } else return `/objects?collection=${collection}`
   }
+
+  console.log(dataResult.value.edges[0].node.primaryImageURL)
     
   return (
     <>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
-        {dataResult.edges.map((collection, index) => (
+        {dataResult.value.edges.map((collection, index) => (
             <ImgTextBelow
                 key={index}
                 className={"aspect-[2.7/1]"}
@@ -68,7 +66,7 @@ export default async function CollectionsContent({
             >
                 <div className="flex flex-col gap-3">
                     <p className="uppercase font-bold lg:text-xl text-base">
-                        {collection.node.displayName} {collection.node.id}
+                        {collection.node.displayName}
                     </p>
         
                     <p className="font-Inter xl:text-sm text-xs">
@@ -90,7 +88,7 @@ export default async function CollectionsContent({
       <div className="mb-24">
         <PaginationControls
           dict={dictResult.pagination}
-          length={dataResult.totalCount}
+          length={dataResult.value.totalCount}
           defaultPageSize={defaultPageSize}
         />
       </div>

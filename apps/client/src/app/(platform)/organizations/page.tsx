@@ -3,10 +3,10 @@ import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
-import Sort from "~/components/ui/Sort";
-import SearchField from "~/components/ui/SearchField";
+import Sort from "~/components/ui/filters/Sort";
+import SearchField from "~/components/ui/filters/SearchField";
 import { PiHandshakeLight } from "react-icons/pi";
-import ToggleFilter from "~/components/ui/ToggleFilter";
+import ToggleFilter from "~/components/ui/filters/ToggleFilter";
 import OrganizationsContent from "./OrganizationsContent";
 import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 
@@ -33,12 +33,12 @@ export default async function Organizations({
           {dictResult.organizations.title}
         </h1>
 
-        <div className="flex flex-grow gap-6 items-center md:justify-end justify-between md:w-fit w-full">
+        <div className="flex gap-6 items-center md:justify-end justify-between md:w-fit w-full">
             <ToggleFilter 
               tooltip={dictResult.tooltips.consortium} 
               param={'consortium'}
             >
-              <PiHandshakeLight className="h-6 w-6" />
+              <PiHandshakeLight className="h-7 w-7" />
             </ToggleFilter>
 
           <Sort 
