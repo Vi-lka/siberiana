@@ -16,7 +16,7 @@ export default async function OrganizationsContent({
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
-  const defaultPageSize = 10
+  const defaultPageSize = 12
 
   const page = searchParams['page'] ?? '1'
   const per = searchParams['per'] ?? defaultPageSize
@@ -44,7 +44,7 @@ export default async function OrganizationsContent({
 
   return (
     <>
-      <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
+      <div className="md:w-full w-[85%] mx-auto mt-3 mb-12 grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.value.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}

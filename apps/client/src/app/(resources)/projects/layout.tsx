@@ -20,7 +20,7 @@ export default function ProjectsLayout({
 
   return (
     <main className="flex flex-col">
-      <div className="font-OpenSans mx-auto mt-10 w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto mt-10 w-[85%]">
         {children}
       </div>
     </main>

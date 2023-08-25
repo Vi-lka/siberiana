@@ -25,7 +25,7 @@ export default async function Header() {
 
   return (
     <div className="font-Inter text-graphite dark:text-beaverLight dark:bg-darkBlue fixed z-50 w-full bg-white px-4 py-4 md:px-0">
-      <div className="mx-auto flex w-[95%] max-w-[1600px] items-center justify-between md:w-[85%]">
+      <div className="mx-auto flex w-[95%] items-center justify-between md:w-[85%]">
         <div className="flex w-1/5">
           <Link
             href={`/`}

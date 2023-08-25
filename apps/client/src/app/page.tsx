@@ -31,7 +31,7 @@ export default async function Home() {
           </h1>
 
           <Suspense fallback={<HomeSliderSkeleton />}>
-            <HomeSliderServer errorDict={dictResult.errors} />
+            <HomeSliderServer />
           </Suspense>
         </div>
 

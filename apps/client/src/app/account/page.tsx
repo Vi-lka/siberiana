@@ -22,7 +22,7 @@ export default async function Account() {
     const userRoles = session.user.roles?.map(role => getUserRole(role, dictResult.account))
 
   return (
-    <div className="mt-12 mb-4 flex flex-col gap-10">
+    <div className="mt-12 mb-4 flex flex-col gap-10 mx-auto">
       <div className='flex justify-between md:flex-row flex-row gap-1'>
         <div className="flex lg:gap-6 gap-3 lg:items-end lg:flex-row flex-col">
           <h1 className="text-foreground xl:text-2xl lg:text-xl text-lg font-bold uppercase">

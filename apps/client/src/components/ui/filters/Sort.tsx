@@ -10,45 +10,54 @@ import ButtonComponent from '../ButtonComponent'
 export default function Sort({ 
     dict,
     data,
+    defaultValue,
+    side = "bottom",
+    align = "end"
 }: {
     dict: SortDictType,
     data: SortDataType[],
+    defaultValue?: string,
+    side?: "bottom" | "top" | "right" | "left",
+    align?: "end" | "center" | "start"
 }) {
 
-    const [isPending, startTransition] = React.useTransition()
+  const [isPending, startTransition] = React.useTransition()
 
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    const pathname = usePathname()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
-    const sort = searchParams.get('sort') ?? undefined
+  const sort = searchParams.get('sort') ?? undefined
 
-    const handleSortParams = React.useCallback(
-        (value: string) => {
-          const params = new URLSearchParams(window.location.search);
-          if (value.length > 0) {
-            params.set("sort", value);
-            startTransition(() => {
-              router.push(`${pathname}?${params.toString()}`, { scroll: false });
-            });
-          } else {
-            params.delete("sort");
-          }
-        },
-        [pathname, router],
-    );
+  const handleSortParams = React.useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(window.location.search);
+      if (value.length > 0) {
+        params.set("sort", value);
+        startTransition(() => {
+          router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        });
+      } else {
+        params.delete("sort");
+      }
+    },
+    [pathname, router],
+  );
 
-    if (isPending) return <Loader2 className='animate-spin' />
+  if (isPending) return <Loader2 className='animate-spin w-5 h-10' /> 
 
   return (
     <Select
+      defaultValue={defaultValue}
       value={sort}
       onValueChange={handleSortParams}
     >
-      <SelectTrigger className="w-fit border-none font-Inter">
-        <SelectValue placeholder={dict.placeholder} />
-      </SelectTrigger>
-      <SelectContent side="bottom" >
+      <div className="flex">
+        <SelectTrigger className="w-fit border-none font-Inter">
+          <SelectValue placeholder={dict.placeholder} />
+        </SelectTrigger>
+      </div>
+      <SelectContent side={side} align={align}>
         {data.map((elem, index) => (
           elem.val 
             ? (
@@ -69,7 +78,7 @@ export default function Sort({
             ) 
             : <Separator key={index} className='my-1' />
         ))}
-        {sort 
+        {sort && (sort !== defaultValue) 
           ? (
             <ButtonComponent 
                 className='w-full h-8 px-2 py-0 mt-4 rounded-sm font-Inter font-normal text-xs uppercase z-[100]'

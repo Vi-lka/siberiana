@@ -8,7 +8,7 @@ export default function LoadingAbout() {
     <>
       <BreadcrumbsSkeleton/>
 
-      <div className="mt-10 mb-24">
+      <div className="mt-10 mb-24 max-w-[1600px] mx-auto">
         <div className="my-10 flex gap-4 md:flex-row flex-col md:items-center justify-between">
           <Skeleton className="w-full h-24" />
         </div>

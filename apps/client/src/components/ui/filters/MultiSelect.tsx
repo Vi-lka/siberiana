@@ -42,13 +42,17 @@ export function MultiSelect({
   className,
   badges = false,
   icon = false,
+  side = "bottom",
+  align = "start"
 }: {
   values: Array<Item>,
   param: string,
   placeholder: string,
   className?: string,
   badges?: boolean,
-  icon?: boolean
+  icon?: boolean,
+  side?: "bottom" | "top" | "right" | "left",
+  align?: "end" | "center" | "start"
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [items, _] = React.useState<Array<Item>>(values);
@@ -170,7 +174,7 @@ export function MultiSelect({
                     </span>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans font-normal cursor-help">
+                <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans font-normal cursor-help">
                   <p>{placeholder}</p>
                 </TooltipContent>
               </Tooltip>
@@ -186,7 +190,7 @@ export function MultiSelect({
       {icon && (selectedValues.length > 0)
         ? 
           <span 
-            className="absolute md:top-0 md:-mt-5 md:left-[12px] md:ml-0 top-2 ml-[50px] md:text-xs text-[11px] text-muted-foreground flex flex-col items-center cursor-pointer underline hover:text-foreground hover:scale-125 transition-all" 
+            className="absolute top-2 ml-[50px] md:text-xs text-[11px] text-muted-foreground flex flex-col items-center cursor-pointer underline hover:text-foreground hover:scale-125 transition-all" 
             onClick={clearItems}
           >
             <X className="h-5 w-5"/>
@@ -210,7 +214,7 @@ export function MultiSelect({
             }
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 font-Inter md:min-w-[400px]">
+        <PopoverContent className="p-0 font-Inter md:min-w-[400px]" side={side} align={align}>
           <Command loop>
             <div className='relative'>
               <CommandInput

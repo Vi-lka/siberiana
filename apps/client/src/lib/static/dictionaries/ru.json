@@ -186,6 +186,13 @@
     "textUrl": "Все категории",
     "goTo": "Узнать больше"
   },
+  "objects": {
+    "count": "Результатов:",
+    "filters": "Фильтры",
+    "artifacts": "Артефакты",
+    "books": "Книги",
+    "protectedAreaPictures": "ООПТ"
+  },
   "organizations": {
     "title": "Oрганизации",
     "textUrl": "Все организации",

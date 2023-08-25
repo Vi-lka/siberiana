@@ -18,16 +18,17 @@ export default async function CategoriesContent({
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
-  const defaultPageSize = 10
+  const defaultPageSize = 12
 
   const page = searchParams['page'] ?? '1'
   const per = searchParams['per'] ?? defaultPageSize
   const search = searchParams['search'] as string | undefined
+  const sort = searchParams['sort'] as string | undefined
 
   const first = per
   const offset = (Number(page) - 1) * Number(per)
 
-  const [ dataResult ] = await Promise.allSettled([ getCategories({ first: Number(first), offset, search }) ])
+  const [ dataResult ] = await Promise.allSettled([ getCategories({ first: Number(first), offset, search, sort }) ])
   if (dataResult.status === 'rejected') return (
     <ErrorHandler 
       error={dataResult.reason as unknown} 
@@ -39,12 +40,12 @@ export default async function CategoriesContent({
 
   return (
     <>
-      <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
+      <div className="md:w-full w-[85%] mx-auto mt-3 mb-12 grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.value.edges.map((category, index) => (
           <ImgTextBelow
             key={index}
             className={"aspect-[2.7/1]"}
-            classNameImage={'w-full object-contain'}
+            classNameImage={'w-full object-cover'}
             title={category.node.displayName}
             src={category.node.primaryImageURL}
             origin={"storage"}

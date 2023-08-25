@@ -7,15 +7,24 @@ import { Button, Input } from '@siberiana/ui'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeft, ChevronsRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { cn } from '@siberiana/ui/src/lib/utils'
 
 export default function PaginationControls({ 
     dict, 
     length,
     defaultPageSize,
+    pageParam,
+    perParam,
+    className,
+    classNameMore
 }: { 
     dict: PaginationDictType,
     length: number,
     defaultPageSize: number,
+    pageParam?: string,
+    perParam?: string,
+    className?: string,
+    classNameMore?: string
 }) {
 
   const [isPendingMore, startTransitionMore] = React.useTransition()
@@ -25,8 +34,11 @@ export default function PaginationControls({
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
-  const page = searchParams.get('page') ?? '1'
-  const per = searchParams.get('per') ?? defaultPageSize
+  const pageP = pageParam ?? 'page'
+  const perP = perParam ?? 'per'
+
+  const page = searchParams.get(pageP) ?? '1'
+  const per = searchParams.get(perP) ?? defaultPageSize
 
   const [pageInput, setPageInput] = React.useState(page)
 
@@ -57,36 +69,42 @@ export default function PaginationControls({
     (value: string) => {
       const params = new URLSearchParams(window.location.search);
       if (value.length > 0) {
-        params.set("page", value);
+        params.set(pageP, value);
         startTransitionPage(() => {
           router.push(`${pathname}?${params.toString()}`);
         });
       } else {
-        params.delete("page");
+        params.delete(pageP);
       }
     },
-    [pathname, router],
+    [pageP, pathname, router],
   );
 
   const handlePageSizeParams = React.useCallback(
     (value: string) => {
       const params = new URLSearchParams(window.location.search);
       if (value.length > 0) {
-        params.set("per", value);
+        params.set(perP, value);
         startTransitionMore(() => {
           router.push(`${pathname}?${params.toString()}`, { scroll: false });
         });
       } else {
-        params.delete("per");
+        params.delete(perP);
       }
     },
-    [pathname, router],
+    [perP, pathname, router],
   );
 
   return (
-    <div className='flex lg:gap-0 gap-12 lg:items-start items-center lg:flex-row flex-col lg:justify-end relative'>
+    <div className={cn(
+      'flex xl:gap-0 gap-12 xl:items-start items-center xl:flex-row flex-col xl:justify-end relative',
+      className
+    )}>
         <ButtonComponent 
-          className="px-10 py-6 uppercase lg:absolute lg:left-1/2 lg:-translate-x-1/2"
+          className={cn(
+            "px-10 py-6 uppercase xl:absolute xl:left-1/2 xl:-translate-x-1/2",
+            classNameMore
+          )}
           variant={(Number(page) >= max_page) ? "hidden" : "default"}
           disabled={isPendingPage || isPendingMore}
           onClick={() => handlePageSizeParams((Number(per) + defaultPageSize).toString())}
@@ -130,7 +148,7 @@ export default function PaginationControls({
                   onClick={() => handlePageParams('1')}
                 >
                   {/* For SEO */}
-                  <Link href={`${pathname}/?page=1&per=${per}`} className="hidden">{dict.firstPage}</Link>
+                  <Link href={`${pathname}/?${pageP}=1&${perP}=${per}`} className="hidden">{dict.firstPage}</Link>
                   <span className="sr-only">{dict.firstPage}</span>
                   <ChevronsLeft className="h-4 w-4" />
                 </Button>
@@ -143,7 +161,7 @@ export default function PaginationControls({
                   onClick={() => handlePageParams((Number(page) - 1).toString())}
                 >
                   {/* For SEO */}
-                  <Link href={`${pathname}/?page=${Number(page) - 1}&per=${per}`} className="hidden">{dict.previousPage}</Link>
+                  <Link href={`${pathname}/?${pageP}=${Number(page) - 1}&${perP}=${per}`} className="hidden">{dict.previousPage}</Link>
                   <span className="sr-only">{dict.previousPage}</span>
                   <ChevronLeftIcon className="h-4 w-4" />
                 </Button>
@@ -156,7 +174,7 @@ export default function PaginationControls({
                   onClick={() => handlePageParams((Number(page) + 1).toString())}
                 >
                   {/* For SEO */}
-                  <Link href={`${pathname}/?page=${Number(page) + 1}&per=${per}`} className='hidden'>{dict.nextPage}</Link>
+                  <Link href={`${pathname}/?${pageP}=${Number(page) + 1}&${perP}=${per}`} className='hidden'>{dict.nextPage}</Link>
                   <span className="sr-only">{dict.nextPage}</span>
                   <ChevronRightIcon className="h-4 w-4" />
                 </Button>
@@ -169,7 +187,7 @@ export default function PaginationControls({
                   onClick={() => handlePageParams(max_page.toString())}
                 >
                   {/* For SEO */}
-                  <Link href={`${pathname}/?page=${max_page}&per=${per}`} className='hidden'>{dict.lastPage}</Link>
+                  <Link href={`${pathname}/?${pageP}=${max_page}&${perP}=${per}`} className='hidden'>{dict.lastPage}</Link>
                   <span className="sr-only">{dict.lastPage}</span>
                   <ChevronsRight className="h-4 w-4" />
                 </Button>

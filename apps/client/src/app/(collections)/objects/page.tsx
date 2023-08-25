@@ -1,12 +1,16 @@
 import React, { Suspense } from "react";
+import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import { getCategories, getCollections } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import SearchField from "~/components/ui/filters/SearchField";
-import RowBlockSkeleton from "~/components/skeletons/RowBlockSkeleton";
 import ObjectsContent from "./ObjectsContent";
+import Sort from "~/components/ui/filters/Sort";
+import { Filter } from "lucide-react";
+import ObjectsFilters from "./ObjectsFilters";
+import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 
 export default async function Objects({
   searchParams
@@ -16,16 +20,8 @@ export default async function Objects({
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
-  // const defaultPageSize = 10
-  
-  // const page = searchParams['page'] ?? '1'
-  // const per = searchParams['per'] ?? defaultPageSize
-  // const search = searchParams['search'] as string | undefined
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
-  
-  // const first = Number(per)
-  // const offset = (Number(page) - 1) * Number(per)
 
   // For filters and titles
   const [ categoriesResult, collectionsResult ] = await Promise.allSettled([ 
@@ -54,6 +50,14 @@ export default async function Objects({
   // Get collection title
   const collectionSingle = collectionsResult.value.edges.find(el => el.node.slug === collections)
 
+  const sortData = [
+    { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
+    { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
+    {},
+    { val: 'CREATED_AT:ASC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.asc}` },
+    { val: 'CREATED_AT:DESC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.desc}` },
+  ] as SortDataType[]
+
   return (
     <div>
       <BreadcrumbsCollections 
@@ -63,14 +67,15 @@ export default async function Objects({
         collectionSlug={collectionSingle?.node.slug}
         collectionTitle={collectionSingle?.node.displayName as string}
       />
-      
-      <div className="mt-10 mb-4 flex gap-4 flex-row items-center justify-between">
+
+      <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
         <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
           {!!collectionSingle 
             ? collectionSingle.node.displayName 
             : !!categorySingle 
               ? categorySingle.node.displayName
-              : dictResult.breadcrumbs.objects}
+              : dictResult.breadcrumbs.objects
+          }
         </h1>
       </div>
 
@@ -93,15 +98,35 @@ export default async function Objects({
         placeholder={dictResult.search.button}
       />
 
-      <Suspense fallback={
-        <div className="my-12">
-          {Array(4).map((_, index) => (
-            <RowBlockSkeleton key={index} />
-          ))}
-        </div>
-      }>
-        <ObjectsContent searchParams={searchParams} />
-      </Suspense>
+      <div className="flex gap-6 items-center md:justify-end justify-between mt-3">
+        <Filter className="md:hidden block" />
+        <Sort 
+          dict={dictResult.sort}
+          data={sortData}
+        />
+      </div>
+
+      <div className="flex gap-6 w-full justify-between md:mt-0 mt-3 mb-12 relative">
+        <Suspense fallback={
+          <div className="w-1/4">
+              Loading Filters...
+          </div>
+        }>
+          <div className="w-1/4 bg-red-700 md:block hidden">
+            <ObjectsFilters />
+          </div>
+        </Suspense>
+
+        <Suspense fallback={
+          <div className="md:w-3/4 w-full">
+              <MasonrySkeleton />
+          </div>
+        }>
+          <div className="md:w-3/4 w-full">
+            <ObjectsContent searchParams={searchParams} />
+          </div>
+        </Suspense>
+      </div>
     </div>
   );
 }

@@ -2,30 +2,25 @@ import { DictionarySchema } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
-import { ZodError } from 'zod';
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
-import ErrorToast from '../errors/ErrorToast';
 import { getDictionary } from '~/lib/utils/getDictionary';
+import ErrorHandler from '../errors/ErrorHandler';
 
 export default async function ProjectsBlock() {
 
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
-  
-  try {
-    await getProjects({page: 1, per: 2});
-  } catch (error) {
-    if (error instanceof ZodError) {
-        console.log(error.issues);
-        return <ErrorToast dict={dictResult.errors} error={error.issues} place="ProjectsBlock" />;
-      } else {
-        return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="ProjectsBlock" />;
-      }
-  }
 
-  const dataResult = await getProjects({page: 1, per: 2});
+  const [ dataResult ] = await Promise.allSettled([ getProjects({page: 1, per: 2}) ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Projects Block" 
+      goBack={false}
+    />
+  )
 
   return (
     <>
@@ -44,7 +39,7 @@ export default async function ProjectsBlock() {
         </Link>
       </div>
       <div className="md:w-full w-[85%] mx-auto my-12 grid md:grid-cols-2 grid-cols-1 gap-6">
-        {dataResult.data.map((proj, index) => (
+        {dataResult.value.data.map((proj, index) => (
             <ImgTextBelow
                 key={index}
                 className={"aspect-[2.7/1]"}

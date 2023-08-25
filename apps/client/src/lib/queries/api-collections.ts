@@ -1,5 +1,5 @@
-import type { CategoriesType, CategoryNodeType, CollectionsType, ObjectsType } from "@siberiana/schemas";
-import { CategoriesSchema, CategoryNodeSchema, CollectionsSchema, ObjectsSchema } from "@siberiana/schemas";
+import type { CategoriesType, CollectionsType, ObjectsType } from "@siberiana/schemas";
+import { CategoriesSchema, CollectionsSchema, ObjectsSchema } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 
@@ -7,17 +7,23 @@ export const getCategories = async ({
   first,
   offset = 0,
   search = "",
+  sort = "DISPLAY_NAME:ASC",
 }: {
   first: number | null,
   offset?: number | null,
   search?: string,
+  sort?: string
 }): Promise<CategoriesType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Categories {
       categories(
         first: ${first}, 
-        offset: ${offset}, 
+        offset: ${offset},
+        orderBy: [{
+          field: ${sort.split(':')[0]},
+          direction: ${sort.split(':')[1]}
+        }],
         where: {or: [ 
           {displayNameContainsFold: "${search}"}, 
           {descriptionContainsFold: "${search}"}, 
@@ -70,70 +76,11 @@ export const getCategories = async ({
   return categories;
 };
 
-export const getCategoryByID = async (id: string): Promise<CategoryNodeType> => {
-  const headers = { "Content-Type": "application/json" };
-  const query = /* GraphGL */ `
-    query CategoryByID {
-      categories(
-        where: {id: "${id}"}
-      ) {
-        edges {
-          node {
-            id
-            displayName
-            abbreviation
-            primaryImageURL
-            description
-            collections {
-              id
-              slug
-            }
-          }
-        }
-      }
-    }
-  `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    next: { revalidate: 3600 },
-  });
-  
-  if (!res.ok) {
-    // Log the error to an error reporting service
-    const err = await res.text();
-    console.log(err);
-    // Throw an error
-    throw new Error("Failed to fetch data 'Category'");
-  }
-
-  const json = await res.json() as {
-    data: {
-      categories: {
-        edges: {
-          node: CategoryNodeType
-        }[]
-      }
-    }
-  };
-
-  if ((json.data.categories.edges.length === 0)) {
-    notFound()
-  }
-
-  const category = CategoryNodeSchema.parse(json.data?.categories.edges[0].node);
-  
-  return category;
-};
-
 export const getCollections = async ({
   first,
   offset = 0,
   search = "",
-  sort = "CREATED_AT:DESC",
+  sort = "DISPLAY_NAME:ASC",
   categories
 }: {
   first: number | null,
@@ -213,13 +160,27 @@ export const getCollections = async ({
 export const getObjects = async ({
   first,
   offset = 0,
+  firstArtifacts,
+  offsetArtifacts = 0,
+  firstBooks,
+  offsetBooks = 0,
+  firstPAP,
+  offsetPAP = 0,
   search = "",
+  sort = "CREATED_AT:DESC",
   categories,
   collections,
 }: {
   first: number | null,
   offset?: number | null,
+  firstArtifacts?: number | null,
+  offsetArtifacts?: number | null,
+  firstBooks?: number | null,
+  offsetBooks?: number | null,
+  firstPAP?: number | null,
+  offsetPAP?: number | null,
   search?: string,
+  sort?: string,
   categories?: string,
   collections?: string,
 }): Promise<ObjectsType> => {
@@ -227,8 +188,12 @@ export const getObjects = async ({
   const query = /* GraphGL */ `
     query Objects {
       artifacts(
-        first: ${first}, 
-        offset: ${offset}, 
+        first: ${firstArtifacts ?? first}, 
+        offset: ${offsetArtifacts ?? offset}, 
+        orderBy: [{
+          field: ${sort.split(':')[0]},
+          direction: ${sort.split(':')[1]}
+        }],
         where: {
           hasCollectionWith: [
             ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
@@ -258,12 +223,17 @@ export const getObjects = async ({
             id
             displayName
             primaryImageURL
+            createdAt
           }
         }
       }
       books(
-        first: ${first}, 
-        offset: ${offset}, 
+        first: ${firstBooks ?? first}, 
+        offset: ${offsetBooks ?? offset}, 
+        orderBy: [{
+          field: ${sort.split(':')[0]},
+          direction: ${sort.split(':')[1]}
+        }],
         where: {
           hasCollectionWith: [
             ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
@@ -293,12 +263,17 @@ export const getObjects = async ({
             id
             displayName
             primaryImageURL
+            createdAt
           }
         }
       }
       protectedAreaPictures(
-        first: ${first}, 
-        offset: ${offset}, 
+        first: ${firstPAP ?? first}, 
+        offset: ${offsetPAP ?? offset}, 
+        orderBy: [{
+          field: ${sort.split(':')[0]},
+          direction: ${sort.split(':')[1]}
+        }],
         where: {
           hasCollectionWith: [
             ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
@@ -328,6 +303,7 @@ export const getObjects = async ({
             id
             displayName
             primaryImageURL
+            createdAt
           }
         }
       }
@@ -352,7 +328,7 @@ export const getObjects = async ({
 
   const json = await res.json() as { data: ObjectsType };
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   const allCount = json.data.artifacts.totalCount + json.data.books.totalCount + json.data.protectedAreaPictures.totalCount
   if (allCount === 0) {

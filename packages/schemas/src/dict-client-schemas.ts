@@ -145,13 +145,22 @@ export const AuthDictSchema = z.object({
 export type AuthDictType = z.infer<typeof AuthDictSchema>;
 
 //.........................CATEGORIES.........................//
-
 export const CategoriesDictSchema = z.object({
   title: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
 export type CategoriesDictType = z.infer<typeof CategoriesDictSchema>;
+
+//.........................OBJECTS.........................//
+export const ObjectsDictSchema = z.object({
+  count: z.string(),
+  filters: z.string(),
+  artifacts: z.string(),
+  books: z.string(),
+  protectedAreaPictures: z.string()
+});
+export type ObjectsDictType = z.infer<typeof ObjectsDictSchema>;
 
 //.........................QUIZ.........................//
 export const QuizDictSchema = z.object({
@@ -252,6 +261,7 @@ export const DictionarySchema = z.object({
   search: SearchDictSchema,
   auth: AuthDictSchema,
   categories: CategoriesDictSchema,
+  objects: ObjectsDictSchema,
   quiz: QuizDictSchema,
   organizations: OrganizationsDictSchema,
   projects: ProjectsDictSchema,

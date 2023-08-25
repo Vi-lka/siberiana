@@ -1,10 +1,12 @@
 import React, { Suspense } from "react";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
+import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import SearchField from "~/components/ui/filters/SearchField";
-import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import CategoriesContent from "./CategoriesContent";
+import { Skeleton } from "@siberiana/ui";
+import Sort from "~/components/ui/filters/Sort";
 
 export default async function Categories({
   searchParams,
@@ -15,27 +17,44 @@ export default async function Categories({
   const dict = await getDictionary();
   const dictResult = DictionarySchema.parse(dict);
 
+  const sortData = [
+    { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
+    { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
+    {},
+    { val: 'CREATED_AT:ASC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.asc}` },
+    { val: 'CREATED_AT:DESC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.desc}` },
+  ] as SortDataType[]
+
   return (
     <div>
-        <Breadcrumbs dict={dictResult.breadcrumbs} />
+      <Breadcrumbs dict={dictResult.breadcrumbs} />
 
-        <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
-          <h1 className="text-foreground text-2xl font-bold uppercase">
-            {dictResult.breadcrumbs.categories}
-          </h1>
-        </div>
+      <div className="mt-10 mb-4 flex gap-2 md:flex-row flex-col md:items-center justify-between">
+        <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
+          {dictResult.breadcrumbs.categories}
+        </h1>
+      </div>
     
-        <SearchField 
-          placeholder={dictResult.search.button}
+      <SearchField 
+        placeholder={dictResult.search.button}
+      />
+
+      <div className="flex gap-6 items-center justify-end mt-3">
+        <Sort 
+          dict={dictResult.sort}
+          data={sortData}
         />
+      </div>
   
-        <Suspense fallback={
-          <div className="my-12">
-            <RowBigBlockSkeleton />
-          </div>
-        }>
-          <CategoriesContent searchParams={searchParams} />
-        </Suspense>
+      <Suspense fallback={
+        <div className="md:w-full w-[85%] mt-3 mb-12 mx-auto grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+          {[1,2,3,4,5,6,7,8,9,10,11,12].map((_, i) => (
+            <Skeleton key={i} className="md:aspect-[2/1] aspect-square w-full px-8 py-6" />
+          ))}
+        </div>
+      }>
+        <CategoriesContent searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

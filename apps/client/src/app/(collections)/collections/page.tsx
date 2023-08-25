@@ -3,13 +3,13 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import SearchField from "~/components/ui/filters/SearchField";
-import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import { getCategories } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import CollectionsContent from "./CollectionsContent";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import { MultiSelect } from "~/components/ui/filters/MultiSelect";
 import Sort from "~/components/ui/filters/Sort";
+import { Skeleton } from "@siberiana/ui";
 
 export default async function Collections({
   searchParams
@@ -63,20 +63,6 @@ export default async function Collections({
         <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
           {!!categorySingle ? categorySingle.node.displayName : dictResult.breadcrumbs.collections}
         </h1>
-
-        <div className="flex gap-6 items-center md:justify-end justify-between">
-          <MultiSelect 
-            values={categoryFilters} 
-            param="category"
-            placeholder="Выберите категорию" 
-            className="text-right" 
-            icon
-          />
-          <Sort 
-            dict={dictResult.sort}
-            data={sortData}
-          />
-        </div>
       </div>
 
       {!!categorySingle ? (
@@ -89,9 +75,25 @@ export default async function Collections({
         placeholder={dictResult.search.button}
       />
 
+      <div className="flex gap-6 items-center justify-between mt-3">
+        <MultiSelect 
+          values={categoryFilters} 
+          param="category"
+          placeholder="Выберите категорию" 
+          className="text-right" 
+          icon
+        />
+        <Sort 
+          dict={dictResult.sort}
+          data={sortData}
+        />
+      </div>
+
       <Suspense fallback={
-        <div className="my-12">
-          <RowBigBlockSkeleton />
+        <div className="md:w-full w-[85%] mt-3 mb-12 mx-auto grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+          {[1,2,3,4,5,6,7,8,9,10,11,12].map((_, i) => (
+            <Skeleton key={i} className="md:aspect-[2/1] aspect-square w-full px-8 py-6" />
+          ))}
         </div>
       }>
         <CollectionsContent searchParams={searchParams} />

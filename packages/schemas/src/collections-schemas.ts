@@ -24,6 +24,9 @@ export const CategoriesSchema = z.object({
 export type CategoriesType = z.infer<typeof CategoriesSchema>;
 
 //.........................COLLECTIONS.........................//
+export const CollectionsEnum = z.enum([ "artifacts", "books", "protected_area_pictures" ])
+export type CollectionEnumType = z.infer<typeof CollectionsEnum>
+
 export const CollectionNodeSchema = z.object({
     id: z.string(),
     slug: z.string(),
@@ -47,13 +50,15 @@ export const CollectionsSchema = z.object({
 export type CollectionsType = z.infer<typeof CollectionsSchema>;
 
 //.........................OBJECTS.........................//
-const OBJECTTYPES = [ "Artifact", "Book", "ProtectedAreaPicture" ] as const
+export const ObjectsEnum = z.enum([ "Artifact", "Book", "ProtectedAreaPicture" ])
+export type ObjectsEnumType = z.infer<typeof ObjectsEnum>
 
 export const ObjectNodeSchema = z.object({
-    __typename: z.enum(OBJECTTYPES),
+    __typename: ObjectsEnum,
     id: z.string(),
     displayName: z.string(),
     primaryImageURL: z.string(),
+    createdAt: z.string().datetime()
 });
 export type ObjectNodeType = z.infer<typeof ObjectNodeSchema>;
 

@@ -4,27 +4,22 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import { DictionarySchema } from '@siberiana/schemas';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import ErrorToast from '../errors/ErrorToast';
-import { ZodError } from 'zod';
 import ImgTextOn from '../thumbnails/ImgTextOn';
+import ErrorHandler from '../errors/ErrorHandler';
 
 export default async function CategoriesBlock() {
 
-    const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
-
-    try {
-        await getCategories({ first: 4 });
-    } catch (error) {
-        if (error instanceof ZodError) {
-            console.log(error.issues);
-            return <ErrorToast dict={dictResult.errors} error={error.issues} place="Categories" />;
-        } else {
-            return <ErrorToast dict={dictResult.errors} error={(error as Error).message} place="Categories" />;
-        }
-    }
-    
-    const dataResult = await getCategories({ first: 4 });
+  const dict = await getDictionary();
+  const dictResult = DictionarySchema.parse(dict);
+  
+  const [ dataResult ] = await Promise.allSettled([ getCategories({ first: 4 }) ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Categories Block" 
+      goBack={false}
+    />
+  )
 
   return (
     <>
@@ -43,7 +38,7 @@ export default async function CategoriesBlock() {
     </div>
 
     <div className="md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
-      {dataResult.edges.map((category, index) => (
+      {dataResult.value.edges.map((category, index) => (
         <ImgTextOn
           key={index}
           className={"aspect-square"}

@@ -7,7 +7,7 @@ export default function LoadingFAQ() {
     <>
       <BreadcrumbsSkeleton/>
 
-      <div className="mt-10 mb-24 lg:w-3/5 md:w-3/4 w-full mx-auto">
+      <div className="mt-10 mb-24 lg:w-3/5 md:w-3/4 w-full mx-auto max-w-[1000px]">
         <Skeleton className="w-4/5 h-12 mb-6" />
         <Skeleton className="w-full h-6 mb-12" />
 

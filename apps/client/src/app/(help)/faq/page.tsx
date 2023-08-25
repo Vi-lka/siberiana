@@ -30,7 +30,7 @@ export default async function FAQ() {
     <div>
         <Breadcrumbs dict={dictResult.breadcrumbs} />
 
-          <div className="mt-10 mb-24 lg:w-3/5 md:w-3/4 w-full mx-auto">
+          <div className="mt-10 mb-24 lg:w-3/5 md:w-3/4 w-full mx-auto max-w-[1000px]">
             <div className="mt-10 mb-14">
                 <h1 className="text-foreground lg:text-3xl text-2xl font-bold uppercase mb-6">
                     {dictResult.faq.title}

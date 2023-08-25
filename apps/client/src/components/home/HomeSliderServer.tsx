@@ -1,29 +1,19 @@
 import React from "react";
-import { ZodError } from "zod";
-
-import type { ErrorsDictType } from "@siberiana/schemas";
-
 import { getSlider } from "~/lib/queries/strapi-server";
-import ErrorToast from "../errors/ErrorToast";
 import HomeSlider from "./HomeSlider";
+import ErrorHandler from "../errors/ErrorHandler";
 
-export default async function HomeSliderServer({
-  errorDict,
-}: {
-  errorDict: ErrorsDictType;
-}) {
-  try {
-    await getSlider();
-  } catch (error) {
-    if (error instanceof ZodError) {
-      console.log(error.issues);
-      return <ErrorToast dict={errorDict} error={error.issues} place="Slider" />;
-    } else {
-      return <ErrorToast dict={errorDict} error={(error as Error).message} place="Slider" />;
-    }
-  }
+export default async function HomeSliderServer() {
+  const [ dataResult ] = await Promise.allSettled([ getSlider() ])
+  if  (dataResult.status === 'rejected') return (
+    <ErrorHandler 
+      error={dataResult.reason as unknown} 
+      place="Slider" 
+      goBack={false}
+    />
+  )
 
-  const dataResult = await getSlider();
-
-  return <HomeSlider data={dataResult} />;
+  return (
+    <HomeSlider data={dataResult.value} />
+  );
 }

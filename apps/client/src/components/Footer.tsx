@@ -16,7 +16,7 @@ export default async function Footer() {
   return (
     <div className='w-full bg-beaver dark:bg-accent text-beaverLight font-Inter'>
         <div className="w-full border-b-[1px] border-beaverLight py-6">
-            <div className="flex gap-6 lg:flex-row flex-col items-center justify-between mx-auto w-[95%] max-w-[1600px] md:w-[85%]">
+            <div className="flex gap-6 lg:flex-row flex-col items-center justify-between mx-auto w-[95%] md:w-[85%]">
                 <div className="flex lg:flex-row flex-col items-center gap-6">
                     <Link
                         href={"https://www.sfu-kras.ru/"}
@@ -56,7 +56,7 @@ export default async function Footer() {
         </div>
 
         <div className="w-full py-6">
-            <div className="flex gap-6 lg:flex-row flex-col-reverse items-center justify-between mx-auto w-[95%] max-w-[1600px] md:w-[85%]">
+            <div className="flex gap-6 lg:flex-row flex-col-reverse items-center justify-between mx-auto w-[95%] md:w-[85%]">
                 <p className="text-xs">
                     ©{year}, {dictResult.footer.allRightRes}
                 </p>
