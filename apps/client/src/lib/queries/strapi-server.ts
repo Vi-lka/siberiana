@@ -22,6 +22,7 @@ import type {
 } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 
+//.........................SLIDER.........................//
 export const getSlider = async (): Promise<SliderType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -84,6 +85,7 @@ export const getSlider = async (): Promise<SliderType> => {
   return data;
 };
 
+//.........................CUSTOM BLOCK.........................//
 export const getCustomBlock = async (): Promise<CustomBlockType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -156,6 +158,7 @@ export const getCustomBlock = async (): Promise<CustomBlockType> => {
   return data;
 };
 
+//.........................ORGANIZATIONS.........................//
 export const getOrganizations = async ({
   page,
   per,
@@ -243,6 +246,7 @@ export const getOrganizations = async ({
   return organizations;
 };
 
+//.........................ORGANIZATION BY SLUG.........................//
 export const getOrganizationBySlug = async (
   slug: string,
 ): Promise<OrganizationBySlugType> => {
@@ -380,6 +384,7 @@ export const getOrganizationBySlug = async (
   return data;
 };
 
+//.........................PROJECTS.........................//
 export const getProjects = async ({
   page,
   per,
@@ -460,6 +465,7 @@ export const getProjects = async ({
   return projects;
 };
 
+//.........................SERVICES.........................//
 export const getServices = async ({
   page,
   per,
@@ -540,6 +546,7 @@ export const getServices = async ({
   return services;
 };
 
+//.........................ABOUT.........................//
 export const getAbout = async (): Promise<AboutType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -601,6 +608,7 @@ export const getAbout = async (): Promise<AboutType> => {
   return about;
 };
 
+//.........................FAQ.........................//
 export const getFAQ = async (): Promise<FAQType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `

@@ -5,6 +5,7 @@ import React from 'react'
 import { Loader2, Search, X } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import { InputSearch } from './InputSearch'
+import resetPaginationts from '~/lib/utils/resetPagination'
 
 export default function SearchField({ placeholder }: { placeholder: string }) {
 
@@ -26,7 +27,7 @@ export default function SearchField({ placeholder }: { placeholder: string }) {
           const params = new URLSearchParams(window.location.search);
 
           // reset pagination(page) to prevent zero results
-          params.set("page", '1')
+          resetPaginationts(params)
 
           if (inputValue.length > 0) {
             params.set("search", inputValue);

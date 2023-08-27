@@ -98,6 +98,9 @@ importers:
       axios:
         specifier: ^1.4.0
         version: 1.4.0
+      client-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       encoding:
         specifier: ^0.1.13
         version: 0.1.13

@@ -56,20 +56,20 @@ export default async function Home() {
       </div>
 
       {/* QUIZ */}
-      <div className="mx-auto mb-24 w-[85%] max-w-[1600px]">
+      <div className="mx-auto w-[85%] max-w-[1600px]">
         <Quiz qiuzDict={dictResult.quiz} errorDict={dictResult.errors} />
       </div>
 
       {/* CUSTOM */}
-      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
+      <div className="mx-auto w-[85%] max-w-[1600px] font-OpenSans">
         <Suspense fallback={
-          <>
+          <div className="mb-24">
             <div className="mb-10 flex items-center justify-between">
               <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
               <Skeleton className="h-full w-[20%] py-5" />
             </div>
             <RowBlockSkeleton />
-          </>
+          </div>
         }>
             <CustomBlock />
         </Suspense>

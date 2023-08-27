@@ -22,6 +22,7 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import resetPaginationts from "~/lib/utils/resetPagination";
 
 type Item = {
   value: string,
@@ -113,7 +114,7 @@ export function MultiSelect({
       let values = [] as string[]
 
       // reset pagination(page) to prevent zero results
-      params.set("page", '1')
+      resetPaginationts(params)
 
       if (newValues.length > 0) {
 

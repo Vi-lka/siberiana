@@ -25,7 +25,7 @@ export const SliderSchema = z.array(
 );
 export type SliderType = z.infer<typeof SliderSchema>;
 
-//.........................CUSTOM.........................//
+//.........................CUSTOM BLOCK.........................//
 export const CustomBlockSchema = z.object(
   {
     title: z.string(),
@@ -42,10 +42,10 @@ export const CustomBlockSchema = z.object(
   {
     required_error: "Custom Block missing",
   },
-);
+)
 export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
 
-//.........................QUESTION.........................//
+//.........................QUESTIONS.........................//
 export const QuestionSchema = z.object({
   attributes: z.object({
     title: z.string(),

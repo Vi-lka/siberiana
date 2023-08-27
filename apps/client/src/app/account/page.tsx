@@ -7,7 +7,7 @@ import React from 'react'
 import { authOptions } from '~/app/api/auth/[...nextauth]/route';
 import { SignOutIcon } from '~/components/auth/NextAuthButtons';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import getUserRole from '~/lib/utils/getUserRole';
+import getUserRoles from '~/lib/utils/getUserRoles';
 import AccountTabs from './AccountTabs';
 import NoSession from '~/components/errors/NoSession';
 
@@ -19,7 +19,7 @@ export default async function Account() {
     const session = await getServerSession(authOptions);
     if (!!!session) return <NoSession />
 
-    const userRoles = session.user.roles?.map(role => getUserRole(role, dictResult.account))
+    const userRoles = session.user.roles?.map(role => getUserRoles(role, dictResult.account))
 
   return (
     <div className="mt-12 mb-4 flex flex-col gap-10 mx-auto">

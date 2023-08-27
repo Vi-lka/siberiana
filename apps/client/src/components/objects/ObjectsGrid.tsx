@@ -25,8 +25,8 @@ export default function ObjectsGrid({
                     src={object.node.primaryImageURL}
                     origin={"storage"}
                     href={'/'}
-                    width={810}
-                    height={300}
+                    width={500}
+                    height={500}
                 />
             ))}
         </Masonry>

@@ -13,12 +13,12 @@ export default async function CustomBlock() {
     <ErrorHandler 
       error={dataResult.reason as unknown} 
       place="Custom Block" 
-      goBack={false}
+      notFound={false}
     />
   )
 
   return (
-    <>
+    <div className="mb-24">
       <div className="mb-10 flex items-center justify-between">
         <h1 className="text-foreground text-2xl font-bold uppercase">
           {dataResult.value.title}
@@ -45,6 +45,6 @@ export default async function CustomBlock() {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }

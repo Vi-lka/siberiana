@@ -39,14 +39,17 @@ export default function Quiz({
 
   // Check for data
   if (isLoading) return <QuizSkeleton />;
-  if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId]) || error){
+  if (error){
     return (
       <ErrorToast
         dict={errorDict}
-        error={error ? error.message : "Quiz Data is undefined"}
+        error={error.message}
         place="Quiz"
       />
     );
+  }
+  if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId])){
+    return null
   }
 
   // Validate data
@@ -75,7 +78,7 @@ export default function Quiz({
   }
 
   return (
-    <div className="hidden grid-cols-2 justify-center gap-6 md:grid">
+    <div className="hidden grid-cols-2 justify-center gap-6 md:grid mb-24">
       <div className="relative h-[300px] w-full max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
         <Image
           src={

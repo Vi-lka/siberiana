@@ -4,6 +4,7 @@ import { Toggle, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from
 import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
+import resetPaginationts from '~/lib/utils/resetPagination'
 
 export default function ToggleFilter({
     tooltip,
@@ -28,7 +29,7 @@ export default function ToggleFilter({
           const params = new URLSearchParams(window.location.search);
 
           // reset pagination(page) to prevent zero results
-          params.set("page", '1')
+          resetPaginationts(params)
 
           if (pressed === true) {
             params.set(param, pressed.toString());

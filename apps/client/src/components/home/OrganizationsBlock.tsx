@@ -18,6 +18,7 @@ export default async function OrganizationsBlock() {
     <ErrorHandler 
       error={dataResult.reason as unknown} 
       place="Organizations Block" 
+      notFound
       goBack={false}
     />
   )

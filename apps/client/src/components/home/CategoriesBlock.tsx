@@ -17,7 +17,7 @@ export default async function CategoriesBlock() {
     <ErrorHandler 
       error={dataResult.reason as unknown} 
       place="Categories Block" 
-      goBack={false}
+      notFound={false}
     />
   )
 

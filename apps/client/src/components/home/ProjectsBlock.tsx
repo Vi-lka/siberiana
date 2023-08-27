@@ -18,6 +18,7 @@ export default async function ProjectsBlock() {
     <ErrorHandler 
       error={dataResult.reason as unknown} 
       place="Projects Block" 
+      notFound
       goBack={false}
     />
   )

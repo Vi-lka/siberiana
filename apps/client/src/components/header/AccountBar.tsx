@@ -7,7 +7,7 @@ import React from 'react'
 import Link from 'next/link';
 import { ClientHydration } from '../providers/ClientHydration';
 import { signOut } from 'next-auth/react';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { tabAccountAtom } from '~/lib/utils/atoms';
 
 export default function AccountBar({ 
@@ -21,7 +21,7 @@ export default function AccountBar({
     const matchesName = session?.user.name.match(/\b(\w)/g)
     const acronymName = matchesName?.join('')
 
-    const [_, setTab] = useAtom(tabAccountAtom)
+    const setTab = useSetAtom(tabAccountAtom)
 
   return (
     <div className='font-Inter text-sm'>

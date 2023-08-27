@@ -12,12 +12,12 @@ type Props = {
 } & (TrueNotFoundProps | FalseNotFoundProps)
 
 type TrueNotFoundProps = {
-    notFound?: true,
+    notFound: true,
     goBack: boolean,
 }
 
 type FalseNotFoundProps = {
-    notFound?: false,
+    notFound: false,
 }
 
 export default async function ErrorHandler(props: Props) {
@@ -25,25 +25,25 @@ export default async function ErrorHandler(props: Props) {
     const dict = await getDictionary();
     const dictResult = DictionarySchema.parse(dict);
 
-    console.log("ErrorHandler: ",  props.error)
+    if ((props.error as Error).message === 'NEXT_NOT_FOUND') {
 
-    if (props.error instanceof ZodError) {
-
-        return <ErrorToast dict={dictResult.errors} error={props.error.issues} place={props.place} />;
+        if (props.notFound) return (
+            <NotFound dict={dictResult.errors} goBack={props.goBack}>
+                {props.children}
+            </NotFound>
+        ) 
+        else return null
 
     } else {
 
-        if (props.notFound) {
-            if ((props.error as Error).message === 'NEXT_NOT_FOUND') {
-
-                return (
-                    <NotFound dict={dictResult.errors} goBack={props.goBack}>
-                        {props.children}
-                    </NotFound>
-                )
-            
-            } else return <ErrorToast dict={dictResult.errors} error={(props.error as Error).message} place={props.place} />
-        } else return <ErrorToast dict={dictResult.errors} error={(props.error as Error).message} place={props.place} />
-
+        console.log("ErrorHandler: ",  props.error)
+        return (
+            <ErrorToast 
+                dict={dictResult.errors} 
+                error={ (props.error instanceof ZodError) ? props.error.issues : (props.error as Error).message } 
+                place={props.place} 
+            />
+        );
+        
     }
 }

@@ -58,7 +58,6 @@ export const ObjectNodeSchema = z.object({
     id: z.string(),
     displayName: z.string(),
     primaryImageURL: z.string(),
-    createdAt: z.string().datetime()
 });
 export type ObjectNodeType = z.infer<typeof ObjectNodeSchema>;
 

@@ -9,7 +9,7 @@ export default async function HomeSliderServer() {
     <ErrorHandler 
       error={dataResult.reason as unknown} 
       place="Slider" 
-      goBack={false}
+      notFound={false}
     />
   )
 
