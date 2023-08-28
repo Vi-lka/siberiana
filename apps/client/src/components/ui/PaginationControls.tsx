@@ -95,23 +95,30 @@ export default function PaginationControls({
     [perP, pathname, router],
   );
 
+  console.log(pageInput)
+
   return (
     <div className={cn(
       'flex xl:gap-0 gap-12 xl:items-start items-center xl:flex-row flex-col xl:justify-end relative',
       className
     )}>
-        <ButtonComponent 
-          className={cn(
-            "px-10 py-6 uppercase xl:absolute xl:left-1/2 xl:-translate-x-1/2",
-            classNameMore
-          )}
-          variant={(Number(page) >= max_page) ? "hidden" : "default"}
-          disabled={isPendingPage || isPendingMore}
-          onClick={() => handlePageSizeParams((Number(per) + defaultPageSize).toString())}
-        >
-          <span className="sr-only">{dict.showMore}</span>
-          {isPendingMore ? <Loader2 className='animate-spin' /> : dict.showMore}
-        </ButtonComponent>
+      {Number(pageInput) === 1 
+        ? (
+          <ButtonComponent 
+            className={cn(
+              "px-10 py-6 uppercase xl:absolute xl:left-1/2 xl:-translate-x-1/2",
+              classNameMore
+            )}
+            variant={(Number(page) >= max_page) ? "hidden" : "default"}
+            disabled={isPendingPage || isPendingMore}
+            onClick={() => handlePageSizeParams((Number(per) + defaultPageSize).toString())}
+          >
+            <span className="sr-only">{dict.showMore}</span>
+            {isPendingMore ? <Loader2 className='animate-spin' /> : dict.showMore}
+          </ButtonComponent>
+        )
+        : null
+      }
 
         <div className='flex items-center lg:flex-row flex-col-reverse lg:gap-6 gap-3' style={{ display: Number(per) >= length ? 'none' : 'flex'}}>
 
