@@ -6,14 +6,14 @@ import PaginationControls from '~/components/ui/PaginationControls'
 import { getDictionary } from '~/lib/utils/getDictionary'
 import type { SortDataType } from '@siberiana/schemas';
 import { DictionarySchema } from '@siberiana/schemas'
-import { getArtifacts } from '~/lib/queries/api-collections'
+import { getBooks } from '~/lib/queries/api-collections'
 import ErrorHandler from '~/components/errors/ErrorHandler'
 import ObjectsCounter from '~/components/providers/ObjectsCounter'
-import ObjectsFilters from './ObjectsFilters'
 import { Filter } from 'lucide-react'
 import Sort from '~/components/ui/filters/Sort'
+import ObjectsFilters from '../ObjectsFilters'
 
-export default async function Artifacts({
+export default async function Books({
   searchParams,
   defaultPageSize,
 }: {
@@ -28,40 +28,37 @@ export default async function Artifacts({
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
   const sort = searchParams['sort'] as string | undefined
-  const page = searchParams['page_artifacts'] ?? '1'
-  const per = searchParams['per_artifacts'] ?? defaultPageSize
+  const page = searchParams['page_books'] ?? '1'
+  const per = searchParams['per_books'] ?? defaultPageSize
 
   const first = Number(per)
   const offset = (Number(page) - 1) * (Number(per))
 
   const [ dataResult ] = await Promise.allSettled([ 
-      getArtifacts({ 
-        search, 
-        categories, 
-        collections, 
-        sort, 
-        first, 
-        offset
-      }) 
+    getBooks({ 
+      search, 
+      categories, 
+      collections, 
+      sort, 
+      first, 
+      offset
+    }) 
   ])
   if  (dataResult.status === 'rejected') return (
-      <>
-          <ErrorHandler 
-            error={dataResult.reason as unknown} 
-            place="Artifacts" 
-            notFound 
-            goBack={false}
-          />
-          <ObjectsCounter artifactsCount={0} />
-      </>
+    <>
+      <ErrorHandler 
+        error={dataResult.reason as unknown} 
+        place="Books" 
+        notFound 
+        goBack={false}
+      />
+      <ObjectsCounter booksCount={0} />
+    </>
   )
 
   const sortData = [
     { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
     { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-    {},
-    { val: 'CREATED_AT:ASC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.asc}` },
-    { val: 'CREATED_AT:DESC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.desc}` },
   ] as SortDataType[]
 
   return (
@@ -91,13 +88,13 @@ export default async function Artifacts({
                 length={dataResult.value.totalCount}
                 defaultPageSize={defaultPageSize}
                 classNameMore='xl:left-[38%]'
-                pageParam={"page_artifacts"}
-                perParam={"per_artifacts"}
+                pageParam={"page_books"}
+                perParam={"per_books"}
               />
             </div>
           </ClientHydration>
         
-          <ObjectsCounter artifactsCount={dataResult.value.totalCount} />
+          <ObjectsCounter booksCount={dataResult.value.totalCount} />
         </div>
       </div>
     </div>

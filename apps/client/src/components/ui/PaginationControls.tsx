@@ -95,8 +95,6 @@ export default function PaginationControls({
     [perP, pathname, router],
   );
 
-  console.log(pageInput)
-
   return (
     <div className={cn(
       'flex xl:gap-0 gap-12 xl:items-start items-center xl:flex-row flex-col xl:justify-end relative',

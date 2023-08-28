@@ -6,11 +6,11 @@ import ErrorHandler from "~/components/errors/ErrorHandler";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import SearchField from "~/components/ui/filters/SearchField";
 import ObjectTabs from "~/components/objects/ObjectsTabs";
-import Artifacts from "./Artifacts";
-import Books from "./Books";
 import ObjectsContent from "~/components/objects/ObjectsContent";
-import ProtectedAreaPictures from "./ProtectedAreaPictures";
 import ObjectsTabsSkeleton from "~/components/skeletons/ObjectsTabsSkeleton";
+import Artifacts from "./(grids)/Artifacts";
+import Books from "./(grids)/Books";
+import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 
 export default async function Objects({
   searchParams
