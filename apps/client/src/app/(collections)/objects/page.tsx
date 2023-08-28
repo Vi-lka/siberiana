@@ -1,20 +1,16 @@
 import React, { Suspense } from "react";
-import type { SortDataType } from "@siberiana/schemas";
 import { DictionarySchema } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import { getCategories, getCollections } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import SearchField from "~/components/ui/filters/SearchField";
-import Sort from "~/components/ui/filters/Sort";
-import { Filter } from "lucide-react";
-import ObjectsFilters from "./ObjectsFilters";
-import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 import ObjectTabs from "~/components/objects/ObjectsTabs";
 import Artifacts from "./Artifacts";
 import Books from "./Books";
 import ObjectsContent from "~/components/objects/ObjectsContent";
 import ProtectedAreaPictures from "./ProtectedAreaPictures";
+import ObjectsTabsSkeleton from "~/components/skeletons/ObjectsTabsSkeleton";
 
 export default async function Objects({
   searchParams
@@ -56,14 +52,6 @@ export default async function Objects({
   // Get collection title
   const collectionSingle = collectionsResult.value.edges.find(el => el.node.slug === collections)
 
-  const sortData = [
-    { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
-    { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-    {},
-    { val: 'CREATED_AT:ASC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.asc}` },
-    { val: 'CREATED_AT:DESC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.desc}` },
-  ] as SortDataType[]
-
   return (
     <div>
       <BreadcrumbsCollections 
@@ -104,41 +92,23 @@ export default async function Objects({
         placeholder={dictResult.search.button}
       />
 
-      <div className="flex gap-6 items-center md:justify-end justify-between mt-3">
-        <Filter className="md:hidden block" />
-        <Sort 
-          dict={dictResult.sort}
-          data={sortData}
-        />
-      </div>
-
-      <div className="flex gap-6 w-full justify-between md:mt-0 mt-3 mb-12 relative">
-        <div className="w-1/4 bg-red-700 md:block hidden">
-          <ObjectsFilters />
-        </div>
-
-        <Suspense fallback={
-          <div className="md:w-3/4 w-full">
-              <MasonrySkeleton />
-          </div>
-        }>
-          <div className="md:w-3/4 w-full">
-            <ObjectTabs dict={dictResult}>
-              <ObjectsContent value="artifacts">
+      <Suspense fallback={ <ObjectsTabsSkeleton /> }>
+        <div className="w-full mt-6">
+          <ObjectTabs dict={dictResult}>
+            <ObjectsContent value="artifacts">
                 <Artifacts searchParams={searchParams} defaultPageSize={defaultPageSize} />
-              </ObjectsContent>
-              
-              <ObjectsContent value="books">
+            </ObjectsContent>
+            
+            <ObjectsContent value="books">
                 <Books searchParams={searchParams} defaultPageSize={defaultPageSize} />
-              </ObjectsContent>
+            </ObjectsContent>
 
-              <ObjectsContent value="protected_area_pictures">
+            <ObjectsContent value="protected_area_pictures">
                 <ProtectedAreaPictures searchParams={searchParams} defaultPageSize={defaultPageSize} />
-              </ObjectsContent>
-            </ObjectTabs>
-          </div>
-        </Suspense>
+            </ObjectsContent>
+          </ObjectTabs>
+        </div>
+      </Suspense>
       </div>
-    </div>
   );
 }

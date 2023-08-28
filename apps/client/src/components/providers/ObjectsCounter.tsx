@@ -17,15 +17,21 @@ export default function ObjectsCounter({
     const setPAPCount = useSetAtom(PAPCountAtom)
     
     React.useEffect(() => {
-        if (artifactsCount !== undefined) setArtifactsCount(artifactsCount)
+        if (artifactsCount !== undefined) {
+            setArtifactsCount(artifactsCount)
+        }
     }, [artifactsCount, setArtifactsCount])
 
     React.useEffect(() => {
-        if (booksCount !== undefined) setBooksCount(booksCount)
+        if (booksCount !== undefined) {
+            setBooksCount(booksCount)
+        }
     }, [booksCount, setBooksCount])
 
     React.useEffect(() => {
-        if (PAPCount !== undefined) setPAPCount(PAPCount)
+        if (PAPCount !== undefined) {
+            setPAPCount(PAPCount)
+        }
     }, [PAPCount, setPAPCount])
 
   return null

@@ -416,7 +416,7 @@ export const getProtectedAreaPictures = async ({
 
   const json = await res.json() as { data: { protectedAreaPictures: ObjectsArrayType } };
 
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   if (json.data.protectedAreaPictures.totalCount === 0) {
     notFound()

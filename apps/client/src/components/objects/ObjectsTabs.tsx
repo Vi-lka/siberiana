@@ -5,7 +5,7 @@ import { Skeleton, Tabs, TabsList, TabsTrigger } from '@siberiana/ui'
 import React from 'react'
 import { useAtomValue, useAtom } from 'jotai'
 import { PAPCountAtom, artifactsCountAtom, booksCountAtom, tabObjectsAtom } from '~/lib/utils/atoms'
-import { ClientHydration } from '~/components/providers/ClientHydration'
+import { ClientHydration } from '../providers/ClientHydration'
 
 export default function ObjectTabs({
     dict,
@@ -36,7 +36,7 @@ export default function ObjectTabs({
     React.useEffect(() => {
         const allCounts = [artifactsCount, booksCount, PAPCount]
         const maxCount = Math.max(...allCounts)
-    
+        
         switch (maxCount) {
             case artifactsCount:
                 setTabObject("artifacts")
@@ -55,26 +55,19 @@ export default function ObjectTabs({
     function isSingleTab() {
         return (notEmptyTabs.length === 1) ? true : false;
     }
-    
-    const handleChangeTabs = React.useCallback(
-        (value: string) => {
-            setTabObject(value)
-        },
-        [setTabObject],
-    );
 
     return (
         <div className='w-full flex flex-col'>
             <Tabs
                 className="w-full"
                 value={tabObject}
-                onValueChange={handleChangeTabs}
+                onValueChange={(value: string) => setTabObject(value)}
             >
                 <ClientHydration fallback={
-                    <Skeleton className='w-28 h-10' />
+                  <Skeleton className='w-56 h-10' />
                 }>
                     <div className="flex gap-3 items-center flex-wrap">
-                        {notEmptyTabs.length !== 0 
+                        {notEmptyTabs.length > 0 
                             ? (
                                 <TabsList className="flex-wrap h-fit" >
                                     {notEmptyTabs.map((tab, index) => (

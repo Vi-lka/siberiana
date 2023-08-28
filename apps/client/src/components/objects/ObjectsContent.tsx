@@ -1,6 +1,7 @@
 "use client"
 
 import { TabsContent } from '@siberiana/ui'
+import { cn } from '@siberiana/ui/src/lib/utils'
 import { useAtomValue } from 'jotai'
 import React from 'react'
 import { tabObjectsAtom } from '~/lib/utils/atoms'
@@ -16,7 +17,14 @@ export default function ObjectsContent({
   const tabObject = useAtomValue(tabObjectsAtom)
 
   return (
-    <TabsContent value={value} forceMount className={tabObject === value ? "flex" : "hidden"}>
+    <TabsContent 
+      value={value} 
+      forceMount 
+      className={cn(
+        "mt-0",
+        tabObject === value ? "flex" : "hidden"
+      )}
+    >
         {children}
     </TabsContent>
   )
