@@ -187,8 +187,12 @@
     "goTo": "Узнать больше"
   },
   "objects": {
-    "count": "Всего:",
-    "filters": "Фильтры",
+    "count": "Всего",
+    "filters": {
+      "title": "Фильтры",
+      "categories": "Категория",
+      "collections": "Коллекции"
+    },
     "artifacts": "Артефакты",
     "books": "Книги",
     "protectedAreaPictures": "ООПТ"

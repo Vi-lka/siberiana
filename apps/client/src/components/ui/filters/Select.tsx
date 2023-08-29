@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Filter, Loader2, SearchX, X, XCircle } from "lucide-react";
+import { Check, ChevronsUpDown, Filter, ListChecks, ListTodo, Loader2, SearchX, X, XCircle } from "lucide-react";
 import { 
     Badge, 
     Button, 
@@ -31,32 +31,37 @@ type Item = {
 };
 
 const badgeStyle = (color: string | undefined) => ({
-  borderColor: `${color}20`,
-  backgroundColor: `${color}30`,
+  borderColor: `${color}70`,
+  backgroundColor: `${color}10`,
   color,
 });
 
-export function MultiSelect({
+export function Select({
+  isMulti,
   values,
   param,
+  deleteParams,
   placeholder,
   className,
   badges = false,
   icon = false,
   side = "bottom",
-  align = "start"
+  align = "start",
 }: {
+  isMulti: boolean,
   values: Array<Item>,
   param: string,
+  deleteParams?: string
   placeholder: string,
   className?: string,
   badges?: boolean,
   icon?: boolean,
   side?: "bottom" | "top" | "right" | "left",
-  align?: "end" | "center" | "start"
+  align?: "end" | "center" | "start",
 }) {
+
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [items, _] = React.useState<Array<Item>>(values);
+  const [items, setItems] = React.useState<Array<Item>>([]);
   const [openCombobox, setOpenCombobox] = React.useState(false);
   const [inputValue, setInputValue] = React.useState<string>("");
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
@@ -67,6 +72,10 @@ export function MultiSelect({
   const pathname = usePathname()
 
   const currentParams = searchParams.get(param) ?? undefined
+
+  React.useEffect(() => {
+    setItems(values)
+  }, [values])
 
   let selectedValues = [] as Item[]
   values.forEach(option => {
@@ -93,11 +102,21 @@ export function MultiSelect({
     // includes() doesn't work with object, so we do this:
     const contains = selectedValues.some(elem => elem.value === item.value);
 
-    contains
-        ? newValues = selectedValues.filter((elem) =>  elem.value !== item.value)
-        : newValues = [...selectedValues, item]
+    if (isMulti) {
+      contains
+          ? newValues = selectedValues.filter((elem) =>  elem.value !== item.value)
+          : newValues = [...selectedValues, item]
+  
+      handleSelectedParams(newValues)
+    } else {
+      contains
+          ? newValues = selectedValues.filter((elem) =>  elem.value !== item.value)
+          : newValues = [item]
 
-    handleSelectedParams(newValues)
+      handleSelectedParams(newValues)
+      setOpenCombobox(false)
+    }
+    
     // inputRef.current?.focus();
   };
 
@@ -119,10 +138,11 @@ export function MultiSelect({
       if (newValues.length > 0) {
 
         newValues.forEach(option => {
-            values = [...values, option.value.toString()]
+          values = [...values, option.value.toString()]
         })
 
         params.set(param, values.join('_'));
+
 
       } else {
 
@@ -130,27 +150,35 @@ export function MultiSelect({
       
       }
 
+      if (deleteParams) params.delete(deleteParams);
+
       startTransitionRouter(() => {
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
       });
     },
-    [param, pathname, router],
+    [param, deleteParams, pathname, router],
   );
 
   function TriggerButton() {
     return(
       <>
-        {isPendingRouter 
-          ? <Loader2 className='animate-spin' />
-          : (
-            <span className="truncate text-muted-foreground">
-              {selectedValues.length === 0 && placeholder}
-              {selectedValues.length === 1 && selectedValues[0].label}
-              {selectedValues.length >= 2 &&
-                `${selectedValues.length} Выбрано`}
-            </span>
-          ) 
-        }
+        <div className="flex items-center gap-2">
+            {isMulti 
+                ? <ListChecks  className="w-6 h-6" />
+                : <ListTodo  className="w-6 h-6" />
+            }
+            {isPendingRouter 
+              ? <Loader2 className='animate-spin' />
+              : (
+                <span className="truncate text-muted-foreground">
+                  {selectedValues.length === 0 && placeholder}
+                  {selectedValues.length === 1 && selectedValues[0].label}
+                  {selectedValues.length >= 2 &&
+                    `${selectedValues.length} Выбрано`}
+                </span>
+              ) 
+            }
+        </div>
         {(selectedValues.length > 0) 
           ? <X className="ml-2 h-4 w-4 shrink-0 opacity-50 hover:opacity-100 hover:scale-125 z-50 transition-all" onClick={clearItems}/>
           : <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -205,8 +233,8 @@ export function MultiSelect({
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "justify-between text-foreground relative",
-              icon && "p-0"
+              "w-full justify-between text-foreground relative",
+              icon && "p-0",
             )}
           >
             {icon 
@@ -215,7 +243,14 @@ export function MultiSelect({
             }
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 font-Inter md:min-w-[400px]" side={side} align={align}>
+        <PopoverContent 
+          className={cn(
+            "p-0 font-Inter",
+            icon ? "md:min-w-[400px]" : ""
+          )}
+          side={side} 
+          align={align}
+        >
           <Command loop>
             <div className='relative'>
               <CommandInput
@@ -246,63 +281,63 @@ export function MultiSelect({
                 }
             </div>
             <CommandList>
-                <CommandEmpty>
-                    <div className='flex flex-col items-center text-center gap-1'>
-                        <SearchX size={20} />
-                        <h2 className='font-OpenSans text-sm font-medium'>
-                            Не найдено
-                        </h2>
-                    </div>
-                </CommandEmpty>
-                <CommandGroup>
-                  <ScrollArea className="h-[240px]">
-                    {items.map((item) => {
-                        // includes() doesn't work with object, so we do this:
-                        const isActive = selectedValues.some(elem => elem.value === item.value);
-                        return (
-                          <CommandItem
-                            key={item.value}
-                            value={item.value}
-                            className={cn(
-                              (isPendingRouter || isPendingSearch)
-                                ? "opacity-30 cursor-wait"
-                                : "opacity-100 cursor-pointer"
-                            )}
-                            onSelect={() => toggleItem(item)}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                isActive ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            <div className="flex-1">{item.label}</div>
-                            {/* <div
-                              className="h-4 w-4 rounded-full"
-                              style={{ backgroundColor: item.color }}
-                            /> */}
-                          </CommandItem>
-                        );
-                    })}
-                  </ScrollArea>              
-                </CommandGroup>
+              <CommandEmpty>
+                <div className='flex flex-col items-center text-center gap-1'>
+                  <SearchX size={20} />
+                  <h2 className='font-OpenSans text-sm font-medium'>
+                    Не найдено
+                  </h2>
+                </div>
+              </CommandEmpty>
+              <CommandGroup >
+                <ScrollArea type="always" classNameViewport="max-h-[200px]">
+                  {items.map((item) => {
+                    // includes() doesn't work with object, so we do this:
+                    const isActive = selectedValues.some(elem => elem.value === item.value);
+                    return (
+                      <CommandItem
+                        key={item.value}
+                        value={item.value}
+                        className={cn(
+                          (isPendingRouter || isPendingSearch)
+                            ? "opacity-30 cursor-wait"
+                            : "opacity-100 cursor-pointer"
+                        )}
+                        onSelect={() => toggleItem(item)}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            isActive ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        <div className="flex-1">{item.label}</div>
+                        <div
+                          className="h-4 w-4 rounded-full"
+                          style={{ backgroundColor: item.color }}
+                        />
+                      </CommandItem>
+                    );
+                  })}
+                </ScrollArea>
+              </CommandGroup> 
             </CommandList>
           </Command>
         </PopoverContent>
       </Popover>
       {badges ? (
-        <div className="relative h-fit max-h-40 overflow-y-auto mt-3">
-          {selectedValues.length > 1 ? selectedValues.map((item) => (
-            <Badge
-              key={item.value}
-              variant="outline"
-              style={badgeStyle(item.color)}
-              className="mr-2 mb-2"
-            >
-              {item.label} <XCircle className="ml-1 w-5 h-5 cursor-pointer" onClick={() => toggleItem(item)} />
-            </Badge>
-          )) : null}
-        </div>
+        <ScrollArea type="always" classNameViewport="max-h-[105px] mt-3">
+            {selectedValues.length > 1 ? selectedValues.map((item) => (
+              <Badge
+                key={item.value}
+                variant="outline"
+                style={badgeStyle(item.color)}
+                className="mr-2 mb-2 pl-2 pr-7 py-1 text-[10px] relative"
+              >
+                {item.label} <XCircle className="absolute right-[1px] w-5 h-5 cursor-pointer" onClick={() => toggleItem(item)} />
+              </Badge>
+            )) : null}
+        </ScrollArea>
       ): null}
     </div>
   );

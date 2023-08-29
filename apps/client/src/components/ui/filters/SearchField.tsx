@@ -42,10 +42,8 @@ export default function SearchField({ placeholder }: { placeholder: string }) {
         [pathname, router],
     );
 
-    // EFFECT: Set Focus
-    React.useEffect(() => {
-      if (inputValue.length > 0) inputRef.current?.focus()
-    }, [inputRef, inputValue.length])
+    // Set Focus
+    if (inputValue.length > 0) inputRef.current?.focus()
 
     // EFFECT: Set Initial Params
     React.useEffect(() => {

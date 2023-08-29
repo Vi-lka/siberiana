@@ -152,10 +152,18 @@ export const CategoriesDictSchema = z.object({
 });
 export type CategoriesDictType = z.infer<typeof CategoriesDictSchema>;
 
+//.........................FILTERS.........................//
+export const FiltersDictSchema = z.object({
+  title: z.string(),
+  categories: z.string(),
+  collections: z.string(),
+});
+export type FiltersDictType = z.infer<typeof FiltersDictSchema>;
+
 //.........................OBJECTS.........................//
 export const ObjectsDictSchema = z.object({
   count: z.string(),
-  filters: z.string(),
+  filters: FiltersDictSchema,
   artifacts: z.string(),
   books: z.string(),
   protectedAreaPictures: z.string()

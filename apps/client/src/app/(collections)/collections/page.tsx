@@ -7,9 +7,9 @@ import { getCategories } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import CollectionsContent from "./CollectionsContent";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
-import { MultiSelect } from "~/components/ui/filters/MultiSelect";
 import Sort from "~/components/ui/filters/Sort";
 import { Skeleton } from "@siberiana/ui";
+import { Select } from "~/components/ui/filters/Select";
 
 export default async function Collections({
   searchParams
@@ -76,7 +76,8 @@ export default async function Collections({
       />
 
       <div className="flex gap-6 items-center justify-between mt-3">
-        <MultiSelect 
+        <Select 
+          isMulti
           values={categoryFilters} 
           param="category"
           placeholder="Выберите категорию" 

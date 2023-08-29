@@ -37,7 +37,7 @@ export default function NotFound({
 
             {goBack ? (
                 <ButtonComponent 
-                    className="p-6 uppercase font-Inter w-full"
+                    className="p-6 uppercase font-Inter w-full max-w-[240px]"
                     onClick={() => router.back()}
                 >
                     {dict.notFound.goBack}

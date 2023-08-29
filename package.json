@@ -29,7 +29,7 @@
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "dotenv": "latest",
-    "lucide-react": "^0.244.0",
+    "lucide-react": "^0.269.0",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",

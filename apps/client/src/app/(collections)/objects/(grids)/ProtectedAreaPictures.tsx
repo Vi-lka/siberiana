@@ -1,6 +1,4 @@
-import type { SortDataType } from '@siberiana/schemas';
 import { DictionarySchema } from '@siberiana/schemas';
-import { Filter } from 'lucide-react';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import ObjectsGrid from '~/components/objects/ObjectsGrid';
@@ -8,10 +6,8 @@ import { ClientHydration } from '~/components/providers/ClientHydration';
 import ObjectsCounter from '~/components/providers/ObjectsCounter';
 import MasonrySkeleton from '~/components/skeletons/MasonrySkeleton';
 import PaginationControls from '~/components/ui/PaginationControls';
-import Sort from '~/components/ui/filters/Sort';
 import { getProtectedAreaPictures } from '~/lib/queries/api-collections';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import ObjectsFilters from '../ObjectsFilters';
 
 export default async function ProtectedAreaPictures({
   searchParams,
@@ -55,48 +51,27 @@ export default async function ProtectedAreaPictures({
       <ObjectsCounter PAPCount={0} />
     </>
   )
-
-  const sortData = [
-    { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
-    { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-  ] as SortDataType[]
   
   return (
-    <div className="w-full relative">
-      <div className="md:absolute right-0 top-0 flex gap-6 items-center md:justify-end justify-between md:mt-2 mt-4">
-        <Filter className="md:hidden block" />
-        <Sort 
-          dict={dictResult.sort}
-          data={sortData}
-        />
-      </div>
+    <div className="w-full">
+      <ClientHydration fallback={
+        <MasonrySkeleton />
+      }>
+        <ObjectsGrid data={dataResult.value} />
     
-      <div className="flex gap-6 w-full justify-between md:mt-6 mb-12">
-        <div className="w-1/4 bg-red-700 md:block hidden">
-          <ObjectsFilters />
+        <div className="mb-24 mt-6">
+          <PaginationControls
+            dict={dictResult.pagination}
+            length={dataResult.value.totalCount}
+            defaultPageSize={defaultPageSize}
+            classNameMore='xl:left-[38%]'
+            pageParam={"page_pap"}
+            perParam={"per_pap"}
+          />
         </div>
+      </ClientHydration>
     
-        <div className='md:w-3/4 w-full md:mt-2'>
-          <ClientHydration fallback={
-            <MasonrySkeleton />
-          }>
-            <ObjectsGrid data={dataResult.value} />
-        
-            <div className="mb-24 mt-6">
-              <PaginationControls
-                dict={dictResult.pagination}
-                length={dataResult.value.totalCount}
-                defaultPageSize={defaultPageSize}
-                classNameMore='xl:left-[38%]'
-                pageParam={"page_pap"}
-                perParam={"per_pap"}
-              />
-            </div>
-          </ClientHydration>
-        
-          <ObjectsCounter PAPCount={dataResult.value.totalCount} />
-        </div>
-      </div>
+      <ObjectsCounter PAPCount={dataResult.value.totalCount} />
     </div>
   )
 }

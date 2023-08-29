@@ -6,6 +6,7 @@ import React from 'react'
 import { useAtomValue, useAtom } from 'jotai'
 import { PAPCountAtom, artifactsCountAtom, booksCountAtom, tabObjectsAtom } from '~/lib/utils/atoms'
 import { ClientHydration } from '../providers/ClientHydration'
+import { cn } from '@siberiana/ui/src/lib/utils'
 
 export default function ObjectTabs({
     dict,
@@ -36,7 +37,7 @@ export default function ObjectTabs({
     React.useEffect(() => {
         const allCounts = [artifactsCount, booksCount, PAPCount]
         const maxCount = Math.max(...allCounts)
-        
+
         switch (maxCount) {
             case artifactsCount:
                 setTabObject("artifacts")
@@ -69,14 +70,25 @@ export default function ObjectTabs({
                     <div className="flex gap-3 items-center flex-wrap">
                         {notEmptyTabs.length > 0 
                             ? (
-                                <TabsList className="flex-wrap h-fit" >
+                                <TabsList
+                                    className={cn(
+                                        "flex-wrap h-fit",
+                                        isSingleTab() && "bg-transparent" 
+                                    )}
+                                >
                                     {notEmptyTabs.map((tab, index) => (
                                         <TabsTrigger 
                                             key={index} 
                                             value={tab.value} 
-                                            className={isSingleTab() ? "cursor-default" : ""}
+                                            className={isSingleTab() 
+                                                ? "cursor-default" 
+                                                : ""
+                                            }
                                         >
-                                            {tab.title} {tab.count}
+                                            {isSingleTab() 
+                                                ? <p>{dict.objects.count}: {tab.count}</p>
+                                                : <p>{tab.title} <sup>{tab.count}</sup></p>
+                                            }
                                         </TabsTrigger> 
                                     ))}
                                 </TabsList>
