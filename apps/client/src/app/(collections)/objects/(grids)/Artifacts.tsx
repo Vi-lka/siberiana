@@ -23,6 +23,8 @@ export default async function Artifacts({
   const search = searchParams['search'] as string | undefined
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
+  const cultureIds = searchParams['culture'] as string | undefined
+
   const sort = searchParams['sort'] as string | undefined
   const page = searchParams['page_artifacts'] ?? '1'
   const per = searchParams['per_artifacts'] ?? defaultPageSize
@@ -37,7 +39,8 @@ export default async function Artifacts({
       collections, 
       sort, 
       first, 
-      offset
+      offset,
+      cultureIds
     }) 
   ])
   if  (dataResult.status === 'rejected') return (

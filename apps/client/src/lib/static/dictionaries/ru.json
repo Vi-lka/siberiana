@@ -191,7 +191,8 @@
     "filters": {
       "title": "Фильтры",
       "categories": "Категория",
-      "collections": "Коллекции"
+      "collections": "Коллекции",
+      "cultures": "Культуры"
     },
     "artifacts": "Артефакты",
     "books": "Книги",

@@ -63,7 +63,7 @@ export function Select({
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [items, setItems] = React.useState<Array<Item>>([]);
   const [openCombobox, setOpenCombobox] = React.useState(false);
-  const [inputValue, setInputValue] = React.useState<string>("");
+  const [inputSearch, setInputSearch] = React.useState<string>("");
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
   const [isPendingRouter, startTransitionRouter] = React.useTransition();
 
@@ -86,7 +86,7 @@ export function Select({
 
   function handleSearch(input: string) {
     startTransitionSearch(() => {
-      setInputValue(input);
+      setInputSearch(input);
     });
   }
 
@@ -227,6 +227,10 @@ export function Select({
         : null
       }
       <Popover open={openCombobox} onOpenChange={onComboboxOpenChange}>
+        {/* {!icon && (selectedValues.length > 1) 
+          ? <h1 className="mb-1">{placeholder}</h1> 
+          : null
+        } */}
         <PopoverTrigger asChild>
           <Button
             variant={icon ? "ghost" : "outline"}
@@ -261,7 +265,7 @@ export function Select({
                     : "cursor-text"
                 )}
                 placeholder="Поиск..."
-                value={inputValue}
+                value={inputSearch}
                 onValueChange={(input) => handleSearch(input)}
               />
               {isPendingSearch 
@@ -270,7 +274,7 @@ export function Select({
                       <Loader2 className='animate-spin' />
                     </div>
                   ) 
-                : inputValue.length > 0
+                : inputSearch.length > 0
                     ? (
                         <X 
                           className="absolute top-[14px] right-3 h-4 w-4 opacity-50 hover:opacity-100 hover:scale-125 z-50 transition-all cursor-pointer" 
@@ -291,13 +295,13 @@ export function Select({
               </CommandEmpty>
               <CommandGroup >
                 <ScrollArea type="always" classNameViewport="max-h-[200px]">
-                  {items.map((item) => {
+                  {items.map((item, index) => {
                     // includes() doesn't work with object, so we do this:
                     const isActive = selectedValues.some(elem => elem.value === item.value);
                     return (
                       <CommandItem
-                        key={item.value}
-                        value={item.value}
+                        key={index}
+                        value={item.label}
                         className={cn(
                           (isPendingRouter || isPendingSearch)
                             ? "opacity-30 cursor-wait"
@@ -327,9 +331,9 @@ export function Select({
       </Popover>
       {badges ? (
         <ScrollArea type="always" classNameViewport="max-h-[105px] mt-3">
-            {selectedValues.length > 1 ? selectedValues.map((item) => (
+            {selectedValues.length > 1 ? selectedValues.map((item, index) => (
               <Badge
-                key={item.value}
+                key={index}
                 variant="outline"
                 style={badgeStyle(item.color)}
                 className="mr-2 mb-2 pl-2 pr-7 py-1 text-[10px] relative"

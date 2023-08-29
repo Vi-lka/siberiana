@@ -75,3 +75,21 @@ export const ObjectsSchema = z.object({
     protectedAreaPictures: ObjectsArraySchema
 });
 export type ObjectsType = z.infer<typeof ObjectsSchema>;
+
+//.........................FILTERS.........................//
+export const FilterNodeSchema = z.object({
+    id: z.string(),
+    displayName: z.string(),
+    artifacts: z.object({
+        id: z.string(),
+    }).array().optional()
+});
+export type FilterNodeType = z.infer<typeof FilterNodeSchema>;
+
+export const FilterArraySchema = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: FilterNodeSchema
+    }).array()
+});
+export type FilterArrayType = z.infer<typeof FilterArraySchema>;

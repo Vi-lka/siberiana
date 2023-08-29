@@ -8,13 +8,14 @@ import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import SearchField from "~/components/ui/filters/SearchField";
 import ObjectTabs from "~/components/objects/ObjectsTabs";
 import ObjectsContent from "~/components/objects/ObjectsContent";
-import ObjectsTabsSkeleton from "~/components/skeletons/ObjectsTabsSkeleton";
 import Artifacts from "./(grids)/Artifacts";
 import Books from "./(grids)/Books";
 import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 import Filters from "./(filters)/Filters";
 import Sort from "~/components/ui/filters/Sort";
 import { Filter } from "lucide-react";
+import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
+import { Skeleton } from "@siberiana/ui";
 
 export default async function Objects({
   searchParams
@@ -102,35 +103,43 @@ export default async function Objects({
       />
 
 
-      <div className="flex gap-6 items-center lg:justify-end justify-between lg:mt-2 mt-4">
-        <Filter className="lg:hidden block" /> {/* Mobile here */}
-        <Sort 
-          dict={dictResult.sort}
-          data={sortData}
-        />
-      </div>
-
-      <div className="flex lg:flex-row flex-col gap-6">
-        <div className="2xl:w-1/5 xl:w-[24%] w-[30%] lg:flex hidden">
-          <Filters searchParams={searchParams} /> 
+      <div className="relative">
+        <div className="flex gap-6 items-center lg:justify-end justify-between lg:mt-3 mt-4">
+          <Filter className="lg:hidden block" /> {/* Mobile here */}
+          <Sort 
+            dict={dictResult.sort}
+            data={sortData}
+            className="lg:absolute lg:top-1"
+          />
         </div>
 
-        <div className="2xl:w-4/5 xl:w-[76%] lg:w-[70%] w-full lg:mt-0 mt-3">
-          <Suspense fallback={ <ObjectsTabsSkeleton /> }>
-              <ObjectTabs dict={dictResult}>
-                <ObjectsContent value="artifacts">
-                    <Artifacts searchParams={searchParams} defaultPageSize={defaultPageSize} />
-                </ObjectsContent>
+        <div className="flex lg:flex-row flex-col gap-6">
+          <div className="2xl:w-1/5 xl:w-[24%] w-[30%] lg:flex hidden">
+            <Filters searchParams={searchParams} /> 
+          </div>
 
-                <ObjectsContent value="books">
-                    <Books searchParams={searchParams} defaultPageSize={defaultPageSize} />
-                </ObjectsContent>
+          <div className="2xl:w-4/5 xl:w-[76%] lg:w-[70%] w-full lg:mt-0 mt-2">
+            <Suspense fallback={ 
+              <div className='w-full flex flex-col'>
+                <Skeleton className='w-full h-10 mt-2'/>
+                <MasonrySkeleton />
+              </div> 
+            }>
+                <ObjectTabs dict={dictResult}>
+                  <ObjectsContent value="artifacts">
+                      <Artifacts searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                  </ObjectsContent>
 
-                <ObjectsContent value="protected_area_pictures">
-                    <ProtectedAreaPictures searchParams={searchParams} defaultPageSize={defaultPageSize} />
-                </ObjectsContent>
-              </ObjectTabs>
-          </Suspense>
+                  <ObjectsContent value="books">
+                      <Books searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                  </ObjectsContent>
+
+                  <ObjectsContent value="protected_area_pictures">
+                      <ProtectedAreaPictures searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                  </ObjectsContent>
+                </ObjectTabs>
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

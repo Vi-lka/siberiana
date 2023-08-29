@@ -157,6 +157,7 @@ export const FiltersDictSchema = z.object({
   title: z.string(),
   categories: z.string(),
   collections: z.string(),
+  cultures: z.string(),
 });
 export type FiltersDictType = z.infer<typeof FiltersDictSchema>;
 

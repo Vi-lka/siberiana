@@ -35,22 +35,9 @@ export default function ObjectTabs({
     })
 
     React.useEffect(() => {
-        const allCounts = [artifactsCount, booksCount, PAPCount]
-        const maxCount = Math.max(...allCounts)
-
-        switch (maxCount) {
-            case artifactsCount:
-                setTabObject("artifacts")
-                break;
-            case booksCount:
-                setTabObject("books")
-                break;
-            case PAPCount:
-                setTabObject("protected_area_pictures")
-                break;
-            default:
-                break;
-        }
+        if (artifactsCount > 0) setTabObject("artifacts")
+        else if (booksCount > 0) setTabObject("books")
+        else if (PAPCount > 0) setTabObject("protected_area_pictures")
     }, [PAPCount, artifactsCount, booksCount, setTabObject])
     
     function isSingleTab() {
@@ -65,14 +52,14 @@ export default function ObjectTabs({
                 onValueChange={(value: string) => setTabObject(value)}
             >
                 <ClientHydration fallback={
-                  <Skeleton className='w-56 h-10' />
+                  <Skeleton className='w-full h-10 mt-2' />
                 }>
-                    <div className="flex gap-3 items-center flex-wrap">
+                    <div className="flex gap-3 items-center flex-wrap mt-2">
                         {notEmptyTabs.length > 0 
                             ? (
                                 <TabsList
                                     className={cn(
-                                        "flex-wrap h-fit",
+                                        "flex-wrap h-fit lg:mr-40",
                                         isSingleTab() && "bg-transparent" 
                                     )}
                                 >

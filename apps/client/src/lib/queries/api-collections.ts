@@ -161,6 +161,8 @@ export const getCollections = async ({
   return collections;
 };
 
+//.........................//.........................OBJECTS.........................//.........................//
+
 //.........................ARTIFACTS.........................//
 export const getArtifacts = async ({
   first,
@@ -169,6 +171,7 @@ export const getArtifacts = async ({
   sort = "CREATED_AT:DESC",
   categories,
   collections,
+  cultureIds,
 }: {
   first: number | null,
   offset?: number | null,
@@ -176,6 +179,7 @@ export const getArtifacts = async ({
   sort?: string,
   categories?: string,
   collections?: string,
+  cultureIds?: string
 }): Promise<ObjectsArrayType> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -195,7 +199,10 @@ export const getArtifacts = async ({
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
             },` : ''}
-          ]
+          ],
+          hasCulturalAffiliationWith: [
+            ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''}
+          ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [

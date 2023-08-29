@@ -29,7 +29,7 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
 
   return (
-    <NavigationMenu>
+    <NavigationMenu delayDuration={100}>
       <NavigationMenuList>
         {menuDict.map((menuItem, index) => (
           <NavMenuItem key={index} menuItem={menuItem} />

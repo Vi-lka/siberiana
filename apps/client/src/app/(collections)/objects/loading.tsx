@@ -17,14 +17,23 @@ export default function LoadingObjects() {
 
         <Skeleton className="w-full h-10" />
 
-        <div className="flex gap-6 items-center md:justify-end justify-between mt-3">
-          <Skeleton className="h-full w-12 py-5 md:hidden block" />
-          <Skeleton className="h-full md:w-[20%] w-3/5 py-5" />
-        </div>
+        <div className="relative">
+          <div className="flex gap-6 items-center lg:justify-end justify-between lg:mt-3 mt-4">
+            <Skeleton className="w-12 py-5 lg:hidden block" />
+            <Skeleton className="w-3/5 py-5 lg:w-[20%] lg:hidden block" />
+          </div>
 
-        <div className="flex gap-6 w-full justify-end md:mt-0 mt-3 mb-12 relative">
-          <div className="md:w-3/4 w-full">
-            <MasonrySkeleton />
+          <div className="flex lg:flex-row flex-col gap-6">
+            <div className="2xl:w-1/5 xl:w-[24%] w-[30%] lg:flex hidden">
+              <Skeleton className='w-full h-full' />
+            </div>
+
+            <div className="2xl:w-4/5 xl:w-[76%] lg:w-[70%] w-full lg:mt-0 mt-3">
+              <div className='w-full flex flex-col'>
+                <Skeleton className='w-full h-10 mt-2' />
+                <MasonrySkeleton />
+              </div> 
+            </div>
           </div>
         </div>
       </div>

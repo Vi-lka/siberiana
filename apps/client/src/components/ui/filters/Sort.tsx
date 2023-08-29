@@ -6,19 +6,22 @@ import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import ButtonComponent from '../ButtonComponent'
+import { cn } from '@siberiana/ui/src/lib/utils'
 
 export default function Sort({ 
     dict,
     data,
     defaultValue,
     side = "bottom",
-    align = "end"
+    align = "end",
+    className,
 }: {
     dict: SortDictType,
     data: SortDataType[],
     defaultValue?: string,
     side?: "bottom" | "top" | "right" | "left",
-    align?: "end" | "center" | "start"
+    align?: "end" | "center" | "start",
+    className?: string
 }) {
 
   const [isPending, startTransition] = React.useTransition()
@@ -44,7 +47,7 @@ export default function Sort({
     [pathname, router],
   );
 
-  if (isPending) return <Loader2 className='animate-spin w-5 h-10' /> 
+  if (isPending) return <Loader2 className={cn('animate-spin w-5 h-10', className)} /> 
 
   return (
     <Select
@@ -52,11 +55,12 @@ export default function Sort({
       value={sort}
       onValueChange={handleSortParams}
     >
-      <div className="flex">
-        <SelectTrigger className="w-fit border-none font-Inter">
-          <SelectValue placeholder={dict.placeholder} />
-        </SelectTrigger>
-      </div>
+      <SelectTrigger className={cn(
+        "w-fit border-none font-Inter",
+        className
+      )}>
+        <SelectValue placeholder={dict.placeholder} />
+      </SelectTrigger>
       <SelectContent side={side} align={align}>
         {data.map((elem, index) => (
           elem.val 
