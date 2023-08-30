@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { TabsContent, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@siberiana/ui';
 import { Settings } from 'lucide-react';
 import { getServerSession } from 'next-auth';
@@ -14,7 +14,7 @@ import NoSession from '~/components/errors/NoSession';
 export default async function Account() {
   
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const session = await getServerSession(authOptions);
     if (!!!session) return <NoSession />

@@ -192,7 +192,9 @@
       "title": "Фильтры",
       "categories": "Категория",
       "collections": "Коллекции",
-      "cultures": "Культуры"
+      "cultures": "Культуры",
+      "monuments": "Памятники",
+      "techniques": "Техники"
     },
     "artifacts": "Артефакты",
     "books": "Книги",

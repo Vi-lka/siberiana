@@ -5,14 +5,12 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 import type {
-  AuthDictType,
-  GroupLinkType,
-  MenuDictType,
-  SingleLinkType,
+  AuthDict,
+  MenuDict,
 } from "@siberiana/schemas";
 import {
-  GroupLinkSchema,
-  SingleLinkSchema,
+  GroupLink,
+  SingleLink,
 } from "@siberiana/schemas";
 import {
   buttonVariants,
@@ -40,8 +38,8 @@ export default function NavSheet({
   authDict,
   session
 }: {
-  menuDict: MenuDictType;
-  authDict: AuthDictType;
+  menuDict: MenuDict;
+  authDict: AuthDict;
   session: Session | null
 }) {
 
@@ -106,7 +104,7 @@ export default function NavSheet({
 function SheetMenuItem({
   menuItem,
 }: {
-  menuItem: SingleLinkType | GroupLinkType;
+  menuItem: SingleLink | GroupLink;
 }) {
   const pathName = usePathname();
 
@@ -120,8 +118,8 @@ function SheetMenuItem({
 
   const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
-  if (SingleLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as SingleLinkType;
+  if (SingleLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as SingleLink;
 
     return (
       <div className="mb-1 mt-6 flex w-full gap-1 py-2">
@@ -137,8 +135,8 @@ function SheetMenuItem({
         </ul>
       </div>
     );
-  } else if (GroupLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as GroupLinkType;
+  } else if (GroupLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as GroupLink;
 
     return (
       <NavigationMenuItem>

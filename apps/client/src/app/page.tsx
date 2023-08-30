@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { ArrowDown } from "lucide-react";
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import CustomBlock from "~/components/home/CustomBlock";
 import HomeSearch from "~/components/home/HomeSearch";
 import HomeSliderServer from "~/components/home/HomeSliderServer";
@@ -19,7 +19,7 @@ const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
 export default async function Home() {
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   return (
     <main className="font-Inter flex flex-col">

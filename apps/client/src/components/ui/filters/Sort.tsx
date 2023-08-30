@@ -1,6 +1,6 @@
 "use client"
 
-import type { SortDataType, SortDictType } from '@siberiana/schemas'
+import type { SortData, SortDict } from '@siberiana/schemas'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator } from '@siberiana/ui'
 import { Loader2 } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -16,8 +16,8 @@ export default function Sort({
     align = "end",
     className,
 }: {
-    dict: SortDictType,
-    data: SortDataType[],
+    dict: SortDict,
+    data: SortData[],
     defaultValue?: string,
     side?: "bottom" | "top" | "right" | "left",
     align?: "end" | "center" | "start",

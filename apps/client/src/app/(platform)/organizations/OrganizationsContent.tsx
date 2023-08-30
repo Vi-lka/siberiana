@@ -5,7 +5,7 @@ import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getOrganizations } from '~/lib/queries/strapi-server';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 
 export default async function OrganizationsContent({
   searchParams,
@@ -14,7 +14,7 @@ export default async function OrganizationsContent({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const defaultPageSize = 12
 

@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 //.........................SITEINFO.........................//
-export const SiteInfoSchema = z.object({
+export const SiteInfoDict = z.object({
   siteName: z.string(),
   siteDescription: z.string(),
 });
-export type SiteInfoType = z.infer<typeof SiteInfoSchema>;
+export type SiteInfoDict = z.infer<typeof SiteInfoDict>;
 
 //.........................BREADCRUMBS.........................//
-export const BreadcrumbsDictSchema = z.object({
+export const BreadcrumbsDict = z.object({
   home: z.string(),
   categories: z.string(),
   collections: z.string(),
@@ -21,10 +21,10 @@ export const BreadcrumbsDictSchema = z.object({
   settings: z.string(),
   faq: z.string(),
 });
-export type BreadcrumbsDictType = z.infer<typeof BreadcrumbsDictSchema>;
+export type BreadcrumbsDict = z.infer<typeof BreadcrumbsDict>;
 
 //.........................PAGINATION.........................//
-export const PaginationDictSchema = z.object({
+export const PaginationDict = z.object({
   showMore: z.string(),
   page: z.string(),
   of: z.string(),
@@ -33,10 +33,10 @@ export const PaginationDictSchema = z.object({
   previousPage: z.string(),
   nextPage: z.string()
 });
-export type PaginationDictType = z.infer<typeof PaginationDictSchema>;
+export type PaginationDict = z.infer<typeof PaginationDict>;
 
 //.........................SORT.........................//
-export const SortDictSchema = z.object({
+export const SortDict = z.object({
   placeholder: z.string(),
   asc: z.string(),
   desc: z.string(),
@@ -46,17 +46,17 @@ export const SortDictSchema = z.object({
   byAdded: z.string(),
   reset: z.string()
 });
-export type SortDictType = z.infer<typeof SortDictSchema>;
+export type SortDict = z.infer<typeof SortDict>;
 
 //.......SORTDATA.......//
-export const SortDataSchema = z.object({
+export const SortData = z.object({
   val: z.string().optional(),
   text: z.string().optional(),
 });
-export type SortDataType = z.infer<typeof SortDataSchema>;
+export type SortData = z.infer<typeof SortData>;
 
 //.........................ERRORS.........................//
-export const ErrorsDictSchema = z.object({
+export const ErrorsDict = z.object({
   title: z.string(),
   tryAgain: z.string(),
   notFound: z.object({
@@ -67,55 +67,43 @@ export const ErrorsDictSchema = z.object({
   sessionTitle: z.string(),
   sessionDescription: z.string()
 });
-export type ErrorsDictType = z.infer<typeof ErrorsDictSchema>;
+export type ErrorsDict = z.infer<typeof ErrorsDict>;
 
 //.........................MENU.........................//
 //......MENU SINGLE LINK.......//
-export const SingleLinkSchema = z.object({
+export const SingleLink = z.object({
   id: z.string().regex(/^\d+$/).transform(Number).or(z.number()),
-  name: z.string({
-    required_error: "Name is required",
-    invalid_type_error: "Name must be a string",
-  }),
-  url: z.string({
-    required_error: "URL is required",
-    invalid_type_error: "URL must be a string",
-  }),
-  description: z.string().nullable(),
-  image: z.string({
-    required_error: "Image is required",
-    invalid_type_error: "Image must be a string",
-  }),
+  name: z.string(),
+  url: z.string(),
+  description: z.string().nullable().optional(),
+  image: z.string().optional(),
 });
-export type SingleLinkType = z.infer<typeof SingleLinkSchema>;
+export type SingleLink = z.infer<typeof SingleLink>;
 
 //......MENU GROUP LINK.......//
-export const GroupLinkSchema = z.object({
+export const GroupLink = z.object({
   id: z.string().regex(/^\d+$/).transform(Number).or(z.number()),
-  name: z.string({
-    required_error: "Name is required",
-    invalid_type_error: "Name must be a string",
-  }),
-  list: SingleLinkSchema.array(),
+  name: z.string(),
+  list: SingleLink.array(),
 });
-export type GroupLinkType = z.infer<typeof GroupLinkSchema>;
+export type GroupLink = z.infer<typeof GroupLink>;
 
 //......MENU ZONE.......//
-export const MenuDictSchema = z
-  .union([SingleLinkSchema, GroupLinkSchema])
+export const MenuDict = z
+  .union([SingleLink, GroupLink])
   .array();
-export type MenuDictType = z.infer<typeof MenuDictSchema>;
+export type MenuDict = z.infer<typeof MenuDict>;
 
 //.........................SEARCH.........................//
-export const SearchDictSchema = z.object({
+export const SearchDict = z.object({
   error: z.string(),
   button: z.string(),
   placeholder: z.string(),
 });
-export type SearchDictType = z.infer<typeof SearchDictSchema>;
+export type SearchDict = z.infer<typeof SearchDict>;
 
 //.........................AUTH.........................//
-export const AuthDictSchema = z.object({
+export const AuthDict = z.object({
   signIn: z.string(),
   signOut: z.string(),
   signUp: z.string(),
@@ -142,69 +130,71 @@ export const AuthDictSchema = z.object({
     passwordMatch: z.string(),
   }),
 });
-export type AuthDictType = z.infer<typeof AuthDictSchema>;
+export type AuthDict = z.infer<typeof AuthDict>;
 
 //.........................CATEGORIES.........................//
-export const CategoriesDictSchema = z.object({
+export const CategoriesDict = z.object({
   title: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
-export type CategoriesDictType = z.infer<typeof CategoriesDictSchema>;
+export type CategoriesDict = z.infer<typeof CategoriesDict>;
 
 //.........................FILTERS.........................//
-export const FiltersDictSchema = z.object({
+export const FiltersDict = z.object({
   title: z.string(),
   categories: z.string(),
   collections: z.string(),
   cultures: z.string(),
+  monuments: z.string(),
+  techniques: z.string(),
 });
-export type FiltersDictType = z.infer<typeof FiltersDictSchema>;
+export type FiltersDict = z.infer<typeof FiltersDict>;
 
 //.........................OBJECTS.........................//
-export const ObjectsDictSchema = z.object({
+export const ObjectsDict = z.object({
   count: z.string(),
-  filters: FiltersDictSchema,
+  filters: FiltersDict,
   artifacts: z.string(),
   books: z.string(),
   protectedAreaPictures: z.string()
 });
-export type ObjectsDictType = z.infer<typeof ObjectsDictSchema>;
+export type ObjectsDict = z.infer<typeof ObjectsDict>;
 
 //.........................QUIZ.........................//
-export const QuizDictSchema = z.object({
+export const QuizDict = z.object({
   right: z.string(),
   wrong: z.string(),
   tryAgain: z.string(),
 });
-export type QuizDictType = z.infer<typeof QuizDictSchema>;
+export type QuizDict = z.infer<typeof QuizDict>;
 
 //.........................ORGANIZATIONS.........................//
-export const OrganizationsDictSchema = z.object({
+export const OrganizationsDict = z.object({
   title: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
-export type OrganizationsDictType = z.infer<typeof OrganizationsDictSchema>;
+export type OrganizationsDict = z.infer<typeof OrganizationsDict>;
 
 //.........................PROJECTS.........................//
-export const ProjectsDictSchema = z.object({
+export const ProjectsDict = z.object({
   title: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
-export type ProjectsDictType = z.infer<typeof ProjectsDictSchema>;
+export type ProjectsDict = z.infer<typeof ProjectsDict>;
 
 //.........................SERVICES.........................//
-export const ServicesDictSchema = z.object({
+export const ServicesDict = z.object({
   title: z.string(),
   textUrl: z.string(),
   goTo: z.string(),
 });
-export type ServicesDictType = z.infer<typeof ServicesDictSchema>;
+export type ServicesDict = z.infer<typeof ServicesDict>;
 
 //.........................SCHEDULE.........................//
-export const ScheduleDictSchema = z.object({
+export const ScheduleDict = z.object({
   monday: z.string(),
   tuesday: z.string(),
   wednesday: z.string(),
@@ -213,16 +203,16 @@ export const ScheduleDictSchema = z.object({
   saturday: z.string(),
   sunday: z.string(),
 });
-export type ScheduleDictType = z.infer<typeof ScheduleDictSchema>;
+export type ScheduleDict = z.infer<typeof ScheduleDict>;
 
 //.........................TOOLTIPS.........................//
-export const TooltipsDictSchema = z.object({
+export const TooltipsDict = z.object({
   consortium: z.string(),
 });
-export type TooltipsDictType = z.infer<typeof TooltipsDictSchema>;
+export type TooltipsDict = z.infer<typeof TooltipsDict>;
 
 //.........................ACCOUNT.........................//
-export const AccountDictSchema = z.object({
+export const AccountDict = z.object({
   barTitle: z.string(),
   profile: z.string(),
   settings: z.string(),
@@ -236,18 +226,18 @@ export const AccountDictSchema = z.object({
     moder: z.string()
   })
 });
-export type AccountDictType = z.infer<typeof AccountDictSchema>;
+export type AccountDict = z.infer<typeof AccountDict>;
 
 //.........................FAQ.........................//
-export const FAQDictSchema = z.object({
+export const FAQDict = z.object({
   title: z.string(),
   subTitle: z.string(),
   techSupport: z.string()
 });
-export type FAQDictType = z.infer<typeof FAQDictSchema>;
+export type FAQDict = z.infer<typeof FAQDict>;
 
 //.........................FOOTER.........................//
-export const FooterDictSchema = z.object({
+export const FooterDict = z.object({
   links: z.object({
     name: z.string(),
     url: z.string()
@@ -256,29 +246,29 @@ export const FooterDictSchema = z.object({
   privacyPol: z.string(),
   termsOfUse: z.string(),
 });
-export type FooterDictType = z.infer<typeof FooterDictSchema>;
+export type FooterDict = z.infer<typeof FooterDict>;
 
 //.........................DICTIONARY.........................//
-export const DictionarySchema = z.object({
-  siteInfo: SiteInfoSchema,
-  breadcrumbs: BreadcrumbsDictSchema,
-  pagination: PaginationDictSchema,
-  sort: SortDictSchema,
-  errors: ErrorsDictSchema,
-  menu: MenuDictSchema,
-  homeTitle: z.string().max(100),
-  search: SearchDictSchema,
-  auth: AuthDictSchema,
-  categories: CategoriesDictSchema,
-  objects: ObjectsDictSchema,
-  quiz: QuizDictSchema,
-  organizations: OrganizationsDictSchema,
-  projects: ProjectsDictSchema,
-  services: ServicesDictSchema,
-  schedule: ScheduleDictSchema,
-  tooltips: TooltipsDictSchema,
-  account: AccountDictSchema,
-  faq: FAQDictSchema,
-  footer: FooterDictSchema,
+export const Dictionary = z.object({
+  siteInfo: SiteInfoDict,
+  breadcrumbs: BreadcrumbsDict,
+  pagination: PaginationDict,
+  sort: SortDict,
+  errors: ErrorsDict,
+  menu: MenuDict,
+  homeTitle: z.string(),
+  search: SearchDict,
+  auth: AuthDict,
+  categories: CategoriesDict,
+  objects: ObjectsDict,
+  quiz: QuizDict,
+  organizations: OrganizationsDict,
+  projects: ProjectsDict,
+  services: ServicesDict,
+  schedule: ScheduleDict,
+  tooltips: TooltipsDict,
+  account: AccountDict,
+  faq: FAQDict,
+  footer: FooterDict,
 });
-export type DictionaryType = z.infer<typeof DictionarySchema>;
+export type Dictionary = z.infer<typeof Dictionary>;

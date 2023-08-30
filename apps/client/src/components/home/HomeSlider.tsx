@@ -7,12 +7,12 @@ import "keen-slider/keen-slider.min.css";
 import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 
-import type { SliderType } from "@siberiana/schemas";
+import type { Slider } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
 
 import getImageURL from "~/lib/utils/getURL";
 
-export default function HomeSlider({ data }: { data: SliderType }) {
+export default function HomeSlider({ data }: { data: Slider }) {
   const [created, setCreated] = React.useState<boolean>();
 
   const [sliderRef] = useKeenSlider({

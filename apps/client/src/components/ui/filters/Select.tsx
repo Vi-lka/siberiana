@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Filter, ListChecks, ListTodo, Loader2, SearchX, X, XCircle } from "lucide-react";
+import { Check, ChevronsUpDown, Filter, Loader2, SearchX, X, XCircle } from "lucide-react";
 import { 
     Badge, 
     Button, 
@@ -24,10 +24,11 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import resetPaginationts from "~/lib/utils/resetPagination";
 
-type Item = {
+export type Item = {
   value: string,
   label: string,
   color?: string,
+  count?: number,
 };
 
 const badgeStyle = (color: string | undefined) => ({
@@ -116,8 +117,6 @@ export function Select({
       handleSelectedParams(newValues)
       setOpenCombobox(false)
     }
-    
-    // inputRef.current?.focus();
   };
 
   const onComboboxOpenChange = (value: boolean) => {
@@ -163,14 +162,10 @@ export function Select({
     return(
       <>
         <div className="flex items-center gap-2">
-            {isMulti 
-                ? <ListChecks  className="w-6 h-6" />
-                : <ListTodo  className="w-6 h-6" />
-            }
             {isPendingRouter 
               ? <Loader2 className='animate-spin' />
               : (
-                <span className="truncate text-muted-foreground">
+                <span className="truncate text-muted-foreground font-Inter font-normal">
                   {selectedValues.length === 0 && placeholder}
                   {selectedValues.length === 1 && selectedValues[0].label}
                   {selectedValues.length >= 2 &&
@@ -179,10 +174,7 @@ export function Select({
               ) 
             }
         </div>
-        {(selectedValues.length > 0) 
-          ? <X className="ml-2 h-4 w-4 shrink-0 opacity-50 hover:opacity-100 hover:scale-125 z-50 transition-all" onClick={clearItems}/>
-          : <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        }
+        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
       </>
     )
   }
@@ -216,37 +208,36 @@ export function Select({
 
   return (
     <div className={cn("max-w-[280px] relative", className)}>
-      {icon && (selectedValues.length > 0)
-        ? 
-          <span 
-            className="absolute top-2 ml-[50px] md:text-xs text-[11px] text-muted-foreground flex flex-col items-center cursor-pointer underline hover:text-foreground hover:scale-125 transition-all" 
-            onClick={clearItems}
-          >
-            <X className="h-5 w-5"/>
-          </span>
-        : null
-      }
       <Popover open={openCombobox} onOpenChange={onComboboxOpenChange}>
-        {/* {!icon && (selectedValues.length > 1) 
-          ? <h1 className="mb-1">{placeholder}</h1> 
-          : null
-        } */}
-        <PopoverTrigger asChild>
-          <Button
-            variant={icon ? "ghost" : "outline"}
-            role="combobox"
-            aria-expanded={openCombobox}
-            className={cn(
-              "w-full justify-between text-foreground relative",
-              icon && "p-0",
-            )}
-          >
-            {icon 
-              ? <TriggerIcon />
-              : <TriggerButton />
-            }
-          </Button>
-        </PopoverTrigger>
+        <div className="flex gap-1 items-center">
+          <PopoverTrigger asChild>
+            <Button
+              variant={icon ? "ghost" : "outline"}
+              role="combobox"
+              aria-expanded={openCombobox}
+              className={cn(
+                "w-full justify-between text-foreground relative",
+                icon && "p-0",
+              )}
+            >
+              {icon 
+                ? <TriggerIcon />
+                : <TriggerButton />
+              }
+            </Button>
+          </PopoverTrigger>
+
+          {(selectedValues.length > 0)
+            ? 
+              <span 
+                className="md:text-xs text-[11px] text-muted-foreground flex flex-col items-center cursor-pointer underline hover:text-foreground hover:scale-125 transition-all" 
+                onClick={clearItems}
+              >
+                <X className="h-5 w-5"/>
+              </span>
+            : null
+          }
+        </div>
         <PopoverContent 
           className={cn(
             "p-0 font-Inter",
@@ -294,7 +285,7 @@ export function Select({
                 </div>
               </CommandEmpty>
               <CommandGroup >
-                <ScrollArea type="always" classNameViewport="max-h-[200px]">
+                <ScrollArea type="always" classNameViewport="max-h-[220px]">
                   {items.map((item, index) => {
                     // includes() doesn't work with object, so we do this:
                     const isActive = selectedValues.some(elem => elem.value === item.value);
@@ -315,7 +306,7 @@ export function Select({
                             isActive ? "opacity-100" : "opacity-0"
                           )}
                         />
-                        <div className="flex-1">{item.label}</div>
+                        <div className="flex-1">{item.label} {item.count ? `(${item.count})` : ''}</div>
                         <div
                           className="h-4 w-4 rounded-full"
                           style={{ backgroundColor: item.color }}

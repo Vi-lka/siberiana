@@ -1,6 +1,6 @@
 "use client"
 
-import type { AccountDictType } from '@siberiana/schemas'
+import type { AccountDict } from '@siberiana/schemas'
 import { Tabs, TabsList, TabsTrigger } from '@siberiana/ui'
 import React from 'react'
 import { tabAccountAtom } from '~/lib/utils/atoms'
@@ -10,7 +10,7 @@ export default function AccountTabs({
     dict,
     children
 }: {
-    dict: AccountDictType,
+    dict: AccountDict,
     children: React.ReactNode
 }) {
 

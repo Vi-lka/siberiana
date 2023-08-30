@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
@@ -19,7 +19,7 @@ export default async function Header() {
   
   const dict = await getDictionary();
 
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const session = await getServerSession(authOptions);
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getAbout } from "~/lib/queries/strapi-server";
@@ -12,7 +12,7 @@ import Member from "./Member";
 export default async function About() {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const [ dataResult ] = await Promise.allSettled([ getAbout() ])
   if  (dataResult.status === 'rejected') return (

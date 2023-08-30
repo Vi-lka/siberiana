@@ -1,6 +1,6 @@
 "use client"
 
-import type { ErrorsDictType } from '@siberiana/schemas'
+import type { ErrorsDict } from '@siberiana/schemas'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import ButtonComponent from '../ui/ButtonComponent'
@@ -11,7 +11,7 @@ export default function NotFound({
     children,
     goBack
 }: { 
-    dict: ErrorsDictType, 
+    dict: ErrorsDict, 
     children?: React.ReactNode,
     goBack: boolean
 }) {

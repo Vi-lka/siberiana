@@ -1,29 +1,19 @@
 import "server-only";
 
 import {
-  AboutSchema,
-  CustomBlockSchema,
-  FAQSchema,
-  OrganizationBySlugSchema,
-  OrganizationsSchema,
-  ProjectsSchema,
-  ServicesSchema,
-  SliderSchema,
-} from "@siberiana/schemas";
-import type {
-  AboutType,
-  CustomBlockType,
-  FAQType,
-  OrganizationBySlugType,
-  OrganizationsType,
-  ProjectsType,
-  ServicesType,
-  SliderType,
+  About,
+  CustomBlock,
+  FAQ,
+  OrganizationBySlug,
+  Organizations,
+  Projects,
+  Services,
+  Slider,
 } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 
 //.........................SLIDER.........................//
-export const getSlider = async (): Promise<SliderType> => {
+export const getSlider = async (): Promise<Slider> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Slider {
@@ -70,7 +60,7 @@ export const getSlider = async (): Promise<SliderType> => {
         data: {
           attributes: {
             Images: {
-              data: SliderType
+              data: Slider
             }
           }
         }
@@ -78,7 +68,7 @@ export const getSlider = async (): Promise<SliderType> => {
     }
   };
 
-  const data = SliderSchema.parse(
+  const data = Slider.parse(
     json.data?.slider.data.attributes.Images.data,
   );
 
@@ -86,7 +76,7 @@ export const getSlider = async (): Promise<SliderType> => {
 };
 
 //.........................CUSTOM BLOCK.........................//
-export const getCustomBlock = async (): Promise<CustomBlockType> => {
+export const getCustomBlock = async (): Promise<CustomBlock> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query CustomBlock {
@@ -140,7 +130,7 @@ export const getCustomBlock = async (): Promise<CustomBlockType> => {
       custom: {
         data: {
           attributes: {
-            content: CustomBlockType
+            content: CustomBlock
           } 
         }
       }
@@ -151,7 +141,7 @@ export const getCustomBlock = async (): Promise<CustomBlockType> => {
     notFound()
   }
 
-  const data = CustomBlockSchema.parse(
+  const data = CustomBlock.parse(
     json.data?.custom.data?.attributes.content,
   );
 
@@ -171,7 +161,7 @@ export const getOrganizations = async ({
   sort?: string,
   search?: string,
   consortium?: boolean,
-}): Promise<OrganizationsType> => {
+}): Promise<Organizations> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
@@ -235,13 +225,13 @@ export const getOrganizations = async ({
     throw new Error("Failed to fetch data 'Organizations'");
   }
 
-  const json = await res.json() as {data: { organizations: OrganizationsType}};
+  const json = await res.json() as {data: { organizations: Organizations}};
 
   if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
     notFound()
   }
 
-  const organizations = OrganizationsSchema.parse(json.data.organizations);
+  const organizations = Organizations.parse(json.data.organizations);
 
   return organizations;
 };
@@ -249,7 +239,7 @@ export const getOrganizations = async ({
 //.........................ORGANIZATION BY SLUG.........................//
 export const getOrganizationBySlug = async (
   slug: string,
-): Promise<OrganizationBySlugType> => {
+): Promise<OrganizationBySlug> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query OrganizationBySlug {
@@ -369,7 +359,7 @@ export const getOrganizationBySlug = async (
     data: { 
       organizations: { 
         data: { 
-          attributes: OrganizationBySlugType 
+          attributes: OrganizationBySlug 
         }[] 
       }
     }
@@ -379,7 +369,7 @@ export const getOrganizationBySlug = async (
     notFound()
   }
 
-  const data = OrganizationBySlugSchema.parse(json.data?.organizations.data[0].attributes);
+  const data = OrganizationBySlug.parse(json.data?.organizations.data[0].attributes);
 
   return data;
 };
@@ -395,7 +385,7 @@ export const getProjects = async ({
   per: number,
   sort?: string,
   search?: string,
-}): Promise<ProjectsType> => {
+}): Promise<Projects> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Projects {
@@ -454,13 +444,13 @@ export const getProjects = async ({
     throw new Error("Failed to fetch data 'Projects'");
   }
 
-  const json = await res.json() as { data: { projects: ProjectsType } };
+  const json = await res.json() as { data: { projects: Projects } };
   
   if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
     notFound()
   }
 
-  const projects = ProjectsSchema.parse(json.data?.projects);
+  const projects = Projects.parse(json.data?.projects);
 
   return projects;
 };
@@ -476,7 +466,7 @@ export const getServices = async ({
   per: number,
   sort?: string,
   search?: string
-}): Promise<ServicesType> => {
+}): Promise<Services> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Services {
@@ -535,19 +525,19 @@ export const getServices = async ({
     throw new Error("Failed to fetch data 'Services'");
   }
 
-  const json = await res.json() as { data: { services: ServicesType } };
+  const json = await res.json() as { data: { services: Services } };
   
   if ((json.data.services.meta.pagination.total === 0) || (json.data.services.data.length === 0)) {
     notFound()
   }
 
-  const services = ServicesSchema.parse(json.data?.services);
+  const services = Services.parse(json.data?.services);
 
   return services;
 };
 
 //.........................ABOUT.........................//
-export const getAbout = async (): Promise<AboutType> => {
+export const getAbout = async (): Promise<About> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query About {
@@ -593,7 +583,7 @@ export const getAbout = async (): Promise<AboutType> => {
     data: {
       about: {
         data: {
-          attributes: AboutType
+          attributes: About
         }
       }
     }
@@ -603,13 +593,13 @@ export const getAbout = async (): Promise<AboutType> => {
     notFound()
   }
 
-  const about = AboutSchema.parse(json.data?.about.data.attributes);
+  const about = About.parse(json.data?.about.data.attributes);
 
   return about;
 };
 
 //.........................FAQ.........................//
-export const getFAQ = async (): Promise<FAQType> => {
+export const getFAQ = async (): Promise<FAQ> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query FAQ {
@@ -649,7 +639,7 @@ export const getFAQ = async (): Promise<FAQType> => {
     data: {
       faq: {
         data: {
-          attributes: FAQType
+          attributes: FAQ
         }
       }
     }
@@ -659,7 +649,7 @@ export const getFAQ = async (): Promise<FAQType> => {
     notFound()
   }
 
-  const faq = FAQSchema.parse(json.data?.faq.data.attributes);
+  const faq = FAQ.parse(json.data?.faq.data.attributes);
 
   return faq;
 };

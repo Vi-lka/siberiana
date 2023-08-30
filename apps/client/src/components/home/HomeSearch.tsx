@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type { SearchDictType } from "@siberiana/schemas";
+import type { SearchDict } from "@siberiana/schemas";
 import {
   Button,
   Form,
@@ -19,7 +19,7 @@ import {
 import { HomeInputSearch } from "./HomeInputSearch";
 import { Loader2 } from "lucide-react";
 
-export default function HomeSearch({ dict }: { dict: SearchDictType }) {
+export default function HomeSearch({ dict }: { dict: SearchDict }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
 
   const [focus, setFocus] = React.useState<boolean>(false)

@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -11,7 +11,7 @@ import ErrorHandler from '../errors/ErrorHandler';
 export default async function ProjectsBlock() {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const [ dataResult ] = await Promise.allSettled([ getProjects({page: 1, per: 2}) ])
   if  (dataResult.status === 'rejected') return (
@@ -44,7 +44,7 @@ export default async function ProjectsBlock() {
             <ImgTextBelow
                 key={index}
                 className={"aspect-[2.7/1]"}
-                classNameImage={'w-full object-contain'}
+                classNameImage={'w-full object-cover'}
                 title={proj.attributes.title}
                 src={proj.attributes.image.data?.attributes.url}
                 href={getLinkDir(proj.attributes.url)}

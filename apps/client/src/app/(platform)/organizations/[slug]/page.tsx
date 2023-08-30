@@ -1,4 +1,4 @@
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@siberiana/ui";
 import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default async function Organization({
     params: { slug: string };
 }) {
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const [ dataResult ] = await Promise.allSettled([ getOrganizationBySlug(slug) ])
     if (dataResult.status === 'rejected') return (

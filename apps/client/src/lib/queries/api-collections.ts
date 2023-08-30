@@ -1,7 +1,6 @@
 import "server-only";
 
-import type { CategoriesType, CollectionsType, ObjectsArrayType } from "@siberiana/schemas";
-import { CategoriesSchema, CollectionsSchema, ObjectsArraySchema } from "@siberiana/schemas";
+import { Categories, Collections, ObjectsArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 
@@ -16,7 +15,7 @@ export const getCategories = async ({
   offset?: number | null,
   search?: string,
   sort?: string
-}): Promise<CategoriesType> => {
+}): Promise<Categories> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Categories {
@@ -68,13 +67,13 @@ export const getCategories = async ({
     throw new Error("Failed to fetch data 'Categories'");
   }
 
-  const json = await res.json() as { data: { categories: CategoriesType } };
+  const json = await res.json() as { data: { categories: Categories } };
 
   if ((json.data.categories.totalCount === 0) || (json.data.categories.edges.length === 0)) {
     notFound()
   }
 
-  const categories = CategoriesSchema.parse(json.data?.categories);
+  const categories = Categories.parse(json.data?.categories);
 
   return categories;
 };
@@ -92,7 +91,7 @@ export const getCollections = async ({
   search?: string,
   sort?: string,
   categories?: string
-}): Promise<CollectionsType> => {
+}): Promise<Collections> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Collections {
@@ -150,13 +149,13 @@ export const getCollections = async ({
     throw new Error("Failed to fetch data 'Collections'");
   }
 
-  const json = await res.json() as { data: { collections: CollectionsType } };
+  const json = await res.json() as { data: { collections: Collections } };
 
   if ((json.data.collections.totalCount === 0) || (json.data.collections.edges.length === 0)) {
     notFound()
   }
 
-  const collections = CollectionsSchema.parse(json.data?.collections);
+  const collections = Collections.parse(json.data?.collections);
 
   return collections;
 };
@@ -172,6 +171,8 @@ export const getArtifacts = async ({
   categories,
   collections,
   cultureIds,
+  monumentIds,
+  techniqueIds,
 }: {
   first: number | null,
   offset?: number | null,
@@ -179,8 +180,10 @@ export const getArtifacts = async ({
   sort?: string,
   categories?: string,
   collections?: string,
-  cultureIds?: string
-}): Promise<ObjectsArrayType> => {
+  cultureIds?: string,
+  monumentIds?: string,
+  techniqueIds?: string,
+}): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query GetArtifacts {
@@ -202,6 +205,12 @@ export const getArtifacts = async ({
           ],
           hasCulturalAffiliationWith: [
             ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''}
+          ],
+          hasMonumentWith: [
+            ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''}
+          ],
+          hasTechniquesWith: [
+            ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''}
           ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
@@ -245,13 +254,13 @@ export const getArtifacts = async ({
     throw new Error("Failed to fetch data 'Artifacts'");
   }
 
-  const json = await res.json() as { data: { artifacts: ObjectsArrayType } };
+  const json = await res.json() as { data: { artifacts: ObjectsArray } };
 
   if (json.data.artifacts.totalCount === 0) {
     notFound()
   }
 
-  const artifacts = ObjectsArraySchema.parse(json.data.artifacts);
+  const artifacts = ObjectsArray.parse(json.data.artifacts);
 
   return artifacts;
 };
@@ -271,7 +280,7 @@ export const getBooks = async ({
   sort?: string,
   categories?: string,
   collections?: string,
-}): Promise<ObjectsArrayType> => {
+}): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query GetBooks {
@@ -333,13 +342,13 @@ export const getBooks = async ({
     throw new Error("Failed to fetch data 'Books'");
   }
 
-  const json = await res.json() as { data: { books: ObjectsArrayType } };
+  const json = await res.json() as { data: { books: ObjectsArray } };
 
   if (json.data.books.totalCount === 0) {
     notFound()
   }
 
-  const books = ObjectsArraySchema.parse(json.data.books);
+  const books = ObjectsArray.parse(json.data.books);
 
   return books;
 };
@@ -359,7 +368,7 @@ export const getProtectedAreaPictures = async ({
   sort?: string,
   categories?: string,
   collections?: string,
-}): Promise<ObjectsArrayType> => {
+}): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query GetProtectedAreaPictures {
@@ -421,7 +430,7 @@ export const getProtectedAreaPictures = async ({
     throw new Error("Failed to fetch data 'ProtectedAreaPictures'");
   }
 
-  const json = await res.json() as { data: { protectedAreaPictures: ObjectsArrayType } };
+  const json = await res.json() as { data: { protectedAreaPictures: ObjectsArray } };
 
   // await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -429,7 +438,7 @@ export const getProtectedAreaPictures = async ({
     notFound()
   }
 
-  const protectedAreaPictures = ObjectsArraySchema.parse(json.data.protectedAreaPictures);
+  const protectedAreaPictures = ObjectsArray.parse(json.data.protectedAreaPictures);
 
   return protectedAreaPictures;
 };

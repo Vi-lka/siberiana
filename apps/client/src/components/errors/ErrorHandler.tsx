@@ -2,7 +2,7 @@ import React from 'react'
 import { ZodError } from 'zod';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import ErrorToast from './ErrorToast';
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import NotFound from './NotFound';
 
 type Props = {
@@ -23,7 +23,7 @@ type FalseNotFoundProps = {
 export default async function ErrorHandler(props: Props) {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     if ((props.error as Error).message === 'NEXT_NOT_FOUND') {
 

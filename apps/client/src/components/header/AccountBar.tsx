@@ -1,6 +1,6 @@
 "use client"
 
-import type { AccountDictType } from '@siberiana/schemas';
+import type { AccountDict } from '@siberiana/schemas';
 import { Avatar, AvatarFallback, Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Skeleton } from '@siberiana/ui'
 import type { Session } from 'next-auth';
 import React from 'react'
@@ -14,7 +14,7 @@ export default function AccountBar({
     dict,
     session
 }: { 
-    dict: AccountDictType,
+    dict: AccountDict,
     session: Session | null
 }) {
 
@@ -22,6 +22,7 @@ export default function AccountBar({
     const acronymName = matchesName?.join('')
 
     const setTab = useSetAtom(tabAccountAtom)
+    
 
   return (
     <div className='font-Inter text-sm'>

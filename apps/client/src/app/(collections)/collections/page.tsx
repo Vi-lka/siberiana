@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import type { SortDataType } from "@siberiana/schemas";
-import { DictionarySchema } from "@siberiana/schemas";
+import type { SortData } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import SearchField from "~/components/ui/filters/SearchField";
 import { getCategories } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
@@ -18,7 +18,7 @@ export default async function Collections({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const category = searchParams['category'] as string | undefined
 
@@ -46,10 +46,7 @@ export default async function Collections({
   const sortData = [
     { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
     { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-    {},
-    { val: 'CREATED_AT:ASC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.asc}` },
-    { val: 'CREATED_AT:DESC', text: `${dictResult.sort.byAdded}: ${dictResult.sort.desc}` },
-  ] as SortDataType[]
+  ] as SortData[]
 
   return (
     <div>

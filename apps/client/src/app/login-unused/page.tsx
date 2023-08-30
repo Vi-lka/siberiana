@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@siberiana/ui";
 
 import LogInForm from "~/components/auth/LogInForm";
@@ -10,7 +10,7 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 export default async function LoginUnused() {
   const dict = await getDictionary();
 
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   return (
     <div className="font-Inter flex justify-center">

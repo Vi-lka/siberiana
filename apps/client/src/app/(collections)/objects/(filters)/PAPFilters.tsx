@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import { getDictionary } from '~/lib/utils/getDictionary';
 
@@ -9,7 +9,7 @@ export default async function PAPFilters({
 }) {
   
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
   
     return (
         <div className=''>

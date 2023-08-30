@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import type { SortDataType } from "@siberiana/schemas";
-import { DictionarySchema } from "@siberiana/schemas";
+import type { SortData } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import Sort from "~/components/ui/filters/Sort";
@@ -15,12 +15,12 @@ export default async function Projects({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const sortData = [
     { val: 'title:asc', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
     { val: 'title:desc', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-  ] as SortDataType[]
+  ] as SortData[]
 
   return (
     <div>

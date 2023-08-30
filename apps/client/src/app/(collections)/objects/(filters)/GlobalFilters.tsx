@@ -1,4 +1,5 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import type { Categories, Collections } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
@@ -13,39 +14,39 @@ export default async function GlobalFilters({
 }) {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const categories = searchParams['category'] as string | undefined
 
-    const [ categoriesResult, collectionsResult ] = await Promise.allSettled([ 
+    const results = await Promise.allSettled([ 
         getCategories({ first: null }),
         getCollections({ first: null, categories })
     ])
-    if (categoriesResult.status === 'rejected') return (
-        <ErrorHandler 
-            error={categoriesResult.reason as unknown} 
-            place="Categories Filter"
-            notFound 
-            goBack
+    
+    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+    
+    if (rejected) {
+      return (
+        <ErrorHandler
+          error={rejected.reason as unknown} 
+          place="Titles in Objects"
+          notFound 
+          goBack
         />
-    )
-    if (collectionsResult.status === 'rejected') return (
-        <ErrorHandler 
-            error={collectionsResult.reason as unknown} 
-            place="Collections Filter" 
-            notFound 
-            goBack
-        />
-    )
+      )
+    }
+    
+    const categoriesFulfilled = results[0] as PromiseFulfilledResult<Categories>
+    const collectionsFulfilled = results[1] as PromiseFulfilledResult<Collections>
 
     // Filters data
-    const categoryFilters = categoriesResult.value.edges.map(el => {
+    const categoryFilters = categoriesFulfilled.value.edges.map(el => {
         const value = el.node.slug;
         const label = el.node.displayName;
         return { value, label };
     })
 
-    const collectionFilters = collectionsResult.value.edges.map((el, index) => {
+    const collectionFilters = collectionsFulfilled.value.edges.map((el, index) => {
         const value = el.node.slug;
         const label = el.node.displayName;
         const color = getColor(index);
@@ -56,9 +57,10 @@ export default async function GlobalFilters({
     <>
         {/* CATEGORIES */}
         <div className="flex flex-col gap-1">
-            <h1 className='font-semibold'>{dictResult.objects.filters.categories}</h1>
+            <h1 className='font-medium'>{dictResult.objects.filters.categories}</h1>
             <Select 
                 isMulti={false}
+                side='right'
                 values={categoryFilters} 
                 param="category"
                 placeholder="Выберите категорию" 
@@ -66,13 +68,13 @@ export default async function GlobalFilters({
                 deleteParams='collection'
             />
         </div>
-
         {/* COLLECTIONS */}
         <div className="flex flex-col gap-1 mt-3">
-            <h1 className='font-semibold'>{dictResult.objects.filters.collections}</h1>
+            <h1 className='font-medium'>{dictResult.objects.filters.collections}</h1>
             <Select 
                 isMulti
                 badges
+                side='right'
                 values={collectionFilters} 
                 param="collection"
                 placeholder="Выберите коллекции" 

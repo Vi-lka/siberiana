@@ -4,7 +4,7 @@ import MasonrySkeleton from '~/components/skeletons/MasonrySkeleton'
 import ObjectsGrid from '~/components/objects/ObjectsGrid'
 import PaginationControls from '~/components/ui/PaginationControls'
 import { getDictionary } from '~/lib/utils/getDictionary'
-import { DictionarySchema } from '@siberiana/schemas'
+import { Dictionary } from '@siberiana/schemas'
 import { getBooks } from '~/lib/queries/api-collections'
 import ErrorHandler from '~/components/errors/ErrorHandler'
 import ObjectsCounter from '~/components/providers/ObjectsCounter'
@@ -18,7 +18,7 @@ export default async function Books({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const search = searchParams['search'] as string | undefined
   const categories = searchParams['category'] as string | undefined

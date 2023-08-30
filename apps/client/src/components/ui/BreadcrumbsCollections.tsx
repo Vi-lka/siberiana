@@ -4,10 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
-import type { BreadcrumbsDictType } from "@siberiana/schemas";
+import type { BreadcrumbsDict } from "@siberiana/schemas";
 
 type Props = {
-  dict: BreadcrumbsDictType;
+  dict: BreadcrumbsDict;
   title?: string
 }& (WithCategoryType | NoCategoryType) & (WithCollectionType | NoCollectionType)
 

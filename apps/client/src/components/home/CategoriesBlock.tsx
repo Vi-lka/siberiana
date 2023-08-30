@@ -1,7 +1,7 @@
 import React from 'react'
 import { getCategories } from '~/lib/queries/api-collections';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import ImgTextOn from '../thumbnails/ImgTextOn';
@@ -10,7 +10,7 @@ import ErrorHandler from '../errors/ErrorHandler';
 export default async function CategoriesBlock() {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
   
   const [ dataResult ] = await Promise.allSettled([ getCategories({ first: 4 }) ])
   if  (dataResult.status === 'rejected') return (

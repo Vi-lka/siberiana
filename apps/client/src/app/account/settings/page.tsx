@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import type { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import React from 'react'
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Settings() {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const session = await getServerSession(authOptions);
     if (!!!session) return <NoSession />

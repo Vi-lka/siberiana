@@ -1,15 +1,17 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import Link from 'next/link';
 import Image from "next/image";
 import React from 'react'
 import { getDictionary } from '~/lib/utils/getDictionary';
 import SFUSvg from './SFUSvg';
 
+export const revalidate = 86400
+
 export default async function Footer() {
 
     const dict = await getDictionary();
 
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const year = new Date().getFullYear();
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { getOrganizations } from "~/lib/queries/strapi-server";
 import ImgTextOn from "../thumbnails/ImgTextOn";
 import { PiHandshakeLight } from "react-icons/pi";
@@ -11,7 +11,7 @@ import ErrorHandler from "../errors/ErrorHandler";
 export default async function OrganizationsBlock() {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const [ dataResult ] = await Promise.allSettled([ getOrganizations({ page: 1, per: 5 }) ])
   if  (dataResult.status === 'rejected') return (

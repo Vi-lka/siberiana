@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@siberiana/ui';
 import Link from 'next/link';
 import React from 'react'
@@ -13,7 +13,7 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 export default async function FAQ() {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
     const [ dataResult ] = await Promise.allSettled([ getFAQ() ])
     if  (dataResult.status === 'rejected') return (

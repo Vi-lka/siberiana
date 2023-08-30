@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 //.........................IMAGE.........................//
-export const ImageSchema = z.object({
+export const Image = z.object({
   data: z
     .object({
       attributes: z.object({
@@ -12,10 +12,10 @@ export const ImageSchema = z.object({
     .nullable()
     .optional(),
 });
-export type ImageType = z.infer<typeof ImageSchema>;
+export type Image = z.infer<typeof Image>;
 
 //.........................SLIDER.........................//
-export const SliderSchema = z.array(
+export const Slider = z.array(
   z.object({
     attributes: z.object({
       url: z.string(),
@@ -23,10 +23,10 @@ export const SliderSchema = z.array(
     }),
   }),
 );
-export type SliderType = z.infer<typeof SliderSchema>;
+export type Slider = z.infer<typeof Slider>;
 
 //.........................CUSTOM BLOCK.........................//
-export const CustomBlockSchema = z.object(
+export const CustomBlock = z.object(
   {
     title: z.string(),
     url: z.string().url(),
@@ -35,7 +35,7 @@ export const CustomBlockSchema = z.object(
       .object({
         title: z.string(),
         url: z.string().url(),
-        img: ImageSchema,
+        img: Image,
       })
       .array(),
   },
@@ -43,13 +43,13 @@ export const CustomBlockSchema = z.object(
     required_error: "Custom Block missing",
   },
 )
-export type CustomBlockType = z.infer<typeof CustomBlockSchema>;
+export type CustomBlock = z.infer<typeof CustomBlock>;
 
 //.........................QUESTIONS.........................//
-export const QuestionSchema = z.object({
+export const Question = z.object({
   attributes: z.object({
     title: z.string(),
-    image: ImageSchema,
+    image: Image,
     tip: z.string(),
     variants: z.array(
       z.object({
@@ -62,20 +62,20 @@ export const QuestionSchema = z.object({
     urlName: z.string(),
   }),
 });
-export type QuestionType = z.infer<typeof QuestionSchema>;
+export type Question = z.infer<typeof Question>;
 
-export const QuestionsSchema = z.object({
+export const Questions = z.object({
   questions: z.object({
-    data: QuestionSchema.array(),
+    data: Question.array(),
   }),
 });
-export type QuestionsType = z.infer<typeof QuestionsSchema>;
+export type Questions = z.infer<typeof Questions>;
 
 //.........................ORGANIZATIONS.........................//
-export const OrganizationBySlugSchema = z.object({
+export const OrganizationBySlug = z.object({
   title: z.string(),
   slug: z.string(),
-  image: ImageSchema,
+  image: Image,
   consortium: z.boolean(),
   url: z.string().url().nullable(),
   collections: z
@@ -87,7 +87,7 @@ export const OrganizationBySlugSchema = z.object({
         .object({
           title: z.string(),
           url: z.string().url(),
-          img: ImageSchema,
+          img: Image,
         })
         .array(),
     })
@@ -102,7 +102,7 @@ export const OrganizationBySlugSchema = z.object({
           name: z.string().nullable(),
           description: z.string().nullable(),
           url: z.string().url(),
-          image: ImageSchema,
+          image: Image,
         })
         .array(),
     })
@@ -122,7 +122,7 @@ export const OrganizationBySlugSchema = z.object({
               cost: z.string().nullable(),
               url: z.string().url(),
               address: z.string(),
-              image: ImageSchema,
+              image: Image,
             })
             .array(),
         }),
@@ -145,84 +145,84 @@ export const OrganizationBySlugSchema = z.object({
     })
     .nullable(),
 });
-export type OrganizationBySlugType = z.infer<typeof OrganizationBySlugSchema>;
+export type OrganizationBySlug = z.infer<typeof OrganizationBySlug>;
 
-export const OrganizationSingleSchema = z.object({
+export const Organization = z.object({
   attributes: z.object({
     title: z.string(),
     slug: z.string(),
-    image: ImageSchema,
+    image: Image,
     consortium: z.boolean(),
   }),
 })
-export type OrganizationSingleType = z.infer<typeof OrganizationSingleSchema>;
+export type Organization = z.infer<typeof Organization>;
 
-export const OrganizationsSchema = z.object({
+export const Organizations = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
     })
   }),
-  data: OrganizationSingleSchema.array()
+  data: Organization.array()
 });
-export type OrganizationsType = z.infer<typeof OrganizationsSchema>;
+export type Organizations = z.infer<typeof Organizations>;
 
 //.........................PROJECTS.........................//
-export const ProjectSingleSchema = z.object({
+export const Project = z.object({
   attributes: z.object({
     title: z.string(),
     description: z.string().nullable(),
     url: z.string().url(),
-    image: ImageSchema,
+    image: Image,
   }),
 })
-export type ProjectSingleType = z.infer<typeof ProjectSingleSchema>;
+export type Project = z.infer<typeof Project>;
 
-export const ProjectsSchema = z.object({
+export const Projects = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
     })
   }),
-  data: ProjectSingleSchema.array()
+  data: Project.array()
 });
-export type ProjectsType = z.infer<typeof ProjectsSchema>;
+export type Projects = z.infer<typeof Projects>;
 
 //.........................SERVICES.........................//
-export const ServiceSingleSchema = z.object({
+export const Service = z.object({
   attributes: z.object({
     title: z.string(),
     description: z.string().nullable(),
     url: z.string().url(),
-    image: ImageSchema,
+    image: Image,
   }),
 })
-export type ServiceSingleType = z.infer<typeof ServiceSingleSchema>;
+export type Service = z.infer<typeof Service>;
 
-export const ServicesSchema = z.object({
+export const Services = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
     })
   }),
-  data: ProjectSingleSchema.array()
+  data: Service.array()
 });
-export type ServicesType = z.infer<typeof ServicesSchema>;
+export type Services = z.infer<typeof Services>;
 
 //.........................ABOUT.........................//
-export const AboutSchema = z.object({
+export const About = z.object({
   title: z.string(),
   description: z.string().nullable(),
   team: z.object({
     name: z.string(),
     description: z.string(),
-    image: ImageSchema
+    image: Image
   }).array()
 })
-export type AboutType = z.infer<typeof AboutSchema>;
+export type About = z.infer<typeof About>;
 
 //.........................FAQ.........................//
-export const FAQSchema = z.object({
+export const FAQ = z.object({
   category: z.object({
     title: z.string(),
     item: z.object({
@@ -231,7 +231,7 @@ export const FAQSchema = z.object({
     }).array()
   }).array()
 })
-export type FAQType = z.infer<typeof FAQSchema>;
+export type FAQ = z.infer<typeof FAQ>;
 
 
 

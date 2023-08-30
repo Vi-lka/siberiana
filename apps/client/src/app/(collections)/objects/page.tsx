@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import type { SortDataType } from "@siberiana/schemas";
-import { DictionarySchema } from "@siberiana/schemas";
+import type { Categories, Collections, SortData } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import { getCategories, getCollections } from "~/lib/queries/api-collections";
 import ErrorHandler from "~/components/errors/ErrorHandler";
@@ -23,7 +23,7 @@ export default async function Objects({
   searchParams: { [key: string]: string | string[] | undefined },
 }) {
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const defaultPageSize = 5
 
@@ -31,36 +31,36 @@ export default async function Objects({
   const collections = searchParams['collection'] as string | undefined
 
   // For titles
-  const [ categoriesResult, collectionsResult ] = await Promise.allSettled([ 
+  const results = await Promise.allSettled([ 
     getCategories({ first: null }),
     getCollections({ first: null, categories })
   ])
-  if (categoriesResult.status === 'rejected') return (
-    <ErrorHandler 
-      error={categoriesResult.reason as unknown} 
-      place="Categories in Objects"
-      notFound 
-      goBack
-    />
-  )
-  if (collectionsResult.status === 'rejected') return (
-    <ErrorHandler 
-      error={collectionsResult.reason as unknown} 
-      place="Collections in Objects" 
-      notFound 
-      goBack
-    />
-  )
+
+  const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+
+  if (rejected) {
+    return (
+      <ErrorHandler
+        error={rejected.reason as unknown} 
+        place="Titles in Objects"
+        notFound 
+        goBack
+      />
+    )
+  }
+
+  const categoriesFulfilled = results[0] as PromiseFulfilledResult<Categories>
+  const collectionsFulfilled = results[1] as PromiseFulfilledResult<Collections>
 
   // Get category title
-  const categorySingle = categoriesResult.value.edges.find(el => el.node.slug === categories)
+  const categorySingle = categoriesFulfilled.value.edges.find(el => el.node.slug === categories)
   // Get collection title
-  const collectionSingle = collectionsResult.value.edges.find(el => el.node.slug === collections)
+  const collectionSingle = collectionsFulfilled.value.edges.find(el => el.node.slug === collections)
 
   const sortData = [
     { val: 'DISPLAY_NAME:ASC', text: `${dictResult.sort.byName}: ${dictResult.sort.ascText}` },
     { val: 'DISPLAY_NAME:DESC', text: `${dictResult.sort.byName}: ${dictResult.sort.descText}` },
-  ] as SortDataType[]
+  ] as SortData[]
 
   return (
     <div>

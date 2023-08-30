@@ -5,13 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import type {
-  GroupLinkType,
-  MenuDictType,
-  SingleLinkType,
+  MenuDict,
 } from "@siberiana/schemas";
 import {
-  GroupLinkSchema,
-  SingleLinkSchema,
+  GroupLink,
+  SingleLink
 } from "@siberiana/schemas";
 import {
   NavigationMenu,
@@ -26,7 +24,7 @@ import {
 import NavListItem from "./NavListItem";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
+export default function NavMenu({ menuDict }: { menuDict: MenuDict }) {
 
   return (
     <NavigationMenu delayDuration={100}>
@@ -42,7 +40,7 @@ export default function NavMenu({ menuDict }: { menuDict: MenuDictType }) {
 function NavMenuItem({
   menuItem,
 }: {
-  menuItem: SingleLinkType | GroupLinkType;
+  menuItem: SingleLink | GroupLink;
 }) {
   const pathName = usePathname();
 
@@ -56,7 +54,7 @@ function NavMenuItem({
 
   const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
 
-  function isNavStyle(menuItem: GroupLinkType) {
+  function isNavStyle(menuItem: GroupLink) {
     const result = menuItem.list.find((item) => {
       if (pathCurrentPage === item.url.replace('/','')) {
           return true; // stop searching
@@ -68,8 +66,8 @@ function NavMenuItem({
     return false
   }
 
-  if (SingleLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as SingleLinkType;
+  if (SingleLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as SingleLink;
 
     return (
       <NavigationMenuItem className="uppercase">
@@ -83,8 +81,8 @@ function NavMenuItem({
         </Link>
       </NavigationMenuItem>
     );
-  } else if (GroupLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as GroupLinkType;
+  } else if (GroupLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as GroupLink;
 
     return (
       <NavigationMenuItem>

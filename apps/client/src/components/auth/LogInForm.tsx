@@ -5,7 +5,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import type { AuthDictType } from "@siberiana/schemas";
+import type { AuthDict } from "@siberiana/schemas";
 import {
   Form,
   FormControl,
@@ -17,7 +17,7 @@ import {
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
-export default function LogInForm({ dict }: { dict: AuthDictType }) {
+export default function LogInForm({ dict }: { dict: AuthDict }) {
 
   const LogInFormSchema = z.object({
     email: z

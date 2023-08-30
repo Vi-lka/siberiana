@@ -7,7 +7,7 @@ import PaginationControls from '~/components/ui/PaginationControls';
 import { getProjects } from '~/lib/queries/strapi-server';
 import getLinkDir from '~/lib/utils/getLinkDir';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 
 export default async function ProjectsContent({
   searchParams,
@@ -16,7 +16,7 @@ export default async function ProjectsContent({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const defaultPageSize = 12
 

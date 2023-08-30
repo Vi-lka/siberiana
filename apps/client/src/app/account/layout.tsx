@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
-import { DictionarySchema } from "@siberiana/schemas";
+import { Dictionary } from "@siberiana/schemas";
 
 export async function generateMetadata(): Promise<Metadata> {
   // fetch data
@@ -20,7 +20,7 @@ export default async function AccountLayout({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   return (
     <main className="flex flex-col">

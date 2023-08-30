@@ -4,8 +4,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ZodError } from "zod";
-import { QuestionsSchema } from "@siberiana/schemas";
-import type { ErrorsDictType, QuizDictType } from "@siberiana/schemas";
+import { Questions } from "@siberiana/schemas";
+import type { ErrorsDict, QuizDict } from "@siberiana/schemas";
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import getURL from "~/lib/utils/getURL";
@@ -17,8 +17,8 @@ export default function Quiz({
   qiuzDict,
   errorDict,
 }: {
-  qiuzDict: QuizDictType;
-  errorDict: ErrorsDictType;
+  qiuzDict: QuizDict;
+  errorDict: ErrorsDict;
 }) {
   const [answer, setAnswer] = React.useState<boolean>();
   const [tryAgain, setTryAgain] = React.useState<boolean>();
@@ -54,7 +54,7 @@ export default function Quiz({
 
   // Validate data
   try {
-    QuestionsSchema.parse(data);
+    Questions.parse(data);
   } catch (error) {
     console.log((error as ZodError).issues);
     return <ErrorToast dict={errorDict} error={(error as ZodError).issues} place="Quiz" />;

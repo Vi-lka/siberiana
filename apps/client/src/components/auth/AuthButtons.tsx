@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { AuthDictType } from "@siberiana/schemas";
+import type { AuthDict } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import GoogleSvg from "../GoogleSvg";
@@ -10,7 +10,7 @@ export default function AuthButtons({
   dict,
   className,
 }: {
-  dict: AuthDictType;
+  dict: AuthDict;
   className?: string;
 }) {
   return (

@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { Alert, AlertDescription, AlertTitle } from '@siberiana/ui';
 import { AlertCircle } from 'lucide-react';
 import React from 'react'
@@ -8,7 +8,7 @@ import { SignInButton } from '../auth/NextAuthButtons';
 export default async function NoSession() {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
   return (
     <div className='w-full flex flex-col items-center py-10'>

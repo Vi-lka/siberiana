@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import ObjectsGrid from '~/components/objects/ObjectsGrid';
@@ -18,7 +18,7 @@ export default async function ProtectedAreaPictures({
 }) {
   
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
   
   const search = searchParams['search'] as string | undefined
   const categories = searchParams['category'] as string | undefined

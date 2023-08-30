@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
@@ -16,7 +16,7 @@ export default async function CollectionsContent({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
   
   const defaultPageSize = 12
   

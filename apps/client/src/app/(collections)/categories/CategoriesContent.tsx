@@ -2,7 +2,7 @@ import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import PaginationControls from '~/components/ui/PaginationControls';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import { getCategories } from '~/lib/queries/api-collections';
 import ImgTextBelow from '~/components/thumbnails/ImgTextBelow';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ export default async function CategoriesContent({
 }) {
 
   const dict = await getDictionary();
-  const dictResult = DictionarySchema.parse(dict);
+  const dictResult = Dictionary.parse(dict);
 
   const defaultPageSize = 12
 

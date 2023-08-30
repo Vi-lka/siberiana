@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 //.........................CATEGORIES.........................//
-export const CategoryNodeSchema = z.object({
+export const CategoryNode = z.object({
     id: z.string(),
     slug: z.string(),
     displayName: z.string(),
@@ -13,21 +13,21 @@ export const CategoryNodeSchema = z.object({
         slug: z.string(),
     }).array()
 });
-export type CategoryNodeType = z.infer<typeof CategoryNodeSchema>;
+export type CategoryNode = z.infer<typeof CategoryNode>;
 
-export const CategoriesSchema = z.object({
+export const Categories = z.object({
     totalCount: z.number(),
     edges: z.object({
-        node: CategoryNodeSchema
+        node: CategoryNode
     }).array()
 });
-export type CategoriesType = z.infer<typeof CategoriesSchema>;
+export type Categories = z.infer<typeof Categories>;
 
 //.........................COLLECTIONS.........................//
 export const CollectionsEnum = z.enum([ "artifacts", "books", "protected_area_pictures" ])
-export type CollectionEnumType = z.infer<typeof CollectionsEnum>
+export type CollectionsEnum = z.infer<typeof CollectionsEnum>
 
-export const CollectionNodeSchema = z.object({
+export const CollectionNode = z.object({
     id: z.string(),
     slug: z.string(),
     displayName: z.string(),
@@ -39,57 +39,39 @@ export const CollectionNodeSchema = z.object({
         slug: z.string()
     }).nullable()
 });
-export type CollectionNodeType = z.infer<typeof CollectionNodeSchema>;
+export type CollectionNode = z.infer<typeof CollectionNode>;
 
-export const CollectionsSchema = z.object({
+export const Collections = z.object({
     totalCount: z.number(),
     edges: z.object({
-        node: CollectionNodeSchema
+        node: CollectionNode
     }).array()
 });
-export type CollectionsType = z.infer<typeof CollectionsSchema>;
+export type Collections = z.infer<typeof Collections>;
 
 //.........................OBJECTS.........................//
 export const ObjectsEnum = z.enum([ "Artifact", "Book", "ProtectedAreaPicture" ])
-export type ObjectsEnumType = z.infer<typeof ObjectsEnum>
+export type ObjectsEnum = z.infer<typeof ObjectsEnum>
 
-export const ObjectNodeSchema = z.object({
+export const ObjectNode = z.object({
     __typename: ObjectsEnum,
     id: z.string(),
     displayName: z.string(),
     primaryImageURL: z.string(),
 });
-export type ObjectNodeType = z.infer<typeof ObjectNodeSchema>;
+export type ObjectNode = z.infer<typeof ObjectNode>;
 
-export const ObjectsArraySchema = z.object({
+export const ObjectsArray = z.object({
     totalCount: z.number(),
     edges: z.object({
-        node: ObjectNodeSchema
+        node: ObjectNode
     }).array()
 });
-export type ObjectsArrayType = z.infer<typeof ObjectsArraySchema>;
+export type ObjectsArray = z.infer<typeof ObjectsArray>;
 
-export const ObjectsSchema = z.object({
-    artifacts: ObjectsArraySchema,
-    books: ObjectsArraySchema,
-    protectedAreaPictures: ObjectsArraySchema
+export const Objects = z.object({
+    artifacts: ObjectsArray,
+    books: ObjectsArray,
+    protectedAreaPictures: ObjectsArray
 });
-export type ObjectsType = z.infer<typeof ObjectsSchema>;
-
-//.........................FILTERS.........................//
-export const FilterNodeSchema = z.object({
-    id: z.string(),
-    displayName: z.string(),
-    artifacts: z.object({
-        id: z.string(),
-    }).array().optional()
-});
-export type FilterNodeType = z.infer<typeof FilterNodeSchema>;
-
-export const FilterArraySchema = z.object({
-    totalCount: z.number(),
-    edges: z.object({
-        node: FilterNodeSchema
-    }).array()
-});
-export type FilterArrayType = z.infer<typeof FilterArraySchema>;
+export type Objects = z.infer<typeof Objects>;

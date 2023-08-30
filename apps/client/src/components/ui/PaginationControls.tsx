@@ -2,7 +2,7 @@
 
 import React from 'react'
 import ButtonComponent from './ButtonComponent'
-import type { PaginationDictType } from '@siberiana/schemas'
+import type { PaginationDict } from '@siberiana/schemas'
 import { Button, Input } from '@siberiana/ui'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeft, ChevronsRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
@@ -18,7 +18,7 @@ export default function PaginationControls({
     className,
     classNameMore
 }: { 
-    dict: PaginationDictType,
+    dict: PaginationDict,
     length: number,
     defaultPageSize: number,
     pageParam?: string,

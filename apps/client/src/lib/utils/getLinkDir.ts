@@ -23,7 +23,6 @@ export default function getLinkDir(link: string): string {
   if (domain === "localhost" || domain === nextDomain) {
     return `/${internalLink}`;
   } else {
-    console.log("OUT: ", url.href);
     return url.href;
   }
 }

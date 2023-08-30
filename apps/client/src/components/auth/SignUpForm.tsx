@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type { AuthDictType } from "@siberiana/schemas";
+import type { AuthDict } from "@siberiana/schemas";
 import {
   Checkbox,
   Form,
@@ -21,7 +21,7 @@ import {
 import ButtonComponent from "../ui/ButtonComponent";
 import AuthButtons from "./AuthButtons";
 
-export default function SignUpForm({ dict }: { dict: AuthDictType }) {
+export default function SignUpForm({ dict }: { dict: AuthDict }) {
 
   const SignUpFormSchema = z
     .object({

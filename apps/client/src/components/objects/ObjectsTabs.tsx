@@ -1,6 +1,6 @@
 "use client"
 
-import type { DictionaryType } from '@siberiana/schemas'
+import type { Dictionary } from '@siberiana/schemas'
 import { Skeleton, Tabs, TabsList, TabsTrigger } from '@siberiana/ui'
 import React from 'react'
 import { useAtomValue, useAtom } from 'jotai'
@@ -12,7 +12,7 @@ export default function ObjectTabs({
     dict,
     children
 }: {
-    dict: DictionaryType,
+    dict: Dictionary,
     children: React.ReactNode
 }) {
     const artifactsCount = useAtomValue(artifactsCountAtom)
@@ -59,7 +59,7 @@ export default function ObjectTabs({
                             ? (
                                 <TabsList
                                     className={cn(
-                                        "flex-wrap h-fit lg:mr-40",
+                                        "flex-wrap h-fit lg:mr-40 font-OpenSans",
                                         isSingleTab() && "bg-transparent" 
                                     )}
                                 >

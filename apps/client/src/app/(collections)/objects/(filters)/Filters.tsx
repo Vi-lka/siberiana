@@ -1,4 +1,4 @@
-import { DictionarySchema } from '@siberiana/schemas';
+import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import FilterTab from '~/components/objects/FilterTab';
 import { getDictionary } from '~/lib/utils/getDictionary';
@@ -15,7 +15,7 @@ export default async function Filters({
 }) {
 
     const dict = await getDictionary();
-    const dictResult = DictionarySchema.parse(dict);
+    const dictResult = Dictionary.parse(dict);
 
   return (
     <div className='w-full py-3 rounded-md'>

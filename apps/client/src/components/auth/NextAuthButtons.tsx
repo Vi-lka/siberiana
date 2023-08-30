@@ -1,6 +1,6 @@
 "use client"
 
-import type { AuthDictType } from '@siberiana/schemas'
+import type { AuthDict } from '@siberiana/schemas'
 import React from 'react'
 import ButtonComponent from '../ui/ButtonComponent'
 import { signIn, signOut } from 'next-auth/react'
@@ -9,7 +9,7 @@ import { cn } from '@siberiana/ui/src/lib/utils'
 import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@siberiana/ui'
 
 type Props = {
-  dict: AuthDictType,
+  dict: AuthDict,
   className?: string,
 }
 

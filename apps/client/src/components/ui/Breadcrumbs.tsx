@@ -4,14 +4,14 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
-import type { BreadcrumbsDictType } from "@siberiana/schemas";
+import type { BreadcrumbsDict } from "@siberiana/schemas";
 
 export default function Breadcrumbs({
   dict,
   slug,
   title
 }: {
-  dict: BreadcrumbsDictType;
+  dict: BreadcrumbsDict;
   slug?: string,
   title?: string
 }) {

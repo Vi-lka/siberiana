@@ -1,6 +1,6 @@
 "use client"
 
-import type { ObjectsArrayType } from '@siberiana/schemas'
+import type { ObjectsArray } from '@siberiana/schemas'
 import React from 'react'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import ImgObject from '~/components/thumbnails/ImgObject'
@@ -8,7 +8,7 @@ import ImgObject from '~/components/thumbnails/ImgObject'
 export default function ObjectsGrid({
     data,
 }: {
-    data: ObjectsArrayType,
+    data: ObjectsArray,
 }) {
 
   return (
