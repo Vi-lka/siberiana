@@ -219,6 +219,8 @@ export const getCulturesFilter = async ({
   }
   
   const json = await res.json() as { data: { cultures: ArtiFilters } };
+
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   
   if (json.data.cultures.totalCount === 0) {
     notFound()

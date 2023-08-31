@@ -10,7 +10,7 @@ export default async function PAPFilters({
   
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
-  
+    
     return (
         <div className=''>
             PAPFilters

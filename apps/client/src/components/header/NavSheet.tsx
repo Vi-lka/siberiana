@@ -80,11 +80,9 @@ export default function NavSheet({
 
         <NavigationMenu orientation="vertical" className="block w-full">
           <NavigationMenuList className="flex flex-col w-full">
-            <ScrollArea 
-              className={cn(
-                "font-Inter mt-[2vh] w-full p-1",
-                !!session ? "h-[80vh]" : "h-[72vh]",
-              )}
+            <ScrollArea
+              className="font-Inter mt-[2vh] w-full p-1"
+              classNameViewport={cn(!!session ? "max-h-[80vh]" : "max-h-[72vh]")}
             >
               {menuDict.map((menuItem, index) => (
                 <SheetMenuItem
@@ -116,7 +114,9 @@ function SheetMenuItem({
     .split("/")
     .filter((v) => v.length > 0);
 
-  const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
+  const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
+
+  console.log(pathCurrentPage)
 
   if (SingleLink.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLink;
@@ -128,7 +128,7 @@ function SheetMenuItem({
             key={menuItemResult.id}
             title={menuItemResult.name}
             href={`${menuItemResult.url}`}
-            active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
+            active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
             className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
           />
@@ -153,7 +153,7 @@ function SheetMenuItem({
                 key={item.id}
                 title={item.name}
                 href={`${item.url}`}
-                active={pathCurrentPage === `${item.url.replace('/','')}`}
+                active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
                 className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
               />

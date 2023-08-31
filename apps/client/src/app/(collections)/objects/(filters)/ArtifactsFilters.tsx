@@ -2,7 +2,6 @@ import type { ArtiFilters } from '@siberiana/schemas';
 import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
-import type { Item} from '~/components/ui/filters/Select';
 import { Select } from '~/components/ui/filters/Select';
 import { getCulturesFilter, getMonumentsFilter, getTechniquesFilter } from '~/lib/queries/api-filters';
 import { getDictionary } from '~/lib/utils/getDictionary';

@@ -24,7 +24,10 @@ export default function FilterTab({
         (tabObject !== value) && "hidden"
       )}
     >
-      {children}
+      {tabObject === value 
+        ? children 
+        : null
+      }
     </div>
   )
 }

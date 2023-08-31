@@ -1,5 +1,5 @@
 import { Dictionary } from '@siberiana/schemas';
-import React from 'react'
+import React, { Suspense } from 'react'
 import FilterTab from '~/components/objects/FilterTab';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import ArtifactsFilters from './ArtifactsFilters';
@@ -14,8 +14,10 @@ export default async function Filters({
     searchParams: { [key: string]: string | string[] | undefined },
 }) {
 
-    const dict = await getDictionary();
-    const dictResult = Dictionary.parse(dict);
+  const dict = await getDictionary();
+  const dictResult = Dictionary.parse(dict);
+
+  const type = searchParams['type'] as string | undefined
 
   return (
     <div className='w-full py-3 rounded-md'>
@@ -27,16 +29,38 @@ export default async function Filters({
 
         <Separator className='h-[2px] mt-1' decorative />
 
+        {/* TODO: Add Skeleton for filters */}
         <FilterTab value='artifacts' className='mt-3'>
-            <ArtifactsFilters searchParams={searchParams} />
+            <Suspense fallback={ 
+              "Loading Artifacts filters..."
+            }>
+                {type === "artifacts" 
+                    ? <ArtifactsFilters searchParams={searchParams} />
+                    : "Loading Artifacts filters..." 
+                }
+            </Suspense> 
         </FilterTab> 
 
         <FilterTab value='books' className='mt-3'>
-            <BooksFilters searchParams={searchParams} />
+            <Suspense fallback={ 
+              "Loading Books filters..."
+            }>
+                {type === "books" 
+                    ? <BooksFilters searchParams={searchParams} />
+                    : "Loading Books filters..." 
+                }
+            </Suspense> 
         </FilterTab> 
 
         <FilterTab value='protected_area_pictures' className='mt-3'>
-            <PAPFilters searchParams={searchParams} />
+            <Suspense fallback={ 
+              "Loading PAP filters..."
+            }>
+                {type === "protected_area_pictures" 
+                    ? <PAPFilters searchParams={searchParams} />
+                    : "Loading PAP filters..." 
+                }
+            </Suspense> 
         </FilterTab> 
     </div>
   )

@@ -52,11 +52,11 @@ function NavMenuItem({
     .split("/")
     .filter((v) => v.length > 0);
 
-  const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
+  const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
 
   function isNavStyle(menuItem: GroupLink) {
     const result = menuItem.list.find((item) => {
-      if (pathCurrentPage === item.url.replace('/','')) {
+      if (pathCurrentPage === item.url.replace('?type=artifacts','')) {
           return true; // stop searching
       } else return false
     })
@@ -73,7 +73,7 @@ function NavMenuItem({
       <NavigationMenuItem className="uppercase">
         <Link href={`${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
-            active={pathCurrentPage === `${menuItemResult.url.replace('/','')}`}
+            active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
             className={navigationMenuTriggerStyle()}
           >
             {menuItemResult.name}
@@ -88,7 +88,7 @@ function NavMenuItem({
       <NavigationMenuItem>
         <NavigationMenuTrigger 
           className={cn(
-            "uppercase",
+            "uppercase transition-all",
             isNavStyle(menuItemResult) ? "bg-accent/50 font-semibold" : ""
           )}
         >
@@ -103,7 +103,7 @@ function NavMenuItem({
                   key={index}
                   title={item.name}
                   href={`${item.url}`}
-                  active={pathCurrentPage === `${item.url.replace('/','')}`}
+                  active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
                   className="w-full data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 />
               ))}

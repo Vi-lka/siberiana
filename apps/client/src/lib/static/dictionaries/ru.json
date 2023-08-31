@@ -68,7 +68,7 @@
         {
           "id": 3,
           "name": "Объекты",
-          "url": "/objects",
+          "url": "/objects?type=artifacts",
           "description": "",
           "image": "Library"
         }

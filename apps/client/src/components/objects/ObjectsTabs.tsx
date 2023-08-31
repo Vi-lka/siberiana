@@ -7,6 +7,7 @@ import { useAtomValue, useAtom } from 'jotai'
 import { PAPCountAtom, artifactsCountAtom, booksCountAtom, tabObjectsAtom } from '~/lib/utils/atoms'
 import { ClientHydration } from '../providers/ClientHydration'
 import { cn } from '@siberiana/ui/src/lib/utils'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function ObjectTabs({
     dict,
@@ -21,6 +22,14 @@ export default function ObjectTabs({
 
     const [tabObject, setTabObject] = useAtom(tabObjectsAtom)
 
+    const [_, startTransition] = React.useTransition();
+
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const pathname = usePathname()
+
+    const type =  searchParams.get("type") ?? undefined
+
     const tabs = [
         { value: "artifacts", title: dict.objects.artifacts, count: artifactsCount },
         { value: "books", title: dict.objects.books, count: booksCount },
@@ -34,11 +43,43 @@ export default function ObjectTabs({
         return true;
     })
 
+    const handleChangeTab = React.useCallback(
+        (value: string) => {
+            setTabObject(value)
+            const params = new URLSearchParams(window.location.search);
+            params.set("type", value);
+            startTransition(() => {
+                router.push(`${pathname}?${params.toString()}`, { scroll: false });
+            });
+        },
+        [pathname, router, setTabObject],
+    )
+
+    const goToFilledTab = React.useCallback(
+        () => {
+            if (artifactsCount > 0) handleChangeTab("artifacts")
+            else if (booksCount > 0) handleChangeTab("books")
+            else if (PAPCount > 0) handleChangeTab("protected_area_pictures")
+        },
+        [PAPCount, artifactsCount, booksCount, handleChangeTab],
+    )
+
     React.useEffect(() => {
-        if (artifactsCount > 0) setTabObject("artifacts")
-        else if (booksCount > 0) setTabObject("books")
-        else if (PAPCount > 0) setTabObject("protected_area_pictures")
-    }, [PAPCount, artifactsCount, booksCount, setTabObject])
+        switch (type) {
+            case "artifacts":
+                (artifactsCount > 0) ? handleChangeTab("artifacts") : goToFilledTab()
+                break;
+            case "books":
+                (booksCount > 0) ? handleChangeTab("books") : goToFilledTab()
+                break;
+            case "protected_area_pictures":
+                (PAPCount > 0) ? handleChangeTab("protected_area_pictures") : goToFilledTab()
+                break;
+            default:
+                goToFilledTab()
+                break;
+        }
+    }, [PAPCount, artifactsCount, booksCount, goToFilledTab, handleChangeTab, type])
     
     function isSingleTab() {
         return (notEmptyTabs.length === 1) ? true : false;
@@ -49,17 +90,17 @@ export default function ObjectTabs({
             <Tabs
                 className="w-full"
                 value={tabObject}
-                onValueChange={(value: string) => setTabObject(value)}
+                onValueChange={(value: string) => handleChangeTab(value)}
             >
                 <ClientHydration fallback={
                   <Skeleton className='w-full h-10 mt-2' />
                 }>
-                    <div className="flex gap-3 items-center flex-wrap mt-2">
+                    <div className="flex gap-3 items-center flex-wrap mt-2 lg:mr-40">
                         {notEmptyTabs.length > 0 
                             ? (
                                 <TabsList
                                     className={cn(
-                                        "flex-wrap h-fit lg:mr-40 font-OpenSans",
+                                        "flex-wrap h-fit font-OpenSans",
                                         isSingleTab() && "bg-transparent" 
                                     )}
                                 >
