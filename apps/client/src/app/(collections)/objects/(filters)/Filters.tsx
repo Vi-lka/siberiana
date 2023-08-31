@@ -25,20 +25,17 @@ export default async function Filters({
             {dictResult.objects.filters.title}
         </h1>
 
-        <GlobalFilters searchParams={searchParams} />
+        {/* TODO: Add Skeleton for filters */}
+        <Suspense fallback={ 
+          "Loading Global filters..."
+        }>
+            <GlobalFilters searchParams={searchParams} />
+        </Suspense> 
 
         <Separator className='h-[2px] mt-1' decorative />
 
-        {/* TODO: Add Skeleton for filters */}
         <FilterTab value='artifacts' className='mt-3'>
-            <Suspense fallback={ 
-              "Loading Artifacts filters..."
-            }>
-                {type === "artifacts" 
-                    ? <ArtifactsFilters searchParams={searchParams} />
-                    : "Loading Artifacts filters..." 
-                }
-            </Suspense> 
+            <ArtifactsFilters searchParams={searchParams} />
         </FilterTab> 
 
         <FilterTab value='books' className='mt-3'>

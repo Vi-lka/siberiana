@@ -145,6 +145,8 @@ export const FiltersDict = z.object({
   title: z.string(),
   categories: z.string(),
   collections: z.string(),
+  countries: z.string(),
+  regions: z.string(),
   cultures: z.string(),
   monuments: z.string(),
   techniques: z.string(),

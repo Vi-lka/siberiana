@@ -21,8 +21,13 @@ export default async function Artifacts({
   const dictResult = Dictionary.parse(dict);
 
   const search = searchParams['search'] as string | undefined
+
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
+
+  const countryIds = searchParams['country'] as string | undefined
+  const regionIds = searchParams['region'] as string | undefined
+
   const cultureIds = searchParams['culture'] as string | undefined
   const monumentIds = searchParams['monument'] as string | undefined
   const techniqueIds = searchParams['technique'] as string | undefined
@@ -41,7 +46,9 @@ export default async function Artifacts({
       search, 
       sort,
       categories, 
-      collections,  
+      collections,
+      countryIds,
+      regionIds,  
       cultureIds,
       monumentIds,
       techniqueIds

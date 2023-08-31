@@ -170,6 +170,8 @@ export const getArtifacts = async ({
   sort = "CREATED_AT:DESC",
   categories,
   collections,
+  countryIds,
+  regionIds,
   cultureIds,
   monumentIds,
   techniqueIds,
@@ -180,6 +182,8 @@ export const getArtifacts = async ({
   sort?: string,
   categories?: string,
   collections?: string,
+  countryIds?: string,
+  regionIds?: string,
   cultureIds?: string,
   monumentIds?: string,
   techniqueIds?: string,
@@ -202,6 +206,10 @@ export const getArtifacts = async ({
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
             },` : ''}
+          ],
+          hasLocationWith: [
+            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
+            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
           ],
           hasCulturalAffiliationWith: [
             ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''}

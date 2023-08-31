@@ -1,14 +1,19 @@
 import { z } from "zod";
 
 //.........................FILTERS ENUMS.........................//
-export const FiltersEnum = z.enum([ 
+export const ArtiFiltersEnum = z.enum([ 
     "Culture", 
     "Monument", 
-    "Technique", 
-    "Location", 
-    "Country" 
+    "Technique",
 ])
-export type FiltersEnum = z.infer<typeof FiltersEnum>
+export type ArtiFiltersEnum = z.infer<typeof ArtiFiltersEnum>
+
+export const LocationsEnum = z.enum([  
+    "Location", 
+    "Country",
+    "Region",
+])
+export type LocationsEnum = z.infer<typeof LocationsEnum>
 
 //.........................ARTIFACTS.........................//
 export const Artifact = z.object({
@@ -21,41 +26,47 @@ export const Artifact = z.object({
     }),
     culturalAffiliation: z.object({
         id: z.string(),
-    }),
+    }).nullable(),
     monument: z.object({
         id: z.string(),
-    }),
+    }).nullable(),
     techniques: z.object({
         id: z.string(),
     }).array(),
+    location: z.object({
+        country: z.object({
+            id: z.string(),
+        }).nullable(),
+        region: z.object({
+            id: z.string(),
+        }).nullable()
+    }).nullable(),
 })
 export type Artifact = z.infer<typeof Artifact>;
+
+export const ArtiNode = z.object({
+    __typename: ArtiFiltersEnum,
+    id: z.string(),
+    displayName: z.string(),
+    artifacts: Artifact.array()
+})
+export type ArtiNode = z.infer<typeof ArtiNode>;
+
+export const LocationsArtiNode = z.object({
+    __typename: LocationsEnum,
+    id: z.string(),
+    displayName: z.string(),
+    locations: z.object({
+        artifacts: Artifact.array()
+    }).array()
+})
+export type LocationsArtiNode = z.infer<typeof LocationsArtiNode>;
 
 export const ArtiFilters = z.object({
     totalCount: z.number(),
     edges: z.object({
-        node: z.object({
-            __typename: FiltersEnum,
-            id: z.string(),
-            displayName: z.string(),
-            artifacts: Artifact.array()
-        })
+        node: z.union([ArtiNode, LocationsArtiNode])
     }).array()
 });
 export type ArtiFilters = z.infer<typeof ArtiFilters>;
 
-//.........................LOCATIONS.........................//
-export const LocationsArti = z.object({
-    totalCount: z.number(),
-    edges: z.object({
-        node: z.object({
-            __typename: FiltersEnum,
-            id: z.string(),
-            displayName: z.string(),
-            locations: z.object({
-                artifacts: Artifact.array()
-            }).array()
-        })
-    }).array()
-});
-export type LocationsArti = z.infer<typeof LocationsArti>;

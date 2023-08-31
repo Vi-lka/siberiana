@@ -50,7 +50,7 @@ export function Select({
   align = "start",
 }: {
   isMulti: boolean,
-  values: Array<Item>,
+  values: Array<Item> | null,
   param: string,
   deleteParams?: string
   placeholder: string,
@@ -62,7 +62,7 @@ export function Select({
 }) {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [items, setItems] = React.useState<Array<Item>>([]);
+  const [items, setItems] = React.useState<Array<Item> | null>([]);
   const [openCombobox, setOpenCombobox] = React.useState(false);
   const [inputSearch, setInputSearch] = React.useState<string>("");
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
@@ -79,7 +79,7 @@ export function Select({
   }, [values])
 
   let selectedValues = [] as Item[]
-  values.forEach(option => {
+  values?.forEach(option => {
     if (currentParams?.split('_').includes(option.value.toString())) {
       selectedValues = [...selectedValues, option]
     }
@@ -161,7 +161,7 @@ export function Select({
   function TriggerButton() {
     return(
       <>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-[85%]">
             {isPendingRouter 
               ? <Loader2 className='animate-spin' />
               : (
@@ -216,7 +216,8 @@ export function Select({
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
-                "w-full justify-between text-foreground relative",
+                "justify-between text-foreground relative",
+                (selectedValues.length > 0) ? "w-[90%]" : "w-full",
                 icon && "p-0",
               )}
             >
@@ -286,7 +287,7 @@ export function Select({
               </CommandEmpty>
               <CommandGroup >
                 <ScrollArea type="always" classNameViewport="max-h-[220px]">
-                  {items.map((item, index) => {
+                  {items?.map((item, index) => {
                     // includes() doesn't work with object, so we do this:
                     const isActive = selectedValues.some(elem => elem.value === item.value);
                     return (
