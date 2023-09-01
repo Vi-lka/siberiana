@@ -3,6 +3,7 @@ import { z } from "zod";
 //.........................FILTERS ENUMS.........................//
 export const ArtiFiltersEnum = z.enum([ 
     "Culture", 
+    "Set",
     "Monument", 
     "Technique",
 ])
@@ -12,6 +13,8 @@ export const LocationsEnum = z.enum([
     "Location", 
     "Country",
     "Region",
+    "District",
+    "Settlement"
 ])
 export type LocationsEnum = z.infer<typeof LocationsEnum>
 
@@ -27,6 +30,9 @@ export const Artifact = z.object({
     culturalAffiliation: z.object({
         id: z.string(),
     }).nullable(),
+    set: z.object({
+        id: z.string(),
+    }).nullable(),
     monument: z.object({
         id: z.string(),
     }).nullable(),
@@ -38,6 +44,12 @@ export const Artifact = z.object({
             id: z.string(),
         }).nullable(),
         region: z.object({
+            id: z.string(),
+        }).nullable(),
+        district: z.object({
+            id: z.string(),
+        }).nullable(),
+        settlement: z.object({
             id: z.string(),
         }).nullable()
     }).nullable(),

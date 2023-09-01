@@ -25,10 +25,13 @@ export default async function Artifacts({
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
 
-  const countryIds = searchParams['country'] as string | undefined
-  const regionIds = searchParams['region'] as string | undefined
+  const countryIds = searchParams['countryArtifacts'] as string | undefined
+  const regionIds = searchParams['regionArtifacts'] as string | undefined 
+  const districtIds = searchParams['districtArtifacts'] as string | undefined
+  const settlementIds = searchParams['settlementArtifacts'] as string | undefined
 
   const cultureIds = searchParams['culture'] as string | undefined
+  const setIds = searchParams['set'] as string | undefined
   const monumentIds = searchParams['monument'] as string | undefined
   const techniqueIds = searchParams['technique'] as string | undefined
 
@@ -48,13 +51,16 @@ export default async function Artifacts({
       categories, 
       collections,
       countryIds,
-      regionIds,  
+      regionIds, 
+      districtIds,
+      settlementIds, 
       cultureIds,
+      setIds,
       monumentIds,
       techniqueIds
     }) 
   ])
-  if  (dataResult.status === 'rejected') return (
+  if (dataResult.status === 'rejected') return (
     <>
       <ErrorHandler 
         error={dataResult.reason as unknown} 

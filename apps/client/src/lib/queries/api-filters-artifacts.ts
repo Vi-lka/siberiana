@@ -4,7 +4,22 @@ import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 import { ArtiFilters } from "@siberiana/schemas";
 
-type Entitys = "cultures" | "monuments" | "techniques"
+type Entitys = "cultures" | "sets" | "monuments" | "techniques"
+
+type ArtiQueryType = {
+  entity?: Entitys,
+  search?: string,
+  categories?: string,
+  collections?: string,
+  countryIds?: string,
+  regionIds?: string,
+  districtIds?: string,
+  settlementIds?: string,
+  cultureIds?: string,
+  setIds?: string,
+  monumentIds?: string,
+  techniqueIds?: string,
+}
 
 export const artifacts = `
   artifacts {
@@ -16,6 +31,9 @@ export const artifacts = `
       }
     }
     culturalAffiliation {
+      id
+    }
+    set {
       id
     }
     monument {
@@ -31,31 +49,30 @@ export const artifacts = `
       region {
         id
       }
+      district {
+        id
+      }
+      settlement {
+        id
+      }
     }
   }
 `
 
 function ArtiQuery({ 
   entity,
-  search,
+  search = "",
   categories,
   collections,
   countryIds,
   regionIds,
+  districtIds,
+  settlementIds,
   cultureIds,
+  setIds,
   monumentIds,
   techniqueIds,
-}: { 
-  entity: Entitys,
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  cultureIds?: string,
-  monumentIds?: string,
-  techniqueIds?: string,
-}) {
+}: ArtiQueryType) {
   const queryString = /* GraphGL */ `
     query {
       ${entity}(
@@ -73,8 +90,11 @@ function ArtiQuery({
             hasLocationWith: [
               ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
               ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
+              ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
+              ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
             ],
             hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
+            hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
             hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
             hasTechniquesWith : [ ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''} ],
             or: [ 
@@ -107,35 +127,13 @@ function ArtiQuery({
 }
 
 //.........................CULTURES.........................//
-export const getCulturesFilter = async ({
-  search = "",
-  categories,
-  collections,
-  countryIds,
-  regionIds,
-  monumentIds,
-  techniqueIds,
-}: {
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  monumentIds?: string,
-  techniqueIds?: string,
-}): Promise<ArtiFilters> => {
+export const getCulturesFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {
 
   const headers = { "Content-Type": "application/json" };
 
   const query = ArtiQuery({
     entity: "cultures",
-    search,
-    categories,
-    collections,
-    countryIds,
-    regionIds,
-    monumentIds,
-    techniqueIds,
+    ...args
   })
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
@@ -156,8 +154,6 @@ export const getCulturesFilter = async ({
   }
   
   const json = await res.json() as { data: { cultures: ArtiFilters } };
-
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
   
   if (json.data.cultures.totalCount === 0) {
     notFound()
@@ -168,36 +164,52 @@ export const getCulturesFilter = async ({
   return cultures;
 };
 
+//.........................SETS.........................//
+export const getSetsFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {
+
+  const headers = { "Content-Type": "application/json" };
+
+  const query = ArtiQuery({
+    entity: "sets",
+    ...args
+  })
+ 
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Sets Filter'");
+  }
+  
+  const json = await res.json() as { data: { sets: ArtiFilters } };
+  
+  if (json.data.sets.totalCount === 0) {
+    notFound()
+  }
+  
+  const sets = ArtiFilters.parse(json.data.sets);
+  
+  return sets;
+};
+
 //.........................MONUMENTS.........................//
-export const getMonumentsFilter = async ({
-  search = "",
-  categories,
-  collections,
-  countryIds,
-  regionIds,
-  cultureIds,
-  techniqueIds
-}: {
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  cultureIds?: string,
-  techniqueIds?: string,
-}): Promise<ArtiFilters> => {
+export const getMonumentsFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {
 
   const headers = { "Content-Type": "application/json" };
 
   const query = ArtiQuery({
     entity: "monuments",
-    search,
-    categories,
-    collections,
-    countryIds,
-    regionIds,
-    cultureIds,
-    techniqueIds,
+    ...args
   })
  
   const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
@@ -226,38 +238,16 @@ export const getMonumentsFilter = async ({
   const monuments = ArtiFilters.parse(json.data.monuments);
   
   return monuments;
-};
+};  
   
 //.........................TECHNIQUES.........................//
-export const getTechniquesFilter = async ({
-  search = "",
-  categories,
-  collections,
-  countryIds,
-  regionIds,
-  cultureIds,
-  monumentIds,
-}: {
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  cultureIds?: string,
-  monumentIds?: string,
-}): Promise<ArtiFilters> => {
+export const getTechniquesFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {
 
   const headers = { "Content-Type": "application/json" };
 
   const query = ArtiQuery({
     entity: "techniques",
-    search,
-    categories,
-    collections,
-    countryIds,
-    regionIds,
-    cultureIds,
-    monumentIds,
+    ...args
   })
   
   const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {

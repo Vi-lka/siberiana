@@ -191,12 +191,15 @@
     "filters": {
       "title": "Фильтры",
       "categories": "Категория",
-      "collections": "Коллекции",
-      "countries": "Страны",
-      "regions": "Регионы",
-      "cultures": "Культуры",
-      "monuments": "Памятники",
-      "techniques": "Техники"
+      "collections": "Коллекция",
+      "countries": "Страна",
+      "regions": "Регион",
+      "districts": "Район",
+      "settlements": "Населенный пункт",
+      "cultures": "Культура",
+      "sets": "Комплекс",
+      "monuments": "Памятник",
+      "techniques": "Техника"
     },
     "artifacts": "Артефакты",
     "books": "Книги",

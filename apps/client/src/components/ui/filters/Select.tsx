@@ -41,7 +41,7 @@ export function Select({
   isMulti,
   values,
   param,
-  deleteParams,
+  deleteParam,
   placeholder,
   className,
   badges = false,
@@ -52,7 +52,7 @@ export function Select({
   isMulti: boolean,
   values: Array<Item> | null,
   param: string,
-  deleteParams?: string
+  deleteParam?: string
   placeholder: string,
   className?: string,
   badges?: boolean,
@@ -149,13 +149,13 @@ export function Select({
       
       }
 
-      if (deleteParams) params.delete(deleteParams);
+      if (!!deleteParam) params.delete(deleteParam);
 
       startTransitionRouter(() => {
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
       });
     },
-    [param, deleteParams, pathname, router],
+    [param, deleteParam, pathname, router],
   );
 
   function TriggerButton() {

@@ -1,8 +1,10 @@
+import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
 import { getCulturesFilter } from '~/lib/queries/api-filters-artifacts';
 import { filterArtifacts } from '~/lib/utils/filters';
+import { getDictionary } from '~/lib/utils/getDictionary';
 
 export default async function CultureFilter({
     searchParams
@@ -10,11 +12,17 @@ export default async function CultureFilter({
     searchParams: { [key: string]: string | string[] | undefined },
 }) {
 
+    const dict = await getDictionary();
+    const dictResult = Dictionary.parse(dict);
+
     const search = searchParams['search'] as string | undefined
     const categories = searchParams['category'] as string | undefined
     const collections = searchParams['collection'] as string | undefined
-    const countryIds = searchParams['country'] as string | undefined
-    const regionIds = searchParams['region'] as string | undefined
+    const countryIds = searchParams['countryArtifacts'] as string | undefined
+    const regionIds = searchParams['regionArtifacts'] as string | undefined
+    const districtIds = searchParams['districtArtifacts'] as string | undefined
+    const settlementIds = searchParams['settlementArtifacts'] as string | undefined
+    const setIds = searchParams['set'] as string | undefined
     const monumentIds = searchParams['monument'] as string | undefined
     const techniqueIds = searchParams['technique'] as string | undefined
 
@@ -24,7 +32,10 @@ export default async function CultureFilter({
             categories, 
             collections, 
             countryIds, 
-            regionIds, 
+            regionIds,
+            settlementIds,
+            districtIds,
+            setIds,
             monumentIds, 
             techniqueIds 
         }) 
@@ -32,36 +43,28 @@ export default async function CultureFilter({
 
     if (result.status === 'rejected') {
         return (
-            <>
-                <ErrorHandler
-                    error={result.reason as unknown} 
-                    place="Artifacts Region Filters"
-                    notFound={false} 
-                />
-                <Select 
-                    isMulti
-                    badges
-                    side='right'
-                    values={null} 
-                    param="culture"
-                    placeholder="Не найдено"
-                    className="max-w-none w-full"
-                />
-            </>
+            <ErrorHandler
+                error={result.reason as unknown} 
+                place="Artifacts Culture Filter"
+                notFound={false} 
+            />
         )
     }
 
     const resultsFiltered = filterArtifacts(result.value, searchParams)
 
     return (
-        <Select 
-            isMulti
-            badges
-            side='right'
-            values={resultsFiltered} 
-            param="culture"
-            placeholder="Выберите культуры"
-            className="max-w-none w-full"
-        />
+        <div className="flex flex-col gap-1">
+            <h1 className='font-medium'>{dictResult.objects.filters.cultures}</h1>
+            <Select 
+                isMulti
+                badges
+                side='right'
+                values={resultsFiltered} 
+                param="culture"
+                placeholder="Выберите культуры"
+                className="max-w-none w-full"
+            />
+        </div>
     )
 }

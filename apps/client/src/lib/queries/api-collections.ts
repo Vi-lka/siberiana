@@ -172,7 +172,10 @@ export const getArtifacts = async ({
   collections,
   countryIds,
   regionIds,
+  districtIds,
+  settlementIds,
   cultureIds,
+  setIds,
   monumentIds,
   techniqueIds,
 }: {
@@ -184,7 +187,10 @@ export const getArtifacts = async ({
   collections?: string,
   countryIds?: string,
   regionIds?: string,
+  districtIds?: string,
+  settlementIds?: string,
   cultureIds?: string,
+  setIds?: string,
   monumentIds?: string,
   techniqueIds?: string,
 }): Promise<ObjectsArray> => {
@@ -210,16 +216,13 @@ export const getArtifacts = async ({
           hasLocationWith: [
             ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
             ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
+            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
+            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
           ],
-          hasCulturalAffiliationWith: [
-            ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''}
-          ],
-          hasMonumentWith: [
-            ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''}
-          ],
-          hasTechniquesWith: [
-            ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''}
-          ],
+          hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
+          hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
+          hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
+          hasTechniquesWith: [ ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''} ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [
@@ -294,7 +297,7 @@ export const getBooks = async ({
     query GetBooks {
       books(
         first: ${first}, 
-        offset: ${ offset}, 
+        offset: ${offset}, 
         orderBy: [{
           field: ${sort.split(':')[0]},
           direction: ${sort.split(':')[1]}

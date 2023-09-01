@@ -147,7 +147,10 @@ export const FiltersDict = z.object({
   collections: z.string(),
   countries: z.string(),
   regions: z.string(),
+  districts: z.string(),
+  settlements: z.string(),
   cultures: z.string(),
+  sets: z.string(),
   monuments: z.string(),
   techniques: z.string(),
 });

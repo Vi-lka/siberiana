@@ -2,11 +2,11 @@ import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
-import { getMonumentsFilter } from '~/lib/queries/api-filters-artifacts';
+import { getArtiSettlementsFilter } from '~/lib/queries/api-filters-locations';
 import { filterArtifacts } from '~/lib/utils/filters';
 import { getDictionary } from '~/lib/utils/getDictionary';
 
-export default async function MonumentFilter({
+export default async function SettlementsFilter({
     searchParams
 }: {
     searchParams: { [key: string]: string | string[] | undefined },
@@ -20,23 +20,23 @@ export default async function MonumentFilter({
     const collections = searchParams['collection'] as string | undefined
     const countryIds = searchParams['countryArtifacts'] as string | undefined
     const regionIds = searchParams['regionArtifacts'] as string | undefined
-    const settlementIds = searchParams['settlementArtifacts'] as string | undefined
     const districtIds = searchParams['districtArtifacts'] as string | undefined
     const cultureIds = searchParams['culture'] as string | undefined
     const setIds = searchParams['set'] as string | undefined
+    const monumentIds = searchParams['monument'] as string | undefined
     const techniqueIds = searchParams['technique'] as string | undefined
 
-    const [ result ] = await Promise.allSettled([
-        getMonumentsFilter({ 
+    const [ result ] = await Promise.allSettled([ 
+        getArtiSettlementsFilter({ 
             search, 
             categories, 
             collections, 
             countryIds, 
-            regionIds, 
-            settlementIds,
+            regionIds,
             districtIds,
             cultureIds, 
             setIds,
+            monumentIds, 
             techniqueIds 
         }) 
     ])
@@ -44,9 +44,9 @@ export default async function MonumentFilter({
     if (result.status === 'rejected') {
         return (
             <ErrorHandler
-                error={result.reason as unknown} 
-                place="Artifacts Monument Filter"
-                notFound={false} 
+              error={result.reason as unknown} 
+              place="Artifacts Settlements Filter"
+              notFound={false} 
             />
         )
     }
@@ -55,14 +55,14 @@ export default async function MonumentFilter({
 
     return (
         <div className="flex flex-col gap-1">
-            <h1 className='font-medium'>{dictResult.objects.filters.monuments}</h1>
+            <h1 className='font-medium'>{dictResult.objects.filters.settlements}</h1>
             <Select 
                 isMulti
                 badges
                 side='right'
                 values={resultsFiltered} 
-                param="monument"
-                placeholder="Выберите памятники"
+                param="settlementArtifacts"
+                placeholder="Выберите населенные пункты"
                 className="max-w-none w-full"
             />
         </div>

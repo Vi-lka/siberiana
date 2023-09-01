@@ -25,12 +25,7 @@ export default async function Filters({
             {dictResult.objects.filters.title}
         </h1>
 
-        {/* TODO: Add Skeleton for filters */}
-        <Suspense fallback={ 
-          "Loading Global filters..."
-        }>
-            <GlobalFilters searchParams={searchParams} />
-        </Suspense> 
+        <GlobalFilters searchParams={searchParams} />
 
         <Separator className='h-[2px] mt-1' decorative />
 
@@ -43,7 +38,7 @@ export default async function Filters({
               "Loading Books filters..."
             }>
                 {type === "books" 
-                    ? <BooksFilters searchParams={searchParams} />
+                    ? <BooksFilters />
                     : "Loading Books filters..." 
                 }
             </Suspense> 
@@ -54,7 +49,7 @@ export default async function Filters({
               "Loading PAP filters..."
             }>
                 {type === "protected_area_pictures" 
-                    ? <PAPFilters searchParams={searchParams} />
+                    ? <PAPFilters />
                     : "Loading PAP filters..." 
                 }
             </Suspense> 
