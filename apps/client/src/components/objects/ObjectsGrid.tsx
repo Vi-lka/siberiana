@@ -7,8 +7,10 @@ import ImgObject from '~/components/thumbnails/ImgObject'
 
 export default function ObjectsGrid({
     data,
+    hrefTo,
 }: {
     data: ObjectsArray,
+    hrefTo: string
 }) {
 
   return (
@@ -24,7 +26,7 @@ export default function ObjectsGrid({
                     title={object.node.displayName}
                     src={object.node.primaryImageURL}
                     origin={"storage"}
-                    href={'/'}
+                    href={`objects/${hrefTo}/${object.node.id}`}
                     width={500}
                     height={500}
                 />

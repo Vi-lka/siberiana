@@ -77,7 +77,7 @@ export default async function Artifacts({
       <ClientHydration fallback={
         <MasonrySkeleton />
       }>
-        <ObjectsGrid data={dataResult.value} />
+        <ObjectsGrid data={dataResult.value} hrefTo={'artifact'} />
         <div className="mb-24 mt-6">
           <PaginationControls
             dict={dictResult.pagination}

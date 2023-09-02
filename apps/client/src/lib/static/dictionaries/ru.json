@@ -203,7 +203,8 @@
     },
     "artifacts": "Артефакты",
     "books": "Книги",
-    "protectedAreaPictures": "ООПТ"
+    "protectedAreaPictures": "ООПТ",
+    "mainInfo": "Основная информация"
   },
   "organizations": {
     "title": "Oрганизации",

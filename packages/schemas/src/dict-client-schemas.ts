@@ -162,7 +162,8 @@ export const ObjectsDict = z.object({
   filters: FiltersDict,
   artifacts: z.string(),
   books: z.string(),
-  protectedAreaPictures: z.string()
+  protectedAreaPictures: z.string(),
+  mainInfo: z.string(),
 });
 export type ObjectsDict = z.infer<typeof ObjectsDict>;
 

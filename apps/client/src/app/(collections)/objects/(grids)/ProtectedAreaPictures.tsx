@@ -57,7 +57,7 @@ export default async function ProtectedAreaPictures({
       <ClientHydration fallback={
         <MasonrySkeleton />
       }>
-        <ObjectsGrid data={dataResult.value} />
+        <ObjectsGrid data={dataResult.value} hrefTo={'pap'} />
     
         <div className="mb-24 mt-6">
           <PaginationControls

@@ -57,7 +57,7 @@ export default async function Books({
       <ClientHydration fallback={
         <MasonrySkeleton />
       }>
-        <ObjectsGrid data={dataResult.value} />
+        <ObjectsGrid data={dataResult.value} hrefTo={'book'} />
         <div className="mb-24 mt-6">
           <PaginationControls
             dict={dictResult.pagination}

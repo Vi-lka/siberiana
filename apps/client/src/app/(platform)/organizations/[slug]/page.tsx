@@ -16,9 +16,9 @@ import ErrorHandler from "~/components/errors/ErrorHandler";
 import { PiHandshakeLight } from "react-icons/pi";
 
 export default async function Organization({
-    params: { slug },
-  }: {
-    params: { slug: string };
+  params: { slug },
+}: {
+  params: { slug: string };
 }) {
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
@@ -29,7 +29,7 @@ export default async function Organization({
         error={dataResult.reason as unknown} 
         place="Organization" 
         notFound 
-        goBack={false}
+        goBack
       />
     )
     
