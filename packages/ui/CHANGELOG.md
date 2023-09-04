@@ -1,5 +1,14 @@
 # @siberiana/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 1a294e2: Extend type for change Viewport className (now can set max height to
+  controll scroll area size)
+- a47a13c: Add badge, command, popover
+- a0ee07f: Add all for strapi cms data
+
 ## 0.2.0
 
 ### Minor Changes
