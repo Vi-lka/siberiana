@@ -4,7 +4,7 @@ import { Skeleton } from "@siberiana/ui";
 
 export default function QuizSkeleton() {
   return (
-    <div className="hidden grid-cols-2 justify-center gap-6 md:grid">
+    <div className="hidden grid-cols-2 justify-center gap-6 md:grid mb-24">
       <div className="relative h-[300px] w-full max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
         <Skeleton className="h-full w-full" />
       </div>

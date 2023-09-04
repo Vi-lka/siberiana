@@ -1,16 +1,16 @@
 import React from "react";
 
-import type { AuthDictType } from "@siberiana/schemas";
+import type { AuthDict } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import GoogleSvg from "../GoogleSvg";
 import ButtonComponent from "../ui/ButtonComponent";
 
 export default function AuthButtons({
-  text,
+  dict,
   className,
 }: {
-  text: AuthDictType;
+  dict: AuthDict;
   className?: string;
 }) {
   return (
@@ -22,7 +22,7 @@ export default function AuthButtons({
         onClick={() => console.log("Sign In with Google")}
       >
         <GoogleSvg className="mr-2 h-5 w-5" />
-        {text.authButtons.google}
+        {dict.authButtons.google}
       </ButtonComponent>
     </div>
   );

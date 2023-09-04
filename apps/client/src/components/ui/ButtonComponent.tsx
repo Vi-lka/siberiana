@@ -1,6 +1,7 @@
+"use client"
+
 import type { PropsWithChildren } from "react";
 import React from "react";
-
 import { Button } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -12,11 +13,13 @@ type ButtonComponentProps = {
     | "secondary"
     | "ghost"
     | "link"
+    | "hidden"
     | null;
   size?: "default" | "sm" | "lg" | null;
   className?: string;
   type?: "submit" | "reset" | "button";
-  onClick?: () => void;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function ButtonComponent(
@@ -31,6 +34,7 @@ export default function ButtonComponent(
       )}
       size={props.size}
       type={props.type}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.children}

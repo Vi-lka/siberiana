@@ -2,16 +2,16 @@
 
 import request from "graphql-request";
 import useSWR from "swr";
+import type { Questions } from "@siberiana/schemas";
 
-import type { QuestionsType } from "@siberiana/schemas";
-
-const fetcher = (query: string): Promise<QuestionsType> =>
+const fetcher = (query: string): Promise<Questions> =>
   request(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, query);
 
-export function useQuestions(locale: string) {
-  const { data, error, isLoading } = useSWR<QuestionsType, Error>(
+//.........................QUESTIONS.........................//
+export function useQuestions() {
+  const { data, error, isLoading } = useSWR<Questions, Error>(
     `query Questions {
-      questions(locale: "${locale}") {
+      questions {
         data {
           attributes {
             title

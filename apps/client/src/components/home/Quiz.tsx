@@ -4,32 +4,26 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ZodError } from "zod";
-
-import { QuestionsSchema } from "@siberiana/schemas";
-import type { ErrorsDictType, QuizType } from "@siberiana/schemas";
-
+import { Questions } from "@siberiana/schemas";
+import type { ErrorsDict, QuizDict } from "@siberiana/schemas";
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
-import getURL from "~/lib/utils/getURL";
-import { useLocale } from "~/lib/utils/useLocale";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
 import ButtonComponent from "../ui/ButtonComponent";
-import ErrorToast from "../ui/ErrorToast";
+import ErrorToast from "../errors/ErrorToast";
 
 export default function Quiz({
-  text,
-  errorText,
+  qiuzDict,
+  errorDict,
 }: {
-  text: QuizType;
-  errorText: ErrorsDictType;
+  qiuzDict: QuizDict;
+  errorDict: ErrorsDict;
 }) {
   const [answer, setAnswer] = React.useState<boolean>();
   const [tryAgain, setTryAgain] = React.useState<boolean>();
 
-  const locale = useLocale();
-
   // Get all questions TODO: if useQuestions() returns random we will get only one question
-  const { data, isLoading, error } = useQuestions(locale);
+  const { data, isLoading, error } = useQuestions();
 
   // Get random question
   const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
@@ -44,20 +38,25 @@ export default function Quiz({
 
   // Check for data
   if (isLoading) return <QuizSkeleton />;
-  if (data === undefined || error)
+  if (error){
     return (
       <ErrorToast
-        dict={errorText}
-        error={error ? error.message : "Quiz Data is undefined"}
+        dict={errorDict}
+        error={error.message}
+        place="Quiz"
       />
     );
+  }
+  if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId])){
+    return null
+  }
 
   // Validate data
   try {
-    QuestionsSchema.parse(data);
+    Questions.parse(data);
   } catch (error) {
     console.log((error as ZodError).issues);
-    return <ErrorToast dict={errorText} error={(error as ZodError).issues} />;
+    return <ErrorToast dict={errorDict} error={(error as ZodError).issues} place="Quiz" />;
   }
 
   const dataResult = data;
@@ -78,12 +77,12 @@ export default function Quiz({
   }
 
   return (
-    <div className="hidden grid-cols-2 justify-center gap-6 md:grid">
+    <div className="hidden grid-cols-2 justify-center gap-6 md:grid mb-24">
       <div className="relative h-[300px] w-full max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
         <Image
           src={
             question.attributes.image.data
-              ? getURL(question.attributes.image.data.attributes.url, "strapi")
+              ? question.attributes.image.data.attributes.url
               : "/images/image-placeholder.png"
           }
           fill
@@ -120,10 +119,10 @@ export default function Quiz({
         ) : answer ? (
           <div className="flex flex-col gap-6">
             <h1 className="font-OpenSans text-xl font-bold uppercase text-lime-600 dark:text-lime-800">
-              {text.right}
+              {qiuzDict.right}
             </h1>
 
-            <Link href={getLinkDir(question.attributes.url, locale)}>
+            <Link href={getLinkDir(question.attributes.url)}>
               <ButtonComponent className="font-Inter w-fit px-8 py-6 text-xs uppercase lg:text-sm">
                 {question.attributes.urlName}
               </ButtonComponent>
@@ -132,14 +131,14 @@ export default function Quiz({
         ) : (
           <div className="flex flex-col gap-6">
             <h1 className="font-OpenSans text-lg font-bold uppercase text-red-600 dark:text-red-800 lg:text-xl">
-              {text.wrong}
+              {qiuzDict.wrong}
             </h1>
 
             <ButtonComponent
               className="font-Inter w-fit px-8 py-6 text-xs uppercase lg:text-sm"
               onClick={() => handleWrong()}
             >
-              {text.tryAgain}
+              {qiuzDict.tryAgain}
             </ButtonComponent>
           </div>
         )}

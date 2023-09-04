@@ -5,15 +5,12 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 import type {
-  AuthDictType,
-  GroupLinkType,
-  MenuZoneType,
-  SingleLinkType,
+  AuthDict,
+  MenuDict,
 } from "@siberiana/schemas";
 import {
-  GroupLinkSchema,
-  MenuZoneSchema,
-  SingleLinkSchema,
+  GroupLink,
+  SingleLink,
 } from "@siberiana/schemas";
 import {
   buttonVariants,
@@ -21,6 +18,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
   ScrollArea,
+  Separator,
   Sheet,
   SheetClose,
   SheetContent,
@@ -30,22 +28,20 @@ import {
   SheetTrigger,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-
-import { useLocale } from "~/lib/utils/useLocale";
 import LogoSvg from "../LogoSvg";
-import Icons from "../ui/IconsSwitch";
 import NavListItem from "./NavListItem";
+import { signIn } from "next-auth/react";
+import type { Session } from "next-auth";
 
 export default function NavSheet({
   menuDict,
   authDict,
+  session
 }: {
-  menuDict: MenuZoneType;
-  authDict: AuthDictType;
+  menuDict: MenuDict;
+  authDict: AuthDict;
+  session: Session | null
 }) {
-  const locale = useLocale();
-
-  const dictResult = MenuZoneSchema.parse(menuDict);
 
   return (
     <Sheet>
@@ -55,9 +51,9 @@ export default function NavSheet({
 
       <SheetContent>
         <SheetHeader>
-          <SheetTitle className="mt-5 flex justify-center">
+          <SheetTitle className="mt-5">
             <Link
-              href={`${locale}`}
+              href={`/`}
               className="relative h-[2.5rem] w-[7rem] md:h-[3.8125rem] md:w-[10rem]"
             >
               <SheetClose>
@@ -67,29 +63,34 @@ export default function NavSheet({
           </SheetTitle>
 
           <SheetDescription className="font-Inter text-center">
-            <Link href={`${locale}/login`}>
+            {!!session ? null : (
               <SheetClose
                 className={cn(
                   buttonVariants(),
                   "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase",
                 )}
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                onClick={() => signIn("keycloak")}
               >
-                {authDict.mainButton}
+                {authDict.signIn}
               </SheetClose>
-            </Link>
+            )}
           </SheetDescription>
         </SheetHeader>
 
-        <NavigationMenu orientation="vertical">
-          <NavigationMenuList className="flex flex-col items-center">
-            <ScrollArea className="font-Inter mt-[2vh] h-[72vh] w-full p-1">
-              {dictResult.map((menuItem, index) => (
+        <NavigationMenu orientation="vertical" className="block w-full">
+          <NavigationMenuList className="flex flex-col w-full">
+            <ScrollArea
+              className="font-Inter mt-[2vh] w-full p-1"
+              classNameViewport={cn(!!session ? "max-h-[80vh]" : "max-h-[72vh]")}
+            >
+              {menuDict.map((menuItem, index) => (
                 <SheetMenuItem
                   key={index}
-                  locale={locale}
                   menuItem={menuItem}
                 />
               ))}
+              <div className="h-20"/>
             </ScrollArea>
           </NavigationMenuList>
         </NavigationMenu>
@@ -99,11 +100,9 @@ export default function NavSheet({
 }
 
 function SheetMenuItem({
-  locale,
   menuItem,
 }: {
-  locale: string;
-  menuItem: SingleLinkType | GroupLinkType;
+  menuItem: SingleLink | GroupLink;
 }) {
   const pathName = usePathname();
 
@@ -115,67 +114,49 @@ function SheetMenuItem({
     .split("/")
     .filter((v) => v.length > 0);
 
-  // Remove locale
-  const pathCurrentPage = pathNestedRoutes[pathNestedRoutes.length - 1];
+  const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
 
-  if (SingleLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as SingleLinkType;
+  console.log(pathCurrentPage)
+
+  if (SingleLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as SingleLink;
 
     return (
       <div className="mb-1 mt-6 flex w-full gap-1 py-2">
-        <div className="from-muted/50 to-muted dark:bg-accent flex flex-col justify-center rounded-md bg-gradient-to-b px-1 py-2">
-          <Icons
-            icon={menuItemResult.image}
-            className="text-dark dark:text-beaverLight h-[50px] w-[50px] p-1"
-          />
-        </div>
-
-        <ul className="flex flex-col justify-center">
+        <ul className="flex flex-col justify-center w-full">
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
-            href={`${locale}${menuItemResult.url}`}
-            active={pathCurrentPage === `${menuItemResult.url}`}
-            className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 py-1"
+            href={`${menuItemResult.url}`}
+            active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
+            className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
-          >
-            {menuItemResult.description}
-          </NavListItem>
+          />
         </ul>
       </div>
     );
-  } else if (GroupLinkSchema.safeParse(menuItem).success) {
-    const menuItemResult = menuItem as GroupLinkType;
+  } else if (GroupLink.safeParse(menuItem).success) {
+    const menuItemResult = menuItem as GroupLink;
 
     return (
       <NavigationMenuItem>
-        <h4 className="text-dark dark:text-beaverLight mb-1 mt-6 text-base font-medium uppercase">
+        <h4 className="text-dark dark:text-beaverLight mb-1 mt-6 text-base font-semibold uppercase">
           {menuItemResult.name}
         </h4>
 
-        <div className="flex w-full gap-1 py-2">
-          <div className="from-muted/50 to-muted dark:bg-accent flex flex-col justify-around gap-1 rounded-md bg-gradient-to-b px-1 py-2">
-            {menuItemResult.list.map((item, index) => (
-              <Icons
-                key={index}
-                icon={item.image}
-                className="text-dark dark:text-beaverLight h-[50px] w-[50px] p-1"
-              />
-            ))}
-          </div>
+        <Separator className="h-[2px]" />
 
-          <ul className="flex flex-col justify-around gap-1">
+        <div className="flex w-full gap-1 py-2">
+          <ul className="flex flex-col justify-around gap-1 w-11/12">
             {menuItemResult.list.map((item) => (
               <NavListItem
                 key={item.id}
                 title={item.name}
-                href={`${locale}${item.url}`}
-                active={pathCurrentPage === `${item.url}`}
-                className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                href={`${item.url}`}
+                active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
+                className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
-              >
-                {item.description}
-              </NavListItem>
+              />
             ))}
           </ul>
         </div>

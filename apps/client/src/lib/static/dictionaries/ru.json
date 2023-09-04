@@ -1,22 +1,78 @@
 {
+  "siteInfo": {
+    "siteName": "Сибириана",
+    "siteDescription": "Агрегатор культурного наследия"
+  },
   "breadcrumbs": {
     "home": "Главная",
+    "categories": "Категории",
+    "collections": "Коллекции",
+    "objects": "Объекты",
     "organizations": "Организации",
-    "objects": "Все объекты",
-    "archaeological": "Археологические коллекции",
-    "archaeology": "Археология"
+    "projects": "Проекты",
+    "services": "Сервисы",
+    "about": "О нас",
+    "account": "Личный кабинет",
+    "settings": "Настройки",
+    "faq": "Часто задаваемые вопросы"
+  },
+  "pagination": {
+    "showMore": "Показать ещё",
+    "page": "Страница",
+    "of": "из",
+    "firstPage": "Перейти на первую страницу",
+    "lastPage": "Перейти на последнюю страницу",
+    "previousPage": "Перейти на предыдущую страницу",
+    "nextPage": "Перейти на следующую страницу"
+  },
+  "sort": {
+    "placeholder": "Сортировать по:",
+    "asc": "asc↓",
+    "desc": "desc↑",
+    "ascText": "А-Я↓",
+    "descText": "Я-А↑",
+    "byName": "Название",
+    "byAdded": "Добавлено",
+    "reset": "Сброс"
   },
   "errors": {
     "title": "Ошибка! Что-то пошло не так:",
-    "tryAgain": "Попробовать снова"
+    "tryAgain": "Попробовать снова",
+    "notFound": {
+      "title": "Не найдено",
+      "description": "Не удалось найти запрошенный ресурс",
+      "goBack": "Вернуться"
+    },
+    "sessionTitle": "Доступ запрещен",
+    "sessionDescription": "Срок действия вашего сеанса истек. Пожалуйста, войдите в систему еще раз."
   },
   "menu": [
     {
       "id": 1,
-      "name": "Коллекции",
-      "url": "/collections",
-      "description": "Изучай наследие Енисейской Сибири",
-      "image": "Library"
+      "name": "Обзор",
+      "list": [
+        {
+          "id": 1,
+          "name": "Категории",
+          "url": "/categories",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 2,
+          "name": "Коллекции",
+          "url": "/collections",
+          "description": "",
+          "image": "Library"
+        },
+        {
+          "id": 3,
+          "name": "Объекты",
+          "url": "/objects?type=artifacts",
+          "description": "",
+          "image": "Library"
+        }
+      ]
     },
     {
       "id": 2,
@@ -88,8 +144,8 @@
     }
   ],
   "auth": {
-    "mainButton": "Войти",
-    "logIn": "Войти",
+    "signIn": "Войти",
+    "signOut": "Выйти",
     "signUp": "Зарегистрироваться",
     "firstName": "Ваше имя *",
     "lastName": "Ваша фамилия *",
@@ -120,39 +176,101 @@
     "button": "Поиск",
     "placeholder": "Например: бронзовый век"
   },
-  "categories": {
-    "title": "Категории",
-    "list": [
-      {
-        "title": "Художественные коллекции",
-        "url": "/art",
-        "img": "/images/artCol.JPG"
-      },
-      {
-        "title": "Археологические коллекции",
-        "url": "/archaeological",
-        "img": "/images/archaeologicalCol.jpg"
-      },
-      {
-        "title": "Культурные и исторические коллекции",
-        "url": "/cultural-historical",
-        "img": "/images/cultHistorCol.jpg"
-      },
-      {
-        "title": "Естественно-научные коллекции",
-        "url": "/natural-science",
-        "img": "/images/naturalCol.jpg"
-      }
-    ]
-  },
   "quiz": {
     "right": "Верно!",
     "wrong": "К сожалению, нет(",
     "tryAgain": "Попробовать еще раз"
   },
+  "categories": {
+    "title": "Категории",
+    "textUrl": "Все категории",
+    "goTo": "Узнать больше"
+  },
+  "objects": {
+    "count": "Всего",
+    "filters": {
+      "title": "Фильтры",
+      "categories": "Категория",
+      "collections": "Коллекция",
+      "countries": "Страна",
+      "regions": "Регион",
+      "districts": "Район",
+      "settlements": "Населенный пункт",
+      "cultures": "Культура",
+      "sets": "Комплекс",
+      "monuments": "Памятник",
+      "techniques": "Техника"
+    },
+    "artifacts": "Артефакты",
+    "books": "Книги",
+    "protectedAreaPictures": "ООПТ",
+    "mainInfo": {
+      "title": "Основная информация"
+    }
+  },
   "organizations": {
     "title": "Oрганизации",
-    "url": "/organizations",
-    "textUrl": "Все организации"
+    "textUrl": "Все организации",
+    "goTo": "Перейти на официальный сайт"
+  },
+  "projects": {
+    "title": "Проекты",
+    "textUrl": "Все проекты",
+    "goTo": "Перейти на сайт проекта"
+  },
+  "services": {
+    "title": "Сервисы",
+    "textUrl": "Все сервисы",
+    "goTo": "Узнать больше"
+  },
+  "schedule": {
+    "monday": "Понедельник",
+    "tuesday": "Вторник",
+    "wednesday": "Среда",
+    "thursday": "Четверг",
+    "friday": "Пятница",
+    "saturday": "Суббота",
+    "sunday": "Воскресенье"
+  },
+  "tooltips": {
+    "consortium": "Консорциум"
+  },
+  "account": {
+    "barTitle": "Мой аккаунт",
+    "profile": "Личный кабинет",
+    "settings": "Настройки",
+    "favourites": "Избранное",
+    "collections": "Коллекции",
+    "publications": "Публикации",
+    "signOut": "Выйти",
+    "roles": {
+      "admin": "Администратор",
+      "research": "Исследователь",
+      "moder": "Модератор"
+    }
+  },
+  "faq": {
+    "title": "Часто задаваемые вопросы",
+    "subTitle": "Персональное обращение вы можете оставить на странице",
+    "techSupport": "Техническая поддержка"
+  },
+  "footer": {
+    "links": [
+      {
+        "name": "Помощь проекту",
+        "url": "/help"
+      },
+      {
+        "name": "Часто задаваемые вопросы",
+        "url": "/faq"
+      },
+      {
+        "name": "Техническая поддержка",
+        "url": "/tech-support"
+      }
+    ],
+    "allRightRes": "Все права защищены.",
+    "privacyPol": "Политика конфиденциальности",
+    "termsOfUse": "Условия использования"
   }
 }

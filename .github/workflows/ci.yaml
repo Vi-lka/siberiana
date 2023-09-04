@@ -5,6 +5,7 @@ on: [push, pull_request]
 env:
   NEXT_PUBLIC_STRAPI_API_URL: http://localhost:1337
   NEXT_PUBLIC_STRAPI_DOMAIN: localhost
+  NEXT_PUBLIC_S3_DOMAIN: s3.appctl.ru
 
 jobs:
   build:

@@ -1,22 +1,10 @@
 import "server-only";
 
-import type { DictionaryType } from "@siberiana/schemas";
+import type { Dictionary } from "@siberiana/schemas";
 
-interface DictionariesType {
-  ru: () => Promise<DictionaryType>;
-  en: () => Promise<DictionaryType>;
-}
+const dictionary = () => import("../static/dictionaries/ru.json").then(
+  (module) => module.default,
+) as Promise<Dictionary>
 
-const dictionaries = {
-  ru: () =>
-    import("../static/dictionaries/ru.json").then(
-      (module) => module.default,
-    ) as Promise<DictionaryType>,
-  en: () =>
-    import("../static/dictionaries/en.json").then(
-      (module) => module.default,
-    ) as Promise<DictionaryType>,
-} as DictionariesType;
-
-export const getDictionary = async (locale: string) =>
-  dictionaries[locale as keyof DictionariesType]();
+export const getDictionary = async () =>
+dictionary();

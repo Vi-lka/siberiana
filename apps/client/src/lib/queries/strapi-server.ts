@@ -1,19 +1,19 @@
 import "server-only";
 
 import {
-  CustomBlockSchema,
-  OrganizationsSchema,
-  SliderSchema,
+  About,
+  CustomBlock,
+  FAQ,
+  OrganizationBySlug,
+  Organizations,
+  Projects,
+  Services,
+  Slider,
 } from "@siberiana/schemas";
-import type {
-  CustomBlockType,
-  OrganizationBySlugType,
-  OrganizationsType,
-  ProjectsType,
-  SliderType,
-} from "@siberiana/schemas";
+import { notFound } from "next/navigation";
 
-export const getSlider = async (): Promise<SliderType> => {
+//.........................SLIDER.........................//
+export const getSlider = async (): Promise<Slider> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Slider {
@@ -39,7 +39,11 @@ export const getSlider = async (): Promise<SliderType> => {
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -50,24 +54,33 @@ export const getSlider = async (): Promise<SliderType> => {
     throw new Error("Failed to fetch data 'Slider'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      slider: {
+        data: {
+          attributes: {
+            Images: {
+              data: Slider
+            }
+          }
+        }
+      }
+    }
+  };
 
-  const data = SliderSchema.parse(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const data = Slider.parse(
     json.data?.slider.data.attributes.Images.data,
   );
 
   return data;
 };
 
-export const getCustomBlock = async (
-  locale: string,
-): Promise<CustomBlockType> => {
+//.........................CUSTOM BLOCK.........................//
+export const getCustomBlock = async (): Promise<CustomBlock> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query CustomBlock {
-      custom(locale: "${locale}") {
+      custom {
         data {
           attributes {
             content {
@@ -97,7 +110,11 @@ export const getCustomBlock = async (
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -108,24 +125,68 @@ export const getCustomBlock = async (
     throw new Error("Failed to fetch data 'Custom Block'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      custom: {
+        data: {
+          attributes: {
+            content: CustomBlock
+          } 
+        }
+      }
+    }
+  };
 
-  const data = CustomBlockSchema.parse(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  if (!json.data.custom.data) {
+    notFound()
+  }
+
+  const data = CustomBlock.parse(
     json.data?.custom.data?.attributes.content,
   );
 
   return data;
 };
 
-export const getOrganizations = async (
-  locale: string,
-): Promise<OrganizationsType> => {
+//.........................ORGANIZATIONS.........................//
+export const getOrganizations = async ({
+  page,
+  per,
+  sort = "order:asc",
+  search = "",
+  consortium
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string,
+  consortium?: boolean,
+}): Promise<Organizations> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Organizations {
-      organizations(locale: "${locale}", sort: "order:asc", pagination: {limit: 5}) {
+      organizations(
+        sort: "${sort}", 
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          },
+          ${consortium ? (
+            `consortium: {
+              eqi: true
+            }`
+          ) : ''}
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
         data {
           attributes {
             title
@@ -149,7 +210,11 @@ export const getOrganizations = async (
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
   });
 
   if (!res.ok) {
@@ -160,20 +225,21 @@ export const getOrganizations = async (
     throw new Error("Failed to fetch data 'Organizations'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {data: { organizations: Organizations}};
 
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
+    notFound()
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const data = OrganizationsSchema.parse(json.data?.organizations.data);
+  const organizations = Organizations.parse(json.data.organizations);
 
-  return data;
+  return organizations;
 };
 
+//.........................ORGANIZATION BY SLUG.........................//
 export const getOrganizationBySlug = async (
   slug: string,
-): Promise<OrganizationBySlugType> => {
+): Promise<OrganizationBySlug> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query OrganizationBySlug {
@@ -282,30 +348,212 @@ export const getOrganizationBySlug = async (
   });
 
   if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
     throw new Error("Failed to fetch data 'Organization By Slug'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as { 
+    data: { 
+      organizations: { 
+        data: { 
+          attributes: OrganizationBySlug 
+        }[] 
+      }
+    }
+  };
+  
+  if (json.data.organizations.data.length === 0) {
+    notFound()
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.organizations.data[0].attributes;
+  const data = OrganizationBySlug.parse(json.data?.organizations.data[0].attributes);
+
+  return data;
 };
 
-export const getProjects = async (locale: string): Promise<ProjectsType> => {
+//.........................PROJECTS.........................//
+export const getProjects = async ({
+  page,
+  per,
+  sort = "order:asc",
+  search = ""
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string,
+}): Promise<Projects> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query Projects {
-      projects(sort: "order:asc", locale: "${locale}") {
+      projects(
+        sort: "${sort}",
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          }
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
         data {
           attributes {
-            Name
-            Description
-            Content
-            Image {
+            title
+            description
+            url
+            image {
               data {
                 attributes {
                   url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Projects'");
+  }
+
+  const json = await res.json() as { data: { projects: Projects } };
+  
+  if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
+    notFound()
+  }
+
+  const projects = Projects.parse(json.data?.projects);
+
+  return projects;
+};
+
+//.........................SERVICES.........................//
+export const getServices = async ({
+  page,
+  per,
+  sort = "order:asc",
+  search = ""
+}: {
+  page: number,
+  per: number,
+  sort?: string,
+  search?: string
+}): Promise<Services> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query Services {
+      services(
+        sort: "${sort}",
+        pagination: {
+          page: ${page},
+          pageSize: ${per}
+        },
+        filters: {
+          title: {
+            containsi: "${search}"
+          }
+        }
+      ) {
+        meta {
+          pagination {
+            total
+          }
+        }
+        data {
+          attributes {
+            title
+            description
+            url
+            image {
+              data {
+                attributes {
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 3600,
+    },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Services'");
+  }
+
+  const json = await res.json() as { data: { services: Services } };
+  
+  if ((json.data.services.meta.pagination.total === 0) || (json.data.services.data.length === 0)) {
+    notFound()
+  }
+
+  const services = Services.parse(json.data?.services);
+
+  return services;
+};
+
+//.........................ABOUT.........................//
+export const getAbout = async (): Promise<About> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query About {
+      about {
+        data {
+          attributes {
+            description 
+            title
+            team {
+              name
+              description
+              image {
+                data {
+                  attributes {
+                    url
+                  }
                 }
               }
             }
@@ -324,14 +572,84 @@ export const getProjects = async (locale: string): Promise<ProjectsType> => {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data 'Projects'");
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'About'");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const json = await res.json();
+  const json = await res.json() as {
+    data: {
+      about: {
+        data: {
+          attributes: About
+        }
+      }
+    }
+  };
+  
+  if (!json.data.about.data) {
+    notFound()
+  }
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  const about = About.parse(json.data?.about.data.attributes);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-  return json.data?.projects.data;
+  return about;
+};
+
+//.........................FAQ.........................//
+export const getFAQ = async (): Promise<FAQ> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query FAQ {
+      faq {
+        data {
+          attributes {
+            category {
+              title
+              item {
+                question
+                answer
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { tags: ["strapi"] },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'FAQ'");
+  }
+
+  const json = await res.json() as {
+    data: {
+      faq: {
+        data: {
+          attributes: FAQ
+        }
+      }
+    }
+  };
+  
+  if (!json.data.faq.data) {
+    notFound()
+  }
+
+  const faq = FAQ.parse(json.data?.faq.data.attributes);
+
+  return faq;
 };
