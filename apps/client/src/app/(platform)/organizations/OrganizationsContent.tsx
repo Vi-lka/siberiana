@@ -54,7 +54,6 @@ export default async function OrganizationsContent({
             title={org.attributes.title}
             src={org.attributes.image.data?.attributes.url}
             url={`/organizations/${org.attributes.slug}`}
-            origin={"strapi"}
             width={600}
             height={400}
           >

@@ -72,7 +72,6 @@ export default async function OrganizationsBlock() {
             title={org.attributes.title}
             src={org.attributes.image.data?.attributes.url}
             url={`/organizations/${org.attributes.slug}`}
-            origin={"strapi"}
             width={450}
             height={450}
           >

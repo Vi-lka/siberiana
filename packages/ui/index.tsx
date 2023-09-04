@@ -27,3 +27,4 @@ export * from "./src/separator";
 export * from "./src/badge";
 export * from "./src/command";
 export * from "./src/popover";
+export * from "./src/collapsible";

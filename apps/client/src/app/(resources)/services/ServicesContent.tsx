@@ -47,7 +47,6 @@ export default async function ServicesContent({
                 src={service.attributes.image.data?.attributes.url}
                 href={getLinkDir(service.attributes.url)}
                 target="_blank"
-                origin={"strapi"}
                 width={700}
                 height={300}
             >

@@ -5,6 +5,7 @@ import BreadcrumbsObject from '~/components/ui/BreadcrumbsObject';
 import { getArtifactById } from '~/lib/queries/api-object';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import PhotoSlider from '~/components/objects/PhotoSlider';
+import MainInfoBlock from '~/components/objects/MainInfoBlock';
 
 
 export default async function Artifact({
@@ -62,20 +63,26 @@ export default async function Artifact({
                         : null
                     }
 
-                    {/* Desktop */}
-                    <p className="text-foreground lg:text-2xl text-xl font-bold uppercase md:block hidden">
-                        {dictResult.objects.mainInfo}
-                    </p>
+                    {/* Desktop Main Info */}
+                    <div className="md:block hidden">
+                        <MainInfoBlock 
+                            dict={dictResult.objects} 
+                            data={dataResult.value}
+                        />
+                    </div>
                 </div>
 
                 <div className="md:w-[50%] w-full mb-3">
                     <PhotoSlider data={images} />
                 </div>    
 
-                {/* Mobile */}
-                <p className="text-foreground lg:text-2xl text-xl font-bold uppercase md:hidden block">
-                    {dictResult.objects.mainInfo}
-                </p>
+                {/* Mobile Main Info */}
+                <div className="md:hidden block">
+                    <MainInfoBlock 
+                        dict={dictResult.objects} 
+                        data={dataResult.value}
+                    />
+                </div>
             </div>
         </div>
     )

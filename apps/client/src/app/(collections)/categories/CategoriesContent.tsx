@@ -48,7 +48,6 @@ export default async function CategoriesContent({
             classNameImage={'w-full object-cover'}
             title={category.node.displayName}
             src={category.node.primaryImageURL}
-            origin={"storage"}
             href={`/collections?category=${category.node.slug}`}
             width={810}
             height={300}

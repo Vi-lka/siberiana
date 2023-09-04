@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Image from "next/image";
-import getURL from '~/lib/utils/getURL';
 
 export default function Member({
     title,
@@ -18,7 +17,7 @@ export default function Member({
 
     React.useEffect(() => {
         if (src) {
-          setImage(getURL(src, "strapi"))
+          setImage(src)
         } else {
           setImage("/images/image-placeholder.png")
         }

@@ -8,7 +8,6 @@ import { Questions } from "@siberiana/schemas";
 import type { ErrorsDict, QuizDict } from "@siberiana/schemas";
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
-import getURL from "~/lib/utils/getURL";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
 import ButtonComponent from "../ui/ButtonComponent";
 import ErrorToast from "../errors/ErrorToast";
@@ -83,7 +82,7 @@ export default function Quiz({
         <Image
           src={
             question.attributes.image.data
-              ? getURL(question.attributes.image.data.attributes.url, "strapi")
+              ? question.attributes.image.data.attributes.url
               : "/images/image-placeholder.png"
           }
           fill

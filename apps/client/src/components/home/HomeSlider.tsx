@@ -10,8 +10,6 @@ import { useKeenSlider } from "keen-slider/react";
 import type { Slider } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
 
-import getImageURL from "~/lib/utils/getURL";
-
 export default function HomeSlider({ data }: { data: Slider }) {
   const [created, setCreated] = React.useState<boolean>();
 
@@ -46,7 +44,7 @@ export default function HomeSlider({ data }: { data: Slider }) {
           >
             {created ? (
               <Image
-                src={getImageURL(image.attributes.url, "strapi")}
+                src={image.attributes.url}
                 fill
                 className={"object-cover"}
                 alt={

@@ -59,7 +59,6 @@ export default async function CollectionsContent({
                 classNameImage={'w-full object-cover'}
                 title={collection.node.displayName}
                 src={collection.node.primaryImageURL}
-                origin={"storage"}
                 href={getCollectionHref(collection.node.category?.slug, collection.node.slug)}
                 width={810}
                 height={300}

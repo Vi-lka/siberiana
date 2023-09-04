@@ -44,7 +44,6 @@ export default async function CategoriesBlock() {
           className={"aspect-square"}
           title={category.node.displayName}
           src={category.node.primaryImageURL}
-          origin={"storage"}
           url={`/collections?category=${category.node.slug}`}
         />
       ))}

@@ -41,7 +41,6 @@ export default async function CustomBlock() {
             title={elem.title}
             src={elem.img.data?.attributes.url}
             url={getLinkDir(elem.url)}
-            origin={"strapi"}
           />
         ))}
       </div>

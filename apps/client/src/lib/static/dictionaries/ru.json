@@ -204,7 +204,9 @@
     "artifacts": "Артефакты",
     "books": "Книги",
     "protectedAreaPictures": "ООПТ",
-    "mainInfo": "Основная информация"
+    "mainInfo": {
+      "title": "Основная информация"
+    }
   },
   "organizations": {
     "title": "Oрганизации",

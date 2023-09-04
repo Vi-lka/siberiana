@@ -49,7 +49,6 @@ export default async function ProjectsBlock() {
                 src={proj.attributes.image.data?.attributes.url}
                 href={getLinkDir(proj.attributes.url)}
                 target="_blank"
-                origin={"strapi"}
                 width={700}
                 height={300}
             >

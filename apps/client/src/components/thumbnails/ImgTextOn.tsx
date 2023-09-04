@@ -3,11 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-
 import { cn } from "@siberiana/ui/src/lib/utils";
-
-import type { UrlOrigins } from "~/lib/utils/getURL";
-import getURL from "~/lib/utils/getURL";
 import { TooltipProvider, Tooltip, TooltipTrigger, Button, TooltipContent } from "@siberiana/ui";
 
 type Props = {
@@ -18,7 +14,6 @@ type Props = {
   width?: number;
   height?: number;
   fill?: boolean;
-  origin?: UrlOrigins;
   className?: string;
 } & (TrueShowIconProps | FalseShowIconProps)
 
@@ -37,11 +32,11 @@ export default function ImgTextOn(props: Props) {
 
   React.useEffect(() => {
     if (props.src) {
-      setImage(getURL(props.src, props.origin))
+      setImage(props.src)
     } else {
       setImage("/images/image-placeholder.png")
     }
-  }, [props.origin, props.src])
+  }, [props.src])
 
   return (
     <Link

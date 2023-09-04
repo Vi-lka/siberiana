@@ -11,7 +11,6 @@ import { getDictionary } from "~/lib/utils/getDictionary";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import MapHtml from "./MapHtml";
 import Image from "next/image";
-import getURL from "~/lib/utils/getURL";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { PiHandshakeLight } from "react-icons/pi";
 
@@ -79,7 +78,7 @@ export default async function Organization({
             {dataResult.value.image.data ? (
               <div className="relative flex lg:w-[40%] w-full aspect-[2/1] overflow-hidden rounded-md">
                 <Image
-                  src={getURL(dataResult.value.image.data.attributes.url, "strapi")}
+                  src={dataResult.value.image.data.attributes.url}
                   width={800}
                   height={400}
                   priority={true}
@@ -118,7 +117,6 @@ export default async function Organization({
                     src={elem.img.data?.attributes.url}
                     url={getLinkDir(elem.url)}
                     target="_blank"
-                    origin={"strapi"}
                   />
                 ))}
               </div>
@@ -151,7 +149,6 @@ export default async function Organization({
                     title={elem.name}
                     src={elem.image.data?.attributes.url}
                     href={getLinkDir(elem.url)}
-                    origin={"strapi"}
                   >
                     <p className="w-full uppercase xl:text-sm text-xs">
                       {elem.name ? (
@@ -197,7 +194,6 @@ export default async function Organization({
                     src={elem.image.data?.attributes.url}
                     href={getLinkDir(elem.url)}
                     target="_blank"
-                    origin={"strapi"}
                     width={450}
                     height={450}
                   >
