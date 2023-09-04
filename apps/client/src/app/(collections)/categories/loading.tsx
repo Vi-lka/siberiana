@@ -19,7 +19,7 @@ export default function LoadingCategories() {
         </div>
 
         <div className="md:w-full w-[85%] mt-3 mb-12 mx-auto grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
-          {[1,2,3,4,5,6,7,8,9,10,11,12].map((_, i) => (
+          {[Array(12)].map((_, i) => (
             <Skeleton key={i} className="md:aspect-[2/1] aspect-square w-full px-8 py-6" />
           ))}
         </div>
