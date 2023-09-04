@@ -2,14 +2,14 @@ import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import BreadcrumbsObject from '~/components/ui/BreadcrumbsObject';
-import { getArtifactById } from '~/lib/queries/api-object';
+import { getPAPById } from '~/lib/queries/api-object';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import PhotoSlider from '~/components/objects/PhotoSlider';
-import MainInfoBlock from '~/app/(collections)/objects/artifact/[id]/MainInfoBlock';
+import MainInfoBlock from './MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
 
 
-export default async function Artifact({
+export default async function ProtectedAreaPictures({
     params: { id },
 }: {
     params: { id: string };
@@ -18,11 +18,11 @@ export default async function Artifact({
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
 
-    const [ dataResult ] = await Promise.allSettled([ getArtifactById(id) ])
+    const [ dataResult ] = await Promise.allSettled([ getPAPById(id) ])
     if (dataResult.status === 'rejected') return (
         <ErrorHandler 
           error={dataResult.reason as unknown} 
-          place={`Artifact ${id}`} 
+          place={`Protected Area Pictures ${id}`} 
           notFound 
           goBack
         />

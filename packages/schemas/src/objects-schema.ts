@@ -94,3 +94,56 @@ export const ArtifactById = z.object({
     }).nullable(),
 });
 export type ArtifactById = z.infer<typeof ArtifactById>;
+
+//.........................BOOK.........................//
+export const BookById = z.object({
+    displayName: z.string(),
+    description: z.string(),
+    primaryImageURL: z.string(),
+    additionalImagesUrls: z.string().array().nullable(),
+    year: z.number(),
+    collection: Collection,
+    location: Location.nullable(),
+    holders: Holders,
+    bookGenres: z.object({
+        displayName: z.string(),  
+    }).array(),
+    authors: z.object({
+        displayName: z.string(),  
+    }).array(),
+    license: z.object({
+        displayName: z.string(),  
+    }).nullable(),
+    publisher: z.object({
+        displayName: z.string(),  
+    }).nullable(),
+    files: z.string().array()
+});
+export type BookById = z.infer<typeof BookById>;
+
+//.........................PAP (protectedAreaPictures).........................//
+export const ProtectedArea = z.object({
+    displayName: z.string(),
+    description: z.string(),
+    area: z.string(),
+    establishmentDate: z.string(),
+    protectedAreaCategory: z.object({
+        displayName: z.string(),  
+    }).nullable(),
+});
+export type ProtectedArea = z.infer<typeof ProtectedArea>;
+
+export const PAPById = z.object({
+    displayName: z.string(),
+    description: z.string(),
+    primaryImageURL: z.string(),
+    additionalImagesUrls: z.string().array().nullable(),
+    shootingDate: z.string(),
+    collection: Collection,
+    location: Location.nullable(),
+    protectedArea: ProtectedArea,
+    license: z.object({
+        displayName: z.string(),  
+    }).nullable(),
+});
+export type PAPById = z.infer<typeof PAPById>;

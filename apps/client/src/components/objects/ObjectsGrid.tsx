@@ -25,7 +25,6 @@ export default function ObjectsGrid({
                     className={"w-full h-fit"}
                     title={object.node.displayName}
                     src={object.node.primaryImageURL}
-                    origin={"storage"}
                     href={`objects/${hrefTo}/${object.node.id}`}
                     width={500}
                     height={500}

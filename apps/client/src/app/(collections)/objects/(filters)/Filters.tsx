@@ -35,22 +35,22 @@ export default async function Filters({
 
         <FilterTab value='books' className='mt-3'>
             <Suspense fallback={ 
-              "Loading Books filters..."
+              "..."
             }>
                 {type === "books" 
                     ? <BooksFilters />
-                    : "Loading Books filters..." 
+                    : "..." 
                 }
             </Suspense> 
         </FilterTab> 
 
         <FilterTab value='protected_area_pictures' className='mt-3'>
             <Suspense fallback={ 
-              "Loading PAP filters..."
+              "..."
             }>
                 {type === "protected_area_pictures" 
                     ? <PAPFilters />
-                    : "Loading PAP filters..." 
+                    : "..." 
                 }
             </Suspense> 
         </FilterTab> 
