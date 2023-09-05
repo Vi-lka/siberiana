@@ -52,7 +52,7 @@ export default async function Artifact({
             />
 
             <div className="flex md:flex-row flex-col items-start mt-10 mb-24 gap-3">
-                <div className="md:w-[50%] w-full">
+                <div className="md:w-1/2 w-full">
                     <div className="mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
                         <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
                           {dataResult.value.displayName}
@@ -77,7 +77,7 @@ export default async function Artifact({
                     </div>
                 </div>
 
-                <div className="md:w-[50%] w-full mb-3">
+                <div className="md:w-1/2 w-full mb-3">
                     <PhotoSlider data={images} />
                 </div>    
 
