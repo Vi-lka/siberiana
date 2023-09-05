@@ -20,7 +20,7 @@ export default async function NoSession() {
             </AlertDescription>
         </Alert>
 
-        <SignInButton className='text-base uppercase font-Inter px-10 py-6 mt-6' dict={dictResult.auth} />
+        <SignInButton className='text-base uppercase font-Inter font-normal px-10 py-6 mt-6' dict={dictResult.auth} />
     </div>
   )
 }

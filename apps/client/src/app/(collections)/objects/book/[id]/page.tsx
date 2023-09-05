@@ -7,6 +7,8 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from './MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
+import ButtonComponent from '~/components/ui/ButtonComponent';
+import Link from 'next/link';
 
 
 export default async function Book({
@@ -35,6 +37,8 @@ export default async function Book({
     const images = !!additionalImages 
         ? [ firstImage, ...additionalImages ]
         : [ firstImage ]
+
+    console.log(dataResult.value.files)
 
     return (
         <div className='relative'>
@@ -68,8 +72,14 @@ export default async function Book({
                         : null
                     }
 
-                    {/* Desktop Main Info */}
-                    <div className="md:block hidden mt-14">
+                    {/* Desktop */}
+                    <div className="mt-12 md:block hidden">
+                        <Link href={dataResult.value.files[0]} target='__blank'>
+                            <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
+                                Читать в pdf
+                            </ButtonComponent> 
+                        </Link>
+
                         <MainInfoBlock 
                             dict={dictResult.objects} 
                             data={dataResult.value}
@@ -77,12 +87,18 @@ export default async function Book({
                     </div>
                 </div>
 
-                <div className="md:w-[50%] w-full mb-3">
+                <div className="md:w-[50%] w-full md:mb-3">
                     <PhotoSlider data={images} />
                 </div>    
 
-                {/* Mobile Main Info */}
-                <div className="md:hidden block mt-3">
+                {/* Mobile */}
+                <div className="md:hidden block">
+                    <Link href={dataResult.value.files[0]} target='__blank'>
+                        <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
+                            Читать в pdf
+                        </ButtonComponent> 
+                    </Link>
+
                     <MainInfoBlock 
                         dict={dictResult.objects} 
                         data={dataResult.value}

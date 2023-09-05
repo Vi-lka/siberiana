@@ -66,7 +66,7 @@ export default async function Header() {
           {/* Desktop */}
           {!!session ? null : (
             <div className="hidden lg:block">
-              <SignInButton className="px-10 py-6 uppercase" dict={dictResult.auth} />
+              <SignInButton className="px-10 py-6 uppercase font-normal" dict={dictResult.auth} />
             </div>
           )}
 
