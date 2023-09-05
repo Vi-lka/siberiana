@@ -1,6 +1,5 @@
 import type { ArtifactById, Holders, ObjectsDict } from '@siberiana/schemas'
-import { Collapsible, CollapsibleTrigger, CollapsibleContent, ScrollArea } from '@siberiana/ui'
-import { ChevronsUpDown } from 'lucide-react'
+import { ScrollArea } from '@siberiana/ui'
 import React from 'react'
 
 export default function MainInfoBlock({
@@ -144,29 +143,18 @@ function SingleItemArray({
                 <p className="w-1/2 font-normal">{value[0].displayName}</p>
             </div>   
         )
-    } else {
-        const withoutFirst = value.slice(1);
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <Collapsible className='w-1/2'>
-                    <CollapsibleTrigger className='flex gap-2 items-center rounded-md hover:bg-accent hover:px-2 transition-all'>
-                        <span className="font-normal">
-                            {value[0].displayName}
-                        </span>
-                        <ChevronsUpDown className="h-6 w-6 border-2 p-0.5 rounded-md" />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      {withoutFirst.map((el, index) => (
-                        <p key={index} className="font-normal">
-                            {el.displayName}
-                        </p>
-                      ))}
-                    </CollapsibleContent>
-                </Collapsible>
-            </div>   
-        )
-    }
+    } else return (
+        <div className="flex gap-3">
+            <p className="w-1/2 font-semibold">{label}</p>
+            <div className='w-1/2 flex flex-col gap-2'>
+                {value.map((el, index) => (
+                    <p key={index} className="font-normal">
+                        {el.displayName}
+                    </p>
+                ))}
+            </div>
+        </div>   
+    )
 }
 
 function SingleItemHolders({
@@ -188,29 +176,19 @@ function SingleItemHolders({
                 </p>
             </div>   
         )
-    } else {
-        const withoutFirst = value.slice(1);
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <Collapsible className='w-1/2'>
-                    <CollapsibleTrigger className='flex gap-2 items-center rounded-md hover:bg-accent hover:px-2 transition-all'>
-                        <span className="font-normal">
-                            {value[0].organization?.displayName}
-                            {value[0].person?.displayName}
-                        </span>
-                        <ChevronsUpDown className="h-6 w-6 border-2 p-0.5 rounded-md" />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      {withoutFirst.map((el, index) => (
-                        <p key={index} className="font-normal">
+    } else return (
+        <div className="flex gap-3">
+            <p className="w-1/2 font-semibold">{label}</p>
+            <div className='w-1/2 flex flex-col gap-2'>
+                {value.map((el, index) => (
+                    <p key={index} className="font-normal">
+                        <span className=" font-semibold">
                             {el.organization?.displayName}
-                            {el.person?.displayName}
-                        </p>
-                      ))}
-                    </CollapsibleContent>
-                </Collapsible>
-            </div>   
-        )
-    }
+                        </span>
+                        {el.person?.displayName}
+                    </p>
+                ))}
+            </div>
+        </div>   
+    )
 }

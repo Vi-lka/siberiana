@@ -74,11 +74,16 @@ export default async function Book({
 
                     {/* Desktop */}
                     <div className="mt-12 md:block hidden">
-                        <Link href={dataResult.value.files[0]} target='__blank'>
-                            <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
-                                Читать в pdf
-                            </ButtonComponent> 
-                        </Link>
+                        {dataResult.value.files.length > 0 
+                            ? (
+                                <Link href={dataResult.value.files[0]} target='__blank'>
+                                    <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
+                                        Читать в pdf
+                                    </ButtonComponent> 
+                                </Link>
+                            )
+                            : null
+                        }
 
                         <MainInfoBlock 
                             dict={dictResult.objects} 
@@ -93,11 +98,16 @@ export default async function Book({
 
                 {/* Mobile */}
                 <div className="md:hidden block">
-                    <Link href={dataResult.value.files[0]} target='__blank'>
-                        <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
-                            Читать в pdf
-                        </ButtonComponent> 
-                    </Link>
+                    {dataResult.value.files.length > 0 
+                        ? (
+                            <Link href={dataResult.value.files[0]} target='__blank'>
+                                <ButtonComponent className='mb-12 px-10 py-6 uppercase font-Inter font-normal'>   
+                                    Читать в pdf
+                                </ButtonComponent> 
+                            </Link>
+                        )
+                        : null
+                    }
 
                     <MainInfoBlock 
                         dict={dictResult.objects} 
