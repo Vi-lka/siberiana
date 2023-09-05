@@ -7,6 +7,7 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from '~/app/(collections)/objects/artifact/[id]/MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
+import Description from '~/components/objects/Description';
 
 
 export default async function Artifact({
@@ -59,17 +60,10 @@ export default async function Artifact({
                         </h1>
                     </div>
 
-                    {dataResult.value.description.length > 0 
-                        ? (
-                            <p className="font-Inter md:text-base text-sm mt-3">
-                                {dataResult.value.description}
-                            </p>
-                        )
-                        : null
-                    }
+                    <Description text={dataResult.value.description} />
 
                     {/* Desktop Main Info */}
-                    <div className="md:block hidden mt-14">
+                    <div className="md:block hidden mt-12">
                         <MainInfoBlock 
                             dict={dictResult.objects} 
                             data={dataResult.value}

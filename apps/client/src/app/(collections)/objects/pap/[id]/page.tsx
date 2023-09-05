@@ -69,7 +69,7 @@ export default async function ProtectedAreaPictures({
                     }
 
                     {/* Desktop Main Info */}
-                    <div className="md:block hidden mt-14">
+                    <div className="md:block hidden mt-12">
                         <MainInfoBlock 
                             dict={dictResult.objects} 
                             data={dataResult.value}

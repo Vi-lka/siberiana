@@ -1,6 +1,9 @@
-export default function getShortDescription(description: string) {
+export default function getShortDescription(description: string, length?: number) {
     const array = description.split(" ")
-    if (array.length >= 31) {
-        return array.slice(0, 30).join(" ") + "..."
+
+    const sliceLength = length ? length : 30
+
+    if (array.length >= (sliceLength + 1)) {
+        return array.slice(0, sliceLength).join(" ") + "..."
     } else return array.join(" ")
 }
