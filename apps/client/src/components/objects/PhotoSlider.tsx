@@ -100,9 +100,7 @@ export default function PhotoSlider({
                 : null
               }
 
-              <PhotoModal 
-                data={data}
-              />
+              <PhotoModal data={data} />
             </div>
           </div>
         )

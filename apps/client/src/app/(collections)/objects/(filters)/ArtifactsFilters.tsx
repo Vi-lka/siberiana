@@ -25,7 +25,7 @@ export default async function ArtifactsFilters({
   const render = type === "artifacts" 
 
   return (
-    <div className='mt-3'>
+    <div className='mt-3' key={Math.random()}>
       
       {/* Countries */}
       <Suspense fallback={ 
@@ -36,12 +36,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <CountriesFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.countries}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
 
@@ -54,12 +49,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <RegionsFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.regions}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense>
 
@@ -72,12 +62,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <DistrictsFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.districts}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
 
@@ -90,12 +75,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <SettlementsFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.settlements}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
       
@@ -110,12 +90,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <CultureFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.cultures}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
 
@@ -128,12 +103,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <SetFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.sets}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
       
@@ -146,12 +116,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <MonumentFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.monuments}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
 
@@ -164,12 +129,7 @@ export default async function ArtifactsFilters({
       }>
         {render
           ? <TechniqueFilter searchParams={searchParams}/>
-          : (
-            <div className="flex flex-col gap-1">
-              <h1 className='font-medium'>{dictResult.objects.filters.techniques}</h1>
-              <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
-            </div>
-          )
+          : null
         }
       </Suspense> 
     </div>
