@@ -70,8 +70,6 @@ export default function HomeSearch({ dict }: { dict: SearchDict }) {
     [pathname, router],
   );
 
-  console.log(pathname)
-
   if (isPending) return <Loader2 className='animate-spin' />;
 
   return (

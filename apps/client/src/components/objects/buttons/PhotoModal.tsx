@@ -88,11 +88,11 @@ export default function PhotoModal({
                     </div>
                   </div>
                   <ArrowLeft 
-                    className="w-8 h-8 text-input bg-accent bg-opacity-20 rounded-md cursor-pointer hover:scale-125 transition-all absolute top-1/2 translate-y-1/2 left-2"
+                    className="w-8 h-8 text-input bg-accent bg-opacity-20 rounded-md cursor-pointer hover:scale-125 transition-all absolute md:top-1/2 md:translate-y-1/2 bottom-6 left-2"
                     onClick={() => instanceRef.current?.prev() } 
                   />
                   <ArrowRight 
-                    className="w-8 h-8 text-input bg-accent bg-opacity-20 rounded-md cursor-pointer hover:scale-125 transition-all absolute top-1/2 translate-y-1/2 right-2" 
+                    className="w-8 h-8 text-input bg-accent bg-opacity-20 rounded-md cursor-pointer hover:scale-125 transition-all absolute md:top-1/2 md:translate-y-1/2 bottom-6 right-2" 
                     onClick={() => instanceRef.current?.next() } 
                   />
                 </>)

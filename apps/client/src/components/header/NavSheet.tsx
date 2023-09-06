@@ -115,8 +115,6 @@ function SheetMenuItem({
 
   const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
 
-  console.log(pathCurrentPage)
-
   if (SingleLink.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLink;
 
