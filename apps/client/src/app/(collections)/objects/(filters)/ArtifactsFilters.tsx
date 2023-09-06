@@ -20,10 +20,6 @@ export default async function ArtifactsFilters({
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
 
-  const type = searchParams['type'] as string | undefined
-
-  const render = type === "artifacts" 
-
   return (
     <div className='mt-3' key={Math.random()}>
       
@@ -34,10 +30,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <CountriesFilter searchParams={searchParams}/>
-          : null
-        }
+        <CountriesFilter searchParams={searchParams}/>
       </Suspense> 
 
       {/* Regions */}
@@ -47,10 +40,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <RegionsFilter searchParams={searchParams}/>
-          : null
-        }
+        <RegionsFilter searchParams={searchParams}/>
       </Suspense>
 
       {/* Districts */}
@@ -60,10 +50,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <DistrictsFilter searchParams={searchParams}/>
-          : null
-        }
+        <DistrictsFilter searchParams={searchParams}/>
       </Suspense> 
 
       {/* Settlements */}
@@ -73,10 +60,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <SettlementsFilter searchParams={searchParams}/>
-          : null
-        }
+        <SettlementsFilter searchParams={searchParams}/>
       </Suspense> 
       
       <Separator className='h-[2px] mt-1 mb-3' decorative />
@@ -88,10 +72,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <CultureFilter searchParams={searchParams}/>
-          : null
-        }
+        <CultureFilter searchParams={searchParams}/>
       </Suspense> 
 
       {/* Set */}
@@ -101,10 +82,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <SetFilter searchParams={searchParams}/>
-          : null
-        }
+        <SetFilter searchParams={searchParams}/>
       </Suspense> 
       
       {/* Monument */}
@@ -114,10 +92,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <MonumentFilter searchParams={searchParams}/>
-          : null
-        }
+        <MonumentFilter searchParams={searchParams}/>
       </Suspense> 
 
       {/* Technique */}
@@ -127,10 +102,7 @@ export default async function ArtifactsFilters({
           <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
         </div>
       }>
-        {render
-          ? <TechniqueFilter searchParams={searchParams}/>
-          : null
-        }
+        <TechniqueFilter searchParams={searchParams}/>
       </Suspense> 
     </div>
   )
