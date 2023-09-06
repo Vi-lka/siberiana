@@ -45,8 +45,6 @@ export default async function Book({
         ? [ firstImage, ...additionalImages ]
         : [ firstImage ]
 
-    console.log(dataResult.value.files)
-
     return (
         <div className='relative'>
             <div className="absolute lg:-left-12 sm:-left-8 left-0 sm:top-0 -top-10">
