@@ -16,7 +16,7 @@ export default function Description({ text }: { text: string }) {
     return (
         <>
             <p className={cn(
-                `font-Inter md:text-base text-sm mt-3 overflow-hidden transition-all duration-300 ease-in-out`,
+                `font-Inter md:text-base text-sm mt-3 overflow-hidden transition-[max-height] duration-300 ease-in-out`,
                 more ? "max-h-[100rem]" : "max-h-40"
             )}>
                 {more 
