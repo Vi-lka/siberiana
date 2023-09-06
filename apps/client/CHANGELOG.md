@@ -1,5 +1,33 @@
 # @siberiana/client
 
+## 0.3.0
+
+### Minor Changes
+
+- 4aa396d: Add handlers:
+
+  - ClientHydration.tsx (fix client hydration errors in radix)
+  - ErrorHandler.tsx (toast or Not Found)
+
+  Add components:
+
+  - NotFound.tsx
+  - RowBigBlockBelowSkeleton.tsx + RowBigBlockBelowSkeleton.tsx +
+    RowBlockBelowSkeleton.tsx + BreadcrumbsSkeleton.tsx
+  - PaginationControls.tsx
+  - ImgTextBelow.tsx
+  - MapHtml.tsx
+
+- a0ee07f: Add all for strapi cms data
+
+### Patch Changes
+
+- Updated dependencies [1a294e2]
+- Updated dependencies [a47a13c]
+- Updated dependencies [a0ee07f]
+  - @siberiana/ui@0.3.0
+  - @siberiana/schemas@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

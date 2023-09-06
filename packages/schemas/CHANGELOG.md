@@ -1,5 +1,11 @@
 # @siberiana/schemas
 
+## 0.2.0
+
+### Minor Changes
+
+- a0ee07f: Add all for strapi cms data
+
 ## 0.1.0
 
 ### Minor Changes
