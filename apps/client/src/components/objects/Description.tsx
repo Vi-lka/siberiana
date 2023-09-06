@@ -9,7 +9,7 @@ export default function Description({ text }: { text: string }) {
 
     const [more, setMore] = React.useState(false)
 
-    const maxLength = 50
+    const maxLength = 30
 
     if (text.length <= 1) return null
 
@@ -27,7 +27,7 @@ export default function Description({ text }: { text: string }) {
             {text.split(" ").length > maxLength
                 ? (
                     <div
-                        className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase cursor-pointer hover:underline"
+                        className="font-Inter text-sm text-beaver dark:text-beaverLight flex items-center gap-1 uppercase cursor-pointer hover:underline"
                         onClick={() => setMore(value => !value)}
                     >
                         {more 

@@ -1,6 +1,7 @@
-import type { BookById, Holders, ObjectsDict } from '@siberiana/schemas'
-import { ScrollArea } from '@siberiana/ui'
+import type { BookById, ObjectsDict } from '@siberiana/schemas'
 import React from 'react'
+import InfoTable from '~/components/objects/InfoTable'
+import { SingleItem, SingleItemArray, SingleItemHolders } from '~/components/objects/Infoitems'
 
 export default function MainInfoBlock({
     dict,
@@ -10,14 +11,13 @@ export default function MainInfoBlock({
     data: BookById,
 }) {
 
-  return (
-    <div className='w-full'>
-        <h2 className="text-foreground lg:text-xl text-lg font-bold uppercase mb-6">
-            {dict.mainInfo.title}
-        </h2>
+    return (
+        <div className='w-full'>
+            <h2 className="text-foreground lg:text-xl text-lg font-bold uppercase mb-3">
+                {dict.mainInfo.title}
+            </h2>
 
-        <ScrollArea type="always" classNameViewport="max-h-[350px]">
-            <div className="md:w-4/5 w-full flex flex-col gap-3">
+            <InfoTable>
                 <SingleItem
                     label='Категория'
                     value={data.collection.category.displayName}
@@ -70,85 +70,7 @@ export default function MainInfoBlock({
                     label='Населенный пункт'
                     value={data.location?.settlement?.displayName}
                 />
-            </div> 
-        </ScrollArea>
-    </div>
-  )
-}
-
-function SingleItem({ label, value }: { label: string, value: string | undefined }) {
-    if (!!value && (value.length > 1)) {
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <p className="w-1/2 font-normal">{value}</p>
-            </div>
-        )
-    } else return null
-}
-
-function SingleItemArray({
-    label,
-    value
-}: {
-    label: string,
-    value: { displayName: string }[],
-}) {
-    if (value.length === 0) {
-        return null
-    } else if (value.length === 1) {
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <p className="w-1/2 font-normal">{value[0].displayName}</p>
-            </div>   
-        )
-    } else return (
-        <div className="flex gap-3">
-            <p className="w-1/2 font-semibold">{label}</p>
-            <div className='w-1/2 flex flex-col gap-2'>
-                {value.map((el, index) => (
-                    <p key={index} className="font-normal">
-                        {el.displayName}
-                    </p>
-                ))}
-            </div>
-        </div>   
-    )
-}
-
-function SingleItemHolders({
-    label,
-    value
-}: {
-    label: string,
-    value: Holders,
-}) {
-    if (value.length === 0) {
-        return null
-    } else if (value.length === 1) {
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <p className="w-1/2 font-normal">
-                    {value[0].organization?.displayName}
-                    {value[0].person?.displayName}
-                </p>
-            </div>   
-        )
-    } else return (
-        <div className="flex gap-3">
-            <p className="w-1/2 font-semibold">{label}</p>
-            <div className='w-1/2 flex flex-col gap-2'>
-                {value.map((el, index) => (
-                    <p key={index} className="font-normal">
-                        <span className=" font-semibold">
-                            {el.organization?.displayName}
-                        </span>
-                        {el.person?.displayName}
-                    </p>
-                ))}
-            </div>
-        </div>   
+            </InfoTable>
+        </div>
     )
 }
