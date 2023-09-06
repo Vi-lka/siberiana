@@ -52,7 +52,7 @@ export default async function Artifact({
                 collectionTitle={dataResult.value.collection.displayName}
             />
 
-            <div className="flex md:flex-row flex-col items-start mt-10 mb-24 gap-3">
+            <div className="flex md:flex-row flex-col items-start mt-10 mb-12 gap-3">
                 <div className="md:w-1/2 w-full">
                     <div className="mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
                         <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
@@ -64,10 +64,7 @@ export default async function Artifact({
 
                     {/* Desktop Main Info */}
                     <div className="md:block hidden mt-12">
-                        <MainInfoBlock 
-                            dict={dictResult.objects} 
-                            data={dataResult.value}
-                        />
+                        Buttons
                     </div>
                 </div>
 
@@ -77,11 +74,15 @@ export default async function Artifact({
 
                 {/* Mobile Main Info */}
                 <div className="md:hidden block mt-3">
-                    <MainInfoBlock 
-                        dict={dictResult.objects} 
-                        data={dataResult.value}
-                    />
+                    Buttons
                 </div>
+            </div>
+
+            <div className="mb-12">
+                <MainInfoBlock 
+                    dict={dictResult.objects} 
+                    data={dataResult.value}
+                />
             </div>
         </div>
     )

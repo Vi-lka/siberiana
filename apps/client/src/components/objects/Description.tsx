@@ -9,7 +9,7 @@ export default function Description({ text }: { text: string }) {
 
     const [more, setMore] = React.useState(false)
 
-    const maxLength = 30
+    const maxLength = 50
 
     if (text.length <= 1) return null
 
