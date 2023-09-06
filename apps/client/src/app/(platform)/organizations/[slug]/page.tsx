@@ -48,7 +48,7 @@ export default async function Organization({
                 {dataResult.value.title}
               </h1>
 
-              <div className="flex md:gap-6 gap-3">
+              <div className="flex md:gap-6 gap-3 items-center">
                 {dataResult.value.consortium ? (
                   <TooltipProvider>
                     <Tooltip delayDuration={300}>
@@ -66,7 +66,7 @@ export default async function Organization({
 
                 {dataResult.value.url ? (
                   <Link href={getLinkDir(dataResult.value.url)} target="_blank">
-                    <ButtonComponent className="md:px-10 md:py-6 py-[22px] px-[10px] uppercase xl:text-sm text-xs">
+                    <ButtonComponent className="md:px-10 md:py-6 py-[22px] px-[10px] xl:text-sm text-xs">
                       <p className="md:block hidden">{dictResult.organizations.goTo}</p>
                       <ArrowUpRight className="md:h-5 md:w-5 h-6 w-6 md:ml-4 ml-0 stroke-1" />
                     </ButtonComponent>
@@ -243,7 +243,7 @@ export default async function Organization({
 
                   {dataResult.value.url ? ( 
                     <Link href={getLinkDir(dataResult.value.url)} target="_blank">
-                      <ButtonComponent className="md:px-10 md:py-6 py-5 px-3 uppercase xl:text-sm text-xs">
+                      <ButtonComponent className="md:px-10 md:py-6 py-5 px-3 xl:text-sm text-xs">
                         <p className="">{dictResult.organizations.goTo}</p>
                         <ArrowUpRight className="h-5 w-5 md:ml-4 ml-1 stroke-1" />
                       </ButtonComponent>

@@ -1,6 +1,7 @@
-import type { PAPById, ObjectsDict, ProtectedArea } from '@siberiana/schemas'
-import { ScrollArea, Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@siberiana/ui'
+import type { PAPById, ObjectsDict } from '@siberiana/schemas'
 import React from 'react'
+import InfoTable from '~/components/objects/InfoTable'
+import { SingleItem, SingleItemProtectedArea } from '~/components/objects/Infoitems'
 
 export default function MainInfoBlock({
     dict,
@@ -10,14 +11,13 @@ export default function MainInfoBlock({
     data: PAPById,
 }) {
 
-  return (
-    <div className='w-full'>
-        <h2 className="text-foreground lg:text-xl text-lg font-bold uppercase mb-6">
-            {dict.mainInfo.title}
-        </h2>
+    return (
+        <div className='w-full'>
+            <h2 className="text-foreground lg:text-xl text-lg font-bold uppercase mb-3">
+                {dict.mainInfo.title}
+            </h2>
 
-        <ScrollArea type="always" classNameViewport="max-h-[350px]">
-            <div className="md:w-4/5 w-full flex flex-col gap-3">
+            <InfoTable>
                 <SingleItem
                     label='Категория'
                     value={data.collection.category.displayName}
@@ -58,52 +58,8 @@ export default function MainInfoBlock({
                     label='Населенный пункт'
                     value={data.location?.settlement?.displayName}
                 />
-            </div> 
-        </ScrollArea>
-    </div>
-  )
-}
-
-function SingleItem({ label, value }: { label: string, value: string | undefined }) {
-    if (!!value && (value.length > 1)) {
-        return (
-            <div className="flex gap-3">
-                <p className="w-1/2 font-semibold">{label}</p>
-                <p className="w-1/2 font-normal">{value}</p>
-            </div>
-        )
-    } else return null
-}
-
-function SingleItemProtectedArea({
-    label,
-    value
-}: {
-    label: string,
-    value: ProtectedArea,
-}) {
-    return (
-        <div className="flex gap-3">
-            <p className="w-1/2 font-semibold">{label}</p>
-            <Accordion type="single" collapsible className='w-1/2'>
-              <AccordionItem value="item-1">
-                <AccordionTrigger className='py-0 font-normal'>
-                    {value.displayName}
-                </AccordionTrigger>
-                <AccordionContent className='text-xs'>
-                    <p>{value.description}</p>
-                    <p>
-                        <span className='font-semibold'>Категория ООПТ:</span> {value.protectedAreaCategory?.displayName}
-                    </p>
-                    <p>
-                        <span className='font-semibold'>Область:</span> {value.area}
-                    </p>
-                    <p>
-                        <span className='font-semibold'>Дата создания:</span> {new Date(value.establishmentDate).toLocaleDateString("ru")}
-                    </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-        </div>   
+            </InfoTable>
+        </div>
     )
 }
+

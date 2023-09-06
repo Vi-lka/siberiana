@@ -30,7 +30,10 @@ export default async function Filters({
         <Separator className='h-[2px] mt-1' decorative />
 
         <FilterTab value='artifacts' className='mt-3'>
-            <ArtifactsFilters searchParams={searchParams} />
+            {type === 'artifacts'
+                ? <ArtifactsFilters searchParams={searchParams} />
+                : null 
+            }
         </FilterTab> 
 
         <FilterTab value='books' className='mt-3'>

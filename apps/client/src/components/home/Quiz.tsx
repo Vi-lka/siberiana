@@ -108,7 +108,7 @@ export default function Quiz({
             {question.attributes.variants.map((elem) => (
               <ButtonComponent
                 key={elem.index}
-                className="font-Inter px-8 py-6 text-xs uppercase lg:text-sm"
+                className="px-8 py-6 text-xs lg:text-sm"
                 type="button"
                 onClick={() => handleAnswer(elem.index)}
               >
@@ -123,7 +123,7 @@ export default function Quiz({
             </h1>
 
             <Link href={getLinkDir(question.attributes.url)}>
-              <ButtonComponent className="font-Inter w-fit px-8 py-6 text-xs uppercase lg:text-sm">
+              <ButtonComponent className="w-fit px-8 py-6 text-xs lg:text-sm">
                 {question.attributes.urlName}
               </ButtonComponent>
             </Link>
@@ -135,7 +135,7 @@ export default function Quiz({
             </h1>
 
             <ButtonComponent
-              className="font-Inter w-fit px-8 py-6 text-xs uppercase lg:text-sm"
+              className="w-fit px-8 py-6 text-xs lg:text-sm"
               onClick={() => handleWrong()}
             >
               {qiuzDict.tryAgain}

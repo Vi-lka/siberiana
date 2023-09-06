@@ -7,6 +7,12 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from './MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
+import Description from '~/components/objects/Description';
+import AddFavorites from '~/components/objects/buttons/AddFavorites';
+import UnloadCSV from '~/components/objects/buttons/UnloadCSV';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '~/app/api/auth/[...nextauth]/route';
+import ReadPDF from '~/components/objects/buttons/ReadPDF';
 
 
 export default async function Book({
@@ -17,6 +23,9 @@ export default async function Book({
 
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
+
+    const session = await getServerSession(authOptions);
+    const haveSession = !!session
 
     const [ dataResult ] = await Promise.allSettled([ getBookById(id) ])
     if (dataResult.status === 'rejected') return (
@@ -52,24 +61,17 @@ export default async function Book({
             />
 
             <div className="flex md:flex-row flex-col items-start mt-10 mb-24 gap-3">
-                <div className="md:w-[50%] w-full">
+                <div className="md:w-1/2 w-full">
                     <div className="mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
                         <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
                           {dataResult.value.displayName}
                         </h1>
                     </div>
 
-                    {dataResult.value.description.length > 0 
-                        ? (
-                            <p className="font-Inter md:text-base text-sm mt-3">
-                                {dataResult.value.description}
-                            </p>
-                        )
-                        : null
-                    }
+                    <Description text={dataResult.value.description} />
 
                     {/* Desktop Main Info */}
-                    <div className="md:block hidden mt-14">
+                    <div className="mt-12 md:block hidden">
                         <MainInfoBlock 
                             dict={dictResult.objects} 
                             data={dataResult.value}
@@ -77,12 +79,17 @@ export default async function Book({
                     </div>
                 </div>
 
-                <div className="md:w-[50%] w-full mb-3">
+                <div className="md:w-1/2 w-full">
                     <PhotoSlider data={images} />
+                    <div className="mt-3 flex flex-wrap gap-3">
+                        <AddFavorites session={haveSession} />
+                        <ReadPDF files={dataResult.value.files} />
+                        <UnloadCSV session={haveSession} />
+                    </div>
                 </div>    
 
                 {/* Mobile Main Info */}
-                <div className="md:hidden block mt-3">
+                <div className="mt-3 md:hidden block w-full">
                     <MainInfoBlock 
                         dict={dictResult.objects} 
                         data={dataResult.value}

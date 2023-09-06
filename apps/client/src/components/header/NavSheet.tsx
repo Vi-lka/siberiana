@@ -31,7 +31,6 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 import LogoSvg from "../LogoSvg";
 import NavListItem from "./NavListItem";
 import { signIn } from "next-auth/react";
-import type { Session } from "next-auth";
 
 export default function NavSheet({
   menuDict,
@@ -40,7 +39,7 @@ export default function NavSheet({
 }: {
   menuDict: MenuDict;
   authDict: AuthDict;
-  session: Session | null
+  session: boolean
 }) {
 
   return (
@@ -67,7 +66,7 @@ export default function NavSheet({
               <SheetClose
                 className={cn(
                   buttonVariants(),
-                  "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase",
+                  "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase font-normal",
                 )}
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => signIn("keycloak")}
@@ -115,8 +114,6 @@ function SheetMenuItem({
     .filter((v) => v.length > 0);
 
   const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
-
-  console.log(pathCurrentPage)
 
   if (SingleLink.safeParse(menuItem).success) {
     const menuItemResult = menuItem as SingleLink;

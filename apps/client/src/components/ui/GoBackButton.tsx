@@ -21,7 +21,7 @@ export default function GoBackButton() {
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans font-normal cursor-help">
-                    <p>Назад</p>
+                    Назад
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

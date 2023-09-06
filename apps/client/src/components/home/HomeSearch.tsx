@@ -61,7 +61,7 @@ export default function HomeSearch({ dict }: { dict: SearchDict }) {
       if (inputValue.length > 0) {
         params.set("search", inputValue);
         startTransition(() => {
-          router.push(`${pathname}/objects?${params.toString()}`);
+          router.push(`${pathname}objects?${params.toString()}`);
         });
       } else {
         params.delete("search");
