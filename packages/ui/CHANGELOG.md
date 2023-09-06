@@ -1,5 +1,11 @@
 # @siberiana/ui
 
+## 0.4.0
+
+### Minor Changes
+
+- 3e39159: Add table component
+
 ## 0.3.0
 
 ### Minor Changes
