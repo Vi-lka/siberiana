@@ -2,7 +2,6 @@
 
 import type { AccountDict } from '@siberiana/schemas';
 import { Avatar, AvatarFallback, Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Skeleton } from '@siberiana/ui'
-import type { Session } from 'next-auth';
 import React from 'react'
 import Link from 'next/link';
 import { ClientHydration } from '../providers/ClientHydration';
@@ -12,13 +11,13 @@ import { tabAccountAtom } from '~/lib/utils/atoms';
 
 export default function AccountBar({ 
     dict,
-    session
+    name
 }: { 
     dict: AccountDict,
-    session: Session | null
+    name: string
 }) {
 
-    const matchesName = session?.user.name.match(/\b(\w)/g)
+    const matchesName = name.match(/\b(\w)/g)
     const acronymName = matchesName?.join('')
 
     const setTab = useSetAtom(tabAccountAtom)

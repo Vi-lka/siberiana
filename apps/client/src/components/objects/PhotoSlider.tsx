@@ -8,7 +8,7 @@ import { Skeleton } from "@siberiana/ui";
 import PhotoSliderImg from './PhotoSliderImg';
 import { cn } from "@siberiana/ui/src/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import PhotoModal from "./PhotoModal";
+import PhotoModal from "./buttons/PhotoModal";
 
 export default function PhotoSlider({ 
   data 
@@ -41,7 +41,7 @@ export default function PhotoSlider({
   });
 
   return (
-    <div className="">
+    <div className="w-full">
       <div ref={sliderRef} className="keen-slider cursor-grab 2xl:max-h-[500px] max-h-96 2xl:aspect-[2/1.2] md:aspect-video aspect-square rounded-md bg-accent">
         {data.map((image, index) => (
           <div
@@ -104,7 +104,7 @@ export default function PhotoSlider({
             </div>
           </div>
         )
-        : <Skeleton className="h-3 w-full mt-6" />
+        : <Skeleton className="h-7 w-full mt-3 mb-3.5" />
       }
     </div>
   )

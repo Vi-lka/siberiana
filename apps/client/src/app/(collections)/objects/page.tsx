@@ -63,7 +63,7 @@ export default async function Objects({
   ] as SortData[]
 
   return (
-    <div>
+    <div className="mb-12">
       <BreadcrumbsCollections 
         dict={dictResult.breadcrumbs}
         categorySlug={categorySingle?.node.slug}

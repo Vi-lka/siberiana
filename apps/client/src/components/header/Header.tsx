@@ -23,6 +23,8 @@ export default async function Header() {
 
   const session = await getServerSession(authOptions);
 
+  const haveSession = !!session
+
   return (
     <div className="font-Inter text-graphite dark:text-beaverLight dark:bg-darkBlue fixed z-50 w-full bg-white px-4 py-4 md:px-0">
       <div className="mx-auto flex w-[95%] items-center justify-between md:w-[85%]">
@@ -59,14 +61,14 @@ export default async function Header() {
           {!!session ? (
             <AccountBar 
               dict={dictResult.account}
-              session={session} 
+              name={session.user.name} 
             />
           ) : null}
           
           {/* Desktop */}
           {!!session ? null : (
             <div className="hidden lg:block">
-              <SignInButton className="px-10 py-6 uppercase font-normal" dict={dictResult.auth} />
+              <SignInButton dict={dictResult.auth} />
             </div>
           )}
 
@@ -75,7 +77,7 @@ export default async function Header() {
             <ClientHydration fallback={
               <Skeleton className="h-[2.5rem] w-[2.5rem]"/>
             }>
-              <NavSheet menuDict={dictResult.menu} authDict={dictResult.auth} session={session} />
+              <NavSheet menuDict={dictResult.menu} authDict={dictResult.auth} session={haveSession} />
             </ClientHydration>
           </div>
 

@@ -29,7 +29,7 @@ export default function ButtonComponent(
     <Button
       variant={props.variant}
       className={cn(
-        "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl",
+        "font-Inter uppercase font-normal px-10 py-6 hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl",
         props.className,
       )}
       size={props.size}

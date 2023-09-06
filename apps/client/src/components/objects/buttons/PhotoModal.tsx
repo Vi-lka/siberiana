@@ -1,7 +1,9 @@
+"use client"
+
 import { Dialog, DialogContent, DialogTrigger } from '@siberiana/ui/src/dialog'
 import { ArrowLeft, ArrowRight, Maximize } from 'lucide-react'
 import React from 'react'
-import PhotoSliderImg from './PhotoSliderImg'
+import PhotoSliderImg from '../PhotoSliderImg'
 import { Skeleton } from '@siberiana/ui'
 import { useKeenSlider } from 'keen-slider/react'
 import { cn } from '@siberiana/ui/src/lib/utils'

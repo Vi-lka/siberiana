@@ -104,7 +104,7 @@ export default function PaginationControls({
         ? (
           <ButtonComponent 
             className={cn(
-              "px-10 py-6 uppercase xl:absolute xl:left-1/2 xl:-translate-x-1/2",
+              "xl:absolute xl:left-1/2 xl:-translate-x-1/2",
               classNameMore
             )}
             variant={(Number(page) >= max_page) ? "hidden" : "default"}
