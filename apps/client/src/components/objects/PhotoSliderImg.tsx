@@ -10,7 +10,7 @@ export default function PhotoSliderImg({
     sizes = "(min-width: 768px) 40vw, 85vw"
 }: {
     alt: string,
-    src?: string,
+    src: string,
     sizes?: string,
 }) {
 
@@ -28,7 +28,6 @@ export default function PhotoSliderImg({
         <Image
             src={image}
             onError={() => setImage("/images/image-placeholder.png")}
-            priority={true}
             fill
             sizes={sizes}
             className={cn(

@@ -4,11 +4,11 @@ import ErrorHandler from '~/components/errors/ErrorHandler';
 import BreadcrumbsObject from '~/components/ui/BreadcrumbsObject';
 import { getBookById } from '~/lib/queries/api-object';
 import { getDictionary } from '~/lib/utils/getDictionary';
-import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from './MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
 import Description from '~/components/objects/Description';
 import ReadPDF from '~/components/objects/buttons/ReadPDF';
+import PhotoZoom from '~/components/objects/PhotoZoom';
 
 
 export default async function Book({
@@ -32,14 +32,6 @@ export default async function Book({
           goBack
         />
     )
-
-    const firstImage = { src: dataResult.value.primaryImageURL, alt: dataResult.value.displayName }
-    const additionalImages = dataResult.value.additionalImagesUrls?.map(url => {
-        return { src: url, alt: dataResult.value.displayName }
-    }) 
-    const images = !!additionalImages 
-        ? [ firstImage, ...additionalImages ]
-        : [ firstImage ]
 
     return (
         <div className='relative'>
@@ -76,7 +68,7 @@ export default async function Book({
                 </div>
 
                 <div className="md:w-1/2 w-full">
-                    <PhotoSlider data={images} />
+                    <PhotoZoom src={dataResult.value.primaryImageURL} alt={dataResult.value.displayName} />
                     <div className="mt-3 flex flex-wrap gap-3">
                         {/* <AddFavorites session={haveSession} /> */}
                         <ReadPDF files={dataResult.value.files} />

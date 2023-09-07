@@ -52,7 +52,6 @@ export default function ImgObject(props: Props) {
           height={props.height ? props.height : 320}
           fill={props.fill}
           onError={() => setImage("/images/image-placeholder.png")}
-          priority={true}
           className={cn(
             "w-full overflow-hidden rounded-md outline outline-offset-1 outline-1 outline-accent shadow-md ring-ring ring-offset-background transition-all duration-200",
             (!isPlaceholder) ? 

@@ -54,7 +54,6 @@ export default function ImgTextOn(props: Props) {
           height={props.height ? props.height : 400}
           fill={props.fill}
           onError={() => setImage("/images/image-placeholder.png")}
-          priority={true}
           className={"w-full object-cover"}
           alt={props.title}
         />

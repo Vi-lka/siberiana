@@ -8,6 +8,7 @@ import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from '~/app/(collections)/objects/artifact/[id]/MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
 import Description from '~/components/objects/Description';
+import PhotoZoom from '~/components/objects/PhotoZoom';
 
 
 export default async function Artifact({
@@ -75,7 +76,10 @@ export default async function Artifact({
                 </div>
 
                 <div className="md:w-1/2 w-full">
-                    <PhotoSlider data={images} />
+                    {images.length === 1 
+                        ? <PhotoZoom src={dataResult.value.primaryImageURL} alt={dataResult.value.displayName} />
+                        : <PhotoSlider data={images} /> 
+                    }
                     {/* <div className="mt-3 flex flex-wrap gap-3"> 
                         <AddFavorites session={haveSession} />
                         <Open3DModel data={dataResult.value.model} />
