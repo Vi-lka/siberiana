@@ -17,23 +17,23 @@ const openSans = Open_Sans({
   variable: "--OpenSans",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
-  alternates: {
-    canonical: "/",
-    languages: {
-      ru: "/",
-    },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
-  },
-};
+// export const metadata: Metadata = {
+//   metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
+//   alternates: {
+//     canonical: "/",
+//     languages: {
+//       ru: "/",
+//     },
+//   },
+//   icons: {
+//     icon: "/favicon.ico",
+//     shortcut: "/favicon.ico",
+//     apple: "/favicon.ico",
+//   },
+// };
 
 export async function generateMetadata(): Promise<Metadata> {
- 
+
   // fetch data
   const dict = await getDictionary();
 
@@ -68,7 +68,7 @@ export default function RootLayout({
       <body className="m min-h-screen m-0 flex flex-col">
         <Providers>
           <Header />
-          <main className="pt-20 flex-1"> 
+          <main className="pt-20 flex-1">
             {children}
           </main>
           <Footer />
