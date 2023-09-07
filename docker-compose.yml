@@ -1,8 +1,8 @@
 version: "3.9"
 
 networks:
-  siberiana-net:
-    name: siberiana-net
+  siberiana-network:
+    name: siberiana-network
     external: true
 
 services:
@@ -27,4 +27,4 @@ services:
     ports:
       - 3000:3000
     networks:
-      - siberiana-net
+      - siberiana-network
