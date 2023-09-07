@@ -55,7 +55,6 @@ export default function ImgTextBelow(props: Props) {
               height={props.height ? props.height : 320}
               fill={props.fill}
               onError={() => setImage("/images/image-placeholder.png")}
-              priority={true}
               className={
                 (props.classNameImage && !isPlaceholder) ? 
                   props.classNameImage 

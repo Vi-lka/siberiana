@@ -8,11 +8,7 @@ import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from '~/app/(collections)/objects/artifact/[id]/MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
 import Description from '~/components/objects/Description';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '~/app/api/auth/[...nextauth]/route';
-import AddFavorites from '~/components/objects/buttons/AddFavorites';
-import Open3DModel from '~/components/objects/buttons/Open3DModel';
-import UnloadCSV from '~/components/objects/buttons/UnloadCSV';
+import PhotoZoom from '~/components/objects/PhotoZoom';
 
 
 export default async function Artifact({
@@ -24,8 +20,8 @@ export default async function Artifact({
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
 
-    const session = await getServerSession(authOptions);
-    const haveSession = !!session
+    // const session = await getServerSession(authOptions);
+    // const haveSession = !!session
 
     const [ dataResult ] = await Promise.allSettled([ getArtifactById(id) ])
     if (dataResult.status === 'rejected') return (
@@ -80,12 +76,15 @@ export default async function Artifact({
                 </div>
 
                 <div className="md:w-1/2 w-full">
-                    <PhotoSlider data={images} />
-                    <div className="mt-3 flex flex-wrap gap-3"> 
+                    {images.length === 1 
+                        ? <PhotoZoom src={dataResult.value.primaryImageURL} alt={dataResult.value.displayName} />
+                        : <PhotoSlider data={images} /> 
+                    }
+                    {/* <div className="mt-3 flex flex-wrap gap-3"> 
                         <AddFavorites session={haveSession} />
                         <Open3DModel data={dataResult.value.model} />
                         <UnloadCSV session={haveSession} />
-                    </div>
+                    </div> */}
                 </div>    
 
                 {/* Mobile Main Info */}

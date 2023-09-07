@@ -3,10 +3,11 @@
 import { Dialog, DialogContent, DialogTrigger } from '@siberiana/ui/src/dialog'
 import { ArrowLeft, ArrowRight, Maximize } from 'lucide-react'
 import React from 'react'
-import PhotoSliderImg from '../PhotoSliderImg'
 import { Skeleton } from '@siberiana/ui'
 import { useKeenSlider } from 'keen-slider/react'
 import { cn } from '@siberiana/ui/src/lib/utils'
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import Image from "next/image";
 
 export default function PhotoModal({ 
   data,
@@ -18,9 +19,10 @@ export default function PhotoModal({
 }) {
   const [created, setCreated] = React.useState<boolean>();
   const [currentSlide, setCurrentSlide] = React.useState(0)
-  
+
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
+    drag: false,
     renderMode: "performance",
     initial: 0,
     slides: {
@@ -39,26 +41,42 @@ export default function PhotoModal({
   });
 
   return (
-    <Dialog
-        onOpenChange={() => setCurrentSlide(0)}
-    >
+    <Dialog onOpenChange={() => setCurrentSlide(0)}>
       <DialogTrigger>
         <Maximize className="w-6 h-6 cursor-pointer hover:scale-125 transition-all" />
       </DialogTrigger>
-      <DialogContent className='sm:w-[85%] w-[95%] h-[85%] sm:max-w-[90%] p-0 relative overflow-hidden'>
+      <DialogContent className='relative sm:max-w-[95vw] max-w-[95vw] h-[90vh] p-0 bg-accent overflow-hidden'>
         <div ref={sliderRef} className="keen-slider cursor-grab h-full w-full rounded-md bg-accent">
           {data.map((image, index) => (
             <div
               key={index}
               className="keen-slider__slide zoom-out__slide"
+              onClick={(e) => e.stopPropagation()}
             >
               {created 
                 ? (
-                  <PhotoSliderImg
-                    src={image.src}
-                    alt={image.alt}
-                    sizes={"(min-width: 640px) 80vw, 90vw"}
-                  />
+                  <TransformWrapper>
+                    <TransformComponent
+                        contentStyle={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '90vh',
+                            width: '95vw',
+                        }}
+                    >
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={image.src}
+                                fill
+                                sizes="100vw"
+                                quality={100}
+                                className='object-contain'
+                                alt={image.alt}
+                            />
+                        </div>
+                    </TransformComponent>
+                  </TransformWrapper>
                 ) : (
                   <Skeleton className="h-full w-full" />
                 )
