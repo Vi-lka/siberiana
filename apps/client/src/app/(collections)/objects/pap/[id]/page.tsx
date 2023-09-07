@@ -8,10 +8,6 @@ import PhotoSlider from '~/components/objects/PhotoSlider';
 import MainInfoBlock from './MainInfoBlock';
 import GoBackButton from '~/components/ui/GoBackButton';
 import Description from '~/components/objects/Description';
-import AddFavorites from '~/components/objects/buttons/AddFavorites';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '~/app/api/auth/[...nextauth]/route';
-import UnloadCSV from '~/components/objects/buttons/UnloadCSV';
 
 
 export default async function ProtectedAreaPictures({
@@ -23,8 +19,8 @@ export default async function ProtectedAreaPictures({
     const dict = await getDictionary();
     const dictResult = Dictionary.parse(dict);
 
-    const session = await getServerSession(authOptions);
-    const haveSession = !!session
+    // const session = await getServerSession(authOptions);
+    // const haveSession = !!session
 
     const [ dataResult ] = await Promise.allSettled([ getPAPById(id) ])
     if (dataResult.status === 'rejected') return (
@@ -80,10 +76,10 @@ export default async function ProtectedAreaPictures({
 
                 <div className="md:w-1/2 w-full">
                     <PhotoSlider data={images} />
-                    <div className="mt-3 flex flex-wrap gap-3">
+                    {/* <div className="mt-3 flex flex-wrap gap-3">
                         <AddFavorites session={haveSession} />
                         <UnloadCSV session={haveSession} />
-                    </div>
+                    </div> */}
                 </div>    
 
                 {/* Mobile Main Info */}

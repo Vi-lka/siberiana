@@ -22,7 +22,7 @@ export default function ReadPDF({
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger className='font-Inter text-sm uppercase font-normal px-4 py-2 bg-accent hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl'>
+            <DropdownMenuTrigger className='font-Inter text-sm uppercase font-normal px-4 py-3 bg-accent hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl'>
                 <p>
                     <span className='lg:inline hidden'>Читать в</span> PDF
                 </p>
