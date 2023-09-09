@@ -1,5 +1,11 @@
 # @siberiana/client
 
+## 0.4.0
+
+### Minor Changes
+
+- 1ff9a66: Location filters
+
 ## 0.3.0
 
 ### Minor Changes
