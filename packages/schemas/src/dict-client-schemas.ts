@@ -149,10 +149,12 @@ export const FiltersDict = z.object({
   regions: z.string(),
   districts: z.string(),
   settlements: z.string(),
+  license: z.string(),
   cultures: z.string(),
   sets: z.string(),
   monuments: z.string(),
   techniques: z.string(),
+  bookGenre: z.string(),
 });
 export type FiltersDict = z.infer<typeof FiltersDict>;
 

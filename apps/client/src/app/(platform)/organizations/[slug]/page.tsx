@@ -199,7 +199,7 @@ export default async function Organization({
                   >
                     <div className="flex md:flex-row flex-col justify-between gap-1">
                       <p className="md:w-[45%] uppercase xl:text-sm text-xs">
-                        <span className="font-bold">{new Date(elem.dateStart).toLocaleDateString("ru")} – {new Date(elem.dateEnd).toLocaleDateString("ru")}</span> {elem.cost ? (`${elem.cost} • ${elem.cost}`) : null } 
+                        <span className="font-bold">{new Date(elem.dateStart).toLocaleDateString("ru")} – {new Date(elem.dateEnd).toLocaleDateString("ru")}</span> {elem.cost ? (`• ${elem.cost}`) : null } 
                         <br/>
                         {elem.name}
                       </p>

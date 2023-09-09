@@ -196,10 +196,12 @@
       "regions": "Регион",
       "districts": "Район",
       "settlements": "Населенный пункт",
+      "license": "Лицензии",
       "cultures": "Культура",
       "sets": "Комплекс",
       "monuments": "Памятник",
-      "techniques": "Техника"
+      "techniques": "Техника",
+      "bookGenre": "Жанр"
     },
     "artifacts": "Артефакты",
     "books": "Книги",

@@ -16,12 +16,17 @@ export default async function CultureFilter({
     const dictResult = Dictionary.parse(dict);
 
     const search = searchParams['search'] as string | undefined
+    
     const categories = searchParams['category'] as string | undefined
     const collections = searchParams['collection'] as string | undefined
     const countryIds = searchParams['countryArtifacts'] as string | undefined
+
     const regionIds = searchParams['regionArtifacts'] as string | undefined
     const districtIds = searchParams['districtArtifacts'] as string | undefined
     const settlementIds = searchParams['settlementArtifacts'] as string | undefined
+
+    const licenseIds = searchParams['licenseArtifacts'] as string | undefined
+
     const setIds = searchParams['set'] as string | undefined
     const monumentIds = searchParams['monument'] as string | undefined
     const techniqueIds = searchParams['technique'] as string | undefined
@@ -34,6 +39,7 @@ export default async function CultureFilter({
             countryIds, 
             regionIds,
             settlementIds,
+            licenseIds,
             districtIds,
             setIds,
             monumentIds, 

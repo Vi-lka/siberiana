@@ -1,5 +1,5 @@
 import { Dictionary } from '@siberiana/schemas';
-import React, { Suspense } from 'react'
+import React from 'react'
 import FilterTab from '~/components/objects/FilterTab';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import ArtifactsFilters from './ArtifactsFilters';
@@ -37,25 +37,17 @@ export default async function Filters({
         </FilterTab> 
 
         <FilterTab value='books' className='mt-3'>
-            <Suspense fallback={ 
-              "..."
-            }>
-                {type === "books" 
-                    ? <BooksFilters />
-                    : "..." 
-                }
-            </Suspense> 
+            {type === "books" 
+                ? <BooksFilters searchParams={searchParams} />
+                : null
+            }
         </FilterTab> 
 
         <FilterTab value='protected_area_pictures' className='mt-3'>
-            <Suspense fallback={ 
-              "..."
-            }>
-                {type === "protected_area_pictures" 
-                    ? <PAPFilters />
-                    : "..." 
-                }
-            </Suspense> 
+            {type === "protected_area_pictures" 
+                ? <PAPFilters searchParams={searchParams} />
+                : null 
+            }
         </FilterTab> 
     </div>
   )
