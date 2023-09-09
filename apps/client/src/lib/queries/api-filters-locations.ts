@@ -151,8 +151,8 @@ function LocationBooksQuery({
                   ]
                 },` : ''}
               ],
-              hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
               hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+              hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
               or: [ 
                 {displayNameContainsFold: "${search}"}
               ]
@@ -210,6 +210,7 @@ function LocationPAPQuery({
                   ]
                 },` : ''}
               ],
+              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
               hasProtectedAreaWith: [ 
                 ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
                 ${!!protectedAreaCategoryIds ? `{
@@ -218,7 +219,6 @@ function LocationPAPQuery({
                   ]
                 },` : ''}
               ],
-              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
               or: [ 
                 {displayNameContainsFold: "${search}"}
               ]

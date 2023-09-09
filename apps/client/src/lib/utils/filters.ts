@@ -1,17 +1,17 @@
 import "server-only";
 
 import type { ArtiFilters, BooksFilters, LocationsArtiNode, LocationsBooksNode, LocationsPAPNode, PAPFilters } from "@siberiana/schemas";
-import { BooksNode } from "@siberiana/schemas";
+import { BooksNode, PAPCategorysNode } from "@siberiana/schemas";
 import { ArtiNode, PAPNode } from "@siberiana/schemas";
 
 export function isParamInString(param: string | undefined, str: string | undefined): boolean {
-    if (!!str) {
+  if (!!str) {
 
-      if (!!param) {
-        return param.split("_").includes(str)
-      } else return true
-    
+    if (!!param) {
+      return param.split("_").includes(str)
     } else return true
+  
+  } else return true
 }
 
 export function isParamInArray(param: string | undefined, array: { id: string }[]) {
@@ -289,21 +289,82 @@ export function filterProtectedAreaPictures(result: PAPFilters, searchParams: { 
         : bySettlement.filter(pap => isParamInString(licenseIds, pap.license?.id))
   
       // PAP FIELDS
-      const byProtectedAreaCategory = protectedAreaPictureNode.__typename === "ProtectedAreaCategory"
-        ? byLicense
-        : byLicense.filter(pap => isParamInString(protectedAreaCategoryIds, pap.protectedArea?.protectedAreaCategory?.id))
       const byProtectedArea = protectedAreaPictureNode.__typename === "ProtectedArea"
-        ? byProtectedAreaCategory
-        : byProtectedAreaCategory.filter(pap => isParamInString(protectedAreaIds, pap.protectedArea?.id))
+        ? byLicense
+        : byLicense.filter(pap => isParamInString(protectedAreaIds, pap.protectedArea?.id))
+      const byProtectedAreaCategory = byProtectedArea.filter(pap => {
+        if (!!protectedAreaCategoryIds && pap.protectedArea?.protectedAreaCategory === null) {
+          return false
+        } else {
+          const str = pap.protectedArea?.protectedAreaCategory?.id
+          if (!!str) {
+
+            if (!!protectedAreaCategoryIds) {
+              return protectedAreaCategoryIds.split("_").includes(str)
+            } else return true
+          
+          } else return true
+        }
+      })
 
       // END
-      const filteredEnd = byProtectedArea
+      const filteredEnd = byProtectedAreaCategory
+
+      if (protectedAreaPictureNode.__typename === "License") console.log(filteredEnd.map(item => item.protectedArea))
 
       return {
         value: protectedAreaPictureNode.id,
         label: protectedAreaPictureNode.displayName,
         count: filteredEnd.length
       }
+
+    } else if (PAPCategorysNode.safeParse(elem.node).success) {
+      const categorysPAPNode = elem.node as PAPCategorysNode;
+
+      // GLOBAL
+      const byName = categorysPAPNode.protectedAreas.map(paps => {
+        return paps.protectedAreaPictures.filter(pap => pap.displayName.toLowerCase().includes(search ?? ""))
+      })
+      const byCategories_Collections = byName.map(paps => {
+        return paps.filter(pap => isParamInString(categories, pap.collection.category.slug) && isParamInString(collections, pap.collection.slug))
+      })
+
+      //LOCATIONS
+      const byCountry = byCategories_Collections.map(paps => {
+        return paps.filter(pap => isParamInString(licenseIds, pap.license?.id))
+      })
+      const byRegion = byCountry.map(paps => {
+        return paps.filter(pap => isParamInString(licenseIds, pap.license?.id))
+      })
+      const byDistrict = byRegion.map(paps => {
+        return paps.filter(pap => isParamInString(licenseIds, pap.license?.id))
+      })
+      const bySettlement = byDistrict.map(paps => {
+        return paps.filter(pap => isParamInString(licenseIds, pap.license?.id))
+      })
+
+      //LICENSE
+      const byLicense = bySettlement.map(paps => {
+        return paps.filter(pap => isParamInString(licenseIds, pap.license?.id))
+      })
+
+      // PAP FIELDS
+      const byProtectedArea = byLicense.map(paps => {
+        return paps.filter(pap => isParamInString(protectedAreaIds, pap.protectedArea?.id))
+      })
+
+      // END
+      const filteredEnd = byProtectedArea.map(paps => paps.length)
+  
+      const filteredCount = filteredEnd.reduce((a, b) => {
+        return a + b;
+      })
+  
+      return {
+        value: categorysPAPNode.id,
+        label: categorysPAPNode.displayName,
+        count: filteredCount
+      } 
 
     } else {
       const locationsPAPNode = elem.node as LocationsPAPNode;
@@ -345,15 +406,28 @@ export function filterProtectedAreaPictures(result: PAPFilters, searchParams: { 
       })
   
       // PAP FIELDS
-      const byProtectedAreaCategory = byLicense.map(paps => {
-        return paps.filter(pap => isParamInString(protectedAreaCategoryIds, pap.protectedArea?.protectedAreaCategory?.id))
-      })
-      const byProtectedArea = byProtectedAreaCategory.map(paps => {
+      const byProtectedArea = byLicense.map(paps => {
         return paps.filter(pap => isParamInString(protectedAreaIds, pap.protectedArea?.id))
+      })
+      const byProtectedAreaCategory = byProtectedArea.map(paps => {
+        return paps.filter(pap => {
+          if (!!protectedAreaCategoryIds && pap.protectedArea?.protectedAreaCategory === null) {
+            return false
+          } else {
+            const str = pap.protectedArea?.protectedAreaCategory?.id
+            if (!!str) {
+  
+              if (!!protectedAreaCategoryIds) {
+                return protectedAreaCategoryIds.split("_").includes(str)
+              } else return true
+            
+            } else return true
+          }
+        })
       })
 
       // END
-      const filteredEnd = byProtectedArea.map(paps => paps.length)
+      const filteredEnd = byProtectedAreaCategory.map(paps => paps.length)
   
       const filteredCount = filteredEnd.reduce((a, b) => {
         return a + b;

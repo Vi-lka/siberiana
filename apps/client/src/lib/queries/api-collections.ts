@@ -399,7 +399,9 @@ export const getProtectedAreaPictures = async ({
   regionIds,
   districtIds,
   settlementIds,
-  licenseIds
+  licenseIds,
+  protectedAreaIds,
+  protectedAreaCategoryIds,
 }: {
   first: number | null,
   offset?: number | null,
@@ -412,6 +414,8 @@ export const getProtectedAreaPictures = async ({
   districtIds?: string,
   settlementIds?: string,
   licenseIds?: string,
+  protectedAreaIds?: string,
+  protectedAreaCategoryIds?: string,
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -439,6 +443,14 @@ export const getProtectedAreaPictures = async ({
             ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
           ],
           hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+          hasProtectedAreaWith: [ 
+            ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
+            ${!!protectedAreaCategoryIds ? `{
+              hasProtectedAreaCategoryWith: [
+                {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
+              ]
+            },` : ''}
+          ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [

@@ -7,6 +7,8 @@ import RegionsFilter from './(pap)/RegionsFilter';
 import DistrictsFilter from './(pap)/DistrictsFilter';
 import SettlementsFilter from './(pap)/SettlementsFilter';
 import LicensesFilter from './(pap)/LicensesFilter';
+import ProtectedAreasFilter from './(pap)/ProtectedAreasFilter';
+import ProtectedAreaCategoryFilter from './(pap)/ProtectedAreaCategoryFilter';
 
 export default async function PAPFilters({
     searchParams
@@ -72,6 +74,26 @@ export default async function PAPFilters({
             </Suspense> 
 
             <Separator className='h-[2px] mt-1 mb-3' decorative />
+
+            {/* Protected Area Category */}
+            <Suspense fallback={ 
+              <div className="flex flex-col gap-1">
+                <h1 className='font-medium'>{dictResult.objects.filters.ooptCategory}</h1>
+                <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
+              </div>
+            }>
+              <ProtectedAreaCategoryFilter searchParams={searchParams}/>
+            </Suspense> 
+
+            {/* Protected Area */}
+            <Suspense fallback={ 
+              <div className="flex flex-col gap-1">
+                <h1 className='font-medium'>{dictResult.objects.filters.oopt}</h1>
+                <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
+              </div>
+            }>
+              <ProtectedAreasFilter searchParams={searchParams}/>
+            </Suspense> 
 
         </div>
     )

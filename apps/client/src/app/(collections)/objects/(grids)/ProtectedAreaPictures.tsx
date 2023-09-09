@@ -32,6 +32,9 @@ export default async function ProtectedAreaPictures({
 
   const licenseIds = searchParams['licensePAP'] as string | undefined
 
+  const protectedAreaIds = searchParams['protectedArea'] as string | undefined
+  const protectedAreaCategoryIds = searchParams['protectedAreaCategory'] as string | undefined
+
   const sort = searchParams['sort'] as string | undefined
   const page = searchParams['page_pap'] ?? '1'
   const per = searchParams['per_pap'] ?? defaultPageSize
@@ -52,6 +55,8 @@ export default async function ProtectedAreaPictures({
       districtIds,
       settlementIds,
       licenseIds,
+      protectedAreaIds,
+      protectedAreaCategoryIds,
     }) 
   ])
   if  (dataResult.status === 'rejected') return (

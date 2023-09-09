@@ -24,7 +24,7 @@ export default async function Objects({
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
 
-  const defaultPageSize = 5
+  const defaultPageSize = 16
 
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined

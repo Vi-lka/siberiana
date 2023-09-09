@@ -201,7 +201,9 @@
       "sets": "Комплекс",
       "monuments": "Памятник",
       "techniques": "Техника",
-      "bookGenre": "Жанр"
+      "bookGenre": "Раздел",
+      "ooptCategory": "Категория ООПТ",
+      "oopt": "ООПТ"
     },
     "artifacts": "Артефакты",
     "books": "Книги",

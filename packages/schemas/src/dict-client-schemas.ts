@@ -155,6 +155,8 @@ export const FiltersDict = z.object({
   monuments: z.string(),
   techniques: z.string(),
   bookGenre: z.string(),
+  ooptCategory: z.string(),
+  oopt: z.string(),
 });
 export type FiltersDict = z.infer<typeof FiltersDict>;
 

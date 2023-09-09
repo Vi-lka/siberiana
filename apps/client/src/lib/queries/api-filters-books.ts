@@ -83,8 +83,8 @@ function BooksQuery({
               ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
               ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
             ],
-            hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
             hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+            hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
             or: [ 
               {displayNameContainsFold: "${search}"}
             ]

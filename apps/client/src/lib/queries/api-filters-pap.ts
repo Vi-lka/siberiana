@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 import { PAPFilters } from "@siberiana/schemas";
 
-type Entitys = "protectedAreas" | "licenses"
+type Entitys = "protectedAreas" | "protectedAreaCategories" | "licenses"
 
 type PAPQueryType = {
   entity?: Entitys,
@@ -88,6 +88,7 @@ function PAPQuery({
               ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
               ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
             ],
+            hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
             hasProtectedAreaWith: [ 
               ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
               ${!!protectedAreaCategoryIds ? `{
@@ -96,7 +97,6 @@ function PAPQuery({
                 ]
               },` : ''}
             ],
-            hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
             or: [ 
               {displayNameContainsFold: "${search}"}
             ]
@@ -192,4 +192,100 @@ export const getProtectedAreasFilter = async (args: PAPQueryType): Promise<PAPFi
     const protectedAreas = PAPFilters.parse(json.data.protectedAreas);
     
     return protectedAreas;
+};
+
+//.........................PROTECTED AREA CATEGORY.........................//
+export const getProtectedAreaCategorysFilter = async ({ 
+  search = "",
+  categories,
+  collections,
+  countryIds,
+  regionIds,
+  districtIds,
+  settlementIds,
+  protectedAreaIds,
+  protectedAreaCategoryIds,
+  licenseIds
+}: PAPQueryType): Promise<PAPFilters> => {
+
+  const headers = { "Content-Type": "application/json" };
+
+  const query = /* GraphGL */ `  
+    query {
+      protectedAreaCategories(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+        where: {
+          hasProtectedAreasWith: [{ 
+            hasProtectedAreaPicturesWith: [{
+              hasCollectionWith: [
+                ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
+                ${!!categories ? `{
+                  hasCategoryWith: [
+                    {slugIn: [${getMultiFilter(categories)}]}
+                  ]
+                },` : ''}
+              ],
+              hasLocationWith: [
+                ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
+                ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
+                ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
+                ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+              ],
+              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+              hasProtectedAreaWith: [ 
+                ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
+                ${!!protectedAreaCategoryIds ? `{
+                  hasProtectedAreaCategoryWith: [
+                    {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
+                  ]
+                },` : ''}
+              ],
+              or: [ 
+                {displayNameContainsFold: "${search}"}
+              ]
+            }]
+          }],
+        }
+      ) {
+        totalCount
+        edges {
+          node {
+            __typename
+            id
+            displayName
+            protectedAreas {
+              ${protectedAreaPictures}
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Protected Area Categorys Filter'");
+  }
+  
+  const json = await res.json() as { data: { protectedAreaCategories: PAPFilters } };
+  
+  if (json.data.protectedAreaCategories.totalCount === 0) {
+    notFound()
+  }
+  
+  const protectedAreaCategories = PAPFilters.parse(json.data.protectedAreaCategories);
+  
+  return protectedAreaCategories;
 };

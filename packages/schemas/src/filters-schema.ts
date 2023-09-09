@@ -200,6 +200,16 @@ export const PAPNode = z.object({
 })
 export type PAPNode = z.infer<typeof PAPNode>;
 
+export const PAPCategorysNode = z.object({
+    __typename: PAPFiltersEnum,
+    id: z.string(),
+    displayName: z.string(),
+    protectedAreas: z.object({
+        protectedAreaPictures: ProtectedAreaPicture.array()
+    }).array()
+});
+export type PAPCategorysNode = z.infer<typeof PAPCategorysNode>;
+
 export const LocationsPAPNode = z.object({
     __typename: LocationsEnum,
     id: z.string(),
@@ -213,7 +223,7 @@ export type LocationsPAPNode = z.infer<typeof LocationsPAPNode>;
 export const PAPFilters = z.object({
     totalCount: z.number(),
     edges: z.object({
-        node: z.union([PAPNode, LocationsPAPNode])
+        node: z.union([PAPNode, PAPCategorysNode, LocationsPAPNode])
     }).array()
 });
 export type PAPFilters = z.infer<typeof PAPFilters>;

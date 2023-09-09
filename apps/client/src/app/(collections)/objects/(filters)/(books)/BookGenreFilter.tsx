@@ -59,7 +59,7 @@ export default async function BookGenreFilter({
               side='right'
               values={resultsFiltered} 
               param="bookGenre"
-              placeholder="Выберите жанры"
+              placeholder="Выберите разделы"
               className="max-w-none w-full"
             />
         </div>
