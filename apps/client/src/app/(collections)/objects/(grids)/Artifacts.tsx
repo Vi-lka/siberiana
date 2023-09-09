@@ -30,6 +30,8 @@ export default async function Artifacts({
   const districtIds = searchParams['districtArtifacts'] as string | undefined
   const settlementIds = searchParams['settlementArtifacts'] as string | undefined
 
+  const licenseIds = searchParams['licenseArtifacts'] as string | undefined
+
   const cultureIds = searchParams['culture'] as string | undefined
   const setIds = searchParams['set'] as string | undefined
   const monumentIds = searchParams['monument'] as string | undefined
@@ -53,7 +55,8 @@ export default async function Artifacts({
       countryIds,
       regionIds, 
       districtIds,
-      settlementIds, 
+      settlementIds,
+      licenseIds, 
       cultureIds,
       setIds,
       monumentIds,

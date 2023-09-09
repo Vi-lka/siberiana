@@ -21,8 +21,19 @@ export default async function Books({
   const dictResult = Dictionary.parse(dict);
 
   const search = searchParams['search'] as string | undefined
+
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
+
+  const countryIds = searchParams['countryBooks'] as string | undefined
+  const regionIds = searchParams['regionBooks'] as string | undefined 
+  const districtIds = searchParams['districtBooks'] as string | undefined
+  const settlementIds = searchParams['settlementBooks'] as string | undefined
+
+  const licenseIds = searchParams['licenseBooks'] as string | undefined
+
+  const bookGenreIds = searchParams['bookGenre'] as string | undefined
+
   const sort = searchParams['sort'] as string | undefined
   const page = searchParams['page_books'] ?? '1'
   const per = searchParams['per_books'] ?? defaultPageSize
@@ -32,12 +43,18 @@ export default async function Books({
 
   const [ dataResult ] = await Promise.allSettled([ 
     getBooks({ 
+      first,
+      offset,
       search, 
+      sort,
       categories, 
       collections, 
-      sort, 
-      first, 
-      offset
+      countryIds,
+      regionIds,
+      districtIds,
+      settlementIds,
+      licenseIds,
+      bookGenreIds
     }) 
   ])
   if  (dataResult.status === 'rejected') return (

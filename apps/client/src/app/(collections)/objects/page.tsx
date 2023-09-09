@@ -13,7 +13,6 @@ import Books from "./(grids)/Books";
 import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 import Filters from "./(filters)/Filters";
 import Sort from "~/components/ui/filters/Sort";
-import { Filter } from "lucide-react";
 import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 import { Skeleton } from "@siberiana/ui";
 
@@ -25,7 +24,7 @@ export default async function Objects({
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
 
-  const defaultPageSize = 5
+  const defaultPageSize = 16
 
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
@@ -104,8 +103,8 @@ export default async function Objects({
 
 
       <div className="relative">
-        <div className="flex gap-6 items-center lg:justify-end justify-between lg:mt-3 mt-4">
-          <Filter className="lg:hidden block" /> {/* Mobile here */}
+        <div className="flex gap-6 items-center justify-end lg:mt-3 mt-4">
+          {/* <Filter className="lg:hidden block" /> Mobile here */}
           <Sort 
             dict={dictResult.sort}
             data={sortData}

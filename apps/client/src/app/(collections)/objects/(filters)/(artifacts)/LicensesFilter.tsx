@@ -2,11 +2,11 @@ import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
-import { getArtiCountriesFilter } from '~/lib/queries/api-filters-locations';
+import { getLicensesFilter } from '~/lib/queries/api-filters-artifacts';
 import { filterArtifacts } from '~/lib/utils/filters';
 import { getDictionary } from '~/lib/utils/getDictionary';
 
-export default async function CountriesFilter({
+export default async function LicensesFilter({
   searchParams
 }: {
   searchParams: { [key: string]: string | string[] | undefined },
@@ -19,12 +19,11 @@ export default async function CountriesFilter({
 
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
-
+  
+  const countryIds = searchParams['countryArtifacts'] as string | undefined
   const regionIds = searchParams['regionArtifacts'] as string | undefined
   const districtIds = searchParams['districtArtifacts'] as string | undefined
   const settlementIds = searchParams['settlementArtifacts'] as string | undefined
-
-  const licenseIds = searchParams['licenseArtifacts'] as string | undefined
   
   const cultureIds = searchParams['culture'] as string | undefined
   const setIds = searchParams['set'] as string | undefined
@@ -32,18 +31,18 @@ export default async function CountriesFilter({
   const techniqueIds = searchParams['technique'] as string | undefined
 
   const [ result ] = await Promise.allSettled([ 
-    getArtiCountriesFilter({ 
+    getLicensesFilter({ 
       search, 
       categories, 
       collections, 
+      countryIds,
       regionIds, 
       districtIds,
       settlementIds,
-      licenseIds,
-      cultureIds, 
+      cultureIds,
       setIds,
-      monumentIds, 
-      techniqueIds 
+      monumentIds,
+      techniqueIds
     }) 
   ])
 
@@ -51,7 +50,7 @@ export default async function CountriesFilter({
     return (
         <ErrorHandler
           error={result.reason as unknown} 
-          place="Artifacts Countries Filter"
+          place="Artifacts Licenses Filter"
           notFound={false} 
         />
     )
@@ -61,14 +60,14 @@ export default async function CountriesFilter({
 
   return (
     <div className="flex flex-col gap-1">
-      <h1 className='font-medium'>{dictResult.objects.filters.countries}</h1>
+      <h1 className='font-medium'>{dictResult.objects.filters.license}</h1>
       <Select 
         isMulti
         badges
         side='right'
         values={resultsFiltered} 
-        param="countryArtifacts"
-        placeholder="Выберите страны"
+        param="licenseArtifacts"
+        placeholder="Выберите лицензии"
         className="max-w-none w-full"
       />
     </div>

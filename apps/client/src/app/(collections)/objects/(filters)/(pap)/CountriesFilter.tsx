@@ -2,8 +2,8 @@ import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
-import { getArtiCountriesFilter } from '~/lib/queries/api-filters-locations';
-import { filterArtifacts } from '~/lib/utils/filters';
+import { getPAPCountriesFilter } from '~/lib/queries/api-filters-locations';
+import { filterProtectedAreaPictures } from '~/lib/utils/filters';
 import { getDictionary } from '~/lib/utils/getDictionary';
 
 export default async function CountriesFilter({
@@ -16,34 +16,26 @@ export default async function CountriesFilter({
   const dictResult = Dictionary.parse(dict);
 
   const search = searchParams['search'] as string | undefined
-
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
-
-  const regionIds = searchParams['regionArtifacts'] as string | undefined
-  const districtIds = searchParams['districtArtifacts'] as string | undefined
-  const settlementIds = searchParams['settlementArtifacts'] as string | undefined
-
-  const licenseIds = searchParams['licenseArtifacts'] as string | undefined
-  
-  const cultureIds = searchParams['culture'] as string | undefined
-  const setIds = searchParams['set'] as string | undefined
-  const monumentIds = searchParams['monument'] as string | undefined
-  const techniqueIds = searchParams['technique'] as string | undefined
+  const regionIds = searchParams['regionPAP'] as string | undefined
+  const districtIds = searchParams['districtPAP'] as string | undefined
+  const settlementIds = searchParams['settlementPAP'] as string | undefined
+  const licenseIds = searchParams['licensePAP'] as string | undefined
+  const protectedAreaIds = searchParams['protectedArea'] as string | undefined
+  const protectedAreaCategoryIds = searchParams['protectedAreaCategory'] as string | undefined
 
   const [ result ] = await Promise.allSettled([ 
-    getArtiCountriesFilter({ 
+    getPAPCountriesFilter({ 
       search, 
       categories, 
       collections, 
       regionIds, 
       districtIds,
       settlementIds,
-      licenseIds,
-      cultureIds, 
-      setIds,
-      monumentIds, 
-      techniqueIds 
+      protectedAreaIds, 
+      protectedAreaCategoryIds,
+      licenseIds
     }) 
   ])
 
@@ -51,13 +43,13 @@ export default async function CountriesFilter({
     return (
         <ErrorHandler
           error={result.reason as unknown} 
-          place="Artifacts Countries Filter"
+          place="PAP Countries Filter"
           notFound={false} 
         />
     )
   }
 
-  const resultsFiltered = filterArtifacts(result.value, searchParams)
+  const resultsFiltered = filterProtectedAreaPictures(result.value, searchParams)
 
   return (
     <div className="flex flex-col gap-1">
@@ -67,7 +59,7 @@ export default async function CountriesFilter({
         badges
         side='right'
         values={resultsFiltered} 
-        param="countryArtifacts"
+        param="countryPAP"
         placeholder="Выберите страны"
         className="max-w-none w-full"
       />

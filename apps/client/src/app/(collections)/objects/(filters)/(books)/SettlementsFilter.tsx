@@ -2,11 +2,11 @@ import { Dictionary } from '@siberiana/schemas';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { Select } from '~/components/ui/filters/Select';
-import { getArtiDistrictsFilter } from '~/lib/queries/api-filters-locations';
-import { filterArtifacts } from '~/lib/utils/filters';
+import { getBooksSettlementsFilter } from '~/lib/queries/api-filters-locations';
+import { filterBooks } from '~/lib/utils/filters';
 import { getDictionary } from '~/lib/utils/getDictionary';
 
-export default async function DistrictsFilter({
+export default async function SettlementsFilter({
     searchParams
 }: {
     searchParams: { [key: string]: string | string[] | undefined },
@@ -16,34 +16,24 @@ export default async function DistrictsFilter({
     const dictResult = Dictionary.parse(dict);
 
     const search = searchParams['search'] as string | undefined
-
     const categories = searchParams['category'] as string | undefined
     const collections = searchParams['collection'] as string | undefined
-
-    const countryIds = searchParams['countryArtifacts'] as string | undefined
-    const regionIds = searchParams['regionArtifacts'] as string | undefined
-    const settlementIds = searchParams['settlementArtifacts'] as string | undefined
-    
-    const licenseIds = searchParams['licenseArtifacts'] as string | undefined
-    
-    const cultureIds = searchParams['culture'] as string | undefined
-    const setIds = searchParams['set'] as string | undefined
-    const monumentIds = searchParams['monument'] as string | undefined
-    const techniqueIds = searchParams['technique'] as string | undefined
-
+    const countryIds = searchParams['countryBooks'] as string | undefined
+    const regionIds = searchParams['regionBooks'] as string | undefined
+    const districtIds = searchParams['districtBooks'] as string | undefined
+    const licenseIds = searchParams['licenseBooks'] as string | undefined
+    const bookGenreIds = searchParams['bookGenre'] as string | undefined
+  
     const [ result ] = await Promise.allSettled([ 
-        getArtiDistrictsFilter({ 
+        getBooksSettlementsFilter({ 
             search, 
             categories, 
             collections, 
             countryIds, 
             regionIds,
-            settlementIds,
-            licenseIds,
-            cultureIds, 
-            setIds,
-            monumentIds, 
-            techniqueIds 
+            districtIds,
+            bookGenreIds,
+            licenseIds
         }) 
     ])
 
@@ -51,24 +41,24 @@ export default async function DistrictsFilter({
         return (
             <ErrorHandler
               error={result.reason as unknown} 
-              place="Artifacts Districts Filter"
+              place="Books Settlements Filter"
               notFound={false} 
             />
         )
     }
 
-    const resultsFiltered = filterArtifacts(result.value, searchParams)
+    const resultsFiltered = filterBooks(result.value, searchParams)
 
     return (
         <div className="flex flex-col gap-1">
-            <h1 className='font-medium'>{dictResult.objects.filters.districts}</h1>
+            <h1 className='font-medium'>{dictResult.objects.filters.settlements}</h1>
             <Select 
                 isMulti
                 badges
                 side='right'
                 values={resultsFiltered} 
-                param="districtArtifacts"
-                placeholder="Выберите регионы"
+                param="settlementBooks"
+                placeholder="Выберите населенные пункты"
                 className="max-w-none w-full"
             />
         </div>

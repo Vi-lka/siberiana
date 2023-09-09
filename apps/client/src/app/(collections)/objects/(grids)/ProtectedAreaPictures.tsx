@@ -21,8 +21,20 @@ export default async function ProtectedAreaPictures({
   const dictResult = Dictionary.parse(dict);
   
   const search = searchParams['search'] as string | undefined
+
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
+
+  const countryIds = searchParams['countryPAP'] as string | undefined
+  const regionIds = searchParams['regionPAP'] as string | undefined 
+  const districtIds = searchParams['districtPAP'] as string | undefined
+  const settlementIds = searchParams['settlementPAP'] as string | undefined
+
+  const licenseIds = searchParams['licensePAP'] as string | undefined
+
+  const protectedAreaIds = searchParams['protectedArea'] as string | undefined
+  const protectedAreaCategoryIds = searchParams['protectedAreaCategory'] as string | undefined
+
   const sort = searchParams['sort'] as string | undefined
   const page = searchParams['page_pap'] ?? '1'
   const per = searchParams['per_pap'] ?? defaultPageSize
@@ -32,12 +44,19 @@ export default async function ProtectedAreaPictures({
   
   const [ dataResult ] = await Promise.allSettled([ 
     getProtectedAreaPictures({ 
+      first,
+      offset,
       search, 
+      sort,
       categories, 
       collections, 
-      sort, 
-      first, 
-      offset
+      countryIds,
+      regionIds,
+      districtIds,
+      settlementIds,
+      licenseIds,
+      protectedAreaIds,
+      protectedAreaCategoryIds,
     }) 
   ])
   if  (dataResult.status === 'rejected') return (

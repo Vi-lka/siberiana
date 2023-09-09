@@ -7,9 +7,10 @@ import MonumentFilter from './(artifacts)/MonumentFilter';
 import TechniqueFilter from './(artifacts)/TechniqueFilter';
 import DistrictsFilter from './(artifacts)/DistrictsFilter';
 import SettlementsFilter from './(artifacts)/SettlementsFilter';
+import SetFilter from './(artifacts)/SetFilter';
+import LicensesFilter from './(artifacts)/LicensesFilter';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import { Dictionary } from '@siberiana/schemas';
-import SetFilter from './(artifacts)/SetFilter';
 
 export default async function ArtifactsFilters({
   searchParams
@@ -63,6 +64,18 @@ export default async function ArtifactsFilters({
         <SettlementsFilter searchParams={searchParams}/>
       </Suspense> 
       
+      <Separator className='h-[2px] mt-1 mb-3' decorative />
+
+      {/* License */}
+      <Suspense fallback={ 
+        <div className="flex flex-col gap-1">
+          <h1 className='font-medium'>{dictResult.objects.filters.license}</h1>
+          <Skeleton className='w-full h-10 py-2 px-4 mb-3' />
+        </div>
+      }>
+        <LicensesFilter searchParams={searchParams}/>
+      </Suspense> 
+
       <Separator className='h-[2px] mt-1 mb-3' decorative />
     
       {/* Culture */}

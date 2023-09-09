@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";
 import { ArtiFilters } from "@siberiana/schemas";
 
-type Entitys = "cultures" | "sets" | "monuments" | "techniques"
+type Entitys = "licenses" | "cultures" | "sets" | "monuments" | "techniques"
 
 type ArtiQueryType = {
   entity?: Entitys,
@@ -15,6 +15,7 @@ type ArtiQueryType = {
   regionIds?: string,
   districtIds?: string,
   settlementIds?: string,
+  licenseIds?: string,
   cultureIds?: string,
   setIds?: string,
   monumentIds?: string,
@@ -29,6 +30,9 @@ export const artifacts = `
       category {
         slug
       }
+    }
+    license {
+      id
     }
     culturalAffiliation {
       id
@@ -68,6 +72,7 @@ function ArtiQuery({
   regionIds,
   districtIds,
   settlementIds,
+  licenseIds,
   cultureIds,
   setIds,
   monumentIds,
@@ -93,20 +98,13 @@ function ArtiQuery({
               ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
               ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
             ],
+            hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
             hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
             hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
             hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
             hasTechniquesWith : [ ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''} ],
             or: [ 
-              {displayNameContainsFold: "${search}"}, 
-              {hasCollectionWith: [
-                {or: [
-                  {displayNameContainsFold: "${search}"},
-                  {hasCategoryWith: [
-                    {displayNameContainsFold: "${search}"}
-                  ]}
-                ]}
-              ]}, 
+              {displayNameContainsFold: "${search}"}
             ]
           }]
         }
@@ -125,6 +123,44 @@ function ArtiQuery({
   `;
   return queryString
 }
+
+//.........................LICENSES.........................//
+export const getLicensesFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {
+
+  const headers = { "Content-Type": "application/json" };
+
+  const query = ArtiQuery({
+    entity: "licenses",
+    ...args
+  })
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+    }),
+    next: { revalidate: 3600 },
+  });
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Licenses Artifacts Filter'");
+  }
+  
+  const json = await res.json() as { data: { licenses: ArtiFilters } };
+  
+  if (json.data.licenses.totalCount === 0) {
+    notFound()
+  }
+  
+  const licenses = ArtiFilters.parse(json.data.licenses);
+  
+  return licenses;
+};
 
 //.........................CULTURES.........................//
 export const getCulturesFilter = async (args: ArtiQueryType): Promise<ArtiFilters> => {

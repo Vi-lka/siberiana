@@ -17,21 +17,6 @@ const openSans = Open_Sans({
   variable: "--OpenSans",
 });
 
-// export const metadata: Metadata = {
-//   metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
-//   alternates: {
-//     canonical: "/",
-//     languages: {
-//       ru: "/",
-//     },
-//   },
-//   icons: {
-//     icon: "/favicon.ico",
-//     shortcut: "/favicon.ico",
-//     apple: "/favicon.ico",
-//   },
-// };
-
 export async function generateMetadata(): Promise<Metadata> {
 
   // fetch data

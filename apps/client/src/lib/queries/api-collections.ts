@@ -174,6 +174,7 @@ export const getArtifacts = async ({
   regionIds,
   districtIds,
   settlementIds,
+  licenseIds,
   cultureIds,
   setIds,
   monumentIds,
@@ -189,6 +190,7 @@ export const getArtifacts = async ({
   regionIds?: string,
   districtIds?: string,
   settlementIds?: string,
+  licenseIds?: string,
   cultureIds?: string,
   setIds?: string,
   monumentIds?: string,
@@ -219,6 +221,7 @@ export const getArtifacts = async ({
             ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
             ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
           ],
+          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
           hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
           hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
           hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
@@ -284,6 +287,12 @@ export const getBooks = async ({
   sort = "CREATED_AT:DESC",
   categories,
   collections,
+  countryIds,
+  regionIds,
+  districtIds,
+  settlementIds,
+  licenseIds,
+  bookGenreIds,
 }: {
   first: number | null,
   offset?: number | null,
@@ -291,6 +300,12 @@ export const getBooks = async ({
   sort?: string,
   categories?: string,
   collections?: string,
+  countryIds?: string,
+  regionIds?: string,
+  districtIds?: string,
+  settlementIds?: string,
+  licenseIds?: string,
+  bookGenreIds?: string,
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -310,7 +325,15 @@ export const getBooks = async ({
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
             },` : ''}
-          ]
+          ],
+          hasLocationWith: [
+            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
+            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
+            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
+            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+          ],
+          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+          hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [
@@ -372,6 +395,13 @@ export const getProtectedAreaPictures = async ({
   sort = "CREATED_AT:DESC",
   categories,
   collections,
+  countryIds,
+  regionIds,
+  districtIds,
+  settlementIds,
+  licenseIds,
+  protectedAreaIds,
+  protectedAreaCategoryIds,
 }: {
   first: number | null,
   offset?: number | null,
@@ -379,6 +409,13 @@ export const getProtectedAreaPictures = async ({
   sort?: string,
   categories?: string,
   collections?: string,
+  countryIds?: string,
+  regionIds?: string,
+  districtIds?: string,
+  settlementIds?: string,
+  licenseIds?: string,
+  protectedAreaIds?: string,
+  protectedAreaCategoryIds?: string,
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -398,7 +435,22 @@ export const getProtectedAreaPictures = async ({
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
             },` : ''}
-          ]
+          ],
+          hasLocationWith: [
+            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
+            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
+            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
+            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+          ],
+          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+          hasProtectedAreaWith: [ 
+            ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
+            ${!!protectedAreaCategoryIds ? `{
+              hasProtectedAreaCategoryWith: [
+                {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
+              ]
+            },` : ''}
+          ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [

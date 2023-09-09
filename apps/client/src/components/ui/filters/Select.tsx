@@ -115,8 +115,8 @@ export function Select({
           : newValues = [item]
 
       handleSelectedParams(newValues)
-      setOpenCombobox(false)
     }
+    setOpenCombobox(false)
   };
 
   const onComboboxOpenChange = (value: boolean) => {

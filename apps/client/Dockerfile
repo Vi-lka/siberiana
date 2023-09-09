@@ -32,6 +32,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
 
+# Add for cache image?
+# RUN mkdir -p /app/.next/cache/images
+
 COPY --from=installer /app/apps/client/next.config.js .
 COPY --from=installer /app/apps/client/package.json .
 
