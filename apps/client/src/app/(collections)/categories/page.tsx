@@ -8,6 +8,8 @@ import CategoriesContent from "./CategoriesContent";
 import { Skeleton } from "@siberiana/ui";
 import Sort from "~/components/ui/filters/Sort";
 
+export const revalidate = 3600
+
 export default async function Categories({
   searchParams,
 }: {
