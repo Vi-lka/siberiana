@@ -310,8 +310,6 @@ export function filterProtectedAreaPictures(result: PAPFilters, searchParams: { 
       // END
       const filteredEnd = byProtectedAreaCategory
 
-      if (protectedAreaPictureNode.__typename === "License") console.log(filteredEnd.map(item => item.protectedArea))
-
       return {
         value: protectedAreaPictureNode.id,
         label: protectedAreaPictureNode.displayName,

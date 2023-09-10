@@ -31,7 +31,7 @@ export default function MainInfoBlock({
                     value={data.license?.displayName}
                 />
                 <SingleItemArray
-                    label='Жанр'
+                    label='Раздел'
                     value={data.bookGenres}
                 />
                 <SingleItem
