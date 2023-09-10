@@ -16,7 +16,7 @@ import Sort from "~/components/ui/filters/Sort";
 import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 import { Skeleton } from "@siberiana/ui";
 
-export const revalidate = 3600
+export const revalidate = 60
 
 export default async function Objects({
   searchParams

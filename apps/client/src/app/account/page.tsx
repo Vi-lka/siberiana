@@ -29,6 +29,8 @@ export default async function Account() {
               {session.user.name}
           </h1>
 
+          {session.access_token}
+
           {userRoles ? (
               <p className='font-Inter xl:text-base lg:text-sm text-xs'>
                   ({userRoles.join(', ')})

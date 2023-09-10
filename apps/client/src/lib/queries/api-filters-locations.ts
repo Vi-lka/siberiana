@@ -259,7 +259,7 @@ export const getArtiCountriesFilter = async (args: LocationArtiQueryType): Promi
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -288,7 +288,7 @@ export const getBooksCountriesFilter = async (args: LocationBooksQueryType): Pro
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -317,7 +317,7 @@ export const getPAPCountriesFilter = async (args: LocationPAPQueryType): Promise
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -348,7 +348,7 @@ export const getArtiRegionsFilter = async (args: LocationArtiQueryType): Promise
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -377,7 +377,7 @@ export const getBooksRegionsFilter = async (args: LocationBooksQueryType): Promi
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -406,7 +406,7 @@ export const getPAPRegionsFilter = async (args: LocationPAPQueryType): Promise<P
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -437,7 +437,7 @@ export const getArtiDistrictsFilter = async (args: LocationArtiQueryType): Promi
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -466,7 +466,7 @@ export const getBooksDistrictsFilter = async (args: LocationBooksQueryType): Pro
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -495,7 +495,7 @@ export const getPAPDistrictsFilter = async (args: LocationPAPQueryType): Promise
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -525,7 +525,7 @@ export const getArtiSettlementsFilter = async (args: LocationArtiQueryType): Pro
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -554,7 +554,7 @@ export const getBooksSettlementsFilter = async (args: LocationBooksQueryType): P
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -583,7 +583,7 @@ export const getPAPSettlementsFilter = async (args: LocationPAPQueryType): Promi
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 3600 },
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     // Log the error to an error reporting service
