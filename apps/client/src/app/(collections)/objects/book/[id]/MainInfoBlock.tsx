@@ -34,10 +34,6 @@ export default function MainInfoBlock({
                     label='Раздел'
                     value={data.bookGenres}
                 />
-                <SingleItem
-                    label='Год'
-                    value={data.year.toString()}
-                />
                 <SingleItemArray
                     label='Автор'
                     value={data.authors}
@@ -45,6 +41,10 @@ export default function MainInfoBlock({
                 <SingleItemHolders
                     label='Держатель'
                     value={data.holders}
+                />
+                <SingleItem
+                    label='Год издания'
+                    value={data.year.toString()}
                 />
                 <SingleItem
                     label='Издатель'
