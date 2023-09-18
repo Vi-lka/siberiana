@@ -126,7 +126,7 @@ function SheetMenuItem({
             title={menuItemResult.name}
             href={`${menuItemResult.url}`}
             active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
-            className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+            className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
           />
         </ul>
@@ -151,7 +151,7 @@ function SheetMenuItem({
                 title={item.name}
                 href={`${item.url}`}
                 active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
-                className="py-2 data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
               />
             ))}
