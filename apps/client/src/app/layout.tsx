@@ -10,11 +10,15 @@ import Providers from "~/components/providers/Providers";
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
   variable: "--Inter",
+  // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
+  preload: false,
 });
 
 const openSans = Open_Sans({
   subsets: ["latin"],
   variable: "--OpenSans",
+  // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
+  preload: false,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
