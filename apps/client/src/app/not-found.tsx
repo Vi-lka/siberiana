@@ -9,7 +9,7 @@ export default async function NotFoundPage() {
     const dictResult = Dictionary.parse(dict);
   
     return (
-        <div className='mt-20'>
+        <div className='md:mt-20'>
             <NotFound
                 dict={dictResult.errors}
                 goBack

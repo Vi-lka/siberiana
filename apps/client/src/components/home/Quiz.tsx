@@ -77,8 +77,11 @@ export default function Quiz({
   }
 
   return (
-    <div className="hidden grid-cols-2 justify-center gap-6 md:grid mb-24">
-      <div className="relative h-[300px] w-full max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
+    <div className="grid md:grid-cols-2 justify-center gap-6 mb-24">
+      <h1 className="md:hidden font-OpenSans mb-0 text-xl font-bold uppercase lg:text-2xl">
+        {question.attributes.title}
+      </h1>
+      <div className="relative h-[300px] md:w-full w-[85%] mx-auto max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
         <Image
           src={
             question.attributes.image.data
@@ -93,18 +96,18 @@ export default function Quiz({
         />
       </div>
 
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between md:w-full w-[85%] mx-auto">
         <div>
-          <h1 className="font-OpenSans mb-6 text-lg font-bold uppercase lg:text-2xl">
+          <h1 className="md:block hidden font-OpenSans mb-6 text-lg font-bold uppercase lg:text-2xl">
             {question.attributes.title}
           </h1>
-          <p className="font-Inter mb- text-xs lg:text-sm">
+          <p className="font-Inter mb- text-xs lg:text-sm md:mb-0 mb-6">
             {question.attributes.tip}
           </p>
         </div>
 
         {answer === undefined ? (
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {question.attributes.variants.map((elem) => (
               <ButtonComponent
                 key={elem.index}
@@ -117,7 +120,7 @@ export default function Quiz({
             ))}
           </div>
         ) : answer ? (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 text-center">
             <h1 className="font-OpenSans text-xl font-bold uppercase text-lime-600 dark:text-lime-800">
               {qiuzDict.right}
             </h1>
@@ -129,13 +132,13 @@ export default function Quiz({
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 text-center">
             <h1 className="font-OpenSans text-lg font-bold uppercase text-red-600 dark:text-red-800 lg:text-xl">
               {qiuzDict.wrong}
             </h1>
 
             <ButtonComponent
-              className="w-fit px-8 py-6 text-xs lg:text-sm"
+              className="w-fit px-8 py-6 text-xs lg:text-sm mx-auto"
               onClick={() => handleWrong()}
             >
               {qiuzDict.tryAgain}
