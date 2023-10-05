@@ -26,8 +26,13 @@ export default async function Header() {
   const haveSession = !!session
 
   return (
-    <div className="font-Inter text-graphite dark:text-beaverLight dark:bg-darkBlue fixed z-50 w-full bg-white px-4 py-4 md:px-0">
-      <div className="mx-auto flex w-[95%] items-center justify-between md:w-[85%]">
+    <div className="font-Inter text-graphite dark:text-beaverLight dark:bg-darkBlue fixed z-50 w-full bg-white px-4 md:px-0">
+      
+      <div className="w-full bg-accent text-sm font-medium text-center p-1 uppercase">
+        Представлена демонстрационная версия платформы
+      </div>
+
+      <div className="mx-auto flex w-[95%] items-center justify-between md:w-[85%] py-4">
         <div className="flex w-1/5">
           <Link
             href={`/`}
