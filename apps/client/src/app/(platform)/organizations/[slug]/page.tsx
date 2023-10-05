@@ -228,18 +228,23 @@ export default async function Organization({
                 <MapHtml map={dataResult.value.contacts.map} />
 
                 <div>
-                  <div className="font-Inter md:text-base text-sm w-fit grid grid-cols-2 gap-14 mb-6">
-                    <div className="w-fit">
-                      {Object.entries(dictResult.schedule).map(([key, val]) => (
-                        <p key={key} className="">{val}</p>
-                      ))}
-                    </div>
-                    <div className="w-fit">
-                      {Object.entries(dataResult.value.contacts.schedule).map(([key, val]) => (
-                        <p key={key} className="">{val}</p>
-                      ))}
-                    </div>
-                  </div>
+                  {dataResult.value.contacts.schedule 
+                    ? (
+                      <div className="font-Inter md:text-base text-sm w-fit grid grid-cols-2 gap-14 mb-6">
+                        <div className="w-fit">
+                          {Object.entries(dictResult.schedule).map(([key, val]) => (
+                            <p key={key} className="">{val}</p>
+                          ))}
+                        </div>
+                        <div className="w-fit">
+                          {Object.entries(dataResult.value.contacts.schedule).map(([key, val]) => (
+                            <p key={key} className="">{val}</p>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                    : null 
+                  }
 
                   {dataResult.value.url ? ( 
                     <Link href={getLinkDir(dataResult.value.url)} target="_blank">

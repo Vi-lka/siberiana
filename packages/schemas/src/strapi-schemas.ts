@@ -141,7 +141,7 @@ export const OrganizationBySlug = z.object({
         friday: z.string(),
         saturday: z.string(),
         sunday: z.string(),
-      }),
+      }).nullable(),
     })
     .nullable(),
 });

@@ -42,7 +42,7 @@ export const getSlider = async (): Promise<Slider> => {
     next: { 
       tags: ["strapi"],
       // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
-      revalidate: 3600,
+      revalidate: 60,
     },
   });
 
@@ -113,7 +113,7 @@ export const getCustomBlock = async (): Promise<CustomBlock> => {
     next: { 
       tags: ["strapi"],
       // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
-      revalidate: 3600,
+      revalidate: 60,
     },
   });
 
@@ -213,7 +213,7 @@ export const getOrganizations = async ({
     next: { 
       tags: ["strapi"],
       // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
-      revalidate: 3600,
+      revalidate: 60,
     },
   });
 
@@ -344,7 +344,11 @@ export const getOrganizationBySlug = async (
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 60,
+     },
   });
 
   if (!res.ok) {
@@ -432,7 +436,7 @@ export const getProjects = async ({
     next: { 
       tags: ["strapi"],
       // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
-      revalidate: 3600,
+      revalidate: 60,
     },
   });
 
@@ -513,7 +517,7 @@ export const getServices = async ({
     next: { 
       tags: ["strapi"],
       // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
-      revalidate: 3600,
+      revalidate: 60,
     },
   });
 
@@ -568,7 +572,11 @@ export const getAbout = async (): Promise<About> => {
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 60,
+    },
   });
 
   if (!res.ok) {
@@ -624,7 +632,11 @@ export const getFAQ = async (): Promise<FAQ> => {
     body: JSON.stringify({
       query,
     }),
-    next: { tags: ["strapi"] },
+    next: { 
+      tags: ["strapi"],
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      revalidate: 60,
+    },
   });
 
   if (!res.ok) {
