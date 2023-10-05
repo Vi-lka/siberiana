@@ -5,7 +5,7 @@ import React from 'react'
 import { getDictionary } from '~/lib/utils/getDictionary';
 import SFUSvg from './SFUSvg';
 
-export const revalidate = 86400
+export const revalidate = 3600
 
 export default async function Footer() {
 

@@ -32,7 +32,7 @@ export default function NavListItem({
               className,
             )}
           >
-            <SheetClose className="space-y-1 px-3 py-2 text-left">
+            <SheetClose className="space-y-1 px-3 py-4 h-full w-full text-left">
               <div className="text-dark dark:text-foreground text-base font-normal leading-none md:text-lg">
                 {title}
               </div>
