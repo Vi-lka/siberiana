@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --darkBlue: #212131;
+    --dark: #0e0e0e;
+    --graphite: #58595b;
+    --beaver: #9b8579;
+    --beaverLight: #f0edeb;
+    --gray4: #bdbdbd;
+    --gray5: #e0e0e0;
+
+    --background: 0 0% 100%;
+    --foreground: 220 2% 35%;
+
+    --muted: 24 14% 93%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 2% 35%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 2% 35%;
+
+    --border: 24 14% 93%;
+    --input: 21 15% 54%;
+
+    --primary: 24 14% 93%;
+    --primary-foreground: 220 2% 35%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 220 2% 35%;
+
+    --accent: 24 14% 93%;
+    --accent-foreground: 220 2% 35%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 24 14% 85%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 240 19% 16%;
+    --foreground: 24 14% 93%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 240 19% 16%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 240 19% 16%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 240 19% 22%;
+    --input: 24 14% 93%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 240 19% 16%;
+
+    --secondary: 220 2% 35%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 240 19% 22%;
+    --accent-foreground: 24 14% 93%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 240 19% 37%;
+
+    --radius: 0.625rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
