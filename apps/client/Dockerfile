@@ -30,10 +30,6 @@ ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-USER nextjs
-
-# Add for cache image?
-# RUN mkdir -p /app/.next/cache/images
 
 COPY --from=installer /app/apps/client/next.config.js .
 COPY --from=installer /app/apps/client/package.json .
@@ -41,9 +37,11 @@ COPY --from=installer /app/apps/client/package.json .
 COPY --from=installer --chown=nextjs:nodejs /app/apps/client/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/client/.next/static ./apps/client/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/client/.next/cache ./apps/client/.next/cache
+COPY --from=installer --chown=nextjs:nodejs /app/apps/client/public ./apps/client/public
 
-# Директория public отсутствует на момент написания Dockerfile
-# COPY --from=installer --chown=nextjs:nodejs /app/apps/client/public ./apps/client/public
+
+RUN chown -R nextjs ./apps/client/.next/cache
+USER nextjs
 
 EXPOSE 3000
 ENV PORT 3000
