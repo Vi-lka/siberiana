@@ -12,9 +12,11 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   env: {
     // Reference a variable that was defined in the .env file and make it available at Build Time (ONLY PUBLIC)
-    NEXT_PUBLIC_URL_ADMIN: process.env.NEXT_PUBLIC_URL,
+    // Define ADMIN for redirect from authorization
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL_ADMIN,
     NEXT_PUBLIC_S3_DOMAIN: process.env.NEXT_PUBLIC_S3_DOMAIN,
-    NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL
+    NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL_ADMIN
   },
   images: {
     domains: [process.env.NEXT_PUBLIC_S3_DOMAIN],
