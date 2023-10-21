@@ -1,0 +1,42 @@
+"use client"
+
+import React from 'react';
+import { Provider } from 'jotai';
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import type { ThemeProviderProps } from 'next-themes/dist/types';
+import { SessionProvider } from 'next-auth/react';
+
+export default function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <Provider>
+        <AuthProvider>
+            <ThemeProvider attribute="class" enableSystem={true}>
+            {children}
+            </ThemeProvider>
+        </AuthProvider>
+    </Provider>
+  )
+}
+
+function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+    const [mounted, setMounted] = React.useState(false)
+  
+    // useEffect only runs on the client, so now we can safely show the UI
+    React.useEffect(() => {
+      setMounted(true)
+    }, [])
+  
+    if (!mounted) {
+      return <>{children}</>
+    }
+  
+    return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}
+
+function AuthProvider({ children }: { children: React.ReactNode }) {
+    return (
+      <SessionProvider>
+          {children}
+      </SessionProvider>
+    )
+}

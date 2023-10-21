@@ -4,8 +4,9 @@
   "scripts": {
     "build": "dotenv -e .env -- turbo run build",
     "clean": "turbo run clean && git clean -xdf node_modules",
-    "dev": "dotenv -e .env -- turbo run dev",
+    "dev": "dotenv -e .env.development.local -- turbo run dev",
     "dev:client": "dotenv -e .env.development.local -- turbo run dev --filter=@siberiana/client",
+    "dev:admin": "dotenv -e .env.development.local -- turbo run dev --filter=@siberiana/admin",
     "dev:docs": "dotenv -e .env.development.local -- turbo run dev --filter=docs",
     "lint": "turbo run lint",
     "format": "prettier --write . --ignore-path .gitignore",

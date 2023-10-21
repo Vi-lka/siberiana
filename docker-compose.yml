@@ -28,3 +28,25 @@ services:
       - 3000:3000
     networks:
       - siberiana-network
+
+  admin:
+    build:
+      context: .
+      dockerfile: ./apps/admin/Dockerfile
+    container_name: admin
+    restart: always
+    environment:
+     NEXT_PUBLIC_URL_ADMIN: ${NEXT_PUBLIC_URL_ADMIN}
+     NEXTAUTH_URL_ADMIN: ${NEXTAUTH_URL_ADMIN}
+     NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+     OIDC_ISSUER: ${OIDC_ISSUER}
+     OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+     OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+     NEXT_PUBLIC_SIBERIANA_API_URL: ${NEXT_PUBLIC_SIBERIANA_API_URL}
+     NEXT_PUBLIC_S3_DOMAIN: ${NEXT_PUBLIC_S3_DOMAIN}
+     REVALIDATE_TOKEN: ${REVALIDATE_TOKEN}
+    ports:
+      - 3001:3001
+    networks:
+      - siberiana-network
+

@@ -149,6 +149,7 @@ export default async function Organization({
                     title={elem.name}
                     src={elem.image.data?.attributes.url}
                     href={getLinkDir(elem.url)}
+                    target="_blank"
                   >
                     <p className="w-full uppercase xl:text-sm text-xs">
                       {elem.name ? (
