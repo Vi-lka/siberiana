@@ -13,7 +13,7 @@ services:
     container_name: client
     restart: always
     volumes:
-      - next_cache:/app/apps/client/.next/cache
+      - client_next_cache:/app/apps/client/.next/cache
     environment:
      NEXT_PUBLIC_URL: ${NEXT_PUBLIC_URL}
      NEXTAUTH_URL: ${NEXTAUTH_URL}
@@ -58,7 +58,7 @@ services:
 
 
 volumes:
-  next_cache:
+  client_next_cache:
     external: true
   admin_next_cache:
     external: true
