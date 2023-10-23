@@ -7,6 +7,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import NoSession from "~/components/errors/NoSession";
 import LogoSvg from "~/components/LogoSvg";
 import Header from "~/components/header/Header";
+import MenuBar from "~/components/MenuBar/MenuBar";
 
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
@@ -41,7 +42,7 @@ export default async function RootLayout({
       <body className="m min-h-screen m-0 flex flex-col">
         <Providers>
           <Header />
-          <main className="pt-20 flex-1">
+          <main className="pt-20 flex-1 md:ml-[14rem]">
             {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
               ? children
               : (
@@ -54,6 +55,7 @@ export default async function RootLayout({
               )
             }
           </main>
+          <MenuBar />
         </Providers>
         <Toaster />
       </body>
