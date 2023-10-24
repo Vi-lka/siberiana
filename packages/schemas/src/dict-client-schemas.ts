@@ -236,7 +236,8 @@ export const AccountDict = z.object({
     admin: z.string(),
     research: z.string(),
     moder: z.string()
-  })
+  }),
+  token: z.string(),
 });
 export type AccountDict = z.infer<typeof AccountDict>;
 
