@@ -7,7 +7,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
     const headers = { "Content-Type": "application/json" };
     const query = /* GraphGL */ `
     query ArtifactById {
-        artifacts(where: { id: "${id}" }) {
+        artifacts(where: { id: "${id}", status: listed }) {
             totalCount
             edges {
                 node {
@@ -132,7 +132,7 @@ export const getBookById = async (id: string): Promise<BookById> => {
     const headers = { "Content-Type": "application/json" };
     const query = /* GraphGL */ `
     query BookById {
-        books(where: { id: "${id}" }) {
+        books(where: { id: "${id}", status: listed }) {
             totalCount
             edges {
                 node {
@@ -232,7 +232,7 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
     const headers = { "Content-Type": "application/json" };
     const query = /* GraphGL */ `
     query PAPById {
-        protectedAreaPictures(where: { id: "${id}" }) {
+        protectedAreaPictures(where: { id: "${id}", status: listed }) {
             totalCount
             edges {
                 node {
