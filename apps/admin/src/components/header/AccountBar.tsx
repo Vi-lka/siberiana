@@ -1,29 +1,18 @@
 "use client"
 
-import type { AccountDict } from '@siberiana/schemas';
-import { Avatar, AvatarFallback, Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Skeleton } from '@siberiana/ui'
+import { Avatar, AvatarFallback, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Skeleton } from '@siberiana/ui'
 import React from 'react'
-import Link from 'next/link';
 import { ClientHydration } from '../providers/ClientHydration';
 import { signOut } from 'next-auth/react';
-import { useSetAtom } from 'jotai';
-import { tabAccountAtom } from '~/lib/utils/atoms';
 
 export default function AccountBar({ 
-    dict,
     name
 }: { 
-    dict: AccountDict,
     name: string
 }) {
 
-    const matchesName = name.match(/[\wа-я]+/ig)
-    const acronymName = matchesName?.map(match => {
-        return match[0].toUpperCase()
-    })
-
-    const setTab = useSetAtom(tabAccountAtom)
-    
+    const matchesName = name.match(/\b(\w)/g)
+    const acronymName = matchesName?.join('')
 
   return (
     <div className='font-Inter text-sm'>
@@ -42,38 +31,17 @@ export default function AccountBar({
             </ClientHydration>
 
             <DropdownMenuContent className="w-56 font-Inter text-foreground">
-                <DropdownMenuLabel>{dict.barTitle}</DropdownMenuLabel>
+                <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
                 <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
+                {/* <DropdownMenuGroup>
                     <Link href={`/account`}>
                         <DropdownMenuItem className='cursor-pointer'>{dict.profile}</DropdownMenuItem>
                     </Link>
                     <Link href={`/account/settings`}>
                         <DropdownMenuItem className='cursor-pointer'>{dict.settings}</DropdownMenuItem>
                     </Link>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuGroup>
-                    <Link href={`/account`}>
-                        <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("favourites")}>
-                            {dict.favourites}
-                        </DropdownMenuItem>
-                    </Link>
-
-                    <Link href={`/account`}>
-                        <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("collections")}>
-                            {dict.collections}
-                        </DropdownMenuItem>    
-                    </Link>
-
-                    <Link href={`/account`}>
-                        <DropdownMenuItem className='cursor-pointer' onClick={() => setTab("publications")}>
-                            {dict.publications}
-                        </DropdownMenuItem>
-                    </Link>
-                </DropdownMenuGroup>
+                </DropdownMenuGroup> */}
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem className='cursor-pointer p-0'>
@@ -82,7 +50,7 @@ export default function AccountBar({
                       variant='ghost'
                       onClick={() => void signOut()}
                     >
-                      {dict.signOut}
+                      Выйти
                     </Button>
                 </DropdownMenuItem>
             </DropdownMenuContent>

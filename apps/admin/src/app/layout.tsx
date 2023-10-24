@@ -5,6 +5,9 @@ import Providers from "~/components/providers/Providers";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import NoSession from "~/components/errors/NoSession";
+import LogoSvg from "~/components/LogoSvg";
+import Header from "~/components/header/Header";
+import MenuBar from "~/components/MenuBar/MenuBar";
 
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
@@ -38,12 +41,21 @@ export default async function RootLayout({
     >
       <body className="m min-h-screen m-0 flex flex-col">
         <Providers>
-          <main className="pt-20 flex-1">
-            {!!session || (roles?.includes("administrator") || roles?.includes("moderator")) 
+          <Header />
+          <main className="pt-20 flex-1 md:ml-[14rem]">
+            {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
               ? children
-              : <NoSession />
+              : (
+                <div className="flex flex-col justify-center items-center gap-6 h-[70dvh]">
+                  <div className="">
+                    <LogoSvg className="h-[5rem] w-[14rem] md:h-[6.6rem] md:w-[18rem]" />
+                  </div>
+                  <NoSession alert={!!session && !(roles?.includes("administrator") || roles?.includes("moderator"))} />
+                </div>
+              )
             }
           </main>
+          <MenuBar />
         </Providers>
         <Toaster />
       </body>

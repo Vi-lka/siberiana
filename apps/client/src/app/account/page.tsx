@@ -10,6 +10,7 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import getUserRoles from '~/lib/utils/getUserRoles';
 import AccountTabs from './AccountTabs';
 import NoSession from '~/components/errors/NoSession';
+import ToastToken from '~/components/ui/ToastToken';
 
 export default async function Account() {
   
@@ -21,9 +22,11 @@ export default async function Account() {
 
     const userRoles = session.user.roles?.map(role => getUserRoles(role, dictResult.account))
 
+    const isAdmin = (session.user.roles?.includes("administrator") || session.user.roles?.includes("moderator"))
+
   return (
     <div className="mt-12 mb-4 flex flex-col gap-10 mx-auto">
-      <div className='flex justify-between md:flex-row flex-row gap-1'>
+      <div className='flex justify-between md:flex-row flex-col md:gap-1 gap-3'>
         <div className="flex lg:gap-6 gap-3 lg:items-end lg:flex-row flex-col">
           <h1 className="text-foreground xl:text-2xl lg:text-xl text-lg font-bold uppercase">
               {session.user.name}
@@ -37,6 +40,14 @@ export default async function Account() {
         </div>
 
         <div className="flex lg:gap-6 gap-3 justify-end">
+          {
+            isAdmin
+            ? (
+              <ToastToken tooltipTitle={dict.account.token} token={session.access_token} />
+            )
+            : null
+          }
+
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
