@@ -8,8 +8,10 @@ import { cn } from '@siberiana/ui/src/lib/utils'
 import { Menu, X } from 'lucide-react'
 
 function getWindowSize() {
-    const {innerWidth, innerHeight} = window;
-    return {innerWidth, innerHeight};
+    if (typeof window !== "undefined") {
+        const {innerWidth, innerHeight} = window;
+        return {innerWidth, innerHeight};
+    }
 }
 
 export default function MenuBar() {
@@ -35,7 +37,7 @@ export default function MenuBar() {
         } else {
             setOpen(true)
         }
-    }, [windowSize.innerWidth])
+    }, [windowSize?.innerWidth])
     
 
   return (
@@ -43,7 +45,7 @@ export default function MenuBar() {
         <Button
             className={cn(
                 "fixed mt-4 left-1/2 transform -translate-x-1/2 z-50",
-                windowSize.innerWidth <= 768 ? "block" : "hidden"
+                (windowSize?.innerWidth && (windowSize.innerWidth <= 768)) ? "block" : "hidden"
             )}
             onClick={() => setOpen((open) => !open)}
         >
@@ -52,13 +54,13 @@ export default function MenuBar() {
                 : <Menu/> 
             }
         </Button>
-        <NavigationMenu orientation='vertical' className="fixed max-w-[14rem] md:mt-24 mt-20 bg-background border border-l-0 outline-none shadow-md rounded-r-md pr-1">
+        <NavigationMenu orientation='vertical' className="fixed max-w-[14rem] md:mt-20 mt-16 bg-background border border-l-0 border-t-0 shadow-md rounded-b-md pr-1 z-50">
             <ScrollArea
                 className={cn(
-                    "font-Inter w-full p-1",
+                    "font-Inter w-full p-1 pr-2 mb-1",
                     open ? "flex" : "hidden"
                 )}
-                classNameViewport={cn("max-h-[84dvh]")}
+                classNameViewport={"max-h-[85dvh] min-h-[80vh]"}
             >
                 <NavigationMenuList className='flex flex-col gap-3 w-full text-left items-start p-2'>
                     <MenuBarSingle href='/categories'>

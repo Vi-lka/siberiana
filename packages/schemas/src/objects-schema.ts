@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const StatusEnum = z.enum([ 
+    "listed", 
+    "unlisted",
+    "draft"
+])
+
 //.........................CATEGORY.........................//
 export const Category = z.object({
     slug: z.string(),
@@ -46,6 +52,8 @@ export type Holders = z.infer<typeof Holders>;
 
 //.........................ARTIFACT.........................//
 export const ArtifactById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),
@@ -97,6 +105,8 @@ export type ArtifactById = z.infer<typeof ArtifactById>;
 
 //.........................BOOK.........................//
 export const BookById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),
@@ -134,6 +144,8 @@ export const ProtectedArea = z.object({
 export type ProtectedArea = z.infer<typeof ProtectedArea>;
 
 export const PAPById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),

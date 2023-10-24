@@ -46,6 +46,8 @@ export default function PaginationControls({
     setPageInput(page)
   }, [page])
   
+  const max_page = Math.ceil(length / Number(per))
+
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     if (Number(event.target.value) > max_page) {
@@ -62,8 +64,6 @@ export default function PaginationControls({
     
     } else setPageInput(event.target.value)
   }
-
-  const max_page = Math.ceil(length / Number(per))
 
   const handlePageParams = React.useCallback(
     (value: string) => {

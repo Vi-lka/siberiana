@@ -11,6 +11,8 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL
@@ -136,6 +138,8 @@ export const getBookById = async (id: string): Promise<BookById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL
@@ -236,6 +240,8 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL

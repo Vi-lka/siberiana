@@ -8,6 +8,14 @@ import NoSession from "~/components/errors/NoSession";
 import LogoSvg from "~/components/LogoSvg";
 import Header from "~/components/header/Header";
 import MenuBar from "~/components/MenuBar/MenuBar";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title:{
+    template: '%s | Сибириана-Admin',
+    default: 'Сибириана-Admin'
+  },
+}
 
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
