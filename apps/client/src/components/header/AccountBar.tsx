@@ -17,8 +17,10 @@ export default function AccountBar({
     name: string
 }) {
 
-    const matchesName = name.match(/\b(\w)/g)
-    const acronymName = matchesName?.join('')
+    const matchesName = name.match(/[\wа-я]+/ig)
+    const acronymName = matchesName?.map(match => {
+        return match[0].toUpperCase()
+    })
 
     const setTab = useSetAtom(tabAccountAtom)
     
