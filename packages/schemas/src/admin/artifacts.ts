@@ -8,3 +8,9 @@ export const ArtifactsArray = z.object({
     }).array()
 });
 export type ArtifactsArray = z.infer<typeof ArtifactsArray>;
+
+export const ArtifactsTable = z.object({
+    artifacts: z.object({
+        displayName: z.string().optional(),
+    }).array()
+})

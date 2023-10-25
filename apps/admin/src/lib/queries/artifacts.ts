@@ -154,7 +154,7 @@ export const getArtifacts = async ({
     if (json.data.artifacts.totalCount === 0) {
       notFound()
     }
-  
+
     const artifacts = ArtifactsArray.parse(json.data.artifacts);
   
     return artifacts;
