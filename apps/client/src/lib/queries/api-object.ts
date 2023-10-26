@@ -11,6 +11,8 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL
@@ -19,7 +21,6 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     admissionDate
                     chemicalComposition
                     typology
-                    dimensions
                     weight
                     collection {
                         slug
@@ -41,14 +42,6 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                             displayName
                         }
                         settlement {
-                            displayName
-                        }
-                    }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
                             displayName
                         }
                     }
@@ -136,6 +129,8 @@ export const getBookById = async (id: string): Promise<BookById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL
@@ -161,14 +156,6 @@ export const getBookById = async (id: string): Promise<BookById> => {
                             displayName
                         }
                         settlement {
-                            displayName
-                        }
-                    }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
                             displayName
                         }
                     }
@@ -236,6 +223,8 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
             totalCount
             edges {
                 node {
+                    id
+                    status
                     displayName
                     description
                     primaryImageURL

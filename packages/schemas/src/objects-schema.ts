@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const StatusEnum = z.enum([ 
+    "listed", 
+    "unlisted",
+    "draft"
+])
+
 //.........................CATEGORY.........................//
 export const Category = z.object({
     slug: z.string(),
@@ -46,6 +52,8 @@ export type Holders = z.infer<typeof Holders>;
 
 //.........................ARTIFACT.........................//
 export const ArtifactById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),
@@ -54,11 +62,10 @@ export const ArtifactById = z.object({
     admissionDate: z.string().nullable(),
     chemicalComposition: z.string(),
     typology: z.string(),
-    dimensions: z.string(),
     weight: z.string(),
     collection: Collection,
     location: Location.nullable(),
-    holders: Holders,
+    // holders: Holders,
     mediums: z.object({
         displayName: z.string(),  
     }).array(),
@@ -97,6 +104,8 @@ export type ArtifactById = z.infer<typeof ArtifactById>;
 
 //.........................BOOK.........................//
 export const BookById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),
@@ -104,7 +113,6 @@ export const BookById = z.object({
     year: z.number(),
     collection: Collection,
     location: Location.nullable(),
-    holders: Holders,
     bookGenres: z.object({
         displayName: z.string(),  
     }).array(),
@@ -134,6 +142,8 @@ export const ProtectedArea = z.object({
 export type ProtectedArea = z.infer<typeof ProtectedArea>;
 
 export const PAPById = z.object({
+    id: z.string(),
+    status: StatusEnum,
     displayName: z.string(),
     description: z.string(),
     primaryImageURL: z.string(),
