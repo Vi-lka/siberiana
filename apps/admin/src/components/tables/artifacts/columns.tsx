@@ -198,29 +198,6 @@ export const columns: ColumnDef<ArtifactById>[] = [
     },
   },
   {
-    accessorKey: "holders",
-    header: () => <div className="text-xs">Музей/Держатель</div>,
-    cell: ({ row }) => {
-      const holders = row.original.holders
-      return (
-        (holders.length > 0) 
-          ? (
-            <div>
-              {
-                holders.map((holder, index) => (
-                  <div key={index} className="min-w-[10rem]">
-                  {!!holder.organization ? <p className="mb-2">{holder.organization.displayName}</p> : null}
-                  {!!holder.person ? <p className="">{holder.person.displayName}</p> : null}
-                  </div>
-                ))
-              }
-            </div>
-          ) 
-          : "__"
-      )
-    },
-  },
-  {
     accessorKey: "authors",
     header: () => <div className="text-xs">Авторы работ</div>,
     cell: ({ row }) => {
