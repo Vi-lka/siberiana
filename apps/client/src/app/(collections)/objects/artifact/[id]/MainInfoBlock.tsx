@@ -1,7 +1,7 @@
 import type { ArtifactById, ObjectsDict } from '@siberiana/schemas'
 import React from 'react'
 import InfoTable from '~/components/objects/InfoTable'
-import { SingleItem, SingleItemArray, SingleItemHolders } from '~/components/objects/Infoitems'
+import { SingleItem, SingleItemArray } from '~/components/objects/Infoitems'
 
 export default function MainInfoBlock({
     dict,
@@ -59,10 +59,6 @@ export default function MainInfoBlock({
                     value={data.chemicalComposition}
                 />
                 <SingleItem
-                    label='Размеры'
-                    value={data.dimensions}
-                />
-                <SingleItem
                     label='Вес, г'
                     value={data.weight}
                 />
@@ -97,10 +93,6 @@ export default function MainInfoBlock({
                 <SingleItemArray
                     label='Автор'
                     value={data.authors}
-                />
-                <SingleItemHolders
-                    label='Держатель'
-                    value={data.holders}
                 />
                 <SingleItemArray
                     label='Проекты'

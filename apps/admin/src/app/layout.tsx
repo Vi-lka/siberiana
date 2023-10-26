@@ -50,20 +50,23 @@ export default async function RootLayout({
       <body className="m min-h-screen m-0 flex flex-col">
         <Providers>
           <Header />
-          <main className="pt-20 flex-1 md:ml-[14rem]">
+          <main className="pt-20 flex-1">
             {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
               ? children
               : (
                 <div className="flex flex-col justify-center items-center gap-6 h-[70dvh]">
                   <div className="">
-                    <LogoSvg className="h-[5rem] w-[14rem] md:h-[6.6rem] md:w-[18rem]" />
+                    <LogoSvg className="h-[5.5rem] w-[14.5rem] md:h-[7rem] md:w-[18.5rem]" />
                   </div>
                   <NoSession alert={!!session && !(roles?.includes("administrator") || roles?.includes("moderator"))} />
                 </div>
               )
             }
           </main>
-          <MenuBar />
+          {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
+            ? <MenuBar />
+            : null 
+          }
         </Providers>
         <Toaster />
       </body>

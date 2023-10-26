@@ -1,7 +1,7 @@
 import type { BookById, ObjectsDict } from '@siberiana/schemas'
 import React from 'react'
 import InfoTable from '~/components/objects/InfoTable'
-import { SingleItem, SingleItemArray, SingleItemHolders } from '~/components/objects/Infoitems'
+import { SingleItem, SingleItemArray } from '~/components/objects/Infoitems'
 
 export default function MainInfoBlock({
     dict,
@@ -37,10 +37,6 @@ export default function MainInfoBlock({
                 <SingleItemArray
                     label='Автор'
                     value={data.authors}
-                />
-                <SingleItemHolders
-                    label='Держатель'
-                    value={data.holders}
                 />
                 <SingleItem
                     label='Год издания'

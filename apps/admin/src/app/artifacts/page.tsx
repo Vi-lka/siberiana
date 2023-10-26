@@ -13,7 +13,7 @@ export default function ArtifactsPage({
 }) {
 
   return (
-    <div className="font-OpenSans px-2 py-10">
+    <div className="font-OpenSans px-2 py-10 md:ml-[14rem]">
       <div className="flex md:flex-row flex-col gap-2 text-sm">
         <CategoryFilter hasArtifacts />
         <CollectionFilter hasArtifacts searchParams={searchParams} />

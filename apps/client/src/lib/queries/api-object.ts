@@ -21,7 +21,6 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     admissionDate
                     chemicalComposition
                     typology
-                    dimensions
                     weight
                     collection {
                         slug
@@ -43,14 +42,6 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                             displayName
                         }
                         settlement {
-                            displayName
-                        }
-                    }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
                             displayName
                         }
                     }
@@ -165,14 +156,6 @@ export const getBookById = async (id: string): Promise<BookById> => {
                             displayName
                         }
                         settlement {
-                            displayName
-                        }
-                    }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
                             displayName
                         }
                     }

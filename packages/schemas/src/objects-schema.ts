@@ -62,11 +62,10 @@ export const ArtifactById = z.object({
     admissionDate: z.string().nullable(),
     chemicalComposition: z.string(),
     typology: z.string(),
-    dimensions: z.string(),
     weight: z.string(),
     collection: Collection,
     location: Location.nullable(),
-    holders: Holders,
+    // holders: Holders,
     mediums: z.object({
         displayName: z.string(),  
     }).array(),
@@ -114,7 +113,6 @@ export const BookById = z.object({
     year: z.number(),
     collection: Collection,
     location: Location.nullable(),
-    holders: Holders,
     bookGenres: z.object({
         displayName: z.string(),  
     }).array(),

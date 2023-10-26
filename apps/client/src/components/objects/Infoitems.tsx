@@ -1,4 +1,4 @@
-import type { Holders, ProtectedArea } from "@siberiana/schemas"
+import type { ProtectedArea } from "@siberiana/schemas"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, TableCell, TableRow } from "@siberiana/ui"
 import React from "react"
 
@@ -38,42 +38,6 @@ export function SingleItemArray({
                 ))}
             </TableCell>
         </TableRow>   
-    )
-}
-
-export function SingleItemHolders({
-    label,
-    value
-}: {
-    label: string,
-    value: Holders,
-}) {
-    if (value.length === 0) {
-        return null
-    } else if (value.length === 1) {
-        return (
-            <TableRow>
-                <TableCell className="py-3 w-2/5 text-base font-semibold">{label}</TableCell>
-                <TableCell className="py-3 w-3/5 font-normal">
-                    {value[0].organization?.displayName}
-                    {value[0].person?.displayName}
-                </TableCell>
-            </TableRow>    
-        )
-    } else return (
-        <TableRow>
-            <TableCell className="py-3 w-2/5 text-base font-semibold">{label}</TableCell>
-            <TableCell className="py-3 w-3/5 flex flex-col gap-2">
-                {value.map((el, index) => (
-                    <p key={index} className="font-normal">
-                        <span className=" font-semibold">
-                            {el.organization?.displayName}
-                        </span>
-                        {el.person?.displayName}
-                    </p>
-                ))}
-            </TableCell>
-        </TableRow>
     )
 }
 
