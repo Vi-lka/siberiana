@@ -64,6 +64,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         displayName  
                     }
                     culturalAffiliation {
+                        id
                         displayName
                     }
                     period {

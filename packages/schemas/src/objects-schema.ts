@@ -85,6 +85,7 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).nullable(),
     culturalAffiliation: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     period: z.object({

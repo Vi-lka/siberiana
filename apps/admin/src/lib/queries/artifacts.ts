@@ -105,7 +105,8 @@ export const getArtifacts = async ({
                         displayName  
                     }
                     culturalAffiliation {
-                        displayName
+                      id
+                      displayName
                     }
                     period {
                         displayName

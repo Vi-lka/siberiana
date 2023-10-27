@@ -54,12 +54,15 @@ export default function DataTable<TData, TValue>({
           id: artifact.id,
           displayName: artifact.displayName,
           description: artifact.description,
+          culturalAffiliation: artifact.culturalAffiliation
         }
       })
     }
   });
 
-  function handleLogIn(dataForm: z.infer<typeof ArtifactsTable>) {
+  function handleSave(dataForm: z.infer<typeof ArtifactsTable>) {
+    console.log(dataForm)
+
     const noLines = dataForm.artifacts.map(artifact => {
       const id = artifact.id
       const displayName = artifact.displayName?.replace(/\n/g, " ")
@@ -67,7 +70,7 @@ export default function DataTable<TData, TValue>({
 
       return {id, displayName, description}
     })
-    console.log(noLines[0]);
+    console.log(noLines);
   }
 
   return (
@@ -75,7 +78,7 @@ export default function DataTable<TData, TValue>({
       <Form {...form}>
         <form
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={form.handleSubmit(handleLogIn)}
+          onSubmit={form.handleSubmit(handleSave)}
           className="mt-1 h-full w-full flex flex-col"
         >
           <div className="flex gap-3 items-center w-full justify-between mb-3">
@@ -92,6 +95,7 @@ export default function DataTable<TData, TValue>({
             </div>
 
             <Button
+              disabled={!form.formState.isDirty}
               type="submit"
               className="p-2 text-sm uppercase"
             >

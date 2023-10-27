@@ -6,6 +6,7 @@ import { DataTableColumnHeader } from "../DataTableColumnHeader"
 import Image from "next/image"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
 import FormTextArea from "../inputs/FormTextArea"
+import Cultures from "./Cultures"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
@@ -74,9 +75,10 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "culturalAffiliation.displayName",
     header: () => <div className="text-xs">Культура</div>,
     cell: ({ row }) => {
-      const text = row.original.culturalAffiliation?.displayName
+      const value = row.original.culturalAffiliation ? row.original.culturalAffiliation.id : ""
+      const label = row.original.culturalAffiliation ? row.original.culturalAffiliation.displayName : "__"
       return (
-        (!!text && text.length > 0) ? text : "__"
+        <Cultures defaultCulture={{ value, label }} rowIndex={row.index} />
       )
     },
   },
