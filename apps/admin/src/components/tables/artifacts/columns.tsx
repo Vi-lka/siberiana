@@ -5,17 +5,17 @@ import type { ArtifactById } from '@siberiana/schemas'
 import { DataTableColumnHeader } from "../DataTableColumnHeader"
 import Image from "next/image"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
-import FormInputText from "../FormInputText"
+import FormTextArea from "../inputs/FormTextArea"
 
 export const columns: ColumnDef<ArtifactById>[] = [
-  // {
-  //   accessorKey: "id",
-  //   header: () => <div className="text-center">ID</div>,
-  //   cell: ({ row }) => {
-  //     const id = parseFloat(row.getValue("id"))
-  //     return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
-  //   },
-  // },
+  {
+    accessorKey: "id",
+    header: () => <div className="text-center">ID</div>,
+    cell: ({ row }) => {
+      const id = parseFloat(row.getValue("id"))
+      return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
+    },
+  },
   {
     accessorKey: "displayName",
     header: ({ column }) => {
@@ -26,7 +26,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
     cell: ({ row }) => {
       const name = row.original.displayName
       return (
-        <FormInputText name={`artifacts[${row.index}].displayName`} value={name} />
+        <FormTextArea name={`artifacts[${row.index}].displayName`} value={name}/>
       )
     },
   },
@@ -36,7 +36,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
     cell: ({ row }) => {
       const image = row.original.primaryImageURL
       return (
-        <HoverCard openDelay={200} closeDelay={150}>
+        <HoverCard openDelay={100} closeDelay={100}>
           <HoverCardTrigger>
             <Image 
               src={image} 
@@ -65,7 +65,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
       const text = row.original.description
       return (
         text.length > 0 
-          ? (<p className="min-w-[18rem] max-w-[25rem]">{text}</p>) 
+          ? (<FormTextArea name={`artifacts[${row.index}].description`} value={text}/>) 
           : "__"
       )
     },

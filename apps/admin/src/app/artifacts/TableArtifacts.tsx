@@ -42,8 +42,8 @@ export default async function TableArtifacts({
     })
 
     return (
-        <div className="w-full mx-auto pt-3">
-            <DataTable columns={columns} data={dataForTable} />
-        </div>
+      <div className="w-full mx-auto pt-3">
+        <DataTable columns={columns} data={dataForTable} />
+      </div>
     )
 }

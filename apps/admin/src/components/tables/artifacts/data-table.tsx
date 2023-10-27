@@ -50,40 +50,55 @@ export default function DataTable<TData, TValue>({
     resolver: zodResolver(ArtifactsTable),
     defaultValues: {
       artifacts: data.map(artifact => {
-        return { displayName: artifact.displayName }
+        return { 
+          id: artifact.id,
+          displayName: artifact.displayName,
+          description: artifact.description,
+        }
       })
     }
   });
 
   function handleLogIn(dataForm: z.infer<typeof ArtifactsTable>) {
-    console.log(dataForm);
+    const noLines = dataForm.artifacts.map(artifact => {
+      const id = artifact.id
+      const displayName = artifact.displayName?.replace(/\n/g, " ")
+      const description = artifact.description?.replace(/\n/g, " ")
+
+      return {id, displayName, description}
+    })
+    console.log(noLines[0]);
   }
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>
-      <div className="flex items-center gap-1">
-        <Search className="w-4 h-4 stroke-muted-foreground" />
-        <Input
-          placeholder="Поиск..."
-          value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("displayName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-xs h-8"
-        />
-      </div>
       <Form {...form}>
         <form
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={form.handleSubmit(handleLogIn)}
-          className="mt-1 h-full w-full"
+          className="mt-1 h-full w-full flex flex-col"
         >
-          <Button
-            type="submit"
-            className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
-          >
-            Сохранить
-          </Button>
+          <div className="flex gap-3 items-center w-full justify-between mb-3">
+            <div className="flex items-center gap-1">
+              <Search className="w-4 h-4 stroke-muted-foreground" />
+              <Input
+                placeholder="Поиск..."
+                value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("displayName")?.setFilterValue(event.target.value)
+                }
+                className="max-w-xs h-8"
+              />
+            </div>
+
+            <Button
+              type="submit"
+              className="p-2 text-sm uppercase"
+            >
+              Сохранить
+            </Button>
+          </div>
+
           <div className="border rounded-lg shadow-md">
             <Table>
               <TableHeader className='font-OpenSans'>

@@ -6,9 +6,10 @@ const config = {
     "prettier",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint", "import"],
+  plugins: ["@typescript-eslint", "import", "@tanstack/query"],
   rules: {
     "@next/next/no-html-link-for-pages": "off",
     "turbo/no-undeclared-env-vars": "off",

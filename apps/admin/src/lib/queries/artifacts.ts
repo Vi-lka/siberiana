@@ -86,14 +86,6 @@ export const getArtifacts = async ({
                             displayName
                         }
                     }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
-                            displayName
-                        }
-                    }
                     mediums {
                         displayName
                     }
