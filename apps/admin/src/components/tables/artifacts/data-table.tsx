@@ -48,6 +48,7 @@ export default function DataTable<TData, TValue>({
 
   const form = useForm<z.infer<typeof ArtifactsTable>>({
     resolver: zodResolver(ArtifactsTable),
+    mode: 'onChange',
     defaultValues: {
       artifacts: data.map(artifact => {
         return { 
@@ -60,6 +61,10 @@ export default function DataTable<TData, TValue>({
           set: artifact.set,
           monument: artifact.monument,
           mediums: artifact.mediums,
+          techniques: artifact.techniques,
+          authors: artifact.authors,
+          publications: artifact.publications,
+          projects: artifact.projects,
         }
       })
     }
@@ -83,6 +88,10 @@ export default function DataTable<TData, TValue>({
         set: artifact.set,
         monument: artifact.monument,
         mediums: artifact.mediums,
+        techniques: artifact.techniques,
+        authors: artifact.authors,
+        publications: artifact.publications,
+        projects: artifact.projects,
       }
     })
     console.log(noLines);
@@ -110,7 +119,7 @@ export default function DataTable<TData, TValue>({
             </div>
 
             <Button
-              disabled={!form.formState.isDirty}
+              disabled={!(form.formState.isDirty && form.formState.isValid)}
               type="submit"
               className="p-2 text-sm uppercase"
             >

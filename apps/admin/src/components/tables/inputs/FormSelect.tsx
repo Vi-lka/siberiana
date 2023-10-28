@@ -61,7 +61,7 @@ export function FormSelect({
   }
 
   const clearSelect = () => {
-    form.setValue(formValueName, null, {shouldDirty: true})
+    form.setValue(formValueName, null, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     inputRef.current?.blur();
     handleSearch("")
     setOpenCombobox(false)
@@ -79,7 +79,7 @@ export function FormSelect({
 
   const handleSelected = React.useCallback(
     (newValue: Item) => {
-      form.setValue(formValueName, { id: newValue?.value, displayName: newValue?.label }, {shouldDirty: true})
+      form.setValue(formValueName, { id: newValue?.value, displayName: newValue?.label }, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     },
     [form, formValueName],
   );

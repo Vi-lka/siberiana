@@ -71,15 +71,19 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).array(),
     authors: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     projects: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     publications: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     techniques: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     license: z.object({

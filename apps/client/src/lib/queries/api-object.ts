@@ -50,15 +50,19 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         displayName
                     }
                     authors {
+                        id
                         displayName
                     }
                     projects {
+                        id
                         displayName
                     }
                     publications {
+                        id
                         displayName
                     }
                     techniques {
+                        id
                         displayName
                     }
                     license {

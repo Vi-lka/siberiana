@@ -61,7 +61,7 @@ export function FormSelectMulti({
   }
 
   const clearSelect = () => {
-    form.setValue(formValueName, [], {shouldDirty: true})
+    form.setValue(formValueName, [], {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     inputRef.current?.blur();
     handleSearch("")
     setOpenCombobox(false)
@@ -90,7 +90,7 @@ export function FormSelectMulti({
 
   const handleSelected = React.useCallback(
     (newValue: Array<Item>) => {
-      form.setValue(formValueName, newValue, {shouldDirty: true})
+      form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     },
     [form, formValueName],
   );
@@ -107,7 +107,7 @@ export function FormSelectMulti({
               className={"justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit"}
             >
               <div className="flex flex-col items-center gap-1 w-[85%]">
-                {(selected && selected.length > 1 && selected.length < 5) 
+                {(!!selected && selected.length > 1 && selected.length < 5) 
                   ? selected.map((elem, index) => (
                     <p key={index} className="truncate">{elem.displayName}</p>
                   ))
@@ -142,7 +142,7 @@ export function FormSelectMulti({
                 value={inputSearch}
                 onValueChange={(input) => handleSearch(input)}
               />
-              {!!selected
+              {(!!selected && selected.length > 0)
                 ? 
                   <span 
                     className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 

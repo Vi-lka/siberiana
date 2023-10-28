@@ -31,7 +31,9 @@ export default function FormTextArea({
                                 className
                             )}
                             placeholder={placeholder}
-                            onKeyDown={(event) => {if (event.key === "Enter") event.preventDefault()}}
+                            onKeyDown={(event) => {
+                                if (event.key === "Enter") event.preventDefault() // prevent lines
+                            }}
                             {...field}
                         />
                     </FormControl>

@@ -1,36 +1,36 @@
-import type { MaterialsForTable } from '@siberiana/schemas'
+import type { PublicationsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getMaterialsQuery } from '~/lib/queries/client/artifacts'
+import { getPublicationsQuery } from '~/lib/queries/client/artifacts'
 import { FormSelectMulti } from '../../inputs/FormSelectMulti'
 
-export default function Materials({ 
-  defaultMaterials,
+export default function Publications({ 
+  defaultPublications,
   rowIndex
 }: { 
-  defaultMaterials: {
+  defaultPublications: {
     id: string, 
     displayName: string
   }[],
   rowIndex: number
 }) {
 
-  const defaultItems = (defaultMaterials.length > 0) ? defaultMaterials : [{ id: "", displayName: "__" }]
+  const defaultItems = (defaultPublications.length > 0) ? defaultPublications : [{ id: "", displayName: "__" }]
 
   const searchParams = useSearchParams()
 
   const category = searchParams.get("category") ?? undefined
   const collection = searchParams.get("collection") ?? undefined
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<MaterialsForTable, Error>({
-    queryKey: ['materials', category, collection],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<PublicationsForTable, Error>({
+    queryKey: ['publications', category, collection],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getMaterialsQuery({category, collection}),
+        getPublicationsQuery({category, collection}),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -44,14 +44,14 @@ export default function Materials({
         ))}
         <ErrorToast
           error={error.message}
-          place="Материалы"
+          place="Публикации"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.media.edges.map(({ node }) => {
+    ? data.publications.edges.map(({ node }) => {
       const id = node.id
       const displayName = node.displayName
       return { id, displayName }
@@ -66,7 +66,7 @@ export default function Materials({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].mediums`}
+        formValueName={`artifacts[${rowIndex}].publications`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

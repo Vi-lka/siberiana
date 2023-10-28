@@ -91,16 +91,20 @@ export const getArtifacts = async ({
                       displayName
                     }
                     authors {
-                        displayName
+                      id
+                      displayName
                     }
                     projects {
-                        displayName
+                      id
+                      displayName
                     }
                     publications {
-                        displayName
+                      id
+                      displayName
                     }
                     techniques {
-                        displayName
+                      id
+                      displayName
                     }
                     license {
                         displayName  

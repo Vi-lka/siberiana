@@ -10,6 +10,10 @@ import Cultures from "./fields/Cultures"
 import Sets from "./fields/Sets"
 import Monuments from "./fields/Monuments"
 import Materials from "./fields/Materials"
+import Techniques from "./fields/Techniques"
+import Authors from "./fields/Authors"
+import Publications from "./fields/Publications"
+import Projects from "./fields/Projects"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
@@ -169,15 +173,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "techniques",
     header: () => <div className="text-xs">Техники</div>,
     cell: ({ row }) => {
-      const techniques = row.original.techniques
       return (
-        (techniques.length > 0) 
-        ? (
-            techniques.map((technique, index) => (
-              <p key={index} className="min-w-[5rem]">{technique.displayName}</p>
-            ))
-        ) 
-        : "__"
+        <Techniques defaultTechniques={row.original.techniques} rowIndex={row.index} />
       )
     },
   },
@@ -195,15 +192,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "authors",
     header: () => <div className="text-xs">Авторы работ</div>,
     cell: ({ row }) => {
-      const authors = row.original.authors
       return (
-        (authors.length > 0) 
-        ? (
-          authors.map((author, index) => (
-              <p key={index} className="min-w-[8rem]">{author.displayName}</p>
-            ))
-        ) 
-        : "__"
+        <Authors defaultAuthors={row.original.authors} rowIndex={row.index} />
       )
     },
   },
@@ -211,15 +201,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "publications",
     header: () => <div className="text-xs">Публикации</div>,
     cell: ({ row }) => {
-      const publications = row.original.publications
       return (
-        (publications.length > 0) 
-        ? (
-          publications.map((publication, index) => (
-              <p key={index} className="min-w-[10rem]">{publication.displayName}</p>
-            ))
-        ) 
-        : "__"
+        <Publications defaultPublications={row.original.publications} rowIndex={row.index} />
       )
     },
   },
@@ -227,15 +210,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "projects",
     header: () => <div className="text-xs">Проекты</div>,
     cell: ({ row }) => {
-      const projects = row.original.projects
       return (
-        (projects.length > 0) 
-        ? (
-          projects.map((project, index) => (
-              <p key={index} className="min-w-[10rem]">{project.displayName}</p>
-            ))
-        ) 
-        : "__"
+        <Projects defaultProjects={row.original.projects} rowIndex={row.index} />
       )
     },
   },

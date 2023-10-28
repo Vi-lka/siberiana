@@ -13,7 +13,7 @@ export type ArtifactsArray = z.infer<typeof ArtifactsArray>;
 export const ArtifactsTable = z.object({
     artifacts: z.object({
         id: z.string(),
-        displayName: z.string().optional(),
+        displayName: z.string().min(1),
         description: z.string().optional(),
         typology: z.string().optional(),
         chemicalComposition: z.string().optional(),
@@ -30,6 +30,22 @@ export const ArtifactsTable = z.object({
             displayName: z.string().optional(),
         }).nullable(),
         mediums: z.object({
+            id: z.string(),
+            displayName: z.string(),  
+        }).array(),
+        techniques: z.object({
+            id: z.string(),
+            displayName: z.string(),  
+        }).array(),
+        authors: z.object({
+            id: z.string(),
+            displayName: z.string(),  
+        }).array(),
+        publications: z.object({
+            id: z.string(),
+            displayName: z.string(),  
+        }).array(),
+        projects: z.object({
             id: z.string(),
             displayName: z.string(),  
         }).array(),
@@ -87,4 +103,57 @@ export const MaterialsForTable = z.object({
     })
 })
 export type MaterialsForTable = z.infer<typeof MaterialsForTable>;
+
+//.........................TECHNIQUES.........................//
+export const TechniquesForTable = z.object({
+    techniques: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type TechniquesForTable = z.infer<typeof TechniquesForTable>;
+
+//.........................AUTHORS.........................//
+export const AuthorsForTable = z.object({
+    persons: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type AuthorsForTable = z.infer<typeof AuthorsForTable>;
+
+//.........................PUBLICATIONS.........................//
+export const PublicationsForTable = z.object({
+    publications: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type PublicationsForTable = z.infer<typeof PublicationsForTable>;
+
+//.........................PROJECTS.........................//
+export const ProjectsForTable = z.object({
+    projects: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type ProjectsForTable = z.infer<typeof ProjectsForTable>;
+
 

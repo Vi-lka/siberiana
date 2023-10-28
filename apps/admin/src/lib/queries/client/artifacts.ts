@@ -167,3 +167,171 @@ export function getMaterialsQuery({
   `
   return query
 }
+
+export function getTechniquesQuery({
+  search = "",
+  category,
+  collection,
+}: {
+  search?: string,
+  category?: string,
+  collection?: string,
+}) {
+  const query = `
+    query Techniques() {
+      techniques(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+              hasArtifactsWith: [{
+                hasCollectionWith: [
+                  ${!!collection ? `{slug: "${collection}"},` : ''}
+                  ${!!category ? `{
+                    hasCategoryWith: [
+                      {slug: "${category}"}
+                    ]
+                  },` : ''}
+                ],
+                or: [ 
+                  {displayNameContainsFold: "${search}"}
+                ]
+              }]
+            }
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getAuthorsQuery({
+  search = "",
+  category,
+  collection,
+}: {
+  search?: string,
+  category?: string,
+  collection?: string,
+}) {
+  const query = `
+    query Persons() {
+      persons(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+              hasArtifactsWith: [{
+                hasCollectionWith: [
+                  ${!!collection ? `{slug: "${collection}"},` : ''}
+                  ${!!category ? `{
+                    hasCategoryWith: [
+                      {slug: "${category}"}
+                    ]
+                  },` : ''}
+                ],
+                or: [ 
+                  {displayNameContainsFold: "${search}"}
+                ]
+              }]
+            }
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getPublicationsQuery({
+  search = "",
+  category,
+  collection,
+}: {
+  search?: string,
+  category?: string,
+  collection?: string,
+}) {
+  const query = `
+    query Publications() {
+      publications(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+              hasArtifactsWith: [{
+                hasCollectionWith: [
+                  ${!!collection ? `{slug: "${collection}"},` : ''}
+                  ${!!category ? `{
+                    hasCategoryWith: [
+                      {slug: "${category}"}
+                    ]
+                  },` : ''}
+                ],
+                or: [ 
+                  {displayNameContainsFold: "${search}"}
+                ]
+              }]
+            }
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getProjectsQuery({
+  search = "",
+  category,
+  collection,
+}: {
+  search?: string,
+  category?: string,
+  collection?: string,
+}) {
+  const query = `
+    query Projects() {
+      projects(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+              hasArtifactsWith: [{
+                hasCollectionWith: [
+                  ${!!collection ? `{slug: "${collection}"},` : ''}
+                  ${!!category ? `{
+                    hasCategoryWith: [
+                      {slug: "${category}"}
+                    ]
+                  },` : ''}
+                ],
+                or: [ 
+                  {displayNameContainsFold: "${search}"}
+                ]
+              }]
+            }
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
