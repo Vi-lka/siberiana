@@ -87,7 +87,8 @@ export const getArtifacts = async ({
                         }
                     }
                     mediums {
-                        displayName
+                      id
+                      displayName
                     }
                     authors {
                         displayName
@@ -112,10 +113,12 @@ export const getArtifacts = async ({
                         displayName
                     }
                     set {
-                        displayName
+                      id
+                      displayName
                     }
                     monument {
-                        displayName
+                      id
+                      displayName
                     }
                     model {
                         displayName

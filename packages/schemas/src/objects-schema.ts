@@ -67,6 +67,7 @@ export const ArtifactById = z.object({
     location: Location.nullable(),
     // holders: Holders,
     mediums: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     authors: z.object({
@@ -92,9 +93,11 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).nullable(),
     set: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     monument: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     model: z.object({

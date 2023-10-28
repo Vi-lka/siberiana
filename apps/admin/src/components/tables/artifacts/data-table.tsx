@@ -54,21 +54,36 @@ export default function DataTable<TData, TValue>({
           id: artifact.id,
           displayName: artifact.displayName,
           description: artifact.description,
-          culturalAffiliation: artifact.culturalAffiliation
+          typology: artifact.typology,
+          chemicalComposition: artifact.chemicalComposition,
+          culturalAffiliation: artifact.culturalAffiliation,
+          set: artifact.set,
+          monument: artifact.monument,
+          mediums: artifact.mediums,
         }
       })
     }
   });
 
   function handleSave(dataForm: z.infer<typeof ArtifactsTable>) {
-    console.log(dataForm)
 
     const noLines = dataForm.artifacts.map(artifact => {
-      const id = artifact.id
       const displayName = artifact.displayName?.replace(/\n/g, " ")
       const description = artifact.description?.replace(/\n/g, " ")
+      const typology = artifact.typology?.replace(/\n/g, " ")
+      const chemicalComposition = artifact.chemicalComposition?.replace(/\n/g, " ")
 
-      return {id, displayName, description}
+      return {
+        id: artifact.id, 
+        displayName, 
+        description, 
+        typology,
+        chemicalComposition,
+        culturalAffiliation: artifact.culturalAffiliation,
+        set: artifact.set,
+        monument: artifact.monument,
+        mediums: artifact.mediums,
+      }
     })
     console.log(noLines);
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, CircleDot, Loader2, SearchX, X } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, SearchX, X } from "lucide-react";
 import { 
     Button, 
     Command,
@@ -19,11 +19,11 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 import { useFormContext } from "react-hook-form";
 
 export type Item = {
-  value: string,
-  label: string,
-} | null;
+  id: string,
+  displayName: string,
+};
 
-export function FormSelect({
+export function FormSelectMulti({
   itemsData,
   formValueName,
   className,
@@ -48,7 +48,7 @@ export function FormSelect({
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 
   const form = useFormContext();
-  const selected = form.getValues(formValueName) as { id: string, displayName: string } | null
+  const selected = form.getValues(formValueName) as { id: string, displayName: string }[] | null
 
   React.useEffect(() => {
     setItems(itemsData)
@@ -61,14 +61,25 @@ export function FormSelect({
   }
 
   const clearSelect = () => {
-    form.setValue(formValueName, null, {shouldDirty: true})
+    form.setValue(formValueName, [], {shouldDirty: true})
     inputRef.current?.blur();
     handleSearch("")
     setOpenCombobox(false)
   };
 
   const toggleItem = (item: Item) => {
-    handleSelected(item)
+    
+    let newValues = [] as Item[]
+
+    // includes() doesn't work with object, so we do this:
+    const contains = (!!selected && selected.some(elem => elem.id === item.id))
+
+    contains
+      ? newValues = selected.filter((elem) =>  elem.id !== item.id)
+      : (!!selected ? newValues = [...selected, item] : newValues = [item])
+
+    handleSelected(newValues)
+
     setOpenCombobox(false)
   };
 
@@ -78,8 +89,8 @@ export function FormSelect({
   };
 
   const handleSelected = React.useCallback(
-    (newValue: Item) => {
-      form.setValue(formValueName, { id: newValue?.value, displayName: newValue?.label }, {shouldDirty: true})
+    (newValue: Array<Item>) => {
+      form.setValue(formValueName, newValue, {shouldDirty: true})
     },
     [form, formValueName],
   );
@@ -95,8 +106,21 @@ export function FormSelect({
               aria-expanded={openCombobox}
               className={"justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit"}
             >
-                {selected ? selected.displayName : "__"}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <div className="flex flex-col items-center gap-1 w-[85%]">
+                {(selected && selected.length > 1 && selected.length < 5) 
+                  ? selected.map((elem, index) => (
+                    <p key={index} className="truncate">{elem.displayName}</p>
+                  ))
+                  : (
+                    <span className="truncate">
+                      {selected?.length === 0 && "__"}
+                      {selected?.length === 1 && selected[0].displayName}
+                      {(selected && selected.length >= 5) && `${selected.length} Выбрано`}
+                    </span>
+                  )
+                }
+              </div>
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
         </div>
@@ -166,11 +190,12 @@ export function FormSelect({
                         <ScrollArea type="always" classNameViewport="max-h-[220px]">
                             {
                               items?.map((item, index) => {
-                                const isActive = selected?.id === item?.value
+                                // includes() doesn't work with object, so we do this:
+                                const isActive = selected?.some(elem => elem.id === item.id);
                                 return (
                                   <CommandItem
                                     key={index}
-                                    value={item?.label}
+                                    value={item.displayName}
                                     className={cn(
                                       (isPendingSearch)
                                         ? "opacity-30 cursor-wait"
@@ -178,13 +203,13 @@ export function FormSelect({
                                     )}
                                     onSelect={() => toggleItem(item)}
                                   >
-                                    <CircleDot
+                                    <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
                                         isActive ? "opacity-100" : "opacity-0"
                                       )}
                                     />
-                                    <div className="flex-1">{item?.label}</div>
+                                    <div className="flex-1">{item.displayName}</div>
                                   </CommandItem>
                                 );
                               })

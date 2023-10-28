@@ -46,6 +46,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         }
                     }
                     mediums {
+                        id
                         displayName
                     }
                     authors {
@@ -71,9 +72,11 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         displayName
                     }
                     set {
+                        id
                         displayName
                     }
                     monument {
+                        id
                         displayName
                     }
                     model {

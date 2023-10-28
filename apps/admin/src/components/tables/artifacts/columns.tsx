@@ -6,7 +6,10 @@ import { DataTableColumnHeader } from "../DataTableColumnHeader"
 import Image from "next/image"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
 import FormTextArea from "../inputs/FormTextArea"
-import Cultures from "./Cultures"
+import Cultures from "./fields/Cultures"
+import Sets from "./fields/Sets"
+import Monuments from "./fields/Monuments"
+import Materials from "./fields/Materials"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
@@ -72,33 +75,29 @@ export const columns: ColumnDef<ArtifactById>[] = [
     },
   },
   {
-    accessorKey: "culturalAffiliation.displayName",
+    accessorKey: "culturalAffiliation",
     header: () => <div className="text-xs">Культура</div>,
     cell: ({ row }) => {
-      const value = row.original.culturalAffiliation ? row.original.culturalAffiliation.id : ""
-      const label = row.original.culturalAffiliation ? row.original.culturalAffiliation.displayName : "__"
       return (
-        <Cultures defaultCulture={{ value, label }} rowIndex={row.index} />
+        <Cultures defaultCulture={row.original.culturalAffiliation} rowIndex={row.index} />
       )
     },
   },
   {
-    accessorKey: "set.displayName",
+    accessorKey: "set",
     header: () => <div className="text-xs">Комплекс</div>,
     cell: ({ row }) => {
-      const text = row.original.set?.displayName
       return (
-        (!!text && text.length > 0) ? text : "__"
+        <Sets defaultSet={row.original.set} rowIndex={row.index} />
       )
     },
   },
   {
-    accessorKey: "monument.displayName",
+    accessorKey: "monument",
     header: () => <div className="text-xs">Памятник</div>,
     cell: ({ row }) => {
-      const text = row.original.monument?.displayName
       return (
-        (!!text && text.length > 0) ? text : "__"
+        <Monuments defaultMonument={row.original.monument} rowIndex={row.index} />
       )
     },
   },
@@ -141,9 +140,9 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "typology",
     header: () => <div className="text-xs">Типология</div>,
     cell: ({ row }) => {
-      const text = row.original.typology
+      const name = row.original.typology
       return (
-        text.length > 0 ? text : "__"
+        <FormTextArea name={`artifacts[${row.index}].typology`} value={name}/>
       )
     },
   },
@@ -151,9 +150,9 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "chemicalComposition",
     header: () => <div className="text-xs">Химический состав</div>,
     cell: ({ row }) => {
-      const text = row.original.chemicalComposition
+      const name = row.original.chemicalComposition
       return (
-        text.length > 0 ? text : "__"
+        <FormTextArea name={`artifacts[${row.index}].chemicalComposition`} value={name}/>
       )
     },
   },
@@ -161,15 +160,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "mediums",
     header: () => <div className="text-xs">Материал</div>,
     cell: ({ row }) => {
-      const mediums = row.original.mediums
       return (
-        (mediums.length > 0) 
-        ? (
-            mediums.map((medium, index) => (
-              <p key={index} className="min-w-[5rem]">{medium.displayName}</p>
-            ))
-        ) 
-        : "__"
+        <Materials defaultMaterials={row.original.mediums} rowIndex={row.index} />
       )
     },
   },
