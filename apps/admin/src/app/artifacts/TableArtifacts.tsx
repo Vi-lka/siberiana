@@ -1,5 +1,7 @@
+import { Loader2 } from 'lucide-react'
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler'
+import { ClientHydration } from '~/components/providers/ClientHydration'
 import { columns } from '~/components/tables/artifacts/columns'
 import DataTable from '~/components/tables/artifacts/data-table'
 import { getArtifacts } from '~/lib/queries/artifacts'
@@ -43,7 +45,9 @@ export default async function TableArtifacts({
 
     return (
       <div className="w-full mx-auto pt-3">
-        <DataTable columns={columns} data={dataForTable} />
+        <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto' />}>
+          <DataTable columns={columns} data={dataForTable} />
+        </ClientHydration>
       </div>
     )
 }

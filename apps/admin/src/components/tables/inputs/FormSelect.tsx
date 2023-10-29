@@ -95,7 +95,12 @@ export function FormSelect({
               aria-expanded={openCombobox}
               className={"justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit"}
             >
-                {selected ? selected.displayName : "__"}
+                {selected 
+                  ? (selected.displayName.length > 0) 
+                    ? selected.displayName
+                    : `id: ${selected.id}` 
+                  : "__"
+                }
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>

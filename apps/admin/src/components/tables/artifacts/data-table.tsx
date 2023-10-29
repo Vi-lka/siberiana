@@ -65,6 +65,8 @@ export default function DataTable<TData, TValue>({
           authors: artifact.authors,
           publications: artifact.publications,
           projects: artifact.projects,
+          admissionDate: artifact.admissionDate,
+          location: artifact.location,
         }
       })
     }
@@ -92,8 +94,11 @@ export default function DataTable<TData, TValue>({
         authors: artifact.authors,
         publications: artifact.publications,
         projects: artifact.projects,
+        admissionDate: artifact.admissionDate,
+        location: artifact.location,
       }
     })
+
     console.log(noLines);
   }
 

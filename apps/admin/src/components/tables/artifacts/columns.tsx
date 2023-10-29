@@ -14,6 +14,8 @@ import Techniques from "./fields/Techniques"
 import Authors from "./fields/Authors"
 import Publications from "./fields/Publications"
 import Projects from "./fields/Projects"
+import DateSelect from "../inputs/DateSelect"
+import Locations from "../global-fields/Locations"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
@@ -32,9 +34,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
       )
     },
     cell: ({ row }) => {
-      const name = row.original.displayName
       return (
-        <FormTextArea name={`artifacts[${row.index}].displayName`} value={name}/>
+        <FormTextArea name={`artifacts[${row.index}].displayName`}/>
       )
     },
   },
@@ -70,11 +71,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "description",
     header: "Описание",
     cell: ({ row }) => {
-      const text = row.original.description
       return (
-        text.length > 0 
-          ? (<FormTextArea name={`artifacts[${row.index}].description`} value={text}/>) 
-          : "__"
+        <FormTextArea name={`artifacts[${row.index}].description`}/>
       )
     },
   },
@@ -106,37 +104,11 @@ export const columns: ColumnDef<ArtifactById>[] = [
     },
   },
   {
-    accessorKey: "location.displayName",
+    accessorKey: "location",
     header: () => <div className="text-xs">Место находки</div>,
     cell: ({ row }) => {
-      const location = row.original.location
       return (
-        (!!location) 
-          ? (
-            <div className="min-w-[10rem]">
-              {location.country 
-                ? (<p><span className="font-medium">Страна:</span> {location.country.displayName}</p>) 
-                : null
-              }
-              {location.region 
-                ? (<p><span className="font-medium">Регион:</span> {location.region.displayName}</p>) 
-                : null
-              }
-              {location.district 
-                ? (<p><span className="font-medium">Район:</span> {location.district.displayName}</p>) 
-                : null
-              }
-              {location.settlement 
-                ? (<p><span className="font-medium">Нас. пункт:</span> {location.settlement.displayName}</p>) 
-                : null
-              }
-              {location.displayName.length > 0 
-                ? (<p><span className="font-medium">Локация:</span> {location.displayName}</p>) 
-                : null
-              }
-            </div>
-          ) 
-          : "__"
+        <Locations defaultLocation={row.original.location} rowIndex={row.index} />
       )
     },
   },
@@ -144,9 +116,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "typology",
     header: () => <div className="text-xs">Типология</div>,
     cell: ({ row }) => {
-      const name = row.original.typology
       return (
-        <FormTextArea name={`artifacts[${row.index}].typology`} value={name}/>
+        <FormTextArea name={`artifacts[${row.index}].typology`}/>
       )
     },
   },
@@ -154,9 +125,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "chemicalComposition",
     header: () => <div className="text-xs">Химический состав</div>,
     cell: ({ row }) => {
-      const name = row.original.chemicalComposition
       return (
-        <FormTextArea name={`artifacts[${row.index}].chemicalComposition`} value={name}/>
+        <FormTextArea name={`artifacts[${row.index}].chemicalComposition`}/>
       )
     },
   },
@@ -182,9 +152,8 @@ export const columns: ColumnDef<ArtifactById>[] = [
     accessorKey: "admissionDate",
     header: () => <div className="text-xs">Дата приема в фонд</div>,
     cell: ({ row }) => {
-      const text = row.original.admissionDate
       return (
-        (!!text && text.length > 0) ? text : "__"
+        <DateSelect name={`artifacts[${row.index}].admissionDate`} placeholder="Выберите дату" />
       )
     },
   },

@@ -72,19 +72,24 @@ export const getArtifacts = async ({
                         }
                     }
                     location {
+                      id
+                      displayName
+                      country {
+                        id  
                         displayName
-                        country {
-                            displayName
-                        }
-                        region {
-                            displayName
-                        }
-                        district {
-                            displayName
-                        }
-                        settlement {
-                            displayName
-                        }
+                      }
+                      region {
+                        id  
+                        displayName
+                      }
+                      district {
+                        id  
+                        displayName
+                      }
+                      settlement {
+                        id  
+                        displayName
+                      }
                     }
                     mediums {
                       id

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ArtifactById } from "../objects-schema";
+import { Location } from "../objects-schema"
 
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
@@ -17,6 +18,7 @@ export const ArtifactsTable = z.object({
         description: z.string().optional(),
         typology: z.string().optional(),
         chemicalComposition: z.string().optional(),
+        admissionDate: z.date().nullable().optional(),
         culturalAffiliation: z.object({
             id: z.string(),
             displayName: z.string().optional(),
@@ -49,6 +51,7 @@ export const ArtifactsTable = z.object({
             id: z.string(),
             displayName: z.string(),  
         }).array(),
+        location: Location.nullable(),
     }).array()
 })
 
@@ -155,5 +158,15 @@ export const ProjectsForTable = z.object({
     })
 })
 export type ProjectsForTable = z.infer<typeof ProjectsForTable>;
+
+//.........................LOCATIONS.........................//
+export const LocationsForTable = z.object({
+    locations: z.object({
+        edges: z.object({
+            node: Location
+        }).array()
+    })
+})
+export type LocationsForTable = z.infer<typeof LocationsForTable>;
 
 

@@ -57,7 +57,6 @@
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -66,6 +65,10 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+.rdp-vhidden {
+  @apply hidden;
 }
 
 html.dark .logo-svg path {

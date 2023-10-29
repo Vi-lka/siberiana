@@ -11,7 +11,6 @@ export default function FormTextArea({
     placeholder
 }: {
     name: string,
-    value: string,
     className?: string,
     placeholder?: string
 }) {

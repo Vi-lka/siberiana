@@ -23,17 +23,22 @@ export type Collection = z.infer<typeof Collection>;
 
 //.........................LOCATION.........................//
 export const Location = z.object({
+    id: z.string(),
     displayName: z.string(),
     country: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     region: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     district: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     settlement: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
 });
@@ -59,7 +64,7 @@ export const ArtifactById = z.object({
     primaryImageURL: z.string(),
     additionalImagesUrls: z.string().array().nullable(),
     dating: z.string(),
-    admissionDate: z.string().nullable(),
+    admissionDate: z.date().nullable(),
     chemicalComposition: z.string(),
     typology: z.string(),
     weight: z.string(),

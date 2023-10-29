@@ -335,3 +335,61 @@ export function getProjectsQuery({
   `
   return query
 }
+
+export function getLocationsQuery({
+  search = "",
+  category,
+  collection,
+}: {
+  search?: string,
+  category?: string,
+  collection?: string,
+}) {
+  const query = `
+    query Locations() {
+      locations(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+              hasArtifactsWith: [{
+                hasCollectionWith: [
+                  ${!!collection ? `{slug: "${collection}"},` : ''}
+                  ${!!category ? `{
+                    hasCategoryWith: [
+                      {slug: "${category}"}
+                    ]
+                  },` : ''}
+                ],
+                or: [ 
+                  {displayNameContainsFold: "${search}"}
+                ]
+              }]
+            }
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+            country {
+              id
+              displayName
+            }
+            region {
+              id 
+              displayName
+            }
+            district {
+              id
+              displayName
+            }
+            settlement {
+              id
+              displayName
+            }
+          }
+        }
+      }
+    }
+  `
+  return query
+}
