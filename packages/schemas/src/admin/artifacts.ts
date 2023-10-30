@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ArtifactById } from "../objects-schema";
+import { ArtifactById, StatusEnum } from "../objects-schema";
 import { Location } from "../objects-schema"
 
 //.........................ARTIFACTS.........................//
@@ -14,6 +14,10 @@ export type ArtifactsArray = z.infer<typeof ArtifactsArray>;
 export const ArtifactsTable = z.object({
     artifacts: z.object({
         id: z.string(),
+        status: z.object({
+            id: StatusEnum,
+            displayName: z.string(),
+        }),
         displayName: z.string().min(1),
         description: z.string().optional(),
         typology: z.string().optional(),
@@ -52,6 +56,10 @@ export const ArtifactsTable = z.object({
             displayName: z.string(),  
         }).array(),
         location: Location.nullable(),
+        createdBy: z.string(),
+        createdAt: z.date(),
+        updatedBy: z.string(),
+        updatedAt: z.date(),
     }).array()
 })
 

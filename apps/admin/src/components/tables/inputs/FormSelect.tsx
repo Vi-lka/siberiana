@@ -17,6 +17,7 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 import { useFormContext } from "react-hook-form";
+import { ErrorMessage } from '@hookform/error-message';
 
 export type Item = {
   value: string,
@@ -30,6 +31,7 @@ export function FormSelect({
   side = "bottom",
   align = "start",
   isLoading,
+  haveDelete = true,
   onClick
 }: {
   itemsData: Array<Item> | null,
@@ -37,7 +39,8 @@ export function FormSelect({
   className?: string,
   side?: "bottom" | "top" | "right" | "left",
   align?: "end" | "center" | "start",
-  isLoading: boolean,
+  isLoading?: boolean,
+  haveDelete?: boolean,
   onClick?: () => void
 }) {
 
@@ -123,7 +126,7 @@ export function FormSelect({
                 value={inputSearch}
                 onValueChange={(input) => handleSearch(input)}
               />
-              {!!selected
+              {!!selected && haveDelete
                 ? 
                   <span 
                     className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
@@ -202,6 +205,11 @@ export function FormSelect({
           </Command>
         </PopoverContent>
       </Popover>
+      <ErrorMessage
+        errors={form.formState.errors}
+        name={formValueName}
+        render={({ message }) => <p className="text-destructive text-sm font-medium">{message}</p>}
+      />
     </div>
   );
 }

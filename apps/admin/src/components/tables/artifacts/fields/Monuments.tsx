@@ -2,7 +2,6 @@
 
 import type { MonumentsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import request from 'graphql-request'
 import { getMonumentsQuery } from '~/lib/queries/client/artifacts'
@@ -22,17 +21,12 @@ export default function Monuments({
 
   const defaultLable = !!defaultMonument ? defaultMonument.displayName : "__"
 
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
-
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<MonumentsForTable, Error>({
-    queryKey: ['monuments', category, collection],
+    queryKey: ['monuments'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getMonumentsQuery({category, collection}),
+        getMonumentsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

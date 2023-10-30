@@ -2,7 +2,6 @@
 
 import type { SetsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import request from 'graphql-request'
 import { getSetsQuery } from '~/lib/queries/client/artifacts'
@@ -22,17 +21,12 @@ export default function Sets({
     
   const defaultLable = !!defaultSet ? defaultSet.displayName : "__"
 
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
-
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<SetsForTable, Error>({
-    queryKey: ['sets', category, collection],
+    queryKey: ['sets'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getSetsQuery({category, collection}),
+        getSetsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

@@ -1,7 +1,6 @@
 import type { AuthorsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { getAuthorsQuery } from '~/lib/queries/client/artifacts'
@@ -19,18 +18,13 @@ export default function Authors({
 }) {
 
   const defaultItems = (defaultAuthors.length > 0) ? defaultAuthors : [{ id: "", displayName: "__" }]
-
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
   
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<AuthorsForTable, Error>({
-    queryKey: ['persons', category, collection],
+    queryKey: ['persons'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getAuthorsQuery({category, collection}),
+        getAuthorsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

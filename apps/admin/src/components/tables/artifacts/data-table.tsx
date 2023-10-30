@@ -18,22 +18,41 @@ import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ArtifactById} from "@siberiana/schemas";
 import { ArtifactsTable } from "@siberiana/schemas";
+import Status from "../global-fields/Status";
+import getStatusName from "~/lib/utils/getStatusName";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: ArtifactById[] & TData[],
+  userRoles?: string[],
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  userRoles,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
+  const isModer = userRoles?.includes("moderator")
+
+  const allowСolumns: ColumnDef<TData, TValue>[] = isModer
+    ? [
+      ...columns,
+      {
+        accessorKey: "status",
+        header: () => <div className="text-center">Статус</div>,
+        cell: ({ row }) => {
+          return <Status rowIndex={row.index} />
+        },
+      },
+    ]
+    : columns
+
   const table = useReactTable({
     data,
-    columns,
+    columns: allowСolumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -51,22 +70,19 @@ export default function DataTable<TData, TValue>({
     mode: 'onChange',
     defaultValues: {
       artifacts: data.map(artifact => {
+        const {
+          status,
+          ...rest // assigns remaining
+        } = artifact;
+
+        const statusForTable = {
+          id: status,
+          displayName: getStatusName(status)
+        }
+
         return { 
-          id: artifact.id,
-          displayName: artifact.displayName,
-          description: artifact.description,
-          typology: artifact.typology,
-          chemicalComposition: artifact.chemicalComposition,
-          culturalAffiliation: artifact.culturalAffiliation,
-          set: artifact.set,
-          monument: artifact.monument,
-          mediums: artifact.mediums,
-          techniques: artifact.techniques,
-          authors: artifact.authors,
-          publications: artifact.publications,
-          projects: artifact.projects,
-          admissionDate: artifact.admissionDate,
-          location: artifact.location,
+          status: statusForTable,
+          ...rest
         }
       })
     }
@@ -81,7 +97,8 @@ export default function DataTable<TData, TValue>({
       const chemicalComposition = artifact.chemicalComposition?.replace(/\n/g, " ")
 
       return {
-        id: artifact.id, 
+        id: artifact.id,
+        status: artifact.status,
         displayName, 
         description, 
         typology,
@@ -168,7 +185,7 @@ export default function DataTable<TData, TValue>({
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                    <TableCell colSpan={allowСolumns.length} className="h-24 text-center">
                       No results.
                     </TableCell>
                   </TableRow>

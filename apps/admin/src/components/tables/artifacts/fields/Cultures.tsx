@@ -2,7 +2,6 @@
 
 import type { CulturesForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import request from 'graphql-request'
 import { getCulturesQuery } from '~/lib/queries/client/artifacts'
@@ -22,17 +21,12 @@ export default function Cultures({
     
   const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__"
 
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
-
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<CulturesForTable, Error>({
-    queryKey: ['cultures', category, collection],
+    queryKey: ['cultures'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getCulturesQuery({category, collection}),
+        getCulturesQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

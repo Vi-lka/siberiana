@@ -16,13 +16,15 @@ import Publications from "./fields/Publications"
 import Projects from "./fields/Projects"
 import DateSelect from "../inputs/DateSelect"
 import Locations from "../global-fields/Locations"
+import { format } from "date-fns"
+import { ru } from "date-fns/locale"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
     accessorKey: "id",
     header: () => <div className="text-center">ID</div>,
     cell: ({ row }) => {
-      const id = parseFloat(row.getValue("id"))
+      const id = parseFloat(row.original.id)
       return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
     },
   },
@@ -182,6 +184,40 @@ export const columns: ColumnDef<ArtifactById>[] = [
       return (
         <Projects defaultProjects={row.original.projects} rowIndex={row.index} />
       )
+    },
+  },
+  {
+    accessorKey: "createdBy",
+    header: () => <div className="text-center text-xs">Создано by</div>,
+    cell: ({ row }) => {
+      return <div className="text-center break-words">{row.original.createdBy}</div>
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: () => <div className="text-center text-xs">Создано at</div>,
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt
+        ? format(row.original.createdAt, "PPP", {locale: ru})
+        : ""
+      return <div className="text-center break-words">{createdAt}</div>
+    },
+  },
+  {
+    accessorKey: "updatedBy",
+    header: () => <div className="text-center text-xs">Обновлено by</div>,
+    cell: ({ row }) => {
+      return <div className="text-center break-words">{row.original.updatedBy}</div>
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: () => <div className="text-center text-xs">Обновлено at</div>,
+    cell: ({ row }) => {
+      const updatedAt = (row.original.updatedAt && row.original.updatedBy)
+        ? format(row.original.updatedAt, "PPP", {locale: ru})
+        : ""
+      return <div className="text-center break-words">{updatedAt}</div>
     },
   },
 ]

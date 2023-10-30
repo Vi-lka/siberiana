@@ -17,6 +17,7 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 import { useFormContext } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 export type Item = {
   id: string,
@@ -222,6 +223,11 @@ export function FormSelectMulti({
           </Command>
         </PopoverContent>
       </Popover>
+      <ErrorMessage
+        errors={form.formState.errors}
+        name={formValueName}
+        render={({ message }) => <p className="text-destructive text-sm font-medium">{message}</p>}
+      />
     </div>
   );
 }

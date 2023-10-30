@@ -77,9 +77,6 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         id
                         displayName
                     }
-                    period {
-                        displayName
-                    }
                     set {
                         id
                         displayName

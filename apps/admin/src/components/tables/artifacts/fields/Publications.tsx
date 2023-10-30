@@ -1,7 +1,6 @@
 import type { PublicationsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { getPublicationsQuery } from '~/lib/queries/client/artifacts'
@@ -19,18 +18,13 @@ export default function Publications({
 }) {
 
   const defaultItems = (defaultPublications.length > 0) ? defaultPublications : [{ id: "", displayName: "__" }]
-
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
   
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<PublicationsForTable, Error>({
-    queryKey: ['publications', category, collection],
+    queryKey: ['publications'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getPublicationsQuery({category, collection}),
+        getPublicationsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

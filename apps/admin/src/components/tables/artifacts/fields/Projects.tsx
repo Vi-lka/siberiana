@@ -1,7 +1,6 @@
 import type { ProjectsForTable } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
-import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { getProjectsQuery } from '~/lib/queries/client/artifacts'
@@ -19,18 +18,13 @@ export default function Projects({
 }) {
 
   const defaultItems = (defaultProjects.length > 0) ? defaultProjects : [{ id: "", displayName: "__" }]
-
-  const searchParams = useSearchParams()
-
-  const category = searchParams.get("category") ?? undefined
-  const collection = searchParams.get("collection") ?? undefined
   
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<ProjectsForTable, Error>({
-    queryKey: ['projects', category, collection],
+    queryKey: ['projects'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getProjectsQuery({category, collection}),
+        getProjectsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running

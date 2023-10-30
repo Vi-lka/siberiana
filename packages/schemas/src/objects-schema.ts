@@ -5,6 +5,7 @@ export const StatusEnum = z.enum([
     "unlisted",
     "draft"
 ])
+export type StatusEnum = z.infer<typeof StatusEnum>;
 
 //.........................CATEGORY.........................//
 export const Category = z.object({
@@ -64,7 +65,7 @@ export const ArtifactById = z.object({
     primaryImageURL: z.string(),
     additionalImagesUrls: z.string().array().nullable(),
     dating: z.string(),
-    admissionDate: z.date().nullable(),
+    admissionDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
     chemicalComposition: z.string(),
     typology: z.string(),
     weight: z.string(),
@@ -98,9 +99,6 @@ export const ArtifactById = z.object({
         id: z.string(),
         displayName: z.string(),  
     }).nullable(),
-    period: z.object({
-        displayName: z.string(),  
-    }).nullable(),
     set: z.object({
         id: z.string(),
         displayName: z.string(),  
@@ -112,6 +110,10 @@ export const ArtifactById = z.object({
     model: z.object({
         displayName: z.string(),  
     }).nullable(),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
 });
 export type ArtifactById = z.infer<typeof ArtifactById>;
 

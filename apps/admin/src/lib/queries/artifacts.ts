@@ -118,9 +118,6 @@ export const getArtifacts = async ({
                       id
                       displayName
                     }
-                    period {
-                        displayName
-                    }
                     set {
                       id
                       displayName
@@ -132,6 +129,10 @@ export const getArtifacts = async ({
                     model {
                         displayName
                     }
+                    createdBy
+                    createdAt
+                    updatedBy
+                    updatedAt
                 }
             }
         }
