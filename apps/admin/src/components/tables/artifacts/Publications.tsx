@@ -1,30 +1,30 @@
-import type { AuthorsForTable } from '@siberiana/schemas'
+import type { PublicationsList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getAuthorsQuery } from '~/lib/queries/client/artifacts'
-import { FormSelectMulti } from '../../inputs/FormSelectMulti'
+import { getPublicationsQuery } from '~/lib/queries/client/artifacts'
+import { FormSelectMulti } from '../inputs/FormSelectMulti'
 
-export default function Authors({ 
-  defaultAuthors,
+export default function Publications({ 
+  defaultPublications,
   rowIndex
 }: { 
-  defaultAuthors: {
+  defaultPublications: {
     id: string, 
     displayName: string
   }[],
   rowIndex: number
 }) {
 
-  const defaultItems = (defaultAuthors.length > 0) ? defaultAuthors : [{ id: "", displayName: "__" }]
+  const defaultItems = (defaultPublications.length > 0) ? defaultPublications : [{ id: "", displayName: "__" }]
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<AuthorsForTable, Error>({
-    queryKey: ['persons'],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<PublicationsList, Error>({
+    queryKey: ['publications'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getAuthorsQuery(),
+        getPublicationsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -38,14 +38,14 @@ export default function Authors({
         ))}
         <ErrorToast
           error={error.message}
-          place="Авторы"
+          place="Публикации"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.persons.edges.map(({ node }) => {
+    ? data.publications.edges.map(({ node }) => {
       const id = node.id
       const displayName = node.displayName
       return { id, displayName }
@@ -60,7 +60,7 @@ export default function Authors({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].authors`}
+        formValueName={`artifacts[${rowIndex}].publications`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

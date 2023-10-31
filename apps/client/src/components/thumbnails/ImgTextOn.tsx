@@ -13,7 +13,6 @@ type Props = {
   src?: string;
   width?: number;
   height?: number;
-  fill?: boolean;
   className?: string;
 } & (TrueShowIconProps | FalseShowIconProps)
 
@@ -52,7 +51,6 @@ export default function ImgTextOn(props: Props) {
           src={image}
           width={props.width ? props.width : 400}
           height={props.height ? props.height : 400}
-          fill={props.fill}
           onError={() => setImage("/images/image-placeholder.png")}
           className={"w-full object-cover"}
           alt={props.title}

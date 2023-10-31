@@ -1,32 +1,32 @@
 "use client"
 
-import type { MonumentsForTable } from '@siberiana/schemas'
+import type { SetsList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import request from 'graphql-request'
-import { getMonumentsQuery } from '~/lib/queries/client/artifacts'
+import { getSetsQuery } from '~/lib/queries/client/artifacts'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { FormSelect } from '../../inputs/FormSelect'
+import { FormSelect } from '../inputs/FormSelect'
 
-export default function Monuments({ 
-  defaultMonument,
+export default function Sets({ 
+  defaultSet,
   rowIndex
 }: { 
-  defaultMonument: {
+  defaultSet: {
     id: string, 
     displayName: string
   } | null,
   rowIndex: number
 }) {
+    
+  const defaultLable = !!defaultSet ? defaultSet.displayName : "__"
 
-  const defaultLable = !!defaultMonument ? defaultMonument.displayName : "__"
-
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<MonumentsForTable, Error>({
-    queryKey: ['monuments'],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<SetsList, Error>({
+    queryKey: ['sets'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getMonumentsQuery(),
+        getSetsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -38,14 +38,14 @@ export default function Monuments({
         {defaultLable}
         <ErrorToast
           error={error.message}
-          place="Памятники"
+          place="Комплексы"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.monuments.edges.map(({ node }) => {
+    ? data.sets.edges.map(({ node }) => {
       const value = node.id
       const label = node.displayName
       return { value, label }
@@ -60,7 +60,7 @@ export default function Monuments({
     <div className='h-full w-full'>
       <FormSelect 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].monument`}
+        formValueName={`artifacts[${rowIndex}].set`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

@@ -1,10 +1,10 @@
-import type { TechniquesForTable } from '@siberiana/schemas'
+import type { TechniquesList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { getTechniquesQuery } from '~/lib/queries/client/artifacts'
-import { FormSelectMulti } from '../../inputs/FormSelectMulti'
+import { FormSelectMulti } from '../inputs/FormSelectMulti'
 
 export default function Techniques({ 
   defaultTechniques,
@@ -19,7 +19,7 @@ export default function Techniques({
 
   const defaultItems = (defaultTechniques.length > 0) ? defaultTechniques : [{ id: "", displayName: "__" }]
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<TechniquesForTable, Error>({
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<TechniquesList, Error>({
     queryKey: ['techniques'],
     queryFn: async () => 
       request(

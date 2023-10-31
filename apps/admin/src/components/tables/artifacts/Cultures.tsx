@@ -1,32 +1,32 @@
 "use client"
 
-import type { SetsForTable } from '@siberiana/schemas'
+import type { CulturesList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import request from 'graphql-request'
-import { getSetsQuery } from '~/lib/queries/client/artifacts'
+import { getCulturesQuery } from '~/lib/queries/client/artifacts'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { FormSelect } from '../../inputs/FormSelect'
+import { FormSelect } from '../inputs/FormSelect'
 
-export default function Sets({ 
-  defaultSet,
+export default function Cultures({ 
+  defaultCulture,
   rowIndex
 }: { 
-  defaultSet: {
+  defaultCulture: {
     id: string, 
     displayName: string
   } | null,
   rowIndex: number
 }) {
     
-  const defaultLable = !!defaultSet ? defaultSet.displayName : "__"
+  const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__"
 
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<SetsForTable, Error>({
-    queryKey: ['sets'],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<CulturesList, Error>({
+    queryKey: ['cultures'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getSetsQuery(),
+        getCulturesQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -38,14 +38,14 @@ export default function Sets({
         {defaultLable}
         <ErrorToast
           error={error.message}
-          place="Комплексы"
+          place="Культуры"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.sets.edges.map(({ node }) => {
+    ? data.cultures.edges.map(({ node }) => {
       const value = node.id
       const label = node.displayName
       return { value, label }
@@ -60,7 +60,7 @@ export default function Sets({
     <div className='h-full w-full'>
       <FormSelect 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].set`}
+        formValueName={`artifacts[${rowIndex}].culturalAffiliation`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

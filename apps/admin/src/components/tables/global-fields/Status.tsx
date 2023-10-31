@@ -5,9 +5,9 @@ import { FormSelect } from '../inputs/FormSelect'
 import getStatusName from '~/lib/utils/getStatusName'
 
 export default function Status({ 
-  rowIndex
+  formValueName
 }: {
-  rowIndex: number
+  formValueName: string
 }) {
 
   const itemsData = [
@@ -20,7 +20,7 @@ export default function Status({
     <div className='h-full w-full'>
       <FormSelect 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].status`}
+        formValueName={formValueName}
         haveDelete={false}
       />
     </div>

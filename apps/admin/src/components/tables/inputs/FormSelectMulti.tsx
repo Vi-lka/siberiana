@@ -114,7 +114,7 @@ export function FormSelectMulti({
                   ))
                   : (
                     <span className="truncate">
-                      {selected?.length === 0 && "__"}
+                      {(selected?.length === 0 || !selected) && "__"}
                       {selected?.length === 1 && selected[0].displayName}
                       {(selected && selected.length >= 5) && `${selected.length} Выбрано`}
                     </span>

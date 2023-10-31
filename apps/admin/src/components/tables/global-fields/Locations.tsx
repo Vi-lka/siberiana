@@ -1,25 +1,27 @@
-import type { LocationsForTable } from '@siberiana/schemas'
+import type { LocationsList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getLocationsQuery } from '~/lib/queries/client/artifacts'
 import { FormSelect } from '../inputs/FormSelect'
+import { getLocationsQuery } from '~/lib/queries/client/global'
 
 export default function Locations({ 
   defaultLocation,
-  rowIndex
+  formValueName,
+  className,
 }: { 
   defaultLocation: {
     id: string, 
     displayName: string
   } | null,
-  rowIndex: number
+  formValueName: string,
+  className?: string,
 }) {
 
   const defaultLable = !!defaultLocation ? defaultLocation.displayName : "__"
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<LocationsForTable, Error>({
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<LocationsList, Error>({
     queryKey: ['locations'],
     queryFn: async () => 
       request(
@@ -73,9 +75,10 @@ export default function Locations({
     <div className='h-full w-full'>
       <FormSelect 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].location`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
+        className={className}
       />
     </div>
   )

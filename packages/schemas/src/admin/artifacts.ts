@@ -64,7 +64,7 @@ export const ArtifactsTable = z.object({
 })
 
 //.........................CULTURES.........................//
-export const CulturesForTable = z.object({
+export const CulturesList = z.object({
     cultures: z.object({
         edges: z.object({
             node: z.object({
@@ -74,10 +74,10 @@ export const CulturesForTable = z.object({
         }).array()
     })
 })
-export type CulturesForTable = z.infer<typeof CulturesForTable>;
+export type CulturesList = z.infer<typeof CulturesList>;
 
 //.........................SETS.........................//
-export const SetsForTable = z.object({
+export const SetsList = z.object({
     sets: z.object({
         edges: z.object({
             node: z.object({
@@ -87,10 +87,10 @@ export const SetsForTable = z.object({
         }).array()
     })
 })
-export type SetsForTable = z.infer<typeof SetsForTable>;
+export type SetsList = z.infer<typeof SetsList>;
 
 //.........................MONUMENTS.........................//
-export const MonumentsForTable = z.object({
+export const MonumentsList = z.object({
     monuments: z.object({
         edges: z.object({
             node: z.object({
@@ -100,10 +100,10 @@ export const MonumentsForTable = z.object({
         }).array()
     })
 })
-export type MonumentsForTable = z.infer<typeof MonumentsForTable>;
+export type MonumentsList = z.infer<typeof MonumentsList>;
 
 //.........................MATERIALS.........................//
-export const MaterialsForTable = z.object({
+export const MaterialsList = z.object({
     media: z.object({
         edges: z.object({
             node: z.object({
@@ -113,10 +113,10 @@ export const MaterialsForTable = z.object({
         }).array()
     })
 })
-export type MaterialsForTable = z.infer<typeof MaterialsForTable>;
+export type MaterialsList = z.infer<typeof MaterialsList>;
 
 //.........................TECHNIQUES.........................//
-export const TechniquesForTable = z.object({
+export const TechniquesList = z.object({
     techniques: z.object({
         edges: z.object({
             node: z.object({
@@ -126,10 +126,10 @@ export const TechniquesForTable = z.object({
         }).array()
     })
 })
-export type TechniquesForTable = z.infer<typeof TechniquesForTable>;
+export type TechniquesList = z.infer<typeof TechniquesList>;
 
 //.........................AUTHORS.........................//
-export const AuthorsForTable = z.object({
+export const AuthorsList = z.object({
     persons: z.object({
         edges: z.object({
             node: z.object({
@@ -139,10 +139,10 @@ export const AuthorsForTable = z.object({
         }).array()
     })
 })
-export type AuthorsForTable = z.infer<typeof AuthorsForTable>;
+export type AuthorsList = z.infer<typeof AuthorsList>;
 
 //.........................PUBLICATIONS.........................//
-export const PublicationsForTable = z.object({
+export const PublicationsList = z.object({
     publications: z.object({
         edges: z.object({
             node: z.object({
@@ -152,10 +152,10 @@ export const PublicationsForTable = z.object({
         }).array()
     })
 })
-export type PublicationsForTable = z.infer<typeof PublicationsForTable>;
+export type PublicationsList = z.infer<typeof PublicationsList>;
 
 //.........................PROJECTS.........................//
-export const ProjectsForTable = z.object({
+export const ProjectsList = z.object({
     projects: z.object({
         edges: z.object({
             node: z.object({
@@ -165,16 +165,6 @@ export const ProjectsForTable = z.object({
         }).array()
     })
 })
-export type ProjectsForTable = z.infer<typeof ProjectsForTable>;
-
-//.........................LOCATIONS.........................//
-export const LocationsForTable = z.object({
-    locations: z.object({
-        edges: z.object({
-            node: Location
-        }).array()
-    })
-})
-export type LocationsForTable = z.infer<typeof LocationsForTable>;
+export type ProjectsList = z.infer<typeof ProjectsList>;
 
 

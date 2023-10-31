@@ -1,23 +1,23 @@
 "use client"
 
 import type { ColumnDef } from "@tanstack/react-table"
-import type { ArtifactById } from '@siberiana/schemas'
-import { DataTableColumnHeader } from "../DataTableColumnHeader"
+import type {ArtifactById} from '@siberiana/schemas';
 import Image from "next/image"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
-import FormTextArea from "../inputs/FormTextArea"
-import Cultures from "./fields/Cultures"
-import Sets from "./fields/Sets"
-import Monuments from "./fields/Monuments"
-import Materials from "./fields/Materials"
-import Techniques from "./fields/Techniques"
-import Authors from "./fields/Authors"
-import Publications from "./fields/Publications"
-import Projects from "./fields/Projects"
-import DateSelect from "../inputs/DateSelect"
-import Locations from "../global-fields/Locations"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
+import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader"
+import FormTextArea from "~/components/tables/inputs/FormTextArea"
+import Authors from "~/components/tables/artifacts/Authors"
+import Cultures from "~/components/tables/artifacts/Cultures"
+import Materials from "~/components/tables/artifacts/Materials"
+import Monuments from "~/components/tables/artifacts/Monuments"
+import Publications from "~/components/tables/artifacts/Publications"
+import Sets from "~/components/tables/artifacts/Sets"
+import Techniques from "~/components/tables/artifacts/Techniques"
+import Projects from "~/components/tables/artifacts/Projects";
+import Locations from "~/components/tables/global-fields/Locations"
+import DateSelect from "~/components/tables/inputs/DateSelect"
 
 export const columns: ColumnDef<ArtifactById>[] = [
   {
@@ -71,7 +71,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "description",
-    header: "Описание",
+    header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
       return (
         <FormTextArea name={`artifacts[${row.index}].description`}/>
@@ -80,7 +80,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "culturalAffiliation",
-    header: () => <div className="text-xs">Культура</div>,
+    header: () => <div className="text-center">Культура</div>,
     cell: ({ row }) => {
       return (
         <Cultures defaultCulture={row.original.culturalAffiliation} rowIndex={row.index} />
@@ -89,7 +89,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "set",
-    header: () => <div className="text-xs">Комплекс</div>,
+    header: () => <div className="text-center">Комплекс</div>,
     cell: ({ row }) => {
       return (
         <Sets defaultSet={row.original.set} rowIndex={row.index} />
@@ -98,7 +98,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "monument",
-    header: () => <div className="text-xs">Памятник</div>,
+    header: () => <div className="text-center">Памятник</div>,
     cell: ({ row }) => {
       return (
         <Monuments defaultMonument={row.original.monument} rowIndex={row.index} />
@@ -107,16 +107,16 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "location",
-    header: () => <div className="text-xs">Место находки</div>,
+    header: () => <div className="text-center">Место находки</div>,
     cell: ({ row }) => {
       return (
-        <Locations defaultLocation={row.original.location} rowIndex={row.index} />
+        <Locations defaultLocation={row.original.location} formValueName={`artifacts[${row.index}].location`} />
       )
     },
   },
   {
     accessorKey: "typology",
-    header: () => <div className="text-xs">Типология</div>,
+    header: () => <div className="text-center">Типология</div>,
     cell: ({ row }) => {
       return (
         <FormTextArea name={`artifacts[${row.index}].typology`}/>
@@ -125,7 +125,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "chemicalComposition",
-    header: () => <div className="text-xs">Химический состав</div>,
+    header: () => <div className="text-center">Химический состав</div>,
     cell: ({ row }) => {
       return (
         <FormTextArea name={`artifacts[${row.index}].chemicalComposition`}/>
@@ -134,7 +134,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "mediums",
-    header: () => <div className="text-xs">Материал</div>,
+    header: () => <div className="text-center">Материал</div>,
     cell: ({ row }) => {
       return (
         <Materials defaultMaterials={row.original.mediums} rowIndex={row.index} />
@@ -143,7 +143,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "techniques",
-    header: () => <div className="text-xs">Техники</div>,
+    header: () => <div className="text-center">Техники</div>,
     cell: ({ row }) => {
       return (
         <Techniques defaultTechniques={row.original.techniques} rowIndex={row.index} />
@@ -152,7 +152,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "admissionDate",
-    header: () => <div className="text-xs">Дата приема в фонд</div>,
+    header: () => <div className="text-center">Дата приема в фонд</div>,
     cell: ({ row }) => {
       return (
         <DateSelect name={`artifacts[${row.index}].admissionDate`} placeholder="Выберите дату" />
@@ -161,7 +161,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "authors",
-    header: () => <div className="text-xs">Авторы работ</div>,
+    header: () => <div className="text-center">Авторы работ</div>,
     cell: ({ row }) => {
       return (
         <Authors defaultAuthors={row.original.authors} rowIndex={row.index} />
@@ -170,7 +170,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "publications",
-    header: () => <div className="text-xs">Публикации</div>,
+    header: () => <div className="text-center">Публикации</div>,
     cell: ({ row }) => {
       return (
         <Publications defaultPublications={row.original.publications} rowIndex={row.index} />
@@ -179,7 +179,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "projects",
-    header: () => <div className="text-xs">Проекты</div>,
+    header: () => <div className="text-center">Проекты</div>,
     cell: ({ row }) => {
       return (
         <Projects defaultProjects={row.original.projects} rowIndex={row.index} />
@@ -188,14 +188,14 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "createdBy",
-    header: () => <div className="text-center text-xs">Создано by</div>,
+    header: () => <div className="text-center">Создано by</div>,
     cell: ({ row }) => {
       return <div className="text-center break-words">{row.original.createdBy}</div>
     },
   },
   {
     accessorKey: "createdAt",
-    header: () => <div className="text-center text-xs">Создано at</div>,
+    header: () => <div className="text-center">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
         ? format(row.original.createdAt, "PPP", {locale: ru})
@@ -205,14 +205,14 @@ export const columns: ColumnDef<ArtifactById>[] = [
   },
   {
     accessorKey: "updatedBy",
-    header: () => <div className="text-center text-xs">Обновлено by</div>,
+    header: () => <div className="text-center">Обновлено by</div>,
     cell: ({ row }) => {
       return <div className="text-center break-words">{row.original.updatedBy}</div>
     },
   },
   {
     accessorKey: "updatedAt",
-    header: () => <div className="text-center text-xs">Обновлено at</div>,
+    header: () => <div className="text-center">Обновлено at</div>,
     cell: ({ row }) => {
       const updatedAt = (row.original.updatedAt && row.original.updatedBy)
         ? format(row.original.updatedAt, "PPP", {locale: ru})

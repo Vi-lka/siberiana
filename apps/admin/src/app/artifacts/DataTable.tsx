@@ -11,14 +11,14 @@ import {
   getFilteredRowModel
 } from '@tanstack/react-table'
 import type {ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
-import { DataTablePagination } from '../DataTablePagination';
+import { DataTablePagination } from '../../components/tables/DataTablePagination';
 import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ArtifactById} from "@siberiana/schemas";
 import { ArtifactsTable } from "@siberiana/schemas";
-import Status from "../global-fields/Status";
+import Status from "../../components/tables/global-fields/Status";
 import getStatusName from "~/lib/utils/getStatusName";
 
 interface DataTableProps<TData, TValue> {
@@ -44,7 +44,7 @@ export default function DataTable<TData, TValue>({
         accessorKey: "status",
         header: () => <div className="text-center">Статус</div>,
         cell: ({ row }) => {
-          return <Status rowIndex={row.index} />
+          return <Status formValueName={`artifacts[${row.index}].status`} />
         },
       },
     ]

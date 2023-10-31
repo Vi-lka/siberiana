@@ -1,30 +1,30 @@
-import type { ProjectsForTable } from '@siberiana/schemas'
+import type { MaterialsList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getProjectsQuery } from '~/lib/queries/client/artifacts'
-import { FormSelectMulti } from '../../inputs/FormSelectMulti'
+import { getMaterialsQuery } from '~/lib/queries/client/artifacts'
+import { FormSelectMulti } from '../inputs/FormSelectMulti'
 
-export default function Projects({ 
-  defaultProjects,
+export default function Materials({ 
+  defaultMaterials,
   rowIndex
 }: { 
-  defaultProjects: {
+  defaultMaterials: {
     id: string, 
     displayName: string
   }[],
   rowIndex: number
 }) {
 
-  const defaultItems = (defaultProjects.length > 0) ? defaultProjects : [{ id: "", displayName: "__" }]
+  const defaultItems = (defaultMaterials.length > 0) ? defaultMaterials : [{ id: "", displayName: "__" }]
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<ProjectsForTable, Error>({
-    queryKey: ['projects'],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<MaterialsList, Error>({
+    queryKey: ['materials'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getProjectsQuery(),
+        getMaterialsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -38,14 +38,14 @@ export default function Projects({
         ))}
         <ErrorToast
           error={error.message}
-          place="Проекты"
+          place="Материалы"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.projects.edges.map(({ node }) => {
+    ? data.media.edges.map(({ node }) => {
       const id = node.id
       const displayName = node.displayName
       return { id, displayName }
@@ -60,7 +60,7 @@ export default function Projects({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
-        formValueName={`artifacts[${rowIndex}].projects`}
+        formValueName={`artifacts[${rowIndex}].mediums`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

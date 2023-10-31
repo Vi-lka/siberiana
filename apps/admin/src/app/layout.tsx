@@ -9,6 +9,7 @@ import LogoSvg from "~/components/LogoSvg";
 import Header from "~/components/header/Header";
 import MenuBar from "~/components/MenuBar/MenuBar";
 import type { Metadata } from "next";
+import { ClientHydration } from "~/components/providers/ClientHydration";
 
 export const metadata: Metadata = {
   title:{
@@ -22,6 +23,7 @@ const inter = Inter({
   variable: "--Inter",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
+  display: "swap",
 });
 
 const openSans = Open_Sans({
@@ -29,6 +31,7 @@ const openSans = Open_Sans({
   variable: "--OpenSans",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
+  display: "swap",
 });
 
 export default async function RootLayout({
@@ -64,7 +67,11 @@ export default async function RootLayout({
             }
           </main>
           {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
-            ? <MenuBar />
+            ? (
+              <ClientHydration>
+                <MenuBar />                
+              </ClientHydration>
+            )
             : null 
           }
         </Providers>

@@ -79,3 +79,26 @@ html.dark .logo-svg path {
   fill: hsl(240, 19%, 22%);
   transition: 0.15s ease-in-out;
 }
+
+.nav-bar:before {
+  display: block;
+  content: "";
+  position:absolute;
+  top: 0;
+  right: -40px;
+  height: 40px;
+  width: 40px;
+  border-left: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+  border-bottom-left-radius: 50%;
+  background: transparent;
+  box-shadow: 0 10px 0 0 hsl(var(--background));
+  transform: rotate(90deg);
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .nav-bar:before {
+    display: none;
+  }
+}

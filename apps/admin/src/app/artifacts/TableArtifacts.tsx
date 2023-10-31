@@ -3,10 +3,10 @@ import { getServerSession } from 'next-auth'
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler'
 import { ClientHydration } from '~/components/providers/ClientHydration'
-import { columns } from '~/components/tables/artifacts/columns'
-import DataTable from '~/components/tables/artifacts/data-table'
 import { getArtifacts } from '~/lib/queries/artifacts'
 import { authOptions } from '../api/auth/[...nextauth]/route'
+import DataTable from './DataTable'
+import { columns } from './columns'
 
 export default async function TableArtifacts({
     searchParams

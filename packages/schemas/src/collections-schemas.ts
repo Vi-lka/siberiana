@@ -1,17 +1,28 @@
 import { z } from "zod";
 
+export const CollectionTypeEnum = z.enum([ 
+    "artifacts",
+    "books",
+    "protected_area_pictures",
+])
+export type CollectionTypeEnum = z.infer<typeof CollectionTypeEnum>;
+
 //.........................CATEGORIES.........................//
 export const CategoryNode = z.object({
     id: z.string(),
-    slug: z.string(),
-    displayName: z.string(),
+    slug: z.string().min(1).regex(new RegExp("^[a-z](-?[a-z])*$")),
+    displayName: z.string().min(1),
     abbreviation: z.string(),
     primaryImageURL: z.string(),
     description: z.string(),
     collections: z.object({
         id: z.string(),
-        slug: z.string(),
-    }).array()
+        displayName: z.string(),
+    }).array(),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
 });
 export type CategoryNode = z.infer<typeof CategoryNode>;
 
@@ -29,6 +40,7 @@ export type CollectionsEnum = z.infer<typeof CollectionsEnum>
 
 export const CollectionNode = z.object({
     id: z.string(),
+    type: CollectionTypeEnum,
     slug: z.string(),
     displayName: z.string(),
     abbreviation: z.string(),
@@ -37,7 +49,11 @@ export const CollectionNode = z.object({
     category : z.object({
         id: z.string(),
         slug: z.string()
-    }).nullable()
+    }).nullable(),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
 });
 export type CollectionNode = z.infer<typeof CollectionNode>;
 
