@@ -54,8 +54,6 @@ export default function AddCategory({
         console.log(result);
     }
 
-    console.log(form.formState.defaultValues)
-
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -69,48 +67,48 @@ export default function AddCategory({
                     <DialogDescription>
                         Добавить категорию
                     </DialogDescription>
-                    <Form {...form}>
-                        <form
-                            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                            onSubmit={form.handleSubmit(handleSave)}
-                        >
-                            <Button
-                                disabled={!(form.formState.isDirty && form.formState.isValid)}
-                                type="submit"
-                                className="w-full mb-2 p-2 h-fit text-xs uppercase"
-                            >
-                              Сохранить
-                            </Button>
-                            <Separator />
-                            <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
-                                <div className="mb-6">
-                                    <p className='mb-2 font-medium'>Название</p>
-                                    <FormInputText name='displayName' className='w-full max-w-lg text-base border-solid' />
-                                </div>
-                
-                                <div className="mb-6">
-                                    <p className='mb-2 font-medium'>Slug (URL имя)</p>
-                                    <FormInputText name='slug' className='w-full max-w-lg text-sm border-solid' />
-                                </div>
-                
-                                <div className="mb-6">
-                                    <p className='mb-2 font-medium'>Аббревиатура</p>
-                                    <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-solid' />
-                                </div>
-                
-                                <div className="mb-6">
-                                    <p className='mb-2 font-medium'>Описание</p>
-                                    <FormTextArea name='description' className='w-full max-w-lg text-sm border-solid' />
-                                </div>
-                
-                                <div className="mb-6">
-                                    <p className='mb-2 font-medium'>Коллекции</p>
-                                    <Collections defaultCollections={form.getValues("collections")} formValueName={`collections`} className='w-full max-w-lg border rounded-md text-base' />
-                                </div>
-                            </ScrollArea>
-                        </form>
-                    </Form>
                 </DialogHeader>
+                <Form {...form}>
+                    <form
+                        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                        onSubmit={form.handleSubmit(handleSave)}
+                    >
+                        <Button
+                            disabled={!(form.formState.isDirty && form.formState.isValid)}
+                            type="submit"
+                            className="w-full mb-2 p-2 h-fit text-xs uppercase"
+                        >
+                          Создать
+                        </Button>
+                        <Separator />
+                        <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
+                            <div className="mb-6">
+                                <p className='mb-2 font-medium'>Название</p>
+                                <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
+                            </div>
+            
+                            <div className="mb-6">
+                                <p className='mb-2 font-medium'>Slug (URL имя)</p>
+                                <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
+                            </div>
+            
+                            <div className="mb-6">
+                                <p className='mb-2 font-medium'>Аббревиатура</p>
+                                <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' />
+                            </div>
+            
+                            <div className="mb-6">
+                                <p className='mb-2 font-medium'>Описание</p>
+                                <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' />
+                            </div>
+            
+                            <div className="mb-6">
+                                <p className='mb-2 font-medium'>Коллекции</p>
+                                <Collections defaultCollections={form.getValues("collections")} formValueName={`collections`} className='w-full max-w-lg border rounded-md text-base' />
+                            </div>
+                        </ScrollArea>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     )

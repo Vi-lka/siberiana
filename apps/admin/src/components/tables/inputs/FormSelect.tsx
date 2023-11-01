@@ -20,9 +20,9 @@ import { useFormContext } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 
 export type Item = {
-  value: string,
-  label: string,
-} | null;
+  id: string,
+  displayName: string,
+};
 
 export function FormSelect({
   itemsData,
@@ -82,7 +82,7 @@ export function FormSelect({
 
   const handleSelected = React.useCallback(
     (newValue: Item) => {
-      form.setValue(formValueName, { id: newValue?.value, displayName: newValue?.label }, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+      form.setValue(formValueName, { id: newValue?.id, displayName: newValue?.displayName }, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     },
     [form, formValueName],
   );
@@ -93,10 +93,15 @@ export function FormSelect({
         <div className="flex gap-0.5 items-center">
           <PopoverTrigger asChild onClick={onClick}>
             <Button
-              variant={"ghost"}
+              variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
               role="combobox"
               aria-expanded={openCombobox}
-              className={"justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit"}
+              className={cn(
+                "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit",
+                form.getFieldState(formValueName).invalid 
+                  ? "border-red-600" 
+                  : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
+              )}
             >
                 {selected 
                   ? (selected.displayName.length > 0) 
@@ -174,11 +179,11 @@ export function FormSelect({
                         <ScrollArea type="always" classNameViewport="max-h-[220px]">
                             {
                               items?.map((item, index) => {
-                                const isActive = selected?.id === item?.value
+                                const isActive = selected?.id === item?.id
                                 return (
                                   <CommandItem
                                     key={index}
-                                    value={item?.label}
+                                    value={item?.displayName}
                                     className={cn(
                                       (isPendingSearch)
                                         ? "opacity-30 cursor-wait"
@@ -192,7 +197,7 @@ export function FormSelect({
                                         isActive ? "opacity-100" : "opacity-0"
                                       )}
                                     />
-                                    <div className="flex-1">{item?.label}</div>
+                                    <div className="flex-1">{item?.displayName}</div>
                                   </CommandItem>
                                 );
                               })

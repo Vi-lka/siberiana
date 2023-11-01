@@ -61,9 +61,9 @@ export default function Locations({
   
   const itemsData = data 
     ? data.locations.edges.map(({ node }) => {
-      const value = node.id
-      const label = getLabel(node)
-      return { value, label }
+      const id = node.id
+      const displayName = getLabel(node)
+      return { id, displayName }
     })
     : null
   

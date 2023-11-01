@@ -102,10 +102,15 @@ export function FormSelectMulti({
         <div className="flex gap-0.5 items-center">
           <PopoverTrigger asChild onClick={onClick}>
             <Button
-              variant={"ghost"}
+              variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
               role="combobox"
               aria-expanded={openCombobox}
-              className={"justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit"}
+              className={cn(
+                "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit",
+                form.getFieldState(formValueName).invalid 
+                  ? "border-red-600" 
+                  : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
+              )}
             >
               <div className="flex flex-col items-center gap-1 w-[85%]">
                 {(!!selected && selected.length > 1 && selected.length < 5) 

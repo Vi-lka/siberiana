@@ -26,8 +26,11 @@ export default function FormInputText({
                     <FormControl>
                         <Input
                             className={cn(
-                                "py-0 px-2 m-0 max-w-[8rem] text-xs border-none w-auto overflow-visible truncate",
-                                className
+                                "py-0 px-2 m-0 max-w-[8rem] text-xs border-solid border-transparent w-auto overflow-visible truncate",
+                                className,
+                                form.getFieldState(name).invalid 
+                                    ? "border-red-500" 
+                                    : form.getFieldState(name).isDirty ? "border-green-400" : ""
                             )}
                             placeholder={placeholder}
                             {...field}

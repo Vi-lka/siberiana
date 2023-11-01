@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { ArtifactById, StatusEnum } from "../objects-schema";
-import { Location } from "../objects-schema"
 
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
@@ -35,6 +34,10 @@ export const ArtifactsTable = z.object({
             id: z.string(),
             displayName: z.string().optional(),
         }).nullable(),
+        location: z.object({
+            id: z.string(),
+            displayName: z.string().optional(),
+        }).nullable(),
         mediums: z.object({
             id: z.string(),
             displayName: z.string(),  
@@ -55,7 +58,6 @@ export const ArtifactsTable = z.object({
             id: z.string(),
             displayName: z.string(),  
         }).array(),
-        location: Location.nullable(),
         createdBy: z.string(),
         createdAt: z.date(),
         updatedBy: z.string(),

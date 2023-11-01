@@ -33,7 +33,10 @@ export default function DateSelect({
                         variant={"outline"}
                         className={cn(
                           "max-w-[240px] px-3 text-left font-normal w-max",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
+                          form.getFieldState(name).invalid 
+                            ? "border-red-600" 
+                            : form.getFieldState(name).isDirty ? "border-green-500" : ""
                         )}
                       >
                         {field.value ? (

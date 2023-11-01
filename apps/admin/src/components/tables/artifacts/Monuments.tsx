@@ -46,9 +46,9 @@ export default function Monuments({
 
   const itemsData = data 
     ? data.monuments.edges.map(({ node }) => {
-      const value = node.id
-      const label = node.displayName
-      return { value, label }
+      const id = node.id
+      const displayName = node.displayName
+      return { id, displayName }
     })
     : null
 

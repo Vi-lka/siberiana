@@ -35,8 +35,6 @@ export default function FormCategories(props: CategoryNode) {
         console.log(result);
     }
 
-    console.log(form.formState.defaultValues)
-
     return (
         <Form {...form}>
             <form
@@ -54,22 +52,22 @@ export default function FormCategories(props: CategoryNode) {
                 <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Название</p>
-                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-solid' />
+                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
                     </div>
 
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Slug (URL имя)</p>
-                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-solid' />
+                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
                     </div>
 
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Аббревиатура</p>
-                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-solid' />
+                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' />
                     </div>
 
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Описание</p>
-                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-solid' />
+                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' />
                     </div>
 
                     <div className="mb-6">

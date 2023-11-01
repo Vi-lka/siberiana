@@ -26,8 +26,11 @@ export default function FormTextArea({
                     <FormControl>
                         <Textarea
                             className={cn(
-                                "py-0 px-2 m-0 text-xs border-none w-auto overflow-visible",
-                                className
+                                "py-0 px-2 m-0 text-xs border-solid border-transparent w-auto overflow-visible",
+                                className,
+                                form.getFieldState(name).invalid 
+                                    ? "border-red-600" 
+                                    : form.getFieldState(name).isDirty ? "border-green-500" : ""
                             )}
                             placeholder={placeholder}
                             onKeyDown={(event) => {
