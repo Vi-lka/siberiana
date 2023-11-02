@@ -50,7 +50,7 @@ export default async function TableArtifacts({
   })
 
   return (
-    <div key={Math.random()} className="w-full mx-auto pt-3">
+    <div className="w-full mx-auto pt-3">
       <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto' />}>
         <DataTable columns={columns} data={dataForTable} userRoles={roles} />
       </ClientHydration>

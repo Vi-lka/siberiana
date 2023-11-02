@@ -4,7 +4,7 @@ import CollectionFilter from '~/components/filters/CollectionFilter'
 import TableArtifacts from './TableArtifacts'
 import { ArrowBigUp, Loader2 } from 'lucide-react'
 
-export const revalidate = 10
+export const dynamic = 'force-dynamic'
 
 export default function ArtifactsPage({
   searchParams
@@ -16,7 +16,7 @@ export default function ArtifactsPage({
   const collection = searchParams['collection'] as string | undefined
 
   return (
-    <div className="font-OpenSans px-2 py-10 md:ml-[14rem]">
+    <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
       <div className="flex md:flex-row flex-col gap-2 text-sm">
         <div className="">
           <CategoryFilter hasArtifacts />

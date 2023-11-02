@@ -8,6 +8,8 @@ import FormCategories from './FormCategories'
 import AddCategory from './AddCategory'
 import DeleteCategory from './DeleteCategory'
 
+export const dynamic = 'force-dynamic'
+
 export default async function CategoriesPage({
     searchParams
 }: {

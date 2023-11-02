@@ -77,7 +77,7 @@ export const getCategories = async ({
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 10 },
+      cache: 'no-store'
     });
   
     if (!res.ok) {
@@ -173,7 +173,7 @@ export const getCategories = async ({
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 10 },
+      cache: 'no-store'
     });
   
     if (!res.ok) {
