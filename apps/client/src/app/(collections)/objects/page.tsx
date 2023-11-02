@@ -18,7 +18,7 @@ import { Skeleton } from "@siberiana/ui";
 
 export const revalidate = 60
 
-const DEFAULT_PAGE_SIZE = 20
+const DEFAULT_PAGE_SIZE = 24
 
 export default async function Objects({
   searchParams

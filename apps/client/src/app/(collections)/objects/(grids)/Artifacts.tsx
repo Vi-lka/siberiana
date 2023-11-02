@@ -76,7 +76,7 @@ export default async function Artifacts({
   )
 
   return (
-    <div className="w-full">
+    <div key={Math.random()} className="w-full">
       <ClientHydration fallback={
         <MasonrySkeleton />
       }>

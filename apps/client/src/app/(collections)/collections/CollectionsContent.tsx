@@ -51,7 +51,7 @@ export default async function CollectionsContent({
     
   return (
     <>
-      <div className="md:w-full w-[85%] mx-auto mt-3 mb-12 grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+      <div key={Math.random()} className="md:w-full w-[85%] mx-auto mt-3 mb-12 grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
         {dataResult.value.edges.map((collection, index) => (
             <ImgTextBelow
                 key={index}
