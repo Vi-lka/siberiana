@@ -114,7 +114,7 @@ export default function ObjectTabs({
                                             }
                                         >
                                             {isSingleTab() 
-                                                ? <p>{dict.objects.count}: {tab.count}</p>
+                                                ? <p key={Math.random()}>{dict.objects.count}: {tab.count}</p>
                                                 : <p>{tab.title} <sup>{tab.count}</sup></p>
                                             }
                                         </TabsTrigger> 

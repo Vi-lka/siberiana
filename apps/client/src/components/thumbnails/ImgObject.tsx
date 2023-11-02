@@ -60,7 +60,7 @@ export default function ImgObject(props: Props) {
           alt={props.title ? props.title : ""}
         />
 
-        <p className="lg:text-base text-sm font-Inter font-normal transition-all duration-200">
+        <p className="lg:text-base text-sm font-Inter font-normal transition-all duration-200 underline-offset-4 decoration-primary decoration-[3px] dark:decoration-2">
             {props.title}
         </p>
       </div>

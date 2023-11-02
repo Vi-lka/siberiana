@@ -106,7 +106,7 @@
 }
 
 .object:hover p {
-  font-weight: 700;
+  text-decoration-line: underline;
 }
 
 .hero {
