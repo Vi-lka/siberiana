@@ -36,7 +36,7 @@ export default async function CategoriesPage({
     return (
         <div className='font-OpenSans px-2 py-10 md:ml-[14rem]'>
             <AddCategory className='mr-6 ml-auto' />
-            <div className='flex flex-wrap justify-center gap-10 mt-6'>
+            <div key={Math.random()} className='flex flex-wrap justify-center gap-10 mt-6'>
                 {result.value.edges.map(edge => (
                     <div key={edge.node.id} className=''>
                         <Dialog>
