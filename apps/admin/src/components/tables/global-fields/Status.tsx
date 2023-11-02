@@ -11,9 +11,9 @@ export default function Status({
 }) {
 
   const itemsData = [
-    { value: 'listed', label: getStatusName('listed') },
-    { value: 'unlisted', label: getStatusName('unlisted') },
-    { value: 'draft', label: getStatusName('draft') },
+    { id: 'listed', displayName: getStatusName('listed') },
+    { id: 'unlisted', displayName: getStatusName('unlisted') },
+    { id: 'draft', displayName: getStatusName('draft') },
   ]
 
   return (
