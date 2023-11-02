@@ -6,6 +6,8 @@ import { authOptions } from '~/app/api/auth/[...nextauth]/route';
 import NoSession from '~/components/errors/NoSession';
 import { getDictionary } from '~/lib/utils/getDictionary';
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
     // fetch data
     const dict = await getDictionary();

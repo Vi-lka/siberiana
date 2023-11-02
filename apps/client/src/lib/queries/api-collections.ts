@@ -58,7 +58,7 @@ export const getCategories = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -141,7 +141,7 @@ export const getCollections = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -261,7 +261,7 @@ export const getArtifacts = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -370,7 +370,7 @@ export const getBooks = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -488,7 +488,7 @@ export const getProtectedAreaPictures = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {

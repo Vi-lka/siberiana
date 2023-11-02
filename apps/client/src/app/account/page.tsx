@@ -12,6 +12,8 @@ import AccountTabs from './AccountTabs';
 import NoSession from '~/components/errors/NoSession';
 import ToastToken from '~/components/ui/ToastToken';
 
+export const dynamic = 'force-dynamic'
+
 export default async function Account() {
   
     const dict = await getDictionary();

@@ -11,7 +11,7 @@ import Sort from "~/components/ui/filters/Sort";
 import { Skeleton } from "@siberiana/ui";
 import { Select } from "~/components/ui/filters/Select";
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function Collections({
   searchParams

@@ -134,7 +134,7 @@ export const getLicensesFilter = async (args: PAPQueryType): Promise<PAPFilters>
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
   
     if (!res.ok) {
@@ -172,7 +172,7 @@ export const getProtectedAreasFilter = async (args: PAPQueryType): Promise<PAPFi
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
   
     if (!res.ok) {
@@ -268,7 +268,7 @@ export const getProtectedAreaCategorysFilter = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
