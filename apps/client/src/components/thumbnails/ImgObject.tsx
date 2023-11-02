@@ -12,7 +12,6 @@ type Props = {
   src?: string;
   width?: number;
   height?: number;
-  fill?: boolean;
   className?: string;
 }
 
@@ -41,7 +40,7 @@ export default function ImgObject(props: Props) {
       href={props.href}
       target={props.target}
       className={cn(
-        "object break-inside-avoid bg-background flex w-full",
+        "object break-inside-avoid bg-background flex w-full max-h-[35rem]",
         props.className,
       )}
     >
@@ -50,7 +49,6 @@ export default function ImgObject(props: Props) {
           src={image}
           width={props.width ? props.width : 320}
           height={props.height ? props.height : 320}
-          fill={props.fill}
           onError={() => setImage("/images/image-placeholder.png")}
           className={cn(
             "w-full overflow-hidden rounded-md outline outline-offset-1 outline-1 outline-accent shadow-md ring-ring ring-offset-background transition-all duration-200",

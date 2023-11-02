@@ -30,3 +30,4 @@ export * from "./src/toaster";
 export * from "./src/use-toast";
 export * from "./src/toggle";
 export * from "./src/tooltip";
+export * from "./src/calendar";

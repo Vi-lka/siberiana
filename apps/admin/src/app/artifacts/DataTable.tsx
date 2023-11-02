@@ -11,29 +11,48 @@ import {
   getFilteredRowModel
 } from '@tanstack/react-table'
 import type {ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
-import { DataTablePagination } from '../DataTablePagination';
+import { DataTablePagination } from '../../components/tables/DataTablePagination';
 import { Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ArtifactById} from "@siberiana/schemas";
 import { ArtifactsTable } from "@siberiana/schemas";
+import Status from "../../components/tables/global-fields/Status";
+import getStatusName from "~/lib/utils/getStatusName";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: ArtifactById[] & TData[],
+  userRoles?: string[],
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  userRoles,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
+  const isModer = userRoles?.includes("moderator")
+
+  const allowСolumns: ColumnDef<TData, TValue>[] = isModer
+    ? [
+      ...columns,
+      {
+        accessorKey: "status",
+        header: () => <div className="text-center">Статус</div>,
+        cell: ({ row }) => {
+          return <Status formValueName={`artifacts[${row.index}].status`} />
+        },
+      },
+    ]
+    : columns
+
   const table = useReactTable({
     data,
-    columns,
+    columns: allowСolumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -48,42 +67,88 @@ export default function DataTable<TData, TValue>({
 
   const form = useForm<z.infer<typeof ArtifactsTable>>({
     resolver: zodResolver(ArtifactsTable),
+    mode: 'onChange',
     defaultValues: {
       artifacts: data.map(artifact => {
-        return { displayName: artifact.displayName }
+        const {
+          status,
+          ...rest // assigns remaining
+        } = artifact;
+
+        const statusForTable = {
+          id: status,
+          displayName: getStatusName(status)
+        }
+
+        return { 
+          status: statusForTable,
+          ...rest
+        }
       })
     }
   });
 
-  function handleLogIn(dataForm: z.infer<typeof ArtifactsTable>) {
-    console.log(dataForm);
+  function handleSave(dataForm: z.infer<typeof ArtifactsTable>) {
+
+    const noLines = dataForm.artifacts.map(artifact => {
+      const displayName = artifact.displayName?.replace(/\n/g, " ")
+      const description = artifact.description?.replace(/\n/g, " ")
+      const typology = artifact.typology?.replace(/\n/g, " ")
+      const chemicalComposition = artifact.chemicalComposition?.replace(/\n/g, " ")
+
+      return {
+        id: artifact.id,
+        status: artifact.status,
+        displayName, 
+        description, 
+        typology,
+        chemicalComposition,
+        culturalAffiliation: artifact.culturalAffiliation,
+        set: artifact.set,
+        monument: artifact.monument,
+        mediums: artifact.mediums,
+        techniques: artifact.techniques,
+        authors: artifact.authors,
+        publications: artifact.publications,
+        projects: artifact.projects,
+        admissionDate: artifact.admissionDate,
+        location: artifact.location,
+      }
+    })
+
+    console.log(noLines);
   }
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>
-      <div className="flex items-center gap-1">
-        <Search className="w-4 h-4 stroke-muted-foreground" />
-        <Input
-          placeholder="Поиск..."
-          value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("displayName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-xs h-8"
-        />
-      </div>
       <Form {...form}>
         <form
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={form.handleSubmit(handleLogIn)}
-          className="mt-1 h-full w-full"
+          onSubmit={form.handleSubmit(handleSave)}
+          className="mt-1 h-full w-full flex flex-col"
         >
-          <Button
-            type="submit"
-            className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
-          >
-            Сохранить
-          </Button>
+          <div className="flex gap-3 items-center w-full justify-between mb-3">
+            <div className="flex items-center gap-1">
+              <Search className="w-4 h-4 stroke-muted-foreground" />
+              <Input
+                placeholder="Поиск..."
+                value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("displayName")?.setFilterValue(event.target.value)
+                }
+                className="max-w-xs h-8"
+              />
+            </div>
+
+            <Button
+              disabled={!(form.formState.isDirty && form.formState.isValid)}
+              type="submit"
+              className="p-2 text-sm uppercase"
+            >
+              Сохранить
+            </Button>
+          </div>
+
           <div className="border rounded-lg shadow-md">
             <Table>
               <TableHeader className='font-OpenSans'>
@@ -120,7 +185,7 @@ export default function DataTable<TData, TValue>({
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                    <TableCell colSpan={allowСolumns.length} className="h-24 text-center">
                       No results.
                     </TableCell>
                   </TableRow>

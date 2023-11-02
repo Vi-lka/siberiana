@@ -16,7 +16,7 @@ function getWindowSize() {
 
 export default function MenuBar() {
     // Yes, not elegant, but simple and works)
-    const [open, setOpen] = React.useState(true)
+    const [open, setOpen] = React.useState(false)
     const [windowSize, setWindowSize] = React.useState(getWindowSize());
 
     React.useEffect(() => {
@@ -43,10 +43,7 @@ export default function MenuBar() {
   return (
     <>
         <Button
-            className={cn(
-                "fixed mt-4 left-1/2 transform -translate-x-1/2 z-50",
-                (windowSize?.innerWidth && (windowSize.innerWidth <= 768)) ? "block" : "hidden"
-            )}
+            className="fixed mt-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden block"
             onClick={() => setOpen((open) => !open)}
         >
             {open
@@ -54,7 +51,7 @@ export default function MenuBar() {
                 : <Menu/> 
             }
         </Button>
-        <NavigationMenu orientation='vertical' className="fixed max-w-[14rem] md:mt-20 mt-16 bg-background border border-l-0 border-t-0 shadow-md rounded-b-md pr-1 z-50">
+        <NavigationMenu orientation='vertical' className="nav-bar fixed md:mt-20 mt-16 z-30 max-w-[14rem] bg-background border border-l-0 border-t-0 shadow-md rounded-b-md pr-1">
             <ScrollArea
                 className={cn(
                     "font-Inter w-full p-1 pr-2 mb-1",

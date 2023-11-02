@@ -8,13 +8,10 @@ import { useFormContext } from 'react-hook-form'
 export default function FormInputText({
     name,
     className,
-    type,
     placeholder
 }: {
     name: string,
-    value: string,
     className?: string,
-    type?: React.HTMLInputTypeAttribute,
     placeholder?: string
 }) {
 
@@ -25,13 +22,15 @@ export default function FormInputText({
             control={form.control}
             name={name}
             render={({ field }) => (
-                <FormItem>
+                <FormItem className='h-full'>
                     <FormControl>
                         <Input
-                            type={type}
                             className={cn(
-                                "",
-                                className
+                                "py-0 px-2 m-0 max-w-[8rem] text-xs border-solid border-transparent w-auto overflow-visible truncate",
+                                className,
+                                form.getFieldState(name).invalid 
+                                    ? "border-red-500" 
+                                    : form.getFieldState(name).isDirty ? "border-green-400" : ""
                             )}
                             placeholder={placeholder}
                             {...field}

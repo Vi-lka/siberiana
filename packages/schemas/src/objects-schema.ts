@@ -5,6 +5,7 @@ export const StatusEnum = z.enum([
     "unlisted",
     "draft"
 ])
+export type StatusEnum = z.infer<typeof StatusEnum>;
 
 //.........................CATEGORY.........................//
 export const Category = z.object({
@@ -23,17 +24,22 @@ export type Collection = z.infer<typeof Collection>;
 
 //.........................LOCATION.........................//
 export const Location = z.object({
+    id: z.string(),
     displayName: z.string(),
     country: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     region: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     district: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
     settlement: z.object({
+        id: z.string(),
         displayName: z.string(),
     }).nullable(),
 });
@@ -59,7 +65,7 @@ export const ArtifactById = z.object({
     primaryImageURL: z.string(),
     additionalImagesUrls: z.string().array().nullable(),
     dating: z.string(),
-    admissionDate: z.string().nullable(),
+    admissionDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
     chemicalComposition: z.string(),
     typology: z.string(),
     weight: z.string(),
@@ -67,38 +73,47 @@ export const ArtifactById = z.object({
     location: Location.nullable(),
     // holders: Holders,
     mediums: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     authors: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     projects: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     publications: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     techniques: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).array(),
     license: z.object({
         displayName: z.string(),  
     }).nullable(),
     culturalAffiliation: z.object({
-        displayName: z.string(),  
-    }).nullable(),
-    period: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     set: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     monument: z.object({
+        id: z.string(),
         displayName: z.string(),  
     }).nullable(),
     model: z.object({
         displayName: z.string(),  
     }).nullable(),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
 });
 export type ArtifactById = z.infer<typeof ArtifactById>;
 

@@ -18,6 +18,8 @@ import { Skeleton } from "@siberiana/ui";
 
 export const revalidate = 60
 
+const DEFAULT_PAGE_SIZE = 20
+
 export default async function Objects({
   searchParams
 }: {
@@ -25,8 +27,6 @@ export default async function Objects({
 }) {
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
-
-  const defaultPageSize = 16
 
   const categories = searchParams['category'] as string | undefined
   const collections = searchParams['collection'] as string | undefined
@@ -128,15 +128,15 @@ export default async function Objects({
             }>
                 <ObjectTabs dict={dictResult}>
                   <ObjectsContent value="artifacts">
-                      <Artifacts searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                      <Artifacts searchParams={searchParams} defaultPageSize={DEFAULT_PAGE_SIZE} />
                   </ObjectsContent>
 
                   <ObjectsContent value="books">
-                      <Books searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                      <Books searchParams={searchParams} defaultPageSize={DEFAULT_PAGE_SIZE} />
                   </ObjectsContent>
 
                   <ObjectsContent value="protected_area_pictures">
-                      <ProtectedAreaPictures searchParams={searchParams} defaultPageSize={defaultPageSize} />
+                      <ProtectedAreaPictures searchParams={searchParams} defaultPageSize={DEFAULT_PAGE_SIZE} />
                   </ObjectsContent>
                 </ObjectTabs>
             </Suspense>

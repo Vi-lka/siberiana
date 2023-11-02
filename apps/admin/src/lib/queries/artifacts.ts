@@ -72,61 +72,67 @@ export const getArtifacts = async ({
                         }
                     }
                     location {
+                      id
+                      displayName
+                      country {
+                        id  
                         displayName
-                        country {
-                            displayName
-                        }
-                        region {
-                            displayName
-                        }
-                        district {
-                            displayName
-                        }
-                        settlement {
-                            displayName
-                        }
-                    }
-                    holders {
-                        organization {
-                            displayName
-                        }
-                        person {
-                            displayName
-                        }
+                      }
+                      region {
+                        id  
+                        displayName
+                      }
+                      district {
+                        id  
+                        displayName
+                      }
+                      settlement {
+                        id  
+                        displayName
+                      }
                     }
                     mediums {
-                        displayName
+                      id
+                      displayName
                     }
                     authors {
-                        displayName
+                      id
+                      displayName
                     }
                     projects {
-                        displayName
+                      id
+                      displayName
                     }
                     publications {
-                        displayName
+                      id
+                      displayName
                     }
                     techniques {
-                        displayName
+                      id
+                      displayName
                     }
                     license {
                         displayName  
                     }
                     culturalAffiliation {
-                        displayName
-                    }
-                    period {
-                        displayName
+                      id
+                      displayName
                     }
                     set {
-                        displayName
+                      id
+                      displayName
                     }
                     monument {
-                        displayName
+                      id
+                      displayName
                     }
                     model {
                         displayName
                     }
+                    createdBy
+                    createdAt
+                    updatedBy
+                    updatedAt
                 }
             }
         }

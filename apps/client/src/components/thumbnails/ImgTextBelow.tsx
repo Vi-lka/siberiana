@@ -13,7 +13,6 @@ type Props = {
   src?: string;
   width?: number;
   height?: number;
-  fill?: boolean;
   className?: string;
   classNameImage?: string;
 }
@@ -53,7 +52,6 @@ export default function ImgTextBelow(props: Props) {
               src={image}
               width={props.width ? props.width : 320}
               height={props.height ? props.height : 320}
-              fill={props.fill}
               onError={() => setImage("/images/image-placeholder.png")}
               className={
                 (props.classNameImage && !isPlaceholder) ? 

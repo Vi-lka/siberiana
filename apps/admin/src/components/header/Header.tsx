@@ -15,7 +15,7 @@ export default async function Header() {
   const roles = session?.user.roles
 
   return (
-    <div className="font-Inter fixed z-40 w-full px-2 md:px-0 bg-background shadow border-b-accent border-b-[1px]">
+    <div className="font-Inter fixed z-20 w-full px-2 md:px-0 bg-background shadow border-b-accent border-b-[1px]">
 
       <div className="mx-auto flex w-[98%] items-center justify-between py-2 pt-4">
         <div className="flex w-1/5">

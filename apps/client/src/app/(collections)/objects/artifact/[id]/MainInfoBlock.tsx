@@ -31,10 +31,6 @@ export default function MainInfoBlock({
                     value={data.license?.displayName}
                 />
                 <SingleItem
-                    label='Период'
-                    value={data.period?.displayName}
-                />
-                <SingleItem
                     label='Датировка'
                     value={data.dating}
                 />

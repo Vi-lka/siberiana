@@ -43,6 +43,8 @@ export const getCategories = async ({
             description
             collections {
               id
+              displayName
+              type
               slug
             }
           }
@@ -118,6 +120,7 @@ export const getCollections = async ({
         edges {
           node {
             id
+            type
             slug
             displayName
             abbreviation

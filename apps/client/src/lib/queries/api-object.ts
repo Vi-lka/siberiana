@@ -31,48 +31,58 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         }
                     }
                     location {
+                        id
                         displayName
                         country {
+                            id
                             displayName
                         }
                         region {
+                            id
                             displayName
                         }
                         district {
+                            id
                             displayName
                         }
                         settlement {
+                            id
                             displayName
                         }
                     }
                     mediums {
+                        id
                         displayName
                     }
                     authors {
+                        id
                         displayName
                     }
                     projects {
+                        id
                         displayName
                     }
                     publications {
+                        id
                         displayName
                     }
                     techniques {
+                        id
                         displayName
                     }
                     license {
                         displayName  
                     }
                     culturalAffiliation {
-                        displayName
-                    }
-                    period {
+                        id
                         displayName
                     }
                     set {
+                        id
                         displayName
                     }
                     monument {
+                        id
                         displayName
                     }
                     model {
@@ -145,17 +155,22 @@ export const getBookById = async (id: string): Promise<BookById> => {
                         }
                     }
                     location {
+                        id
                         displayName
                         country {
+                            id
                             displayName
                         }
                         region {
+                            id
                             displayName
                         }
                         district {
+                            id
                             displayName
                         }
                         settlement {
+                            id
                             displayName
                         }
                     }
@@ -248,17 +263,22 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
                         }
                     }
                     location {
+                        id
                         displayName
                         country {
+                            id
                             displayName
                         }
                         region {
+                            id
                             displayName
                         }
                         district {
+                            id
                             displayName
                         }
                         settlement {
+                            id
                             displayName
                         }
                     }

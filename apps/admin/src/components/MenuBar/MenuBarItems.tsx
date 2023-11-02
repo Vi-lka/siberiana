@@ -35,7 +35,7 @@ export function MenuBarSingle({
                     active={pathCurrentPage === href} 
                     className={cn(
                         navigationMenuTriggerStyle(),
-                        "w-full text-base justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
+                        "w-full font-normal text-base justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
                     )}
                 >
                     {children}
@@ -87,7 +87,7 @@ export function MenuBarGroup({
                             className={cn(
                                 navigationMenuTriggerStyle(),
                                 isNavStyle(menuItem) ? "bg-primary text-white" : "",
-                                "w-full text-base justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
+                                "w-full text-base font-normal justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
                             )}
                         >
                             {menuItem.name} <ChevronDown className='w-4 h-4 self-center'/>
@@ -105,7 +105,7 @@ export function MenuBarGroup({
                                     active={pathCurrentPage === item.url} 
                                     className={cn(
                                         navigationMenuTriggerStyle(),
-                                        "w-full justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
+                                        "w-full font-normal justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
                                     )}
                                 >
                                     {item.name}
