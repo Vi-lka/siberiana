@@ -9,7 +9,10 @@ import type { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import type { ProviderType } from "next-auth/providers/index";
 import KeycloakProvider from "next-auth/providers/keycloak";
-import { logoutRequest, refreshTokenRequest } from "~/lib/auth/oidc";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { logoutRequest, refreshTokenRequest, getToken, getUserInfo } from "~/lib/auth/oidc";
+import { z } from "zod";
+import type { AxiosResponse } from "axios";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -24,11 +27,49 @@ export const authOptions: AuthOptions = {
         return profile;
       },
     }),
+    // Configure the Credentials provider
+    CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        const parsedCredentials = z
+          .object({ username: z.string(), password: z.string().min(6) })
+          .safeParse(credentials);
+
+          if (parsedCredentials.success) {
+            const { username, password } = parsedCredentials.data;
+            const resToken = await getToken({ username, password }) as AxiosResponse<Account>;
+            const account = resToken.data
+            if (!account) throw new Error();
+            
+            const resUser = await getUserInfo(account.access_token) as AxiosResponse<User>;
+            if (!resUser.data) throw new Error()
+
+            resUser.data.id = resUser.data.sub
+
+            const user = {
+              account: account,
+              ...resUser.data
+            }
+
+            return user
+          }
+   
+          throw new Error();
+      },
+    }),
   ],
   events: {
     async signOut({ token }) {
       await logoutRequest(token.refresh_token);
     },
+  },
+  pages: {
+    signIn: '/login'
   },
   callbacks: {
     async jwt({
@@ -49,12 +90,15 @@ export const authOptions: AuthOptions = {
           Date.now() + (account.expires_in - 15) * 1000;
         token.refresh_token_expired =
           Date.now() + (account.refresh_expires_in - 15) * 1000;
-        token.user = user;
+        token.user = {
+          account: account,
+          ...user
+        };
         return token;
       } else {
         try {
           // Send a post request to refresh the token
-          const response = await refreshTokenRequest(token.refresh_token);
+          const response = await refreshTokenRequest(token.user.account.refresh_token);
           const tokens = await response.data;
           if (response.status !== 200) throw tokens;
           // Update token with refreshed information
@@ -69,7 +113,7 @@ export const authOptions: AuthOptions = {
           };
         } catch (e) {
           console.error(e);
-          return null as unknown as JWT;
+          throw new Error();
         }
       }
     },
@@ -174,6 +218,7 @@ declare module "next-auth/jwt" {
       family_name: string;
       email: string;
       id: string;
+      account: Account;
     };
     error?: string | null;
   }

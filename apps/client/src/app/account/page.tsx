@@ -9,8 +9,8 @@ import { SignOutIcon } from '~/components/auth/NextAuthButtons';
 import { getDictionary } from '~/lib/utils/getDictionary';
 import getUserRoles from '~/lib/utils/getUserRoles';
 import AccountTabs from './AccountTabs';
-import NoSession from '~/components/errors/NoSession';
 import ToastToken from '~/components/ui/ToastToken';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +20,9 @@ export default async function Account() {
     const dictResult = Dictionary.parse(dict);
 
     const session = await getServerSession(authOptions);
-    if (!!!session) return <NoSession />
+    if (!session) {
+      redirect('/login')
+    }
 
     const userRoles = session.user.roles?.map(role => getUserRoles(role, dictResult.account))
 

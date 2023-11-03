@@ -109,6 +109,7 @@ export const AuthDict = z.object({
   signUp: z.string(),
   firstName: z.string(),
   lastName: z.string(),
+  login: z.string(),
   email: z.string(),
   password: z.string(),
   passwordConfirm: z.string(),
@@ -128,6 +129,8 @@ export const AuthDict = z.object({
     email: z.string(),
     passwordMin: z.string(),
     passwordMatch: z.string(),
+    denied: z.string(),
+    deniedDescription: z.string(),
   }),
 });
 export type AuthDict = z.infer<typeof AuthDict>;

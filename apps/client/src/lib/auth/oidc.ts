@@ -6,6 +6,13 @@ const params = {
   grant_type: "refresh_token",
 };
 
+const payload = {
+  grant_type: "password",
+  client_id: process.env.OIDC_CLIENT_ID || "",
+  client_secret: process.env.OIDC_CLIENT_SECRET || "",
+  scope: "profile email openid"
+};
+
 export const oidc = axios.create({
   baseURL: `${process.env.OIDC_ISSUER}/protocol/openid-connect`,
   headers: {
@@ -33,5 +40,30 @@ export const logoutRequest = (refresh_token: string) => {
       refresh_token,
       ...params,
     }),
+  });
+};
+
+export const getToken = (credentials: {
+  username: string,
+  password: string,
+}) => {
+  return oidc({
+    method: "POST",
+    url: "/token",
+    data: new URLSearchParams({
+      username: credentials.username,
+      password: credentials.password,
+      ...payload,
+    }),
+  });
+};
+
+export const getUserInfo = (token: string) => {
+  return oidc({
+    method: "GET",
+    url: "/userinfo",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
   });
 };
