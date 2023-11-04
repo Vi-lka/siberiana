@@ -1,8 +1,11 @@
-export function getCollectionsQuery() {
+export function getCollectionsQuery({withoutCategory = null}: {withoutCategory: boolean | null}) {
     const query = `
       query Collections() {
         collections(
           orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+          where: {
+            hasCategory: ${withoutCategory}
+          }
         ) {
           totalCount
           edges {

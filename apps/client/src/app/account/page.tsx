@@ -34,7 +34,7 @@ export default async function Account() {
       <div className='flex justify-between md:flex-row flex-col md:gap-1 gap-3'>
         <div className="flex lg:gap-6 gap-3 lg:items-end lg:flex-row flex-col">
           <h1 className="text-foreground xl:text-2xl lg:text-xl text-lg font-bold uppercase">
-              {session.user.name}
+              {(!!session.user.name && session.user.name.length > 0) ? session.user.name : session.user.preferred_username}
           </h1>
 
           {userRoles ? (
