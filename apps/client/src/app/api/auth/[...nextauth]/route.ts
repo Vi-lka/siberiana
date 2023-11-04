@@ -52,7 +52,7 @@ export const authOptions: AuthOptions = {
             resUser.data.id = resUser.data.sub
 
             const user = {
-              account: account,
+              tokens: account,
               ...resUser.data
             }
 
@@ -74,31 +74,28 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({
       token,
-      account,
       user,
     }: {
       token: JWT;
-      account: Account | null;
       user: User | null;
     }) {
       // Handle JWT token creation and refreshing
-      if (account && user) {
+      if (user && user.tokens) {
         // Update token with account information
-        token.access_token = account.access_token;
-        token.refresh_token = account.refresh_token;
-        token.access_token_expired =
-          Date.now() + (account.expires_in - 15) * 1000;
-        token.refresh_token_expired =
-          Date.now() + (account.refresh_expires_in - 15) * 1000;
-        token.user = {
-          account: account,
-          ...user
-        };
+        const {
+          tokens,
+          ...rest // assigns remaining
+        } = user
+        token = {
+          user: rest,
+          ...tokens
+        }
+        token.user = rest;
         return token;
       } else {
         try {
           // Send a post request to refresh the token
-          const response = await refreshTokenRequest(token.user.account.refresh_token);
+          const response = await refreshTokenRequest(token.refresh_token);
           const tokens = await response.data;
           if (response.status !== 200) throw tokens;
           // Update token with refreshed information
@@ -106,9 +103,8 @@ export const authOptions: AuthOptions = {
             ...token,
             access_token: tokens.access_token,
             refresh_token: tokens.refresh_token ?? token.refresh_token,
-            refresh_token_expired:
-              tokens.refresh_expires_in ?? token.refresh_token_expired,
-            expires_in: Math.floor(Date.now() / 1000 + tokens.expires_in),
+            refresh_expires_in: tokens.refresh_expires_in,
+            expires_in: tokens.expires_in,
             error: null,
           };
         } catch (e) {
@@ -167,6 +163,7 @@ declare module "next-auth" {
     family_name: string;
     email: string;
     id: string;
+    tokens?: Account;
   }
 
   // Define custom account properties
@@ -218,7 +215,6 @@ declare module "next-auth/jwt" {
       family_name: string;
       email: string;
       id: string;
-      account: Account;
     };
     error?: string | null;
   }

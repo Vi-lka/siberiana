@@ -52,7 +52,8 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
         password: data.password,
       })
       if (!res?.error) {
-        router.push('/account') // does not apply in header(((
+        router.refresh() // apply in header
+        router.push('/account')
       } else {
         throw new Error(res.error ? res.error : "Error")
       }

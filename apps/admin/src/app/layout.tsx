@@ -44,6 +44,8 @@ export default async function RootLayout({
 
   const roles = session?.user.roles
 
+  const canEnter = !!session && ((roles?.includes("administrator") || roles?.includes("moderator")))
+
   return (
     <html
       lang={"ru"}
@@ -54,7 +56,7 @@ export default async function RootLayout({
         <Providers>
           <Header />
           <main className="pt-20 flex-1">
-            {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
+            {canEnter
               ? children
               : (
                 <div className="flex flex-col justify-center items-center gap-6 h-[70dvh]">
@@ -66,10 +68,10 @@ export default async function RootLayout({
               )
             }
           </main>
-          {!!session && ((roles?.includes("administrator") || roles?.includes("moderator"))) 
+          {canEnter
             ? (
               <ClientHydration>
-                <MenuBar />                
+                <MenuBar />
               </ClientHydration>
             )
             : null 

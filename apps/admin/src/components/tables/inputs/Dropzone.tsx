@@ -56,7 +56,6 @@ export default function Dropzone({
     const handleSubmit = async (files: File[]) => {
       const res = await upload({ files }).then((res) => res.data);
       return res
-    //   ;
     };
 
     if (error) return (
