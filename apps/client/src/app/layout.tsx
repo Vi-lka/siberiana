@@ -14,7 +14,7 @@ const inter = Inter({
   variable: "--Inter",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
-  // display: "swap",
+  display: "swap",
 });
 
 const openSans = Open_Sans({
