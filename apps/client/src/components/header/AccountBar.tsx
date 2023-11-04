@@ -14,13 +14,15 @@ export default function AccountBar({
     name
 }: { 
     dict: AccountDict,
-    name: string
+    name?: string
 }) {
 
-    const matchesName = name.match(/[\wа-я]+/ig)
-    const acronymName = matchesName?.map(match => {
-        return match[0].toUpperCase()
-    })
+    const matchesName = name?.match(/[\wа-я]+/ig)
+    const acronymName = !!matchesName 
+        ? matchesName.map(match => {
+            return match[0].toUpperCase()
+        })
+        : "USER"
 
     const setTab = useSetAtom(tabAccountAtom)
     
@@ -35,7 +37,7 @@ export default function AccountBar({
                     <Avatar className='hover:ring hover:ring-offset-2 ring-ring ring-offset-background transition-all'>
                         {/* <AvatarImage src={image} /> */}
                         <AvatarFallback className='font-semibold'>
-                            {acronymName ? acronymName : "USER"}
+                            {acronymName}
                         </AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>

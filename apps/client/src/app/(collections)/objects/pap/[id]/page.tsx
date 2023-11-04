@@ -9,6 +9,7 @@ import GoBackButton from '~/components/ui/GoBackButton';
 import Description from '~/components/objects/Description';
 import PhotoZoom from '~/components/objects/PhotoZoom';
 
+export const dynamic = 'force-dynamic'
 
 export default async function ProtectedAreaPictures({
     params: { id },

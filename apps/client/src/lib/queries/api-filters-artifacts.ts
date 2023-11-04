@@ -140,7 +140,7 @@ export const getLicensesFilter = async (args: ArtiQueryType): Promise<ArtiFilter
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -178,7 +178,7 @@ export const getCulturesFilter = async (args: ArtiQueryType): Promise<ArtiFilter
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -216,7 +216,7 @@ export const getSetsFilter = async (args: ArtiQueryType): Promise<ArtiFilters> =
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -254,7 +254,7 @@ export const getMonumentsFilter = async (args: ArtiQueryType): Promise<ArtiFilte
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {
@@ -292,7 +292,7 @@ export const getTechniquesFilter = async (args: ArtiQueryType): Promise<ArtiFilt
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
 
   if (!res.ok) {

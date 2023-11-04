@@ -6,11 +6,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@siberiana/ui";
 import LogInForm from "~/components/auth/LogInForm";
 import SignUpForm from "~/components/auth/SignUpForm";
 import { getDictionary } from "~/lib/utils/getDictionary";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export default async function LoginUnused() {
   const dict = await getDictionary();
-
   const dictResult = Dictionary.parse(dict);
+
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect('/account')
+  }
 
   return (
     <div className="font-Inter flex justify-center">

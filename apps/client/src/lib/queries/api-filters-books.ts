@@ -122,7 +122,7 @@ export const getLicensesFilter = async (args: BooksQueryType): Promise<BooksFilt
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
   
   if (!res.ok) {
@@ -160,7 +160,7 @@ export const getBookGenresFilter = async (args: BooksQueryType): Promise<BooksFi
     body: JSON.stringify({
       query,
     }),
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
   
   if (!res.ok) {

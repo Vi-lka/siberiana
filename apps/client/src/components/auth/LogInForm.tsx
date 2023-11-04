@@ -13,19 +13,22 @@ import {
   FormItem,
   FormMessage,
   Input,
+  useToast,
 } from "@siberiana/ui";
 import ButtonComponent from "../ui/ButtonComponent";
-import AuthButtons from "./AuthButtons";
+import { signIn } from "next-auth/react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LogInForm({ dict }: { dict: AuthDict }) {
 
+  const router = useRouter()
+  const { toast } = useToast();
+
   const LogInFormSchema = z.object({
-    email: z
+    username: z
       .string({
         required_error: dict.errors.required,
-      })
-      .email({
-        message: dict.errors.email,
       }),
     password: z
       .string({
@@ -38,14 +41,34 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
 
   const form = useForm<z.infer<typeof LogInFormSchema>>({
     resolver: zodResolver(LogInFormSchema),
+    mode: 'onChange',
   });
 
-  function handleLogIn(data: z.infer<typeof LogInFormSchema>) {
-    console.log(data);
-  }
+  const handleLogIn = async (data: z.infer<typeof LogInFormSchema>) => {
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        username: data.username,
+        password: data.password,
+      })
+      if (!res?.error) {
+        router.refresh() // apply in header
+        router.push('/account')
+      } else {
+        throw new Error(res.error ? res.error : "Error")
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: dict.errors.denied,
+        description: dict.errors.deniedDescription,
+        className: "font-Inter",
+      });
+    }
+  };
 
   return (
-    <div className="flex flex-col-reverse items-center justify-around sm:flex-col-reverse">
+    <div className="flex flex-col items-center justify-around">
       <Form {...form}>
         <form
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -54,14 +77,16 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
         >
           <FormField
             control={form.control}
-            name="email"
+            name="username"
+            defaultValue=""
             render={({ field }) => (
               <FormItem className="text-center">
                 <FormControl>
                   <Input
-                    type="email"
+                    type="text"
+                    disabled={form.formState.isSubmitting}
                     className="mb-0 p-5 placeholder:uppercase"
-                    placeholder={dict.email}
+                    placeholder={dict.login}
                     {...field}
                   />
                 </FormControl>
@@ -72,11 +97,13 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
           <FormField
             control={form.control}
             name="password"
+            defaultValue=""
             render={({ field }) => (
               <FormItem className="text-center">
                 <FormControl>
                   <Input
                     type="password"
+                    disabled={form.formState.isSubmitting}
                     className="mb-0 mt-6 p-5 placeholder:uppercase"
                     placeholder={dict.password}
                     {...field}
@@ -91,18 +118,18 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
               {dict.reset}
             </Link>
             <ButtonComponent
+              disabled={!(form.formState.isDirty && form.formState.isValid)}
               type="submit"
               className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
             >
-              {dict.signIn}
+              {form.formState.isSubmitting
+                ? <Loader2 className='animate-spin w-8 h-8 mx-auto' />
+                : dict.signIn
+              }
             </ButtonComponent>
           </div>
         </form>
       </Form>
-
-      <p className="mb-5 mt-5 text-center">{dict.or}</p>
-
-      <AuthButtons dict={dict} />
     </div>
   );
 }

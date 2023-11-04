@@ -8,7 +8,7 @@ import CategoriesContent from "./CategoriesContent";
 import { Skeleton } from "@siberiana/ui";
 import Sort from "~/components/ui/filters/Sort";
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function Categories({
   searchParams,

@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
-
 import { Dictionary } from "@siberiana/schemas";
-
 import { getDictionary } from "~/lib/utils/getDictionary";
 import LogoSvg from "../LogoSvg";
 import { ThemeToggle } from "../providers/ThemeToggle";

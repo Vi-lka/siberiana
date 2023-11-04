@@ -99,7 +99,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
   
     if (!res.ok) {
@@ -198,7 +198,7 @@ export const getBookById = async (id: string): Promise<BookById> => {
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
   
     if (!res.ok) {
@@ -296,7 +296,7 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
       body: JSON.stringify({
         query,
       }),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
   
     if (!res.ok) {

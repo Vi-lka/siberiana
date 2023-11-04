@@ -19,7 +19,6 @@ import {
 } from "@siberiana/ui";
 
 import ButtonComponent from "../ui/ButtonComponent";
-import AuthButtons from "./AuthButtons";
 
 export default function SignUpForm({ dict }: { dict: AuthDict }) {
 
@@ -107,7 +106,7 @@ export default function SignUpForm({ dict }: { dict: AuthDict }) {
   }
 
   return (
-    <div className="flex flex-col-reverse items-center justify-around lg:flex-row-reverse">
+    <div className="flex flex-col items-center justify-around">
       <Form {...form}>
         <form
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -275,6 +274,7 @@ export default function SignUpForm({ dict }: { dict: AuthDict }) {
           />
           <div className="mt-6">
             <ButtonComponent
+              disabled={!(form.formState.isDirty && form.formState.isValid)}
               type="submit"
               className="w-full px-10 py-6 text-sm uppercase"
             >
@@ -283,10 +283,6 @@ export default function SignUpForm({ dict }: { dict: AuthDict }) {
           </div>
         </form>
       </Form>
-
-      <p className="mb-5 mt-5 text-center lg:w-[5%]">{dict.or}</p>
-
-      <AuthButtons dict={dict} className="gap-12 lg:w-[45%]" />
     </div>
   );
 }

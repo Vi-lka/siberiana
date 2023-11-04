@@ -31,3 +31,4 @@ export * from "./src/use-toast";
 export * from "./src/toggle";
 export * from "./src/tooltip";
 export * from "./src/calendar";
+export * from "./src/progress";

@@ -9,6 +9,7 @@ import type { z } from 'zod';
 import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
 import Collections from '~/components/tables/global-fields/Collections';
+import Dropzone from '~/components/tables/inputs/Dropzone';
 
 
 export default function FormCategories(props: CategoryNode) {
@@ -58,6 +59,11 @@ export default function FormCategories(props: CategoryNode) {
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Slug (URL имя)</p>
                         <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
+                    </div>
+
+                    <div className="mb-6">
+                        <p className='mb-2 font-medium'>Фото</p>
+                        <Dropzone />
                     </div>
 
                     <div className="mb-6">
