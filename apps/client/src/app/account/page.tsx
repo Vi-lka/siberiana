@@ -11,6 +11,7 @@ import getUserRoles from '~/lib/utils/getUserRoles';
 import AccountTabs from './AccountTabs';
 import ToastToken from '~/components/ui/ToastToken';
 import { redirect } from 'next/navigation';
+import { decrypt } from '~/lib/utils/encryption';
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +28,8 @@ export default async function Account() {
     const userRoles = session.user.roles?.map(role => getUserRoles(role, dictResult.account))
 
     const isAdmin = (session.user.roles?.includes("administrator") || session.user.roles?.includes("moderator"))
+
+    const decryptedToken = decrypt(session.access_token)
 
   return (
     <div className="mt-12 mb-4 flex flex-col gap-10 mx-auto">
@@ -47,7 +50,7 @@ export default async function Account() {
           {
             isAdmin
             ? (
-              <ToastToken tooltipTitle={dict.account.token} token={session.access_token} />
+              <ToastToken tooltipTitle={dict.account.token} token={decryptedToken} />
             )
             : null
           }

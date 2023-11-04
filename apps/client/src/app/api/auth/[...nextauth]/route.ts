@@ -13,6 +13,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { logoutRequest, refreshTokenRequest, getToken, getUserInfo } from "~/lib/auth/oidc";
 import { z } from "zod";
 import type { AxiosResponse } from "axios";
+import { encrypt } from "~/lib/utils/encryption";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -118,7 +119,7 @@ export const authOptions: AuthOptions = {
       // Update session with user and access token information
       session.user = token.user;
       session.error = token.error;
-      session.access_token = token.access_token;
+      session.access_token = encrypt(token.access_token);
       return session;
     },
   },
