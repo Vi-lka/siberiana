@@ -10,8 +10,8 @@ import { getDictionary } from '~/lib/utils/getDictionary';
 import getUserRoles from '~/lib/utils/getUserRoles';
 import AccountTabs from './AccountTabs';
 import ToastToken from '~/components/ui/ToastToken';
-import { redirect } from 'next/navigation';
 import { decrypt } from '~/lib/utils/encryption';
+import NoSession from '~/components/errors/NoSession';
 
 export const dynamic = 'force-dynamic'
 
@@ -21,9 +21,7 @@ export default async function Account() {
     const dictResult = Dictionary.parse(dict);
 
     const session = await getServerSession(authOptions);
-    if (!session) {
-      redirect('/login')
-    }
+    if (!session) return <NoSession />
 
     const userRoles = session.user.roles?.map(role => getUserRoles(role, dictResult.account))
 

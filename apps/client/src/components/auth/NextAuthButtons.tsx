@@ -3,11 +3,10 @@
 import type { AuthDict } from '@siberiana/schemas'
 import React from 'react'
 import ButtonComponent from '../ui/ButtonComponent'
-import { signOut } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import { LogOut } from 'lucide-react'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@siberiana/ui'
-import Link from 'next/link'
 
 type Props = {
   dict: AuthDict,
@@ -19,11 +18,12 @@ export const SignInButton = ({
     className,
 }: Props) => {
   return (
-    <Link href={'/login'} passHref>
-      <ButtonComponent className={className}>
-        {dict.signIn}
-      </ButtonComponent>
-    </Link>
+    <ButtonComponent 
+      className={className}
+      onClick={() => void signIn("keycloak")}
+    >
+      {dict.signIn}
+    </ButtonComponent>
   )
 }
 
