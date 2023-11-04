@@ -3,14 +3,14 @@ import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler'
 import ImageComp from '~/components/lists/ImageComp'
 import MetaData from '~/components/lists/MetaData'
-import { getCategories } from '~/lib/queries/collections'
-import FormCategory from './FormCategory'
-import AddCategory from './AddCategory'
-import DeleteCategory from './DeleteCategory'
+import { getCollections } from '~/lib/queries/collections'
+import FormCollection from './FormCollection'
+import AddCollection from './AddCollection'
+import DeleteCollection from './DeleteCollection'
 
 export const dynamic = 'force-dynamic'
 
-export default async function CategoriesPage({
+export default async function CollectionsPage({
     searchParams
 }: {
     searchParams: { [key: string]: string | string[] | undefined },
@@ -19,7 +19,7 @@ export default async function CategoriesPage({
     const search = searchParams['search'] as string | undefined
 
     const [ result ] = await Promise.allSettled([ 
-        getCategories({ 
+        getCollections({ 
           first: null,
           search,
         }) 
@@ -28,7 +28,7 @@ export default async function CategoriesPage({
         return (
           <ErrorHandler
             error={result.reason as unknown}
-            place="Categories Page"
+            place="Collections Page"
             notFound 
             goBack
           />
@@ -37,7 +37,7 @@ export default async function CategoriesPage({
       
     return (
         <div key={Math.random()} className='font-OpenSans px-2 py-10 md:ml-[14rem]'>
-            <AddCategory className='mr-6 ml-auto' />
+            <AddCollection className='mr-6 ml-auto' />
             <div className='flex flex-wrap justify-center gap-10 mt-6'>
                 {result.value.edges.map(edge => (
                     <div key={edge.node.id} className=''>
@@ -64,12 +64,12 @@ export default async function CategoriesPage({
                                             Изменить
                                         </DialogTitle>
                                         <DialogDescription>
-                                            Редактировать категорию
+                                            Редактировать коллекцию
                                         </DialogDescription>
                                     </div>
-                                    <DeleteCategory id={edge.node.id} collections={edge.node.collections} className='mr-4 ml-auto mt-0' />
+                                    <DeleteCollection id={edge.node.id} className='mr-4 ml-auto mt-0' />
                                 </DialogHeader>
-                                <FormCategory {...edge.node}/>
+                                <FormCollection {...edge.node}/>
                             </DialogContent>
                         </Dialog>
                     </div>

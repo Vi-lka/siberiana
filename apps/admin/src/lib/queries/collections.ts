@@ -156,7 +156,7 @@ export const getCategories = async ({
               description
               category {
                 id
-                slug
+                displayName
               }
               createdBy
               createdAt

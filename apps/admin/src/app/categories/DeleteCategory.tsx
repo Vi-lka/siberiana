@@ -103,8 +103,8 @@ export default function DeleteCategory({
                                                 <ul>
                                                     {collections.map(collection => (
                                                         <li key={collection.id}>
-                                                            <Link href={`/collections/${collection.id}`} passHref>
-                                                                <Button variant={"destructive"}>
+                                                            <Link href={`/collections`} passHref>
+                                                                <Button variant={"destructive"} className='mb-2'>
                                                                     {collection.displayName} <ChevronRight/>
                                                                 </Button>
                                                             </Link>

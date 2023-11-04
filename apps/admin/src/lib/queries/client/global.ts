@@ -1,3 +1,23 @@
+export function getCategoriesQuery() {
+    const query = `
+      query Categories() {
+        categories(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+        ) {
+          totalCount
+          edges {
+            node {
+              id
+              displayName
+              slug
+            }
+          }
+        }
+      }
+    `
+    return query
+}
+
 export function getCollectionsQuery({
   hasCategory = null,
   categoryId,

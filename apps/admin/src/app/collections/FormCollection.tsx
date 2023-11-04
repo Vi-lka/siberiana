@@ -1,26 +1,25 @@
 "use client"
 
-import { CategoryNode } from '@siberiana/schemas'
-import { Button, Form, ScrollArea, Separator } from '@siberiana/ui'
 import React from 'react'
+import { CollectionNode } from '@siberiana/schemas'
+import { Button, Form, ScrollArea, Separator } from '@siberiana/ui'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from 'zod';
 import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
-import Collections from '~/components/tables/global-fields/Collections';
 import Dropzone from '~/components/tables/inputs/Dropzone';
+import Categories from '~/components/tables/global-fields/Categories';
+import type { z } from 'zod';
+import { getName } from './TypeSelect';
 
-
-export default function FormCategories(props: CategoryNode) {
-
-    const form = useForm<z.infer<typeof CategoryNode>>({
-        resolver: zodResolver(CategoryNode),
+export default function FormCollection(props: CollectionNode) {
+    const form = useForm<z.infer<typeof CollectionNode>>({
+        resolver: zodResolver(CollectionNode),
         mode: 'onChange',
         defaultValues: props
     });
 
-    function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+    function handleSave(dataForm: z.infer<typeof CollectionNode>) {
         const {
             description,
             ...rest // assigns remaining
@@ -62,6 +61,11 @@ export default function FormCategories(props: CategoryNode) {
                     </div>
 
                     <div className="mb-6">
+                        <p className='mb-2 font-medium'>Тип</p>
+                        <p>{getName(props.type)}</p>
+                    </div>
+
+                    <div className="mb-6">
                         <p className='mb-2 font-medium'>Фото</p>
                         <Dropzone formValueName="primaryImageURL" defaultValue={props.primaryImageURL} />
                     </div>
@@ -77,12 +81,10 @@ export default function FormCategories(props: CategoryNode) {
                     </div>
 
                     <div className="mb-6">
-                        <p className='mb-2 font-medium'>Коллекции</p>
-                        <Collections 
-                            defaultCollections={form.getValues("collections")} 
-                            formValueName={`collections`} 
-                            hasCategory={false}
-                            categoryId={props.id}
+                        <p className='mb-2 font-medium'>Категория</p>
+                        <Categories 
+                            defaultCategory={form.getValues("category")} 
+                            formValueName={`category`} 
                             className='w-full max-w-lg border rounded-md text-base' 
                         />
                     </div>

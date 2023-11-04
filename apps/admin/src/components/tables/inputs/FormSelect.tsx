@@ -10,9 +10,9 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+    PopoverForModal,
+    PopoverContentForModal,
+    PopoverTriggerForModal,
     ScrollArea,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
@@ -89,9 +89,9 @@ export function FormSelect({
 
   return (
     <div className={cn("max-w-[280px] relative", className)}>
-      <Popover open={openCombobox} onOpenChange={onComboboxOpenChange}>
+      <PopoverForModal open={openCombobox} onOpenChange={onComboboxOpenChange}>
         <div className="flex gap-0.5 items-center">
-          <PopoverTrigger asChild onClick={onClick}>
+          <PopoverTriggerForModal asChild onClick={onClick}>
             <Button
               variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
               role="combobox"
@@ -111,9 +111,9 @@ export function FormSelect({
                 }
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
-          </PopoverTrigger>
+          </PopoverTriggerForModal>
         </div>
-        <PopoverContent 
+        <PopoverContentForModal 
           className={"p-0 font-Inter"}
           side={side} 
           align={align}
@@ -208,8 +208,8 @@ export function FormSelect({
               </CommandGroup> 
             </CommandList>
           </Command>
-        </PopoverContent>
-      </Popover>
+        </PopoverContentForModal>
+      </PopoverForModal>
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}
