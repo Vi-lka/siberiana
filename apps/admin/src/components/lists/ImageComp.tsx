@@ -35,7 +35,7 @@ export default function ImageComp(props: Props) {
   }, [image])
 
   return (
-    <div className="flex flex-col gap-3 h-fit">
+    <div className="flex flex-col gap-3 h-full w-full">
         <div
           className={cn(
             "bg-background ring-ring ring-offset-background flex min-h-full w-full overflow-hidden rounded-md transition-all duration-200 hover:-translate-y-2 hover:scale-[1.03] hover:ring-4 hover:ring-offset-2",

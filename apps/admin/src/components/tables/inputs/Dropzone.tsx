@@ -4,35 +4,50 @@ import { Progress, useToast } from '@siberiana/ui'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { AlertOctagon, MousePointerClick, UploadCloud } from 'lucide-react'
 import Image from 'next/image'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useFormContext } from 'react-hook-form'
 import { usePutObjects } from '~/lib/auth/siberiana'
 import getShortDescription from '~/lib/utils/getShortDescription'
 
 export default function Dropzone({
+    defaultValue,
+    formValueName,
+    bucket,
     className,
 }: {
+    formValueName: string,
+    defaultValue?: string,
+    bucket?: string,
     className?: string
 }) {
     const [file, setFile] = useState<string>()
-    const [response, setResponse] = useState<{ urls: Array<string> } | null>(null)
     const [error, setError] = useState(false)
     
     const { toast } = useToast()
 
     const { upload, progress, isLoading } = usePutObjects()
 
+    const form = useFormContext();
+
+    useEffect(() => {
+        if (!!defaultValue) setFile(defaultValue)
+    }, [defaultValue])
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const newFileUrl = URL.createObjectURL(acceptedFiles[0])
         setFile(newFileUrl)
         handleSubmit(acceptedFiles)
             .then((res) => {
-                setResponse(res)
+                res.urls.forEach((url) => {
+                    handleAddToForm(url)
+                })
                 toast({
                     title: "Успешно!",
                     description: <p>Фотография загружена</p>,
                     className: "font-Inter",
                 })
+                console.log(form.getValues())
             })
             .catch(err => {
                 setError(true)
@@ -54,9 +69,16 @@ export default function Dropzone({
     })
     
     const handleSubmit = async (files: File[]) => {
-      const res = await upload({ files }).then((res) => res.data);
-      return res
+        const res = await upload({ bucket, files }).then((res) => res.data);
+        return res
     };
+
+    const handleAddToForm = useCallback(
+        (newValue: string) => {
+          form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+        },
+        [form, formValueName],
+    );
 
     if (error) return (
         <div {...getRootProps({
@@ -88,8 +110,6 @@ export default function Dropzone({
             }
         </div>
     )
-
-    console.log(response)
     
     return (
         <div className={cn("p-12 border border-solid border-border rounded-md bg-muted", className)}>

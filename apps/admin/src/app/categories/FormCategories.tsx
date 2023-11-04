@@ -63,7 +63,7 @@ export default function FormCategories(props: CategoryNode) {
 
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Фото</p>
-                        <Dropzone />
+                        <Dropzone formValueName="primaryImageURL" defaultValue={props.primaryImageURL} />
                     </div>
 
                     <div className="mb-6">
@@ -78,7 +78,13 @@ export default function FormCategories(props: CategoryNode) {
 
                     <div className="mb-6">
                         <p className='mb-2 font-medium'>Коллекции</p>
-                        <Collections defaultCollections={form.getValues("collections")} formValueName={`collections`} className='w-full max-w-lg border rounded-md text-base' />
+                        <Collections 
+                            defaultCollections={form.getValues("collections")} 
+                            formValueName={`collections`} 
+                            hasCategory={false}
+                            categoryId={props.id}
+                            className='w-full max-w-lg border rounded-md text-base' 
+                        />
                     </div>
                 </ScrollArea>
             </form>

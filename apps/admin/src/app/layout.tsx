@@ -7,7 +7,7 @@ import { authOptions } from "./api/auth/[...nextauth]/route";
 import NoSession from "~/components/errors/NoSession";
 import LogoSvg from "~/components/LogoSvg";
 import Header from "~/components/header/Header";
-import MenuBar from "~/components/MenuBar/MenuBar";
+import MenuBar from "~/components/menuBar/MenuBar";
 import type { Metadata } from "next";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 

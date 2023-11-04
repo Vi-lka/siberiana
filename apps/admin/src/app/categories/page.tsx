@@ -46,8 +46,8 @@ export default async function CategoriesPage({
                                 <ImageComp
                                     src={edge.node.primaryImageURL}
                                     title={edge.node.displayName}
-                                    className={"aspect-[1.5/1]"}
-                                    classNameImage='w-full object-cover'
+                                    className={"aspect-[1.5/1] min-h-[215px] max-h-[220px]"}
+                                    classNameImage='w-full object-cover h-full'
                                 />
                                 <Separator/>
                                 <MetaData 
