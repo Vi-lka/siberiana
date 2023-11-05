@@ -10,48 +10,41 @@ import {
   getSortedRowModel, 
   getFilteredRowModel
 } from '@tanstack/react-table'
-import type {ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
+import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
 import { DataTablePagination } from '../../components/tables/DataTablePagination';
-import { Search } from "lucide-react";
+import { CornerRightUp, Loader2, Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ArtifactById} from "@siberiana/schemas";
-import { ArtifactsTable } from "@siberiana/schemas";
-import Status from "../../components/tables/global-fields/Status";
-import getStatusName from "~/lib/utils/getStatusName";
+import type { ArtifactForTable } from "@siberiana/schemas";
+import { ArtifactsForm } from "@siberiana/schemas";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: ArtifactById[] & TData[],
+  columns: ColumnDef<TData, TValue>[],
+  moderatorsColumns: ColumnDef<TData, TValue>[],
+  data: ArtifactForTable[] & TData[],
   userRoles?: string[],
 }
 
 export default function DataTable<TData, TValue>({
   columns,
+  moderatorsColumns,
   data,
   userRoles,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
 
-  const isModer = userRoles?.includes("moderator")
+  const router = useRouter();
 
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModer
-    ? [
-      ...columns,
-      {
-        accessorKey: "status",
-        header: () => <div className="text-center">Статус</div>,
-        cell: ({ row }) => {
-          return <Status formValueName={`artifacts[${row.index}].status`} />
-        },
-      },
-    ]
-    : columns
+  const isModerator = userRoles?.includes("moderator")
+
+  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator ? moderatorsColumns : columns
 
   const table = useReactTable({
-    data,
+    data: data,
     columns: allowСolumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -59,37 +52,33 @@ export default function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    autoResetPageIndex: false,
     state: {
       sorting,
       columnFilters,
     },
   }) 
 
-  const form = useForm<z.infer<typeof ArtifactsTable>>({
-    resolver: zodResolver(ArtifactsTable),
+  const form = useForm<z.infer<typeof ArtifactsForm>>({
+    resolver: zodResolver(ArtifactsForm),
     mode: 'onChange',
     defaultValues: {
-      artifacts: data.map(artifact => {
-        const {
-          status,
-          ...rest // assigns remaining
-        } = artifact;
-
-        const statusForTable = {
-          id: status,
-          displayName: getStatusName(status)
-        }
-
-        return { 
-          status: statusForTable,
-          ...rest
-        }
-      })
+      artifacts: data
     }
   });
 
-  function handleSave(dataForm: z.infer<typeof ArtifactsTable>) {
+  const handleCreateNew = React.useCallback(
+    () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set("mode", "add");
+      startTransitionGoToCreate(() => {
+        router.push(`artifacts?${params.toString()}`);
+      });
+    },
+    [router],
+  );
 
+  function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
     const noLines = dataForm.artifacts.map(artifact => {
       const displayName = artifact.displayName?.replace(/\n/g, " ")
       const description = artifact.description?.replace(/\n/g, " ")
@@ -116,7 +105,16 @@ export default function DataTable<TData, TValue>({
       }
     })
 
-    console.log(noLines);
+    const dirtyFields = form.formState.dirtyFields.artifacts
+
+    noLines.map((item, index) => {
+      if(!!dirtyFields && (typeof dirtyFields[index] !== 'undefined')) {
+        console.log("dirty: ", item)
+      }
+      else {
+        console.log("no dirty fields found")
+      }
+    })
   }
 
   return (
@@ -127,7 +125,7 @@ export default function DataTable<TData, TValue>({
           onSubmit={form.handleSubmit(handleSave)}
           className="mt-1 h-full w-full flex flex-col"
         >
-          <div className="flex gap-3 items-center w-full justify-between mb-3">
+          <div className="flex lg:flex-row flex-col-reverse gap-3 lg:items-center w-full justify-between mb-3">
             <div className="flex items-center gap-1">
               <Search className="w-4 h-4 stroke-muted-foreground" />
               <Input
@@ -136,17 +134,32 @@ export default function DataTable<TData, TValue>({
                 onChange={(event) =>
                   table.getColumn("displayName")?.setFilterValue(event.target.value)
                 }
-                className="max-w-xs h-8"
+                className="lg:max-w-xs h-8"
               />
             </div>
 
-            <Button
-              disabled={!(form.formState.isDirty && form.formState.isValid)}
-              type="submit"
-              className="p-2 text-sm uppercase"
-            >
-              Сохранить
-            </Button>
+            <div className="flex flex-wrap lg:gap-6 gap-3 items-center lg:justify-end justify-between">
+              <Button
+                disabled={!form.formState.isValid || isPendingGoToCreate}
+                type="button"
+                variant="link"
+                className="p-0 text-sm uppercase gap-1 font-medium"
+                onClick={handleCreateNew}
+              >
+                {isPendingGoToCreate
+                  ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
+                  : <> Перейти к добавлению <CornerRightUp className="mb-2"/> </>
+                }
+              </Button>
+
+              <Button
+                disabled={!(form.formState.isDirty && form.formState.isValid)}
+                type="submit"
+                className="px-6 text-sm uppercase mr-0 ml-auto"
+              >
+                Сохранить
+              </Button>
+            </div>
           </div>
 
           <div className="border rounded-lg shadow-md">

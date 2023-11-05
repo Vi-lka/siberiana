@@ -58,11 +58,12 @@ export default function Sets({
 
   return (
     <div className='h-full w-full'>
-      <FormSelect 
-        itemsData={itemsData} 
+      <FormSelect
+        defaultValue={defaultSet}
+        itemsData={itemsData}
         formValueName={`artifacts[${rowIndex}].set`}
         isLoading={isFetching && isPending}
-        onClick={handleClick} 
+        onClick={handleClick}
       />
     </div>
   )

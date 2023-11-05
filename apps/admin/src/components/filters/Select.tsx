@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Filter, Loader2, SearchX, X, XCircle } from "lucide-react";
+import { Check, ChevronsUpDown, CircleDot, Filter, Loader2, SearchX, X, XCircle } from "lucide-react";
 import { 
     Badge, 
     Button, 
@@ -301,12 +301,24 @@ export function Select({
                         )}
                         onSelect={() => toggleItem(item)}
                       >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            isActive ? "opacity-100" : "opacity-0"
-                          )}
-                        />
+                        {isMulti
+                          ? (
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                isActive ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          )
+                          : (
+                            <CircleDot
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                isActive ? "opacity-100" : "opacity-0"
+                              )}
+                            />
+                          )
+                        }
                         <div className="flex-1">{item.label} {item.count ? `(${item.count})` : ''}</div>
                         <div
                           className="h-4 w-4 rounded-full"

@@ -87,7 +87,7 @@ export default function Dropzone({
             <input {...getInputProps()} />
             <AlertOctagon className='mx-auto text-red-500'/>
             <p className='text-xs text-center text-red-500'>Ошибка!</p>
-            <p className='text-xs text-center text-muted-foreground'>Попробуйте снова</p>
+            <p className='text-xs text-center text-muted-foreground'>Что-то пошло не так</p>
         </div>
     )
 
@@ -95,28 +95,28 @@ export default function Dropzone({
         <div {...getRootProps({
             className: cn("p-12 border border-solid border-border rounded-md cursor-pointer bg-muted", className)
         })}>
-            <input {...getInputProps()} />
-            <UploadCloud className='mx-auto text-muted-foreground' />
-            {isDragActive 
-                ? <p className='text-xs text-center text-muted-foreground'>Drop the files here ...</p>
-                : 
-                <p className='text-xs text-center text-muted-foreground'>
-                    <span className='underline underline-offset-3'>Drag & drop</span> or <span className='underline underline-offset-2'><MousePointerClick className='inline w-3 h-3' />Click</span>
-                </p>
-            }
             {isLoading && progress < 100
                 ? <Progress value={progress} className="w-full" />
-                : null
+                : (<>
+                    <input {...getInputProps()} />
+                    <UploadCloud className='mx-auto text-muted-foreground' />
+                    {isDragActive 
+                        ? <p className='text-xs text-center text-muted-foreground'>Drop the files here ...</p>
+                        : 
+                        <p className='text-xs text-center text-muted-foreground'>
+                            <span className='underline underline-offset-3'>Drag & drop</span> or <span className='underline underline-offset-2'><MousePointerClick className='inline w-3 h-3' />Click</span>
+                        </p>
+                    }
+                </>)
             }
         </div>
     )
     
     return (
         <div className={cn("p-12 border border-solid border-border rounded-md bg-muted", className)}>
-            <Image src={file} width={200} height={200} alt='' className='mx-auto'/>
             {isLoading && progress < 100
                 ? <Progress value={progress} className="w-full" />
-                : null
+                : <Image src={file} width={200} height={200} alt='' className='mx-auto'/>
             }
         </div>
     )

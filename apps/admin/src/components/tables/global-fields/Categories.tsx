@@ -11,7 +11,7 @@ export default function Categories({
   formValueName,
   className
 }: { 
-    defaultCategory: {
+  defaultCategory: {
     id: string, 
     displayName: string
   } | null,
@@ -59,6 +59,7 @@ export default function Categories({
   return (
     <div className='h-full w-full'>
       <FormSelect 
+        defaultValue={defaultCategory}
         itemsData={itemsData} 
         formValueName={formValueName}
         isLoading={isFetching && isPending}

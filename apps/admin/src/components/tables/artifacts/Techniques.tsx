@@ -60,6 +60,7 @@ export default function Techniques({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultTechniques}
         formValueName={`artifacts[${rowIndex}].techniques`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

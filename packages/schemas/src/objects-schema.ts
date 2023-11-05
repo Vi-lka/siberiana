@@ -16,6 +16,7 @@ export type Category = z.infer<typeof Category>;
 
 //.........................COLLECTION.........................//
 export const Collection = z.object({
+    id: z.string(),
     slug: z.string(),
     displayName: z.string(),
     category: Category

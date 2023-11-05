@@ -60,6 +60,7 @@ export default function Materials({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultMaterials}
         formValueName={`artifacts[${rowIndex}].mediums`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

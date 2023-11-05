@@ -69,6 +69,7 @@ export default function Collections({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultCollections}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

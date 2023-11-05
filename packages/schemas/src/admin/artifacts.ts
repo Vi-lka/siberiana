@@ -10,60 +10,70 @@ export const ArtifactsArray = z.object({
 });
 export type ArtifactsArray = z.infer<typeof ArtifactsArray>;
 
-export const ArtifactsTable = z.object({
-    artifacts: z.object({
+export const ArtifactForTable = z.object({
+    id: z.string(),
+    status: z.object({
+        id: StatusEnum,
+        displayName: z.string(),
+    }),
+    displayName: z.string().min(1),
+    primaryImageURL: z.string(),
+    description: z.string().optional(),
+    typology: z.string().optional(),
+    weight: z.string().optional(),
+    chemicalComposition: z.string().optional(),
+    admissionDate: z.date().nullable().optional(),
+    collection: z.object({
         id: z.string(),
-        status: z.object({
-            id: StatusEnum,
-            displayName: z.string(),
-        }),
-        displayName: z.string().min(1),
-        description: z.string().optional(),
-        typology: z.string().optional(),
-        chemicalComposition: z.string().optional(),
-        admissionDate: z.date().nullable().optional(),
-        culturalAffiliation: z.object({
-            id: z.string(),
-            displayName: z.string().optional(),
-        }).nullable(),
-        set: z.object({
-            id: z.string(),
-            displayName: z.string().optional(),
-        }).nullable(),
-        monument: z.object({
-            id: z.string(),
-            displayName: z.string().optional(),
-        }).nullable(),
-        location: z.object({
-            id: z.string(),
-            displayName: z.string().optional(),
-        }).nullable(),
-        mediums: z.object({
-            id: z.string(),
-            displayName: z.string(),  
-        }).array(),
-        techniques: z.object({
-            id: z.string(),
-            displayName: z.string(),  
-        }).array(),
-        authors: z.object({
-            id: z.string(),
-            displayName: z.string(),  
-        }).array(),
-        publications: z.object({
-            id: z.string(),
-            displayName: z.string(),  
-        }).array(),
-        projects: z.object({
-            id: z.string(),
-            displayName: z.string(),  
-        }).array(),
-        createdBy: z.string(),
-        createdAt: z.date(),
-        updatedBy: z.string(),
-        updatedAt: z.date(),
-    }).array()
+        displayName: z.string(),
+    }),
+    culturalAffiliation: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    set: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    monument: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    location: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    mediums: z.object({
+        id: z.string(),
+        displayName: z.string(),  
+    }).array(),
+    techniques: z.object({
+        id: z.string(),
+        displayName: z.string(),  
+    }).array(),
+    authors: z.object({
+        id: z.string(),
+        displayName: z.string(),  
+    }).array(),
+    publications: z.object({
+        id: z.string(),
+        displayName: z.string(),  
+    }).array(),
+    projects: z.object({
+        id: z.string(),
+        displayName: z.string(),  
+    }).array(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
 })
+export type ArtifactForTable = z.infer<typeof ArtifactForTable>;
+
+export const ArtifactsForm = z.object({
+    artifacts: ArtifactForTable.array()
+})
+export type ArtifactsForm = z.infer<typeof ArtifactsForm>;
 
 //.........................CULTURES.........................//
 export const CulturesList = z.object({

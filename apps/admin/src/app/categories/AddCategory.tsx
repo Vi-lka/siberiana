@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from 'zod';
 import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
-import Collections from '~/components/tables/global-fields/Collections';
 import { Loader2, Plus } from 'lucide-react';
 import { cn } from '@siberiana/ui/src/lib/utils';
 import Dropzone from '~/components/tables/inputs/Dropzone';
@@ -154,7 +153,7 @@ export default function AddCategory({
                                     </div>
                         
                                     <div className="mb-6">
-                                        <p className='mb-2 font-medium'>Slug (URL имя)</p>
+                                        <p className='mb-2 font-medium'>Slug <span className='font-light text-sm'>(URL имя)</span></p>
                                         <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
                                     </div>
                         
@@ -171,16 +170,6 @@ export default function AddCategory({
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
                                         <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' />
-                                    </div>
-                        
-                                    <div className="mb-6">
-                                        <p className='mb-2 font-medium'>Коллекции</p>
-                                        <Collections 
-                                            defaultCollections={form.getValues("collections")} 
-                                            formValueName="collections"
-                                            hasCategory={false}
-                                            className='w-full max-w-lg border rounded-md text-base' 
-                                        />
                                     </div>
                                 </ScrollArea>
                             </form>

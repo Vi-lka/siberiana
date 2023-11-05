@@ -26,6 +26,7 @@ export type Item = {
 
 export function FormSelectMulti({
   itemsData,
+  defaultValues,
   formValueName,
   className,
   side = "bottom",
@@ -34,6 +35,7 @@ export function FormSelectMulti({
   onClick
 }: {
   itemsData: Array<Item> | null,
+  defaultValues: Array<Item> | null,
   formValueName: string,
   className?: string,
   side?: "bottom" | "top" | "right" | "left",
@@ -49,7 +51,7 @@ export function FormSelectMulti({
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 
   const form = useFormContext();
-  const selected = form.getValues(formValueName) as { id: string, displayName: string }[] | null
+  const selected = form.getValues(formValueName) as Item[] | null
 
   React.useEffect(() => {
     setItems(itemsData)
@@ -96,20 +98,24 @@ export function FormSelectMulti({
     [form, formValueName],
   );
 
+  const sortedDefaultValues = defaultValues?.sort((a, b) => { return Number(a.id) - Number(b.id) })
+  const sortedSelected = selected?.sort((a, b) => { return Number(a.id) - Number(b.id) })
+  const customDirty = sortedDefaultValues?.toString() !== sortedSelected?.toString()
+
   return (
     <div className={cn("max-w-[280px] relative", className)}>
       <PopoverForModal open={openCombobox} onOpenChange={onComboboxOpenChange}>
         <div className="flex gap-0.5 items-center">
           <PopoverTriggerForModal asChild onClick={onClick}>
             <Button
-              variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
+              variant={(form.getFieldState(formValueName).isDirty || customDirty) ? "outline" : "ghost"}
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
                 "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit",
                 form.getFieldState(formValueName).invalid 
                   ? "border-red-600" 
-                  : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
+                  : (form.getFieldState(formValueName).isDirty || customDirty) ? "border-green-500" : ""
               )}
             >
               <div className="flex flex-col items-center gap-1 w-[85%]">

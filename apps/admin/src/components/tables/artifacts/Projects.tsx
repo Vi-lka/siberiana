@@ -60,6 +60,7 @@ export default function Projects({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultProjects} 
         formValueName={`artifacts[${rowIndex}].projects`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

@@ -4,16 +4,20 @@ import { Button, Calendar, FormControl, FormField, FormItem, FormMessage, Popove
 import { cn } from '@siberiana/ui/src/lib/utils';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 
 export default function DateSelect({
     name,
-    placeholder
+    placeholder,
+    fromYear,
+    defaultValue,
 }: {
     name: string,
-    placeholder: string
+    placeholder: string,
+    fromYear?: number,
+    defaultValue?: Date | null,
 }) {
 
     const form = useFormContext();
@@ -36,7 +40,7 @@ export default function DateSelect({
                           !field.value && "text-muted-foreground",
                           form.getFieldState(name).invalid 
                             ? "border-red-600" 
-                            : form.getFieldState(name).isDirty ? "border-green-500" : ""
+                            : (form.getFieldState(name).isDirty || field.value !== defaultValue)? "border-green-500" : ""
                         )}
                       >
                         {field.value ? (
@@ -48,6 +52,15 @@ export default function DateSelect({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
+                  {!!field.value
+                    ? (
+                      <X 
+                        className="h-5 w-5 opacity-50 hover:opacity-100 hover:scale-125 z-50 transition-all cursor-pointer mx-auto" 
+                        onClick={() => form.setValue(name, null)}
+                      />
+                    )
+                    : null
+                  }
                   <PopoverContent className="w-auto p-0 font-Inter" align="start">
                     <Calendar
                       mode="single"
@@ -57,7 +70,7 @@ export default function DateSelect({
                       disabled={(date) =>
                         date > dateNow
                       }
-                      fromYear={1960}
+                      fromYear={!!fromYear ? fromYear : 1900}
                       toYear={dateNow.getFullYear()}
                       initialFocus
                     />

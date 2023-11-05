@@ -5,14 +5,16 @@ import { getCollections } from '~/lib/queries/collections';
 
 export default async function CollectionFilter({
     searchParams,
-    hasArtifacts,
-    hasBooks,
-    hasPAP
+    artType,
+    artifactsType,
+    booksType,
+    PAPType
 }: {
     searchParams: { [key: string]: string | string[] | undefined },
-    hasArtifacts?: boolean,
-    hasBooks?: boolean,
-    hasPAP?: boolean
+    artType?: boolean,
+    artifactsType?: boolean,
+    booksType?: boolean,
+    PAPType?: boolean
 }) {
 
     const categories = searchParams['category'] as string | undefined
@@ -21,9 +23,10 @@ export default async function CollectionFilter({
         getCollections({ 
             first: null, 
             categories, 
-            hasArtifacts, 
-            hasBooks, 
-            hasPAP 
+            artType,
+            artifactsType,
+            booksType,
+            PAPType 
         }) 
     ])
     
@@ -48,7 +51,7 @@ export default async function CollectionFilter({
         <div className="flex flex-col gap-1">
             <h1 className='font-medium'>Коллекции</h1>
             <Select 
-                isMulti
+                isMulti={false}
                 badges
                 side='bottom'
                 values={resultsFiltered} 

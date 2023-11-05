@@ -7,10 +7,12 @@ import { useFormContext } from 'react-hook-form'
 
 export default function FormTextArea({
     name,
+    defaultValue,
     className,
     placeholder
 }: {
     name: string,
+    defaultValue?: string,
     className?: string,
     placeholder?: string
 }) {
@@ -30,7 +32,7 @@ export default function FormTextArea({
                                 className,
                                 form.getFieldState(name).invalid 
                                     ? "border-red-600" 
-                                    : form.getFieldState(name).isDirty ? "border-green-500" : ""
+                                    : (form.getFieldState(name).isDirty || field.value !== defaultValue) ? "border-green-500" : ""
                             )}
                             placeholder={placeholder}
                             onKeyDown={(event) => {

@@ -74,6 +74,7 @@ export default function Locations({
   return (
     <div className='h-full w-full'>
       <FormSelect 
+        defaultValue={defaultLocation}
         itemsData={itemsData} 
         formValueName={formValueName}
         isLoading={isFetching && isPending}
