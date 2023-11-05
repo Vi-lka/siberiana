@@ -73,12 +73,9 @@ export default function Dropzone({
         return res
     };
 
-    const handleAddToForm = useCallback(
-        (newValue: string) => {
-          form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
-        },
-        [form, formValueName],
-    );
+    const handleAddToForm = (newValue: string) => {
+        form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+    }
 
     if (error) return (
         <div {...getRootProps({
@@ -113,10 +110,13 @@ export default function Dropzone({
     )
     
     return (
-        <div className={cn("p-12 border border-solid border-border rounded-md bg-muted", className)}>
+        <div className={cn("px-12 py-10 border border-solid border-border rounded-md bg-muted", className)}>
             {isLoading && progress < 100
                 ? <Progress value={progress} className="w-full" />
-                : <Image src={file} width={200} height={200} alt='' className='mx-auto'/>
+                : (<>
+                    <Image src={file} width={200} height={200} alt={file} className='mx-auto'/>
+                    <p className='font-light text-xs break-words text-center mt-3'>{file}</p>
+                </>)
             }
         </div>
     )

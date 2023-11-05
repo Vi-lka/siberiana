@@ -148,11 +148,9 @@ export default function CreateTable<TData, TValue>({
     [router],
   );
 
-  console.log("DATA_STATE: ", dataState)
-  // console.log("TABLE: ", table.getRowModel().rows[0].original)
+  // console.log("DATA_STATE: ", dataState)
+  console.log("TABLE: ", table.getRowModel().rows[0].original)
   console.log("FORM: ", form.getValues().artifacts)
-
-  // console.log("dirtyFields: ", form.formState.dirtyFields.artifacts)
 
   function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
     const noLines = dataForm.artifacts.map(artifact => {
@@ -166,6 +164,7 @@ export default function CreateTable<TData, TValue>({
         status: artifact.status,
         displayName, 
         description, 
+        primaryImageURL: artifact.primaryImageURL,
         typology,
         chemicalComposition,
         culturalAffiliation: artifact.culturalAffiliation,

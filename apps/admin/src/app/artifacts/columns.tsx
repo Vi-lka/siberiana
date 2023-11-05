@@ -2,8 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { ArtifactForTable } from '@siberiana/schemas';
-import Image from "next/image"
-import { Checkbox, HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
+import { Checkbox } from "@siberiana/ui"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader"
@@ -19,6 +18,7 @@ import Projects from "~/components/tables/artifacts/Projects";
 import Locations from "~/components/tables/global-fields/Locations"
 import DateSelect from "~/components/tables/inputs/DateSelect"
 import Status from "~/components/tables/global-fields/Status";
+import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -65,29 +65,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "primaryImageURL",
-    header: () => <div className="text-center">Фото</div>,
+    header: () => <div className="text-center min-w-[80px]">Фото</div>,
     cell: ({ row }) => {
-      const image = row.original.primaryImageURL
       return (
-        <HoverCard openDelay={100} closeDelay={100}>
-          <HoverCardTrigger>
-            <Image 
-              src={image ? image : "/images/image-placeholder.png"} 
-              alt={image ? image : "/images/image-placeholder.png"} 
-              width={30}
-              height={30}
-            />
-          </HoverCardTrigger>
-          <HoverCardContent side="right">
-            <Image 
-              src={image ? image : "/images/image-placeholder.png"} 
-              alt={image ? image : "/images/image-placeholder.png"} 
-              width={180}
-              height={180}
-              className="object-contain mx-auto"
-            />
-          </HoverCardContent>
-        </HoverCard>
+        <PopoverDropzone formValueName={`artifacts[${row.index}].primaryImageURL`} bucket="default" className="px-6 py-6" /> // change later on "artifacts"
       )
     },
   },

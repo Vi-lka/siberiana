@@ -78,6 +78,8 @@ export default function DataTable<TData, TValue>({
     [router],
   );
 
+  // console.log("dirtyFields: ", form.formState.dirtyFields.artifacts)
+
   function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
     const noLines = dataForm.artifacts.map(artifact => {
       const displayName = artifact.displayName?.replace(/\n/g, " ")
