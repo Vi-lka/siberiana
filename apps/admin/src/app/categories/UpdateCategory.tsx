@@ -163,14 +163,14 @@ export default function UpdateCategory(props: CategoryNode) {
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
-                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' />
+                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={props.description} />
                                     </div>
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Коллекции</p>
-                                        {props.collections.map((item, index) => (<>
-                                            <p key={index} className='text-center mb-3'>{item.displayName}</p>
-                                        </>))}
+                                        {props.collections.map(item => (
+                                            <p key={item.id} className='text-center mb-3'>{item.displayName}</p>
+                                        ))}
                                     </div>
                                 </ScrollArea>
                             </form>

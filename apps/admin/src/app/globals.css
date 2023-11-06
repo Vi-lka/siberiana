@@ -92,7 +92,7 @@ html.dark .logo-svg path {
   border-bottom: 1px solid hsl(var(--border));
   border-bottom-left-radius: 50%;
   background: transparent;
-  box-shadow: 0 10px 0 0 hsl(var(--background));
+  box-shadow: 0 16px 0 0 hsl(var(--background));
   transform: rotate(90deg);
   z-index: 10;
 }

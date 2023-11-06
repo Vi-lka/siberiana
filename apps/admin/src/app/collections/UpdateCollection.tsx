@@ -182,7 +182,7 @@ export default function UpdateCollection(props: CollectionNode) {
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
-                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' />
+                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={props.description} />
                                     </div>
                                 </ScrollArea>
                             </form>
