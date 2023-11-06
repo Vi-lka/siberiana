@@ -2,7 +2,7 @@
 
 import type { ArtifactForTable} from '@siberiana/schemas';
 import { ArtifactsForm } from '@siberiana/schemas'
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Form, Input, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@siberiana/ui'
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Form, Input, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, toast } from '@siberiana/ui'
 import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { CornerRightUp, Loader2, MoreHorizontal, Plus, Search } from 'lucide-react'
@@ -13,6 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DataTablePagination } from '~/components/tables/DataTablePagination'
 import getStatusName from '~/lib/utils/getStatusName'
 import { useRouter } from 'next/navigation';
+import { useCreateArtifact } from '~/lib/mutations/objects';
+import { useSession } from 'next-auth/react';
+import getShortDescription from '~/lib/utils/getShortDescription';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -33,11 +36,16 @@ export default function CreateTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
+  const [loading, setLoading] = React.useState(false)
+  
   const [isPendingTable, startTransitionTable] = React.useTransition()
   const [isPendingForm, startTransitionForm] = React.useTransition()
   const [isPendingGoToUpdate, startTransitionGoToUpdate] = React.useTransition()
 
-  const router = useRouter();
+  const router = useRouter()
+  const session = useSession()
+
+  const mutation = useCreateArtifact(session.data?.access_token)
 
   const isModerator = userRoles?.includes("moderator")
 
@@ -122,6 +130,16 @@ export default function CreateTable<TData, TValue>({
       item => !selectedRows.some(row => row.getValue("id") === item.id)
     ) as ArtifactForTable[] & TData[]
 
+    if (filteredData.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Oшибка!",
+        description: <p>А есть смысл оставлять таблицу пустой?</p>,
+        className: "font-Inter"
+      })
+      return
+    }
+
     startTransitionTable(() => {
       setDataState(filteredData)
     })
@@ -137,7 +155,7 @@ export default function CreateTable<TData, TValue>({
     table.toggleAllPageRowsSelected(false)
   }
 
-  const handleCreateNew = React.useCallback(
+  const handleGoToUpdate = React.useCallback(
     () => {
       const params = new URLSearchParams(window.location.search);
       params.delete("mode")
@@ -149,10 +167,12 @@ export default function CreateTable<TData, TValue>({
   );
 
   // console.log("DATA_STATE: ", dataState)
-  console.log("TABLE: ", table.getRowModel().rows[0].original)
-  console.log("FORM: ", form.getValues().artifacts)
+  // console.log("TABLE: ", table.getRowModel().rows[0].original)
+  // console.log("FORM: ", form.getValues().artifacts)
 
-  function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
+    setLoading(true)
+
     const noLines = dataForm.artifacts.map(artifact => {
       const displayName = artifact.displayName?.replace(/\n/g, " ")
       const description = artifact.description?.replace(/\n/g, " ")
@@ -162,6 +182,7 @@ export default function CreateTable<TData, TValue>({
       return {
         id: artifact.id,
         status: artifact.status,
+        collection: artifact.collection,
         displayName, 
         description, 
         primaryImageURL: artifact.primaryImageURL,
@@ -180,8 +201,38 @@ export default function CreateTable<TData, TValue>({
       }
     })
 
-    console.log("handleSave: ", noLines)
+    const mutationsArray = noLines.map(item => mutation.mutateAsync(item))
+
+    const results = await Promise.allSettled(mutationsArray)
+
+    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+
+    if (rejected) {
+      setLoading(false)
+      toast({
+        variant: "destructive",
+        title: "Oшибка!",
+        description: <p>{getShortDescription(rejected.reason as string)}</p>,
+        className: "font-Inter"
+      })
+      console.log(rejected.reason)
+    } else {
+      setLoading(false)
+      toast({
+        title: "Успешно!",
+        description: "Артефакт создан",
+        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      })
+      console.log("results: ", results)
+
+      const params = new URLSearchParams(window.location.search);
+      params.delete("mode")
+      router.refresh()
+      router.push(`artifacts?${params.toString()}`)
+    }
   }
+
+  if (loading) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>
@@ -210,9 +261,13 @@ export default function CreateTable<TData, TValue>({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
+                    disabled={isPendingTable || isPendingForm}
                     className="flex h-10 w-10 p-0 data-[state=open]:bg-muted"
                   >
-                    <MoreHorizontal className="h-6 w-6" />
+                    {isPendingTable || isPendingForm
+                      ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
+                      : <MoreHorizontal className="h-6 w-6" />
+                    }
                     <span className="sr-only">Open menu</span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -221,7 +276,7 @@ export default function CreateTable<TData, TValue>({
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem
-                      disabled={table.getFilteredSelectedRowModel().rows.length === 0} 
+                      disabled={(table.getFilteredSelectedRowModel().rows.length === 0) || isPendingTable || isPendingForm} 
                       className='cursor-pointer destructive group border-destructive bg-destructive text-destructive-foreground'
                       onClick={handleDelete}
                     >Удалить</DropdownMenuItem>
@@ -238,7 +293,7 @@ export default function CreateTable<TData, TValue>({
                     type="button"
                     variant="link"
                     className="p-0 text-sm uppercase gap-1 font-medium"
-                    onClick={handleCreateNew}
+                    onClick={handleGoToUpdate}
                   >
                     {isPendingGoToUpdate
                       ? <Loader2 className='animate-spin w-6 h-6 mx-8' />

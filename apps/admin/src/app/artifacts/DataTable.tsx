@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Button, Form, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@siberiana/ui';
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Form, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, toast } from '@siberiana/ui';
 import { 
   useReactTable, 
   getCoreRowModel, 
@@ -12,13 +12,16 @@ import {
 } from '@tanstack/react-table'
 import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
 import { DataTablePagination } from '../../components/tables/DataTablePagination';
-import { CornerRightUp, Loader2, Search } from "lucide-react";
+import { CornerRightUp, Loader2, MoreHorizontal, Search } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ArtifactForTable } from "@siberiana/schemas";
 import { ArtifactsForm } from "@siberiana/schemas";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useDeleteArtifact } from "~/lib/mutations/objects";
+import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -35,9 +38,15 @@ export default function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [loading, setLoading] = React.useState(false)
+
   const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
 
-  const router = useRouter();
+  const router = useRouter()
+  const session = useSession()
+
+  const mutation = useDeleteArtifact(session.data?.access_token)
 
   const isModerator = userRoles?.includes("moderator")
 
@@ -52,10 +61,12 @@ export default function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
     autoResetPageIndex: false,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
   }) 
 
@@ -67,7 +78,7 @@ export default function DataTable<TData, TValue>({
     }
   });
 
-  const handleCreateNew = React.useCallback(
+  const handleGoToCreate = React.useCallback(
     () => {
       const params = new URLSearchParams(window.location.search);
       params.set("mode", "add");
@@ -77,6 +88,44 @@ export default function DataTable<TData, TValue>({
     },
     [router],
   );
+
+
+  async function handleDelete() {
+    setLoading(true)
+
+    const selectedRows = table.getFilteredSelectedRowModel().rows
+    const dataToDelete = form.getValues().artifacts.filter(
+      item => selectedRows.some(row => row.getValue("id") === item.id)
+    ) as ArtifactForTable[] & TData[]
+    const idsToDelete = dataToDelete.map(item => item.id)
+
+    const mutationsArray = idsToDelete.map(id => mutation.mutateAsync(id))
+
+    const results = await Promise.allSettled(mutationsArray)
+
+    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+
+    if (rejected) {
+      setLoading(false)
+      toast({
+        variant: "destructive",
+        title: "Oшибка!",
+        description: <p>{getShortDescription(rejected.reason as string)}</p>,
+        className: "font-Inter"
+      })
+      console.log(rejected.reason)
+    } else {
+      setLoading(false)
+      toast({
+        title: "Успешно!",
+        description: "Артефакт удален",
+        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      })
+      console.log("results: ", results)
+      table.toggleAllPageRowsSelected(false)
+      router.refresh()
+    }
+  }
 
   // console.log("dirtyFields: ", form.formState.dirtyFields.artifacts)
 
@@ -128,25 +177,54 @@ export default function DataTable<TData, TValue>({
           className="mt-1 h-full w-full flex flex-col"
         >
           <div className="flex lg:flex-row flex-col-reverse gap-3 lg:items-center w-full justify-between mb-3">
-            <div className="flex items-center gap-1">
-              <Search className="w-4 h-4 stroke-muted-foreground" />
-              <Input
-                placeholder="Поиск..."
-                value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
-                onChange={(event) =>
-                  table.getColumn("displayName")?.setFilterValue(event.target.value)
-                }
-                className="lg:max-w-xs h-8"
-              />
+            <div className='flex flex-wrap gap-3'>
+              <div className="flex items-center gap-1">
+                <Search className="w-4 h-4 stroke-muted-foreground" />
+                <Input
+                  placeholder="Поиск..."
+                  value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
+                  onChange={(event) =>
+                    table.getColumn("displayName")?.setFilterValue(event.target.value)
+                  }
+                  className="lg:max-w-xs h-8"
+                />
+              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    disabled={loading}
+                    className="flex h-10 w-10 p-0 data-[state=open]:bg-muted"
+                  >
+                    {loading
+                      ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
+                      : <MoreHorizontal className="h-6 w-6" />
+                    }
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-[160px] font-Inter">
+                  <DropdownMenuLabel>Выбранные</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      disabled={(table.getFilteredSelectedRowModel().rows.length === 0) || loading} 
+                      className='cursor-pointer destructive group border-destructive bg-destructive text-destructive-foreground'
+                      onClick={() => void handleDelete()}
+                    >Удалить</DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             <div className="flex flex-wrap lg:gap-6 gap-3 items-center lg:justify-end justify-between">
               <Button
-                disabled={!form.formState.isValid || isPendingGoToCreate}
+                disabled={!form.formState.isValid || isPendingGoToCreate || loading}
                 type="button"
                 variant="link"
                 className="p-0 text-sm uppercase gap-1 font-medium"
-                onClick={handleCreateNew}
+                onClick={handleGoToCreate}
               >
                 {isPendingGoToCreate
                   ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
@@ -155,7 +233,7 @@ export default function DataTable<TData, TValue>({
               </Button>
 
               <Button
-                disabled={!(form.formState.isDirty && form.formState.isValid)}
+                disabled={!(form.formState.isDirty && form.formState.isValid) || loading}
                 type="submit"
                 className="px-6 text-sm uppercase mr-0 ml-auto"
               >

@@ -75,10 +75,7 @@ export default async function TablesArtifacts({
       monument: null,
       location: null,
       mediums: [],
-      techniques: [
-        {id: "150323855362", displayName: "скалывание"},
-        {id: "150323855361", displayName: "лепка"}
-      ],
+      techniques: [],
       authors: [],
       publications: [],
       projects: [],

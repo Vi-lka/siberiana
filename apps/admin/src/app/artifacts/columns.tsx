@@ -137,7 +137,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "mediums",
-    header: () => <div className="text-center">Материал</div>,
+    header: () => <div className="text-center">Материалы</div>,
     cell: ({ row }) => {
       return (
         <Materials defaultMaterials={row.original.mediums} rowIndex={row.index} />
