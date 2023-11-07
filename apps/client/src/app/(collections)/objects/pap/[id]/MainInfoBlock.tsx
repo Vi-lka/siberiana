@@ -32,7 +32,7 @@ export default function MainInfoBlock({
                 />
                 <SingleItem
                     label='Дата съемки'
-                    value={new Date(data.shootingDate).toLocaleDateString("ru")}
+                    value={data.shootingDate?.toLocaleDateString("ru")}
                 />
                 <SingleItemProtectedArea
                     label='ООПТ'
