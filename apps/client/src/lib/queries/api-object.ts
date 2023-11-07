@@ -50,6 +50,22 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                             displayName
                         }
                     }
+                    country {
+                        id
+                        displayName
+                    }
+                    region {
+                        id
+                        displayName
+                    }
+                    district {
+                        id
+                        displayName
+                    }
+                    settlement {
+                        id
+                        displayName
+                    }
                     mediums {
                         id
                         displayName

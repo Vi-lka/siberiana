@@ -14,8 +14,8 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
     const [isPending, startTransition] = useTransition()
     return (
-      <div className="flex md:flex-row flex-col md:gap-0 gap-2 items-center justify-between px-2">
-        <div className="flex-1 md:text-sm text-xs text-muted-foreground">
+      <div className="flex md:flex-row flex-col md:gap-0 gap-0.5 items-center justify-between px-2">
+        <div className="flex-1 md:text-sm text-xs text-muted-foreground self-start">
           {table.getFilteredSelectedRowModel().rows.length} из{" "}
           {table.getFilteredRowModel().rows.length} строк выбрано.
         </div>

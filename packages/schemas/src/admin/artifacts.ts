@@ -1,6 +1,15 @@
 import { z } from "zod";
 import { ArtifactById, StatusEnum } from "../objects-schema";
 
+export const LocationEnum = z.enum([ 
+    "location", 
+    "country",
+    "region",
+    "district",
+    "settlement"
+])
+export type LocationEnum = z.infer<typeof LocationEnum>;
+
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
     totalCount: z.number(),
@@ -42,6 +51,7 @@ export const ArtifactForTable = z.object({
     location: z.object({
         id: z.string(),
         displayName: z.string(),
+        type: LocationEnum,
     }).nullable(),
     mediums: z.object({
         id: z.string(),

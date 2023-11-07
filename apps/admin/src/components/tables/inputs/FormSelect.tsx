@@ -65,6 +65,11 @@ export function FormSelect({
     });
   }
 
+  const onComboboxOpenChange = (value: boolean) => {
+    inputRef.current?.blur(); // HACK: otherwise, would scroll automatically to the bottom of page
+    setOpenCombobox(value);
+  };
+
   const clearSelect = () => {
     form.setValue(formValueName, null, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     inputRef.current?.blur();
@@ -72,19 +77,10 @@ export function FormSelect({
     setOpenCombobox(false)
   };
 
-  const toggleItem = (item: Item) => {
-    handleSelected(item)
-    setOpenCombobox(false)
-  };
-
-  const onComboboxOpenChange = (value: boolean) => {
-    inputRef.current?.blur(); // HACK: otherwise, would scroll automatically to the bottom of page
-    setOpenCombobox(value);
-  };
-
   const handleSelected = React.useCallback(
     (newValue: Item) => {
       form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+      setOpenCombobox(false)
     },
     [form, formValueName],
   );
@@ -135,16 +131,6 @@ export function FormSelect({
                 value={inputSearch}
                 onValueChange={(input) => handleSearch(input)}
               />
-              {!!selected && haveDelete
-                ? 
-                  <span 
-                    className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
-                    onClick={clearSelect}
-                  >
-                    <X className="h-5 w-5"/> Удалить
-                  </span>
-                : null
-              }
               {isPendingSearch 
                 ? (
                     <div className="absolute top-[10px] right-2">
@@ -159,7 +145,17 @@ export function FormSelect({
                         />
                       )
                     : null 
-                }
+              }
+              {!!selected && haveDelete
+                ? 
+                  <span 
+                    className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
+                    onClick={clearSelect}
+                  >
+                    <X className="h-5 w-5"/> Удалить
+                  </span>
+                : null
+              }
             </div>
             <CommandList>
               <CommandEmpty>
@@ -193,7 +189,7 @@ export function FormSelect({
                                         ? "opacity-30 cursor-wait"
                                         : "opacity-100 cursor-pointer"
                                     )}
-                                    onSelect={() => toggleItem(item)}
+                                    onSelect={() => handleSelected(item)}
                                   >
                                     <CircleDot
                                       className={cn(

@@ -113,22 +113,38 @@ export default async function TablesArtifacts({
     const {
       status,
       collection,
+      location,
+      country,
+      region,
+      district,
+      settlement,
       ...rest // assigns remaining
     } = node;
-    const statusForTable = {
-      id: status,
-      displayName: getStatusName(status)
-    }
-    const collectionForTable = {
-      id: collection.id,
-      displayName: collection.displayName
-    }
+
+    const locationForTabel = location
+      ? { ...location, type: "location" }
+      : settlement 
+        ? { ...settlement, type: "settlement" }
+        : district
+          ? { ...district, type: "district" }
+          : region
+            ? { ...region, type: "region" }
+            : country
+              ? { ...country, type: "country" }
+              : null
 
     return { 
-      status: statusForTable,
-      collection: collectionForTable,
+      status: {
+        id: status,
+        displayName: getStatusName(status)
+      },
+      collection: {
+        id: collection.id,
+        displayName: collection.displayName
+      },
+      location: locationForTabel,
       ...rest
-    }
+    } as ArtifactForTable
   })
 
   if (mode === 'add') return (

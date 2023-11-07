@@ -1,3 +1,6 @@
+import { useQuery } from "@tanstack/react-query"
+import request from "graphql-request"
+
 export function getCategoriesQuery() {
     const query = `
       query Categories() {
@@ -63,37 +66,84 @@ export function getCollectionsQuery({
     return query
 }
 
-export function getLocationsQuery() {
-    const query = `
-      query Locations() {
-        locations(
-          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
-        ) {
-          totalCount
-          edges {
-            node {
-              id
-              displayName
-              country {
-                id
-                displayName
-              }
-              region {
-                id 
-                displayName
-              }
-              district {
-                id
-                displayName
-              }
-              settlement {
-                id
-                displayName
-              }
-            }
-          }
-        }
+type Edges = {
+  totalCount: number;
+  edges: {
+    node: {
+      id: string;
+      displayName: string;
+    };
+  }[]
+}
+
+export function useLocationsQuery() {
+  const queryString = `
+    query Locations() {
+      locations(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {node {
+          id
+          displayName
+        }}
       }
-    `
-    return query
+      countries(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {node {
+          id
+          displayName
+        }}
+      }
+      regions(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {node {
+          id
+          displayName
+        }}
+      }
+      districts(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {node {
+          id
+          displayName
+        }}
+      }
+      settlements(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {node {
+          id
+          displayName
+        }}
+      }
+    }
+  `
+  const query = useQuery<
+    {
+      locations: Edges,
+      countries: Edges,
+      regions: Edges,
+      districts: Edges,
+      settlements: Edges,
+    }, 
+    Error
+  >({
+    queryKey: ['locations', queryString],
+    queryFn: async () => 
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        queryString,
+      ),
+    refetchOnWindowFocus: true,
+  })
+
+  return query
 }

@@ -129,6 +129,8 @@ export default function DataTable<TData, TValue>({
   }
 
   async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
+    setLoading(true)
+
     const noLines = dataForm.artifacts.map(artifact => {
       const {
         displayName,
@@ -196,6 +198,8 @@ export default function DataTable<TData, TValue>({
       router.refresh()
     }
   }
+
+  if (loading) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>

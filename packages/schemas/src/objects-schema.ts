@@ -30,32 +30,21 @@ export const Location = z.object({
     country: z.object({
         id: z.string(),
         displayName: z.string(),
-    }).nullable(),
+    }).nullable().optional(),
     region: z.object({
         id: z.string(),
         displayName: z.string(),
-    }).nullable(),
+    }).nullable().optional(),
     district: z.object({
         id: z.string(),
         displayName: z.string(),
-    }).nullable(),
+    }).nullable().optional(),
     settlement: z.object({
         id: z.string(),
         displayName: z.string(),
-    }).nullable(),
+    }).nullable().optional(),
 });
 export type Location = z.infer<typeof Location>;
-
-//.........................HOLDERS.........................//
-export const Holders = z.object({
-    organization: z.object({
-        displayName: z.string(),
-    }).nullable(),
-    person: z.object({
-        displayName: z.string(),
-    }).nullable(),
-}).array();
-export type Holders = z.infer<typeof Holders>;
 
 //.........................ARTIFACT.........................//
 export const ArtifactById = z.object({
@@ -72,7 +61,22 @@ export const ArtifactById = z.object({
     weight: z.string(),
     collection: Collection,
     location: Location.nullable(),
-    // holders: Holders,
+    country: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    region: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    district: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    settlement: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
     mediums: z.object({
         id: z.string(),
         displayName: z.string(),  

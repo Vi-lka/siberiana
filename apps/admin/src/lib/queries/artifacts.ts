@@ -68,29 +68,29 @@ export const getArtifacts = async ({
                       slug
                       displayName
                       category {
-                          slug
-                          displayName
+                        slug
+                        displayName
                       }
                     }
                     location {
                       id
                       displayName
-                      country {
-                        id  
-                        displayName
-                      }
-                      region {
-                        id  
-                        displayName
-                      }
-                      district {
-                        id  
-                        displayName
-                      }
-                      settlement {
-                        id  
-                        displayName
-                      }
+                    }
+                    country {
+                      id
+                      displayName
+                    }
+                    region {
+                      id
+                      displayName
+                    }
+                    district {
+                      id
+                      displayName
+                    }
+                    settlement {
+                      id
+                      displayName
                     }
                     mediums {
                       id
