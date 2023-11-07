@@ -147,6 +147,8 @@ export default async function TablesArtifacts({
     } as ArtifactForTable
   })
 
+  console.log(dataForUpdate)
+
   if (mode === 'add') return (
     <div className="w-full mx-auto pt-3">
       <h1 className='flex-grow text-center text-2xl font-Inter font-semibold lg:mb-1 mb-4'>

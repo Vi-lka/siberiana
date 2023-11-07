@@ -81,7 +81,20 @@ function clearLocation(
   }
 }
 
-function changedValues(
+function clearObject(object: {
+  id: string;
+  displayName: string;
+} | null) {
+  if (!object || !object.id || (object.id.length === 0)) return true
+  else false
+}
+
+function clearDate(date: Date | null | undefined) {
+  if (!date || date.toISOString().length === 0) return true
+  else false
+}
+
+function handleArrays(
   newValues: {
     id: string;
     displayName: string;
@@ -198,11 +211,11 @@ export function useUpdateArtifact(access_token?: string) {
     };
     const mutation = useMutation({
         mutationFn: ({ id, newValue, oldValue }: { id: string, newValue: ArtifactForTable, oldValue: ArtifactForTable }) => {
-            const authorsIds = changedValues(newValue.authors, oldValue.authors)
-            const mediumIDs = changedValues(newValue.mediums, oldValue.mediums)
-            const projectIDs = changedValues(newValue.projects, oldValue.projects)
-            const publicationIDs = changedValues(newValue.publications, oldValue.publications)
-            const techniqueIDs = changedValues(newValue.techniques, oldValue.techniques)
+            const authorsIds = handleArrays(newValue.authors, oldValue.authors)
+            const mediumIDs = handleArrays(newValue.mediums, oldValue.mediums)
+            const projectIDs = handleArrays(newValue.projects, oldValue.projects)
+            const publicationIDs = handleArrays(newValue.publications, oldValue.publications)
+            const techniqueIDs = handleArrays(newValue.techniques, oldValue.techniques)
             return request(
                 `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
                 mutationString,
@@ -225,16 +238,20 @@ export function useUpdateArtifact(access_token?: string) {
                         districtID: getLocation(newValue.location, "district"),
                         settlementID: getLocation(newValue.location, "settlement"),
                         locationID: getLocation(newValue.location, "location"),
-                        clearCountry: clearLocation(newValue.location, "country"),
-                        clearRegion: clearLocation(newValue.location, "region"),
-                        clearDistrict: clearLocation(newValue.location, "district"),
-                        clearSettlement: clearLocation(newValue.location, "settlement"),
-                        clearLocation: clearLocation(newValue.location, "location"),
                         addAuthorIDs: authorsIds.addValues,
                         addMediumIDs: mediumIDs.addValues,
                         addProjectIDs: projectIDs.addValues,
                         addPublicationIDs: publicationIDs.addValues,
                         addTechniqueIDs: techniqueIDs.addValues,
+                        clearAdmissionDate: clearDate(newValue.admissionDate),
+                        clearSet: clearObject(newValue.set),
+                        clearMonument: clearObject(newValue.monument),
+                        clearCulturalAffiliation: clearObject(newValue.culturalAffiliation),
+                        clearCountry: clearLocation(newValue.location, "country"),
+                        clearRegion: clearLocation(newValue.location, "region"),
+                        clearDistrict: clearLocation(newValue.location, "district"),
+                        clearSettlement: clearLocation(newValue.location, "settlement"),
+                        clearLocation: clearLocation(newValue.location, "location"),
                         removeAuthorIDs: authorsIds.removeValues,
                         removeMediumIDs: mediumIDs.removeValues,
                         removeProjectIDs: projectIDs.removeValues,

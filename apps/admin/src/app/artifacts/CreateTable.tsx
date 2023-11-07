@@ -41,6 +41,7 @@ export default function CreateTable<TData, TValue>({
   const [isPendingTable, startTransitionTable] = React.useTransition()
   const [isPendingForm, startTransitionForm] = React.useTransition()
   const [isPendingGoToUpdate, startTransitionGoToUpdate] = React.useTransition()
+  const [isPendingRouter, startTransitionRouter] = React.useTransition()
 
   const router = useRouter()
   const session = useSession()
@@ -208,7 +209,6 @@ export default function CreateTable<TData, TValue>({
     const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
     if (rejected) {
-      setLoading(false)
       toast({
         variant: "destructive",
         title: "Oшибка!",
@@ -216,8 +216,8 @@ export default function CreateTable<TData, TValue>({
         className: "font-Inter"
       })
       console.log(rejected.reason)
-    } else {
       setLoading(false)
+    } else {
       toast({
         title: "Успешно!",
         description: "Артефакты добавлены",
@@ -227,12 +227,15 @@ export default function CreateTable<TData, TValue>({
 
       const params = new URLSearchParams(window.location.search);
       params.delete("mode")
-      router.refresh()
-      router.push(`artifacts?${params.toString()}`)
+      startTransitionRouter(() => {
+        router.refresh()
+        router.push(`artifacts?${params.toString()}`)
+      })
+      setLoading(false)
     }
   }
 
-  if (loading) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
+  if (loading || isPendingRouter) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>

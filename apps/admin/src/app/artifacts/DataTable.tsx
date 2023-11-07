@@ -42,6 +42,7 @@ export default function DataTable<TData, TValue>({
   const [loading, setLoading] = React.useState(false)
 
   const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
+  const [isPendingRefresh, startTransitionRefresh] = React.useTransition()
 
   const router = useRouter()
   const session = useSession()
@@ -107,7 +108,6 @@ export default function DataTable<TData, TValue>({
     const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
     if (rejected) {
-      setLoading(false)
       toast({
         variant: "destructive",
         title: "Oшибка!",
@@ -115,8 +115,8 @@ export default function DataTable<TData, TValue>({
         className: "font-Inter"
       })
       console.log(rejected.reason)
-    } else {
       setLoading(false)
+    } else {
       toast({
         title: "Успешно!",
         description: "Артефакты удалены",
@@ -124,7 +124,10 @@ export default function DataTable<TData, TValue>({
       })
       console.log("results: ", results)
       table.toggleAllPageRowsSelected(false)
-      router.refresh()
+      startTransitionRefresh(() => {
+        router.refresh()
+      })
+      setLoading(false)
     }
   }
 
@@ -178,7 +181,6 @@ export default function DataTable<TData, TValue>({
     const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
     if (rejected) {
-      setLoading(false)
       toast({
         variant: "destructive",
         title: "Oшибка!",
@@ -186,8 +188,8 @@ export default function DataTable<TData, TValue>({
         className: "font-Inter"
       })
       console.log(rejected.reason)
-    } else {
       setLoading(false)
+    } else {
       toast({
         title: "Успешно!",
         description: "Артефакты изменены",
@@ -195,11 +197,14 @@ export default function DataTable<TData, TValue>({
       })
       console.log("results: ", results)
       table.toggleAllPageRowsSelected(false)
-      router.refresh()
+      startTransitionRefresh(() => {
+        router.refresh()
+      })
+      setLoading(false)
     }
   }
 
-  if (loading) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
+  if (loading || isPendingRefresh) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>
