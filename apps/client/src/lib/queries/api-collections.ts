@@ -128,6 +128,7 @@ export const getCollections = async ({
             description
             category {
               id
+              displayName
               slug
             }
           }

@@ -9,7 +9,8 @@ import { FormSelectMulti } from '../inputs/FormSelectMulti'
 export default function Collections({ 
   defaultCollections,
   formValueName,
-  withoutCategory,
+  hasCategory,
+  categoryId,
   className
 }: { 
   defaultCollections: {
@@ -17,18 +18,22 @@ export default function Collections({
     displayName: string
   }[],
   formValueName: string,
-  withoutCategory?: boolean,
+  hasCategory?: boolean,
+  categoryId?: string,
   className?: string,
 }) {
 
   const defaultItems = (defaultCollections && defaultCollections.length > 0) ? defaultCollections : []
   
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<CollectionsList, Error>({
-    queryKey: ['сollections', withoutCategory],
+    queryKey: ['сollections', hasCategory, categoryId],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getCollectionsQuery({withoutCategory: withoutCategory === undefined ? null : withoutCategory}),
+        getCollectionsQuery({
+          hasCategory: hasCategory === undefined ? null : hasCategory,
+          categoryId,
+        }),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -64,6 +69,7 @@ export default function Collections({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultCollections}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

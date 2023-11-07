@@ -1,36 +1,35 @@
 "use client"
 
-import { Alert, AlertDescription, AlertTitle, Button, Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, ScrollArea, Separator, useToast } from '@siberiana/ui'
+import { Alert, AlertDescription, AlertTitle, Button, Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Separator, useToast } from '@siberiana/ui'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { useMutation } from '@tanstack/react-query'
 import request from 'graphql-request'
-import { AlertCircle, ChevronRight, Loader2, Trash2 } from 'lucide-react'
+import { AlertCircle, Loader2, Trash2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import { deleteCategory } from '~/lib/mutations/collections'
+import { deleteCollection } from '~/lib/mutations/collections'
 import getShortDescription from '~/lib/utils/getShortDescription'
 
-export default function DeleteCategory({
+export default function DeleteCollection({
     id,
     name,
-    collections,
     className,
 }: {
     id: string,
     name: string,
-    collections: {
-        id: string;
-        displayName: string;
-    }[]
     className?: string,
 }) {
     const [loading, setLoading] = React.useState(false)
+    const [sureQuestion, setSureQuestion] = React.useState(false)
     const [openDialog, setOpenDialog] = React.useState(false)
     const { toast } = useToast()
     const router = useRouter()
     const session = useSession()
+
+    React.useEffect(() => {
+        if (!openDialog) setSureQuestion(false)
+    }, [openDialog])
 
     const requestHeaders = {
         Authorization: `Bearer ${session.data?.access_token}`,
@@ -38,12 +37,12 @@ export default function DeleteCategory({
     };
 
     const mutation = useMutation({
-        mutationKey: ['deleteCategory', requestHeaders],
+        mutationKey: ['deleteCollection', requestHeaders],
         mutationFn: (id: string) => 
           request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-            deleteCategory(),
-            { deleteCategoryId: id },
+            deleteCollection(),
+            { deleteCollectionId: id },
             requestHeaders
           ),
         onMutate: () => setLoading(true),
@@ -63,7 +62,7 @@ export default function DeleteCategory({
             setOpenDialog(false)
             toast({
                 title: "Успешно!",
-                description: "Категория удалена",
+                description: "Коллекция удалена",
                 className: "font-Inter",
             })
             router.refresh()
@@ -72,6 +71,7 @@ export default function DeleteCategory({
 
     const handleDelete = () => {
         mutation.mutate(id)
+        setSureQuestion(false)
     }
 
     return (
@@ -85,54 +85,55 @@ export default function DeleteCategory({
                 <DialogHeader>
                     <DialogTitle>Удалить</DialogTitle>
                     <DialogDescription>
-                        Категорию: <span className="font-semibold lg:text-base text-xs break-all">{name}</span>
+                        Коллекцию: <span className="font-semibold lg:text-base text-xs break-all">{name}</span>
                     </DialogDescription>
                 </DialogHeader>
                 {loading
                     ? <Loader2 className='animate-spin w-12 h-12 mx-auto mt-3' />
                     : (<>
                         <Separator />
-                        <div className='pt-3'>
-                            <h1 className='font-bold text-2xl text-center mb-3'>Вы уверены?</h1>
-                            {collections.length > 0
-                                ? (
-                                    <Alert variant="destructive">
+                        {sureQuestion
+                            ? (
+                                <div className='pt-3'>
+                                    <h1 className='font-bold text-2xl text-center mb-6'>Вы <span>точно</span> уверены?</h1>
+                                    <div className="w-full flex gap-6 justify-center items-center">
+                                        <DialogClose asChild>
+                                            <Button variant={"destructive"} onClick={handleDelete}>
+                                                Да, Удалить!
+                                            </Button>
+                                        </DialogClose>
+                                        <DialogClose asChild>
+                                            <Button type="button" variant="secondary" onClick={() => setSureQuestion(false)}>
+                                              Нет, Отмена
+                                            </Button>
+                                        </DialogClose>
+                                    </div>
+                                </div>
+                            )
+                            : (
+                                <div className='pt-3'>
+                                    <h1 className='font-bold text-2xl text-center mb-3'>Вы уверены?</h1>
+                                    <Alert variant="destructive" className='mb-6'>
                                         <AlertCircle className="h-4 w-4" />
                                         <AlertTitle>Внимание!</AlertTitle>
                                         <AlertDescription>
-                                            <p>Вы должны <span className='font-semibold'>удалить коллекции</span>:</p>
-                                            <ScrollArea type='always' className='mt-3' classNameViewport='max-h-96 pr-3'>
-                                                <ul>
-                                                    {collections.map(collection => (
-                                                        <li key={collection.id}>
-                                                            <Link href={`/collections`} passHref>
-                                                                <Button variant={"destructive"} className='mb-2'>
-                                                                    {collection.displayName} <ChevronRight/>
-                                                                </Button>
-                                                            </Link>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </ScrollArea>
+                                            <p>Это действие <span className='font-semibold text-lg'>удалит все объекты коллекции!!!</span></p>
+                                            <h1 className='text-lg font-semibold'>Восстановить их нельзя!</h1>
                                         </AlertDescription>
                                     </Alert>
-                                )
-                                : (
                                     <div className="w-full flex gap-6 justify-center items-center">
-                                        <DialogClose asChild>
-                                            <Button  variant={"destructive"} onClick={handleDelete}>
-                                                Удалить
-                                            </Button>
-                                        </DialogClose>
+                                        <Button variant={"destructive"} onClick={() => setSureQuestion(true)}>
+                                            Удалить
+                                        </Button>
                                         <DialogClose asChild>
                                             <Button type="button" variant="secondary">
                                               Отмена
                                             </Button>
                                         </DialogClose>
                                     </div>
-                                )
-                            }
-                        </div>
+                                </div>
+                            )
+                        }
                     </>)
                 }
             </DialogContent>

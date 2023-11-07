@@ -26,8 +26,8 @@ export default function ObjectsGrid({
                     title={object.node.displayName}
                     src={object.node.primaryImageURL}
                     href={`objects/${hrefTo}/${object.node.id}`}
-                    width={500}
-                    height={500}
+                    width={320}
+                    height={320}
                 />
             ))}
         </Masonry>

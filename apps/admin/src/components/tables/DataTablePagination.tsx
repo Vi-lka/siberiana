@@ -2,7 +2,8 @@
 
 import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@siberiana/ui"
 import type { Table } from "@tanstack/react-table"
-import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsLeft, ChevronsRight, Loader2 } from "lucide-react"
+import { useTransition } from "react"
 
 interface DataTablePaginationProps<TData> {
     table: Table<TData>
@@ -11,6 +12,7 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
     table,
 }: DataTablePaginationProps<TData>) {
+    const [isPending, startTransition] = useTransition()
     return (
       <div className="flex md:flex-row flex-col md:gap-0 gap-2 items-center justify-between px-2">
         <div className="flex-1 md:text-sm text-xs text-muted-foreground">
@@ -23,18 +25,26 @@ export function DataTablePagination<TData>({
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {
-                table.setPageSize(Number(value))
+                startTransition(() => {
+                  table.setPageSize(Number(value))
+                });
               }}
             >
-              <SelectTrigger className="h-8 w-[70px]">
-                <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectTrigger disabled={isPending} className="h-8 w-[70px]">
+                {isPending
+                  ? <Loader2 className='animate-spin w-6 h-6 mx-auto' />
+                  : <SelectValue placeholder={table.getState().pagination.pageSize} />
+                }
               </SelectTrigger>
               <SelectContent side="top">
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={`${pageSize}`} className=" font-Inter cursor-pointer">
-                    {pageSize}
-                  </SelectItem>
-                ))}
+                {isPending
+                  ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+                  : [10, 20, 30, 40, 50].map((pageSize) => (
+                    <SelectItem key={pageSize} value={`${pageSize}`} className=" font-Inter cursor-pointer">
+                      {pageSize}
+                    </SelectItem>
+                  ))
+                }
               </SelectContent>
             </Select>
           </div>
@@ -46,38 +56,66 @@ export function DataTablePagination<TData>({
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(0)}
+              onClick={() => 
+                startTransition(() => {
+                  table.setPageIndex(0)
+                })
+              }
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to first page</span>
-              <ChevronsLeft className="h-4 w-4" />
+              {isPending
+                ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+                : <ChevronsLeft className="h-4 w-4" />
+              }
             </Button>
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.previousPage()}
+              onClick={() => 
+                startTransition(() => {
+                  table.previousPage()
+                })
+              }
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to previous page</span>
-              <ChevronLeftIcon className="h-4 w-4" />
+              {isPending
+                ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+                : <ChevronLeftIcon className="h-4 w-4" />
+              }
             </Button>
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.nextPage()}
+              onClick={() => 
+                startTransition(() => {
+                  table.nextPage()
+                })
+              }
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to next page</span>
-              <ChevronRightIcon className="h-4 w-4" />
+              {isPending
+                ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+                : <ChevronRightIcon className="h-4 w-4" />
+              }
             </Button>
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              onClick={() => 
+                startTransition(() => {
+                  table.setPageIndex(table.getPageCount() - 1)
+                })
+              }
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to last page</span>
-              <ChevronsRight className="h-4 w-4" />
+              {isPending
+                ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+                : <ChevronsRight className="h-4 w-4" />
+              }
             </Button>
           </div>
         </div>

@@ -1,60 +1,40 @@
 "use client"
 
-import { CategoryNode } from '@siberiana/schemas'
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import React from 'react'
+import { CollectionNode } from '@siberiana/schemas'
+import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from 'zod';
 import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
-import { Loader2, Plus } from 'lucide-react';
-import { cn } from '@siberiana/ui/src/lib/utils';
 import Dropzone from '~/components/tables/inputs/Dropzone';
+import Categories from '~/components/tables/global-fields/Categories';
+import type { z } from 'zod';
+import { getName } from './TypeSelect';
 import { useMutation } from '@tanstack/react-query';
 import request from 'graphql-request';
-import { createCategory } from '~/lib/mutations/collections';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
-import { useRouter } from 'next/navigation';
+import ImageComp from '~/components/lists/ImageComp';
+import MetaData from '~/components/lists/MetaData';
+import DeleteCollection from './DeleteCollection';
+import { ChevronRight, Loader2 } from 'lucide-react';
+import { updateCollection } from '~/lib/mutations/collections';
+import Link from 'next/link';
 
-const DEFAULT_VALUES = {
-    id: "",
-    slug: "",
-    displayName: "",
-    abbreviation: "",
-    primaryImageURL: "",
-    description: "",
-    collections: [],
-    createdBy: "",
-    createdAt: new Date(),
-    updatedBy: "",
-    updatedAt: new Date()
-} as CategoryNode
-
-export default function AddCategory({
-    className
-}: {
-    className?: string
-}) {
-
+export default function UpdateCollection(props: CollectionNode) {
+    
     const [loading, setLoading] = React.useState(false)
     const [openDialog, setOpenDialog] = React.useState(false)
     const { toast } = useToast()
     const router = useRouter()
     const session = useSession()
 
-    function getCollectionsIds(collections: { id: string, displayName: string }[]) {
-        if (collections.length === 0) return null
-
-        const ids = collections.map(collection => collection.id)
-        return ids
-    }
-
-    const form = useForm<z.infer<typeof CategoryNode>>({
-        resolver: zodResolver(CategoryNode),
+    const form = useForm<z.infer<typeof CollectionNode>>({
+        resolver: zodResolver(CollectionNode),
         mode: 'onChange',
-        defaultValues: DEFAULT_VALUES
+        defaultValues: props
     });
 
     const requestHeaders = {
@@ -63,19 +43,22 @@ export default function AddCategory({
     };
 
     const mutation = useMutation({
-        mutationKey: ['createCategory', requestHeaders],
-        mutationFn: (values: CategoryNode) => 
+        mutationKey: ['updateCollection', requestHeaders],
+        mutationFn: (values: CollectionNode) => 
           request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-            createCategory(),
-            {input: {
-                displayName: values.displayName,
-                description: values.description,
-                abbreviation: values.abbreviation,
-                collectionIDs: getCollectionsIds(values.collections),
-                primaryImageURL: values.primaryImageURL,
-                slug: values.slug
-            }},
+            updateCollection(),
+            {
+                updateCollectionId: props.id,
+                input: {
+                  displayName: values.displayName,
+                  description: values.description,
+                  slug: values.slug,
+                  abbreviation: values.abbreviation,
+                  primaryImageURL: values.primaryImageURL,
+                  categoryID: values.category.id,
+                }
+            },
             requestHeaders
           ),
         onMutate: () => setLoading(true),
@@ -95,19 +78,21 @@ export default function AddCategory({
             setOpenDialog(false)
             toast({
                 title: "Успешно!",
-                description: "Категория создана",
+                description: "Коллекция обновлена",
                 className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
             })
             router.refresh()
         },
     })
 
-    function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+    function handleSave(dataForm: z.infer<typeof CollectionNode>) {
         const {
             description,
             ...rest // assigns remaining
         } = dataForm;
+
         const descriptionNoLines = description.replace(/\n/g, " ")
+
         const result = { 
             description: descriptionNoLines,
             ...rest
@@ -118,17 +103,32 @@ export default function AddCategory({
 
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogTrigger asChild>
-                <Button disabled={loading} className={cn('flex items-center gap-1', className)}>
-                    <Plus/> Создать
-                </Button>
+            <DialogTrigger disabled={loading} className='flex flex-col gap-2 justify-start h-fit'>
+                <ImageComp
+                    src={props.primaryImageURL}
+                    title={props.displayName}
+                    className={"aspect-[1.5/1] min-h-[215px] max-h-[220px]"}
+                    classNameImage='w-full object-cover h-full'
+                />
+                <Separator/>
+                <MetaData 
+                    createdBy={props.createdBy}
+                    createdAt={props.createdAt}
+                    updatedBy={props.updatedBy}
+                    updatedAt={props.updatedAt}
+                />
             </DialogTrigger>
             <DialogContent className='font-Inter'>
-                <DialogHeader>
-                    <DialogTitle>Создать</DialogTitle>
-                    <DialogDescription>
-                        Категорию
-                    </DialogDescription>
+                <DialogHeader className='flex flex-row justify-between items-center'>
+                    <div className='flex flex-col space-y-1.5 text-left'>
+                        <DialogTitle>
+                            Изменить
+                        </DialogTitle>
+                        <DialogDescription>
+                            Коллекцию: <span className="font-semibold lg:text-base text-xs break-all">{props.displayName}</span>
+                        </DialogDescription>
+                    </div>
+                    <DeleteCollection id={props.id} name={props.displayName} className='mr-4 ml-auto mt-0' />
                 </DialogHeader>
                 {loading
                     ? <Loader2 className='animate-spin w-12 h-12 mx-auto mt-3' />
@@ -143,7 +143,7 @@ export default function AddCategory({
                                     type="submit"
                                     className="w-full mb-2 p-2 h-fit text-xs uppercase"
                                 >
-                                  Создать
+                                  Сохранить
                                 </Button>
                                 <Separator />
                                 <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
@@ -151,25 +151,41 @@ export default function AddCategory({
                                         <p className='mb-2 font-medium'>Название</p>
                                         <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
                                     </div>
-                        
+                            
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Slug <span className='font-light text-sm'>(URL имя)</span></p>
                                         <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
                                     </div>
-                        
+                            
+                                    <div className="mb-6">
+                                        <p className='mb-2 font-medium'>Тип</p>
+                                        <Link href={`/${props.type}?collection=${props.slug}`} className='flex items-center underline underline-offset-2'>
+                                            {getName(props.type)} <ChevronRight className='w-5 h-5' />
+                                        </Link>
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <p className='mb-2 font-medium'>Категория</p>
+                                        <Categories 
+                                            defaultCategory={form.getValues("category")} 
+                                            formValueName={`category`} 
+                                            className='w-full max-w-lg border rounded-md text-base' 
+                                        />
+                                    </div>
+                            
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Фото</p>
-                                        <Dropzone formValueName="primaryImageURL" />
+                                        <Dropzone formValueName="primaryImageURL" defaultValue={props.primaryImageURL} />
                                     </div>
-                        
+                            
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Аббревиатура</p>
                                         <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' />
                                     </div>
-                        
+                            
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
-                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={""}  />
+                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={props.description} />
                                     </div>
                                 </ScrollArea>
                             </form>

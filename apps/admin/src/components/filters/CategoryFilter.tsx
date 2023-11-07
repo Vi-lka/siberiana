@@ -4,21 +4,24 @@ import { Select } from './Select';
 import { getCategories } from '~/lib/queries/collections';
 
 export default async function CategoryFilter({
-  hasArtifacts,
-  hasBooks,
-  hasPAP
+  artType,
+  artifactsType,
+  booksType,
+  PAPType
 }: {
-  hasArtifacts?: boolean,
-  hasBooks?: boolean,
-  hasPAP?: boolean
+  artType?: boolean,
+  artifactsType?: boolean,
+  booksType?: boolean,
+  PAPType?: boolean
 }) {
 
     const [ result ] = await Promise.allSettled([ 
       getCategories({ 
         first: null,
-        hasArtifacts, 
-        hasBooks, 
-        hasPAP  
+        artType,
+        artifactsType,
+        booksType,
+        PAPType 
       }) 
     ])
     

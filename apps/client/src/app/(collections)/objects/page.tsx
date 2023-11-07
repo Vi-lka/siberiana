@@ -39,16 +39,14 @@ export default async function Objects({
 
   const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
-  if (rejected) {
-    return (
-      <ErrorHandler
-        error={rejected.reason as unknown} 
-        place="Titles in Objects"
-        notFound 
-        goBack
-      />
-    )
-  }
+  if (rejected) return (
+    <ErrorHandler
+      error={rejected.reason as unknown} 
+      place="Titles in Objects"
+      notFound 
+      goBack
+    />
+  )
 
   const categoriesFulfilled = results[0] as PromiseFulfilledResult<Categories>
   const collectionsFulfilled = results[1] as PromiseFulfilledResult<Collections>

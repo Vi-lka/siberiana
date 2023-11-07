@@ -1,6 +1,6 @@
 "use client"
 
-import { CategoryNode } from '@siberiana/schemas'
+import { CollectionNode } from '@siberiana/schemas'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form';
@@ -13,10 +13,12 @@ import { cn } from '@siberiana/ui/src/lib/utils';
 import Dropzone from '~/components/tables/inputs/Dropzone';
 import { useMutation } from '@tanstack/react-query';
 import request from 'graphql-request';
-import { createCategory } from '~/lib/mutations/collections';
+import { createCollection } from '~/lib/mutations/collections';
 import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { useRouter } from 'next/navigation';
+import Categories from '~/components/tables/global-fields/Categories';
+import TypeSelect from './TypeSelect';
 
 const DEFAULT_VALUES = {
     id: "",
@@ -25,14 +27,13 @@ const DEFAULT_VALUES = {
     abbreviation: "",
     primaryImageURL: "",
     description: "",
-    collections: [],
     createdBy: "",
     createdAt: new Date(),
     updatedBy: "",
     updatedAt: new Date()
-} as CategoryNode
+} as CollectionNode
 
-export default function AddCategory({
+export default function AddCollection({
     className
 }: {
     className?: string
@@ -44,15 +45,8 @@ export default function AddCategory({
     const router = useRouter()
     const session = useSession()
 
-    function getCollectionsIds(collections: { id: string, displayName: string }[]) {
-        if (collections.length === 0) return null
-
-        const ids = collections.map(collection => collection.id)
-        return ids
-    }
-
-    const form = useForm<z.infer<typeof CategoryNode>>({
-        resolver: zodResolver(CategoryNode),
+    const form = useForm<z.infer<typeof CollectionNode>>({
+        resolver: zodResolver(CollectionNode),
         mode: 'onChange',
         defaultValues: DEFAULT_VALUES
     });
@@ -63,18 +57,19 @@ export default function AddCategory({
     };
 
     const mutation = useMutation({
-        mutationKey: ['createCategory', requestHeaders],
-        mutationFn: (values: CategoryNode) => 
+        mutationKey: ['createCollection', requestHeaders],
+        mutationFn: (values: CollectionNode) => 
           request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-            createCategory(),
+            createCollection(),
             {input: {
                 displayName: values.displayName,
                 description: values.description,
                 abbreviation: values.abbreviation,
-                collectionIDs: getCollectionsIds(values.collections),
+                categoryID: values.category.id,
                 primaryImageURL: values.primaryImageURL,
-                slug: values.slug
+                slug: values.slug,
+                type: values.type,
             }},
             requestHeaders
           ),
@@ -95,14 +90,14 @@ export default function AddCategory({
             setOpenDialog(false)
             toast({
                 title: "Успешно!",
-                description: "Категория создана",
+                description: "Коллекция создана",
                 className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
             })
             router.refresh()
         },
     })
 
-    function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+    function handleSave(dataForm: z.infer<typeof CollectionNode>) {
         const {
             description,
             ...rest // assigns remaining
@@ -127,7 +122,7 @@ export default function AddCategory({
                 <DialogHeader>
                     <DialogTitle>Создать</DialogTitle>
                     <DialogDescription>
-                        Категорию
+                        Коллекцию
                     </DialogDescription>
                 </DialogHeader>
                 {loading
@@ -156,6 +151,20 @@ export default function AddCategory({
                                         <p className='mb-2 font-medium'>Slug <span className='font-light text-sm'>(URL имя)</span></p>
                                         <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
                                     </div>
+
+                                    <div className="mb-6">
+                                        <p className='mb-2 font-medium'>Тип <span className='font-light text-sm'>(нельзя изменить после создания)</span></p>
+                                        <TypeSelect className='w-full max-w-lg border rounded-md text-base' />
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <p className='mb-2 font-medium'>Категория</p>
+                                        <Categories 
+                                            defaultCategory={form.getValues("category")} 
+                                            formValueName={`category`} 
+                                            className='w-full max-w-lg border rounded-md text-base' 
+                                        />
+                                    </div>
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Фото</p>
@@ -169,7 +178,7 @@ export default function AddCategory({
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
-                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={""}  />
+                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue='' />
                                     </div>
                                 </ScrollArea>
                             </form>

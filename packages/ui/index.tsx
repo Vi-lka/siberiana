@@ -16,6 +16,7 @@ export * from "./src/input";
 export * from "./src/label";
 export * from "./src/navigation-menu";
 export * from "./src/popover";
+export * from "./src/popover-for-modal";
 export * from "./src/radio-group";
 export * from "./src/scroll-area";
 export * from "./src/select";

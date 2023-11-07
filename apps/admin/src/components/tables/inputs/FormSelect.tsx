@@ -10,9 +10,9 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+    PopoverForModal,
+    PopoverContentForModal,
+    PopoverTriggerForModal,
     ScrollArea,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
@@ -26,6 +26,7 @@ export type Item = {
 
 export function FormSelect({
   itemsData,
+  defaultValue,
   formValueName,
   className,
   side = "bottom",
@@ -35,6 +36,7 @@ export function FormSelect({
   onClick
 }: {
   itemsData: Array<Item> | null,
+  defaultValue?: Item | null,
   formValueName: string,
   className?: string,
   side?: "bottom" | "top" | "right" | "left",
@@ -51,7 +53,7 @@ export function FormSelect({
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 
   const form = useFormContext();
-  const selected = form.getValues(formValueName) as { id: string, displayName: string } | null
+  const selected = form.getValues(formValueName) as Item | null
 
   React.useEffect(() => {
     setItems(itemsData)
@@ -82,25 +84,27 @@ export function FormSelect({
 
   const handleSelected = React.useCallback(
     (newValue: Item) => {
-      form.setValue(formValueName, { id: newValue?.id, displayName: newValue?.displayName }, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+      form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     },
     [form, formValueName],
   );
 
+  const customDirty = defaultValue?.id !== selected?.id
+
   return (
     <div className={cn("max-w-[280px] relative", className)}>
-      <Popover open={openCombobox} onOpenChange={onComboboxOpenChange}>
+      <PopoverForModal open={openCombobox} onOpenChange={onComboboxOpenChange}>
         <div className="flex gap-0.5 items-center">
-          <PopoverTrigger asChild onClick={onClick}>
+          <PopoverTriggerForModal asChild onClick={onClick}>
             <Button
-              variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
+              variant={(form.getFieldState(formValueName).isDirty || customDirty) ? "outline" : "ghost"}
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
                 "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit",
                 form.getFieldState(formValueName).invalid 
                   ? "border-red-600" 
-                  : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
+                  : (form.getFieldState(formValueName).isDirty || customDirty) ? "border-green-500" : ""
               )}
             >
                 {selected 
@@ -111,9 +115,9 @@ export function FormSelect({
                 }
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
-          </PopoverTrigger>
+          </PopoverTriggerForModal>
         </div>
-        <PopoverContent 
+        <PopoverContentForModal 
           className={"p-0 font-Inter"}
           side={side} 
           align={align}
@@ -208,8 +212,8 @@ export function FormSelect({
               </CommandGroup> 
             </CommandList>
           </Command>
-        </PopoverContent>
-      </Popover>
+        </PopoverContentForModal>
+      </PopoverForModal>
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}

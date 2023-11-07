@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import CategoryFilter from '~/components/filters/CategoryFilter'
 import CollectionFilter from '~/components/filters/CollectionFilter'
-import TableArtifacts from './TableArtifacts'
+import TablesArtifacts from './TablesArtifacts'
 import { ArrowBigUp, Loader2 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +19,7 @@ export default function ArtifactsPage({
     <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
       <div className="flex md:flex-row flex-col gap-2 text-sm">
         <div className="">
-          <CategoryFilter hasArtifacts />
+          <CategoryFilter artifactsType />
           {!(!!category || !!collection) 
             ? (
               <div className="flex flex-col items-center text-center">
@@ -32,7 +32,7 @@ export default function ArtifactsPage({
         </div>
         
         <div className=''>
-          <CollectionFilter hasArtifacts searchParams={searchParams} />
+          <CollectionFilter artifactsType searchParams={searchParams} />
           {!(!!category || !!collection)
             ? (
               <div className="flex flex-col items-center text-center">
@@ -58,7 +58,7 @@ export default function ArtifactsPage({
         (!!collection)
         ? (
           <Suspense fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto' />}>
-            <TableArtifacts searchParams={searchParams} />
+            <TablesArtifacts searchParams={searchParams} />
           </Suspense>
         )
         : null

@@ -12,7 +12,21 @@ export const LocationsList = z.object({
 })
 export type LocationsList = z.infer<typeof LocationsList>;
 
-//.........................LOCATIONS.........................//
+//.........................CATEGORIES.........................//
+export const CategoriesList = z.object({
+    categories: z.object({
+        edges: z.object({
+            node: z.object({
+                id: z.string(),
+                displayName: z.string(),
+                slug: z.string(),
+            })
+        }).array()
+    })
+})
+export type CategoriesList = z.infer<typeof CategoriesList>;
+
+//.........................COLLECTIONS.........................//
 export const CollectionsList = z.object({
     collections: z.object({
         edges: z.object({

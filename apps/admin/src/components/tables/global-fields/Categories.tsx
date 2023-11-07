@@ -1,30 +1,32 @@
-import type { TechniquesList } from '@siberiana/schemas'
+import type { CategoriesList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getTechniquesQuery } from '~/lib/queries/client/artifacts'
-import { FormSelectMulti } from '../inputs/FormSelectMulti'
+import { getCategoriesQuery } from '~/lib/queries/client/global'
+import { FormSelect } from '../inputs/FormSelect'
 
-export default function Techniques({ 
-  defaultTechniques,
-  rowIndex
+export default function Categories({ 
+  defaultCategory,
+  formValueName,
+  className
 }: { 
-  defaultTechniques: {
+  defaultCategory: {
     id: string, 
     displayName: string
-  }[],
-  rowIndex: number
+  } | null,
+  formValueName: string,
+  className?: string,
 }) {
 
-  const defaultItems = (defaultTechniques.length > 0) ? defaultTechniques : [{ id: "", displayName: "__" }]
+  const defaultItem = defaultCategory ? defaultCategory : {id: "", displayName: "__"}
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<TechniquesList, Error>({
-    queryKey: ['techniques'],
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<CategoriesList, Error>({
+    queryKey: ['сollections'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getTechniquesQuery(),
+        getCategoriesQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -33,19 +35,17 @@ export default function Techniques({
   if (isError && !!error){
     return (
       <>
-        {defaultItems.map((item, index) => (
-          <p key={index} className=''>{item.displayName}</p>
-        ))}
+        <p className=''>{defaultItem.displayName}</p>
         <ErrorToast
           error={error.message}
-          place="Техники"
+          place="Коллекции"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.techniques.edges.map(({ node }) => {
+    ? data.categories.edges.map(({ node }) => {
       const id = node.id
       const displayName = node.displayName
       return { id, displayName }
@@ -58,12 +58,13 @@ export default function Techniques({
 
   return (
     <div className='h-full w-full'>
-      <FormSelectMulti 
+      <FormSelect 
+        defaultValue={defaultCategory}
         itemsData={itemsData} 
-        defaultValues={defaultTechniques}
-        formValueName={`artifacts[${rowIndex}].techniques`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
+        className={className}
       />
     </div>
   )

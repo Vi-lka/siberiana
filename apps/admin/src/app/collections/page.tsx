@@ -1,12 +1,12 @@
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler'
-import { getCategories } from '~/lib/queries/collections'
-import UpdateCategory from './UpdateCategory'
-import AddCategory from './AddCategory'
+import { getCollections } from '~/lib/queries/collections'
+import AddCollection from './AddCollection'
+import UpdateCollection from './UpdateCollection'
 
 export const dynamic = 'force-dynamic'
 
-export default async function CategoriesPage({
+export default async function CollectionsPage({
     searchParams
 }: {
     searchParams: { [key: string]: string | string[] | undefined },
@@ -15,7 +15,7 @@ export default async function CategoriesPage({
     const search = searchParams['search'] as string | undefined
 
     const [ result ] = await Promise.allSettled([ 
-        getCategories({ 
+        getCollections({ 
           first: null,
           search,
         }) 
@@ -24,7 +24,7 @@ export default async function CategoriesPage({
         return (
           <ErrorHandler
             error={result.reason as unknown}
-            place="Categories Page"
+            place="Collections Page"
             notFound 
             goBack
           />
@@ -33,11 +33,11 @@ export default async function CategoriesPage({
       
     return (
         <div key={Math.random()} className='font-OpenSans px-2 py-10 md:ml-[14rem]'>
-            <AddCategory className='mr-6 ml-auto' />
+            <AddCollection className='mr-6 ml-auto' />
             <div className='flex flex-wrap justify-center gap-10 mt-6'>
                 {result.value.edges.map(edge => (
                     <div key={edge.node.id} className=''>
-                        <UpdateCategory {...edge.node} />
+                        <UpdateCollection {...edge.node} />
                     </div>
                 ))}
             </div>

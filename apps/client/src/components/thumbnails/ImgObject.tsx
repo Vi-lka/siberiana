@@ -58,6 +58,7 @@ export default function ImgObject(props: Props) {
               "object-cover"
           )}
           alt={props.title ? props.title : ""}
+          priority={true}
         />
 
         <p className="lg:text-base text-sm font-Inter font-normal transition-all duration-200 underline-offset-4 decoration-primary decoration-[3px] dark:decoration-2">

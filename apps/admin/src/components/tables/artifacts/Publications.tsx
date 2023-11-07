@@ -60,6 +60,7 @@ export default function Publications({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultPublications}
         formValueName={`artifacts[${rowIndex}].publications`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

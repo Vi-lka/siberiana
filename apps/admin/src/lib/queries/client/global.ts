@@ -1,10 +1,51 @@
-export function getCollectionsQuery({withoutCategory = null}: {withoutCategory: boolean | null}) {
+export function getCategoriesQuery() {
+    const query = `
+      query Categories() {
+        categories(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+        ) {
+          totalCount
+          edges {
+            node {
+              id
+              displayName
+              slug
+            }
+          }
+        }
+      }
+    `
+    return query
+}
+
+export function getCollectionsQuery({
+  hasCategory = null,
+  categoryId,
+}: {
+  hasCategory?: boolean | null,
+  categoryId?: string, 
+}) {
     const query = `
       query Collections() {
         collections(
           orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
           where: {
-            hasCategory: ${withoutCategory}
+            or: [
+              ${!!categoryId
+                ? `{
+                  hasCategoryWith: [
+                    {
+                      id: "${categoryId}"
+                    }
+                  ]
+                },`
+                : ''
+              }
+              ${hasCategory !== null 
+                ? `{ hasCategory: ${hasCategory} },`
+                : ''
+              }
+            ]
           }
         ) {
           totalCount

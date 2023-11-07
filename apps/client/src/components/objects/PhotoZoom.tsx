@@ -52,7 +52,7 @@ export default function PhotoZoom({
                             src={image}
                             onError={() => setImage("/images/image-placeholder.png")}
                             fill
-                            sizes="100vw"
+                            sizes="150vw"
                             quality={100}
                             className='object-contain'
                             alt={alt}

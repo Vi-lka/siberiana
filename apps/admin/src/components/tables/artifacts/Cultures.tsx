@@ -59,6 +59,7 @@ export default function Cultures({
   return (
     <div className='h-full w-full'>
       <FormSelect 
+        defaultValue={defaultCulture}
         itemsData={itemsData} 
         formValueName={`artifacts[${rowIndex}].culturalAffiliation`}
         isLoading={isFetching && isPending}

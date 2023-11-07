@@ -255,6 +255,7 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
                         }
                     }
                     collection {
+                        id
                         slug
                         displayName
                         category {

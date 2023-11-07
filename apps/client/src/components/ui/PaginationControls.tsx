@@ -128,7 +128,11 @@ export default function PaginationControls({
                     <>
                       {dict.page}
                       <Input 
-                        className='w-14 mx-2 font-Inter font-normal text-base'
+                        className={cn(
+                          'w-16 mx-2 font-Inter font-normal text-base',
+                          max_page < 9 ? 'w-14' :
+                            max_page > 99 ? "w-20" : "w-16"
+                        )}
                         type="number" 
                         value={pageInput} 
                         onChange={handleChangeInput}

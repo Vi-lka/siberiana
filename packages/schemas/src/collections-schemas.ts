@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const CollectionTypeEnum = z.enum([ 
+    "art",
     "artifacts",
     "books",
     "protected_area_pictures",
@@ -41,15 +42,16 @@ export type CollectionsEnum = z.infer<typeof CollectionsEnum>
 export const CollectionNode = z.object({
     id: z.string(),
     type: CollectionTypeEnum,
-    slug: z.string(),
-    displayName: z.string(),
+    slug: z.string().min(1).regex(new RegExp("^[a-z](-?[a-z])*$")),
+    displayName: z.string().min(1),
     abbreviation: z.string(),
     primaryImageURL: z.string(),
     description: z.string(),
     category : z.object({
         id: z.string(),
-        slug: z.string()
-    }).nullable(),
+        slug: z.string().optional(),
+        displayName: z.string(),
+    }),
     createdBy: z.string().optional(),
     createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
     updatedBy: z.string().optional(),

@@ -8,17 +8,19 @@ export const getCategories = async ({
     offset = 0,
     search = "",
     sort = "DISPLAY_NAME:ASC",
-    hasArtifacts,
-    hasBooks,
-    hasPAP
+    artType,
+    artifactsType,
+    booksType,
+    PAPType,
   }: {
     first: number | null,
     offset?: number | null,
     search?: string,
     sort?: string,
-    hasArtifacts?: boolean,
-    hasBooks?: boolean,
-    hasPAP?: boolean
+    artType?: boolean,
+    artifactsType?: boolean,
+    booksType?: boolean,
+    PAPType?: boolean
   }): Promise<Categories> => {
     const headers = { "Content-Type": "application/json" };
     const query = /* GraphGL */ `
@@ -31,12 +33,15 @@ export const getCategories = async ({
             direction: ${sort.split(':')[1]}
           }],
           where: {
-            ${(!!hasArtifacts || !!hasBooks || !!hasPAP)
+            ${(!!artType || !!artifactsType || !!booksType || !!PAPType)
                 ? `
                 hasCollectionsWith: [{
-                    hasArtifacts: ${!!hasArtifacts ? `true`: `null`},
-                    hasBooks: ${!!hasBooks ? `true`: `null`},
-                    hasProtectedAreaPictures: ${!!hasPAP ? `true`: `null`}
+                  typeIn: [
+                    ${!!artType ? `art,`: ""}
+                    ${!!artifactsType ? `artifacts,`: ""}
+                    ${!!booksType ? `books,`: ""}
+                    ${!!PAPType ? `protected_area_pictures,`: ""}
+                  ]
                 }],
                 ` : ''
             }
@@ -102,22 +107,26 @@ export const getCategories = async ({
   //.........................COLLECTIONS.........................//
   export const getCollections = async ({
     first,
+    slug,
     offset = 0,
     search = "",
     sort = "DISPLAY_NAME:ASC",
     categories,
-    hasArtifacts,
-    hasBooks,
-    hasPAP
+    artType,
+    artifactsType,
+    booksType,
+    PAPType,
   }: {
     first: number | null,
+    slug?: string,
     offset?: number | null,
     search?: string,
     sort?: string,
     categories?: string,
-    hasArtifacts?: boolean,
-    hasBooks?: boolean,
-    hasPAP?: boolean
+    artType?: boolean,
+    artifactsType?: boolean,
+    booksType?: boolean,
+    PAPType?: boolean,
   }): Promise<Collections> => {
     const headers = { "Content-Type": "application/json" };
     const query = /* GraphGL */ `
@@ -130,9 +139,13 @@ export const getCategories = async ({
             direction: ${sort.split(':')[1]}
           }],
           where: {
-            hasArtifacts: ${!!hasArtifacts ? `true`: `null`},
-            hasBooks: ${!!hasBooks ? `true`: `null`},
-            hasProtectedAreaPictures: ${!!hasPAP ? `true`: `null`},
+            ${!!slug ? `slug: "${slug}",` : ""}
+            typeIn: [
+              ${!!artType ? `art,`: ""}
+              ${!!artifactsType ? `artifacts,`: ""}
+              ${!!booksType ? `books,`: ""}
+              ${!!PAPType ? `protected_area_pictures,`: ""}
+            ],
             ${!!categories ? (
               `hasCategoryWith: [
                 {slugIn: [${getMultiFilter(categories)}]}
@@ -156,7 +169,7 @@ export const getCategories = async ({
               description
               category {
                 id
-                slug
+                displayName
               }
               createdBy
               createdAt

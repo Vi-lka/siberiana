@@ -46,8 +46,11 @@ export function SingleItemProtectedArea({
     value
 }: {
     label: string,
-    value: ProtectedArea,
+    value: ProtectedArea | null,
 }) {
+
+    if (value === null) return null
+
     return (
         <TableRow>
             <TableCell className="py-3 w-2/5 text-base font-semibold">{label}</TableCell>
@@ -66,7 +69,7 @@ export function SingleItemProtectedArea({
                             <span className='font-semibold'>Область:</span> {value.area}
                         </p>
                         <p className="ml-2">
-                            <span className='font-semibold'>Дата создания:</span> {new Date(value.establishmentDate).toLocaleDateString("ru")}
+                            <span className='font-semibold'>Дата создания:</span> {value.establishmentDate?.toLocaleDateString("ru")}
                         </p>
                     </AccordionContent>
                   </AccordionItem>

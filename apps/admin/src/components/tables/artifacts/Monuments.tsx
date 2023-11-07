@@ -59,6 +59,7 @@ export default function Monuments({
   return (
     <div className='h-full w-full'>
       <FormSelect 
+        defaultValue={defaultMonument}
         itemsData={itemsData} 
         formValueName={`artifacts[${rowIndex}].monument`}
         isLoading={isFetching && isPending}

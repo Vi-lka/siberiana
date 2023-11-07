@@ -64,12 +64,13 @@ export const getArtifacts = async ({
                     dimensions
                     weight
                     collection {
-                        slug
-                        displayName
-                        category {
-                            slug
-                            displayName
-                        }
+                      id
+                      slug
+                      displayName
+                      category {
+                          slug
+                          displayName
+                      }
                     }
                     location {
                       id

@@ -60,6 +60,7 @@ export default function Authors({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
+        defaultValues={defaultAuthors}
         formValueName={`artifacts[${rowIndex}].authors`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 

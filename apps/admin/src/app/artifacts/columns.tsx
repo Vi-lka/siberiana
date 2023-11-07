@@ -1,9 +1,8 @@
 "use client"
 
 import type { ColumnDef } from "@tanstack/react-table"
-import type {ArtifactById} from '@siberiana/schemas';
-import Image from "next/image"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@siberiana/ui"
+import type { ArtifactForTable } from '@siberiana/schemas';
+import { Checkbox } from "@siberiana/ui"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader"
@@ -18,13 +17,36 @@ import Techniques from "~/components/tables/artifacts/Techniques"
 import Projects from "~/components/tables/artifacts/Projects";
 import Locations from "~/components/tables/global-fields/Locations"
 import DateSelect from "~/components/tables/inputs/DateSelect"
+import Status from "~/components/tables/global-fields/Status";
+import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
 
-export const columns: ColumnDef<ArtifactById>[] = [
+export const columns: ColumnDef<ArtifactForTable>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        className="rounded-[6px] w-5 h-5"
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        className="rounded-[6px] w-5 h-5"
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "id",
     header: () => <div className="text-center">ID</div>,
     cell: ({ row }) => {
-      const id = parseFloat(row.original.id)
+      const id = row.original.id.includes("random") ? row.index : parseFloat(row.original.id)
       return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
     },
   },
@@ -37,35 +59,16 @@ export const columns: ColumnDef<ArtifactById>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormTextArea name={`artifacts[${row.index}].displayName`}/>
+        <FormTextArea name={`artifacts[${row.index}].displayName`} defaultValue={row.original.displayName}/>
       )
     },
   },
   {
     accessorKey: "primaryImageURL",
-    header: () => <div className="text-center">Фото</div>,
+    header: () => <div className="text-center min-w-[80px]">Фото</div>,
     cell: ({ row }) => {
-      const image = row.original.primaryImageURL
       return (
-        <HoverCard openDelay={100} closeDelay={100}>
-          <HoverCardTrigger>
-            <Image 
-              src={image} 
-              alt={image} 
-              width={30}
-              height={30}
-            />
-          </HoverCardTrigger>
-          <HoverCardContent side="right">
-            <Image 
-              src={image} 
-              alt={image} 
-              width={180}
-              height={180}
-              className="object-contain mx-auto"
-            />
-          </HoverCardContent>
-        </HoverCard>
+        <PopoverDropzone formValueName={`artifacts[${row.index}].primaryImageURL`} bucket="default" className="px-6 py-6" /> // change later on "artifacts"
       )
     },
   },
@@ -74,7 +77,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
     header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea name={`artifacts[${row.index}].description`}/>
+        <FormTextArea name={`artifacts[${row.index}].description`} defaultValue={row.original.description}/>
       )
     },
   },
@@ -119,7 +122,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
     header: () => <div className="text-center">Типология</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea name={`artifacts[${row.index}].typology`}/>
+        <FormTextArea name={`artifacts[${row.index}].typology`} defaultValue={row.original.typology}/>
       )
     },
   },
@@ -128,13 +131,13 @@ export const columns: ColumnDef<ArtifactById>[] = [
     header: () => <div className="text-center">Химический состав</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea name={`artifacts[${row.index}].chemicalComposition`}/>
+        <FormTextArea name={`artifacts[${row.index}].chemicalComposition`} defaultValue={row.original.chemicalComposition}/>
       )
     },
   },
   {
     accessorKey: "mediums",
-    header: () => <div className="text-center">Материал</div>,
+    header: () => <div className="text-center">Материалы</div>,
     cell: ({ row }) => {
       return (
         <Materials defaultMaterials={row.original.mediums} rowIndex={row.index} />
@@ -155,7 +158,7 @@ export const columns: ColumnDef<ArtifactById>[] = [
     header: () => <div className="text-center">Дата приема в фонд</div>,
     cell: ({ row }) => {
       return (
-        <DateSelect name={`artifacts[${row.index}].admissionDate`} placeholder="Выберите дату" />
+        <DateSelect name={`artifacts[${row.index}].admissionDate`} placeholder="Выберите дату" defaultValue={row.original.admissionDate} />
       )
     },
   },
@@ -218,6 +221,17 @@ export const columns: ColumnDef<ArtifactById>[] = [
         ? format(row.original.updatedAt, "PPP", {locale: ru})
         : ""
       return <div className="text-center break-words">{updatedAt}</div>
+    },
+  },
+]
+
+export const moderatorsColumns: ColumnDef<ArtifactForTable>[] = [
+  ...columns,
+  {
+    accessorKey: "status",
+    header: () => <div className="text-center">Статус</div>,
+    cell: ({ row }) => {
+      return <Status defaultStatus={row.original.status} formValueName={`artifacts[${row.index}].status`} />
     },
   },
 ]
