@@ -220,7 +220,7 @@ export default function CreateTable<TData, TValue>({
       setLoading(false)
       toast({
         title: "Успешно!",
-        description: "Артефакт создан",
+        description: "Артефакты добавлены",
         className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       })
       console.log("results: ", results)

@@ -110,11 +110,11 @@ export default function Dropzone({
     )
     
     return (
-        <div className={cn("px-12 py-10 border border-solid border-border rounded-md bg-muted", className)}>
+        <div className={cn("lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md bg-muted", className)}>
             {isLoading && progress < 100
                 ? <Progress value={progress} className="w-full" />
                 : (<>
-                    <Image src={file} width={200} height={200} alt={file} className='mx-auto'/>
+                    <Image src={file} width={180} height={180} alt={file} className='mx-auto object-cover'/>
                     <p className='font-light text-xs break-words text-center mt-3'>{file}</p>
                 </>)
             }

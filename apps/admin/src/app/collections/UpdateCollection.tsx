@@ -19,8 +19,9 @@ import getShortDescription from '~/lib/utils/getShortDescription';
 import ImageComp from '~/components/lists/ImageComp';
 import MetaData from '~/components/lists/MetaData';
 import DeleteCollection from './DeleteCollection';
-import { Loader2 } from 'lucide-react';
+import { ChevronRight, Loader2 } from 'lucide-react';
 import { updateCollection } from '~/lib/mutations/collections';
+import Link from 'next/link';
 
 export default function UpdateCollection(props: CollectionNode) {
     
@@ -124,10 +125,10 @@ export default function UpdateCollection(props: CollectionNode) {
                             Изменить
                         </DialogTitle>
                         <DialogDescription>
-                            Редактировать коллекцию
+                            Коллекцию: <span className="font-semibold lg:text-base text-xs break-all">{props.displayName}</span>
                         </DialogDescription>
                     </div>
-                    <DeleteCollection id={props.id} className='mr-4 ml-auto mt-0' />
+                    <DeleteCollection id={props.id} name={props.displayName} className='mr-4 ml-auto mt-0' />
                 </DialogHeader>
                 {loading
                     ? <Loader2 className='animate-spin w-12 h-12 mx-auto mt-3' />
@@ -145,7 +146,7 @@ export default function UpdateCollection(props: CollectionNode) {
                                   Сохранить
                                 </Button>
                                 <Separator />
-                                <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
+                                <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Название</p>
                                         <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
@@ -158,7 +159,9 @@ export default function UpdateCollection(props: CollectionNode) {
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Тип</p>
-                                        <p>{getName(props.type)}</p>
+                                        <Link href={`/${props.type}?collection=${props.slug}`} className='flex items-center underline underline-offset-2'>
+                                            {getName(props.type)} <ChevronRight className='w-5 h-5' />
+                                        </Link>
                                     </div>
 
                                     <div className="mb-6">

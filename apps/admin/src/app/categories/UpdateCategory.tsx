@@ -114,15 +114,15 @@ export default function UpdateCategory(props: CategoryNode) {
             </DialogTrigger>
             <DialogContent className='font-Inter'>
                 <DialogHeader className='flex flex-row justify-between items-center'>
-                    <div className='flex flex-col space-y-1.5 text-left'>
+                    <div className='flex flex-col space-y-1.5 text-left ml-0 mr-auto'>
                         <DialogTitle>
                             Изменить
                         </DialogTitle>
                         <DialogDescription>
-                            Редактировать категорию
+                            Категорию: <span className="font-semibold lg:text-base text-xs break-all">{props.displayName}</span>
                         </DialogDescription>
                     </div>
-                    <DeleteCategory id={props.id} collections={props.collections} className='mr-4 ml-auto mt-0' />
+                    <DeleteCategory id={props.id} name={props.displayName} collections={props.collections} className='mr-4 ml-auto mt-0' />
                 </DialogHeader>
                 {loading
                     ? <Loader2 className='animate-spin w-12 h-12 mx-auto mt-3' />
@@ -140,7 +140,7 @@ export default function UpdateCategory(props: CategoryNode) {
                                   Сохранить
                                 </Button>
                                 <Separator />
-                                <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
+                                <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Название</p>
                                         <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />

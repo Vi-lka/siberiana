@@ -127,7 +127,7 @@ export default function AddCategory({
                 <DialogHeader>
                     <DialogTitle>Создать</DialogTitle>
                     <DialogDescription>
-                        Добавить категорию
+                        Категорию
                     </DialogDescription>
                 </DialogHeader>
                 {loading
@@ -146,7 +146,7 @@ export default function AddCategory({
                                   Создать
                                 </Button>
                                 <Separator />
-                                <ScrollArea className='pt-3' classNameViewport='max-h-[70vh] md:px-4 px-2'>
+                                <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Название</p>
                                         <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />

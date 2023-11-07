@@ -14,10 +14,12 @@ import getShortDescription from '~/lib/utils/getShortDescription'
 
 export default function DeleteCategory({
     id,
+    name,
     collections,
     className,
 }: {
     id: string,
+    name: string,
     collections: {
         id: string;
         displayName: string;
@@ -83,7 +85,7 @@ export default function DeleteCategory({
                 <DialogHeader>
                     <DialogTitle>Удалить</DialogTitle>
                     <DialogDescription>
-                        Удалить категорию
+                        Категорию: <span className="font-semibold lg:text-base text-xs break-all">{name}</span>
                     </DialogDescription>
                 </DialogHeader>
                 {loading

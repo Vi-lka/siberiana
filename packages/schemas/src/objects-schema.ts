@@ -150,7 +150,7 @@ export const ProtectedArea = z.object({
     displayName: z.string(),
     description: z.string(),
     area: z.string(),
-    establishmentDate: z.string(),
+    establishmentDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
     protectedAreaCategory: z.object({
         displayName: z.string(),  
     }).nullable(),
@@ -164,10 +164,10 @@ export const PAPById = z.object({
     description: z.string(),
     primaryImageURL: z.string(),
     additionalImagesUrls: z.string().array().nullable(),
-    shootingDate: z.string(),
+    shootingDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
     collection: Collection,
     location: Location.nullable(),
-    protectedArea: ProtectedArea,
+    protectedArea: ProtectedArea.nullable(),
     license: z.object({
         displayName: z.string(),  
     }).nullable(),

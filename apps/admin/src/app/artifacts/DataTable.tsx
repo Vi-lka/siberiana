@@ -20,7 +20,7 @@ import type { ArtifactForTable } from "@siberiana/schemas";
 import { ArtifactsForm } from "@siberiana/schemas";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useDeleteArtifact } from "~/lib/mutations/objects";
+import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
@@ -46,7 +46,8 @@ export default function DataTable<TData, TValue>({
   const router = useRouter()
   const session = useSession()
 
-  const mutation = useDeleteArtifact(session.data?.access_token)
+  const deleteMutation = useDeleteArtifact(session.data?.access_token)
+  const updateMutation = useUpdateArtifact(session.data?.access_token)
 
   const isModerator = userRoles?.includes("moderator")
 
@@ -99,7 +100,7 @@ export default function DataTable<TData, TValue>({
     ) as ArtifactForTable[] & TData[]
     const idsToDelete = dataToDelete.map(item => item.id)
 
-    const mutationsArray = idsToDelete.map(id => mutation.mutateAsync(id))
+    const mutationsArray = idsToDelete.map(id => deleteMutation.mutateAsync(id))
 
     const results = await Promise.allSettled(mutationsArray)
 
@@ -118,7 +119,7 @@ export default function DataTable<TData, TValue>({
       setLoading(false)
       toast({
         title: "Успешно!",
-        description: "Артефакт удален",
+        description: "Артефакты удалены",
         className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       })
       console.log("results: ", results)
@@ -127,45 +128,73 @@ export default function DataTable<TData, TValue>({
     }
   }
 
-  // console.log("dirtyFields: ", form.formState.dirtyFields.artifacts)
-
-  function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
     const noLines = dataForm.artifacts.map(artifact => {
-      const displayName = artifact.displayName?.replace(/\n/g, " ")
-      const description = artifact.description?.replace(/\n/g, " ")
-      const typology = artifact.typology?.replace(/\n/g, " ")
-      const chemicalComposition = artifact.chemicalComposition?.replace(/\n/g, " ")
-
-      return {
-        id: artifact.id,
-        status: artifact.status,
-        displayName, 
-        description, 
+      const {
+        displayName,
+        description,
         typology,
         chemicalComposition,
-        culturalAffiliation: artifact.culturalAffiliation,
-        set: artifact.set,
-        monument: artifact.monument,
-        mediums: artifact.mediums,
-        techniques: artifact.techniques,
-        authors: artifact.authors,
-        publications: artifact.publications,
-        projects: artifact.projects,
-        admissionDate: artifact.admissionDate,
-        location: artifact.location,
+        ...rest
+      } = artifact
+      
+      const displayNameReplace = displayName?.replace(/\n/g, " ")
+      const descriptionReplace = description?.replace(/\n/g, " ")
+      const typologyReplace = typology?.replace(/\n/g, " ")
+      const chemicalCompositionReplace = chemicalComposition?.replace(/\n/g, " ")
+
+      return {
+        displayName: displayNameReplace,
+        description: descriptionReplace,
+        typology: typologyReplace,
+        chemicalComposition: chemicalCompositionReplace,
+        ...rest
       }
     })
 
     const dirtyFields = form.formState.dirtyFields.artifacts
 
-    noLines.map((item, index) => {
-      if(!!dirtyFields && (typeof dirtyFields[index] !== 'undefined')) {
-        console.log("dirty: ", item)
+    const dirtyFieldsArray = noLines.map((item, index) => {
+      if (!!dirtyFields && (typeof dirtyFields[index] !== 'undefined')) {
+        return { new: item, old: data[index] }
       }
-      else {
-        console.log("no dirty fields found")
-      }
-    })
+    }).filter((item) => item !== undefined) as {
+      new: ArtifactForTable, 
+      old: ArtifactForTable
+    }[]
+
+    const mutationsArray = dirtyFieldsArray.map(
+      item => updateMutation.mutateAsync({
+        id: item.new.id,
+        newValue: item.new,
+        oldValue: item.old
+      })
+    )
+
+    const results = await Promise.allSettled(mutationsArray)
+
+    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+
+    if (rejected) {
+      setLoading(false)
+      toast({
+        variant: "destructive",
+        title: "Oшибка!",
+        description: rejected.reason as string,
+        className: "font-Inter"
+      })
+      console.log(rejected.reason)
+    } else {
+      setLoading(false)
+      toast({
+        title: "Успешно!",
+        description: "Артефакты изменены",
+        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      })
+      console.log("results: ", results)
+      table.toggleAllPageRowsSelected(false)
+      router.refresh()
+    }
   }
 
   return (
@@ -173,7 +202,7 @@ export default function DataTable<TData, TValue>({
       <Form {...form}>
         <form
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={form.handleSubmit(handleSave)}
+          onSubmit={form.handleSubmit(handleUpdate)}
           className="mt-1 h-full w-full flex flex-col"
         >
           <div className="flex lg:flex-row flex-col-reverse gap-3 lg:items-center w-full justify-between mb-3">
