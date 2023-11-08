@@ -27,7 +27,6 @@ export default function Locations({
 }) {
 
   const [openCombobox, setOpenCombobox] = React.useState(false);
-  // const [open, setOpen] = React.useState(false)
 
   const defaultLable = !!defaultLocation 
     ? defaultLocation.displayName.length > 0

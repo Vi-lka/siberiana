@@ -99,6 +99,17 @@ export default function CreateTable<TData, TValue>({
     chemicalComposition: "",
     typology: "",
     weight: "",
+    sizes: {
+      width: 0,
+      height: 0,
+      length: 0,
+      depth: 0,
+      diameter: 0,
+    },
+    datingRow: {
+      datingStart: 0,
+      datingEnd: 0,
+    },
     culturalAffiliation: null,
     set: null,
     monument: null,
@@ -175,30 +186,20 @@ export default function CreateTable<TData, TValue>({
     setLoading(true)
 
     const noLines = dataForm.artifacts.map(artifact => {
-      const displayName = artifact.displayName?.replace(/\n/g, " ")
-      const description = artifact.description?.replace(/\n/g, " ")
-      const typology = artifact.typology?.replace(/\n/g, " ")
-      const chemicalComposition = artifact.chemicalComposition?.replace(/\n/g, " ")
-
-      return {
-        id: artifact.id,
-        status: artifact.status,
-        collection: artifact.collection,
-        displayName, 
-        description, 
-        primaryImageURL: artifact.primaryImageURL,
+      const {
+        displayName,
+        description,
         typology,
         chemicalComposition,
-        culturalAffiliation: artifact.culturalAffiliation,
-        set: artifact.set,
-        monument: artifact.monument,
-        mediums: artifact.mediums,
-        techniques: artifact.techniques,
-        authors: artifact.authors,
-        publications: artifact.publications,
-        projects: artifact.projects,
-        admissionDate: artifact.admissionDate,
-        location: artifact.location,
+        ...rest
+      } = artifact
+
+      return {
+        displayName: displayName.replace(/\n/g, " "), 
+        description: description?.replace(/\n/g, " "), 
+        typology: typology?.replace(/\n/g, " "),
+        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
+        ...rest,
       }
     })
 

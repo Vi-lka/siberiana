@@ -70,6 +70,17 @@ export default async function TablesArtifacts({
       chemicalComposition: "",
       typology: "",
       weight: "",
+      sizes: {
+        width: 0,
+        height: 0,
+        length: 0,
+        depth: 0,
+        diameter: 0,
+      },
+      datingRow: {
+        datingStart: 0,
+        datingEnd: 0,
+      },
       culturalAffiliation: null,
       set: null,
       monument: null,
@@ -118,6 +129,13 @@ export default async function TablesArtifacts({
       region,
       district,
       settlement,
+      width,
+      height,
+      length,
+      depth,
+      diameter,
+      datingStart,
+      datingEnd,
       ...rest // assigns remaining
     } = node;
 
@@ -143,11 +161,20 @@ export default async function TablesArtifacts({
         displayName: collection.displayName
       },
       location: locationForTabel,
+      sizes: {
+        width,
+        height,
+        length,
+        depth,
+        diameter,
+      },
+      datingRow: {
+        datingStart,
+        datingEnd
+      },
       ...rest
     } as ArtifactForTable
   })
-
-  console.log(dataForUpdate)
 
   if (mode === 'add') return (
     <div className="w-full mx-auto pt-3">

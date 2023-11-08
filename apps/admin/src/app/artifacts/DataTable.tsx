@@ -91,7 +91,6 @@ export default function DataTable<TData, TValue>({
     [router],
   );
 
-
   async function handleDelete() {
     setLoading(true)
 
@@ -142,17 +141,12 @@ export default function DataTable<TData, TValue>({
         chemicalComposition,
         ...rest
       } = artifact
-      
-      const displayNameReplace = displayName?.replace(/\n/g, " ")
-      const descriptionReplace = description?.replace(/\n/g, " ")
-      const typologyReplace = typology?.replace(/\n/g, " ")
-      const chemicalCompositionReplace = chemicalComposition?.replace(/\n/g, " ")
 
       return {
-        displayName: displayNameReplace,
-        description: descriptionReplace,
-        typology: typologyReplace,
-        chemicalComposition: chemicalCompositionReplace,
+        displayName: displayName.replace(/\n/g, " "),
+        description: description?.replace(/\n/g, " "),
+        typology: typology?.replace(/\n/g, " "),
+        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest
       }
     })

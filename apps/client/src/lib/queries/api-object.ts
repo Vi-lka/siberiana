@@ -17,11 +17,19 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     description
                     primaryImageURL
                     additionalImagesUrls
-                    dating
                     admissionDate
                     chemicalComposition
                     typology
                     weight
+                    width
+                    height
+                    length
+                    depth
+                    diameter
+                    datingStart
+                    datingEnd
+                    dating
+                    dimensions
                     collection {
                         slug
                         displayName

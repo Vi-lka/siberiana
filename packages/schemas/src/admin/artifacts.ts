@@ -10,6 +10,15 @@ export const LocationEnum = z.enum([
 ])
 export type LocationEnum = z.infer<typeof LocationEnum>;
 
+export const Sizes = z.object({
+    width: z.number(),
+    height: z.number(),
+    length: z.number(),
+    depth: z.number(),
+    diameter: z.number(),
+});
+export type Sizes = z.infer<typeof Sizes>;
+
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
     totalCount: z.number(),
@@ -28,9 +37,16 @@ export const ArtifactForTable = z.object({
     displayName: z.string().min(1),
     primaryImageURL: z.string(),
     description: z.string().optional(),
+    chemicalComposition: z.string().optional(),
     typology: z.string().optional(),
     weight: z.string().optional(),
-    chemicalComposition: z.string().optional(),
+    sizes: Sizes,
+    datingRow: z.object({
+        datingStart: z.number().int(),
+        datingEnd: z.number().int(),
+    }),
+    dating: z.string().optional(),
+    dimensions: z.string().optional(),
     admissionDate: z.date().nullable().optional(),
     collection: z.object({
         id: z.string(),

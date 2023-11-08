@@ -57,12 +57,19 @@ export const getArtifacts = async ({
                     description
                     primaryImageURL
                     additionalImagesUrls
-                    dating
                     admissionDate
                     chemicalComposition
                     typology
-                    dimensions
                     weight
+                    width
+                    height
+                    length
+                    depth
+                    diameter
+                    datingStart
+                    datingEnd
+                    dating
+                    dimensions
                     collection {
                       id
                       slug

@@ -1,129 +1,10 @@
 "use client"
 
-import type { ArtifactForTable, LocationEnum } from "@siberiana/schemas"
+import type { ArtifactForTable } from "@siberiana/schemas"
 import { useMutation } from "@tanstack/react-query"
 import request from "graphql-request"
-
-function getIds(values: { id: string, displayName: string }[]) {
-    const ids = values.map(value => value.id)
-    return ids
-}
-
-function getLocation(
-  location: {
-    id: string;
-    type: LocationEnum;
-    displayName: string;
-  } | null,
-  target: LocationEnum,
-) {
-  if (!location) return undefined;
-
-  switch (location.type) {
-    case "country":
-      if (target === "country") return location.id;
-      return undefined;
-
-    case "region":
-      if (target === "region") return location.id;
-      return undefined;
-
-    case "district":
-      if (target === "district") return location.id;
-      return undefined;
-
-    case "settlement":
-      if (target === "settlement") return location.id;
-      return undefined;
-
-    case "location":
-      if (target === "location") return location.id;
-      return undefined;
-
-    default:
-      return undefined;
-  }
-}
-
-function clearLocation(
-  location: {
-    id: string;
-    type: LocationEnum;
-    displayName: string;
-  } | null,
-  target: LocationEnum,
-) {
-  if (!location) return true;
-
-  switch (location.type) {
-    case "country":
-      if (target === "country") return undefined;
-      return true;
-
-    case "region":
-      if (target === "region") return undefined;
-      return true;
-
-    case "district":
-      if (target === "district") return undefined;
-      return true;
-
-    case "settlement":
-      if (target === "settlement") return undefined;
-      return true;
-
-    case "location":
-      if (target === "location") return undefined;
-      return true;
-
-    default:
-      return undefined;
-  }
-}
-
-function clearObject(object: {
-  id: string;
-  displayName: string;
-} | null) {
-  if (!object || !object.id || (object.id.length === 0)) return true
-  else false
-}
-
-function clearDate(date: Date | null | undefined) {
-  if (!date || date.toISOString().length === 0) return true
-  else false
-}
-
-function handleArrays(
-  newValues: {
-    id: string;
-    displayName: string;
-  }[], 
-  oldValues: {
-    id: string;
-    displayName: string;
-  }[]
-) {
-  const addValues = newValues.map(item => {
-      return item.id
-  }).filter(id => {
-    // includes() doesn't work with object, so we do this:
-    const contains = oldValues.some(elem => elem.id === id)
-    if (!contains) {
-      return id
-    }
-  })
-  const removeValues = oldValues.map(item => {
-      return item.id
-  }).filter(id => {
-    // includes() doesn't work with object, so we do this:
-    const contains = newValues.some(elem => elem.id === id)
-    if (!contains) {
-      return id
-    }
-  })
-  return { addValues, removeValues }
-}
+import { clearDate, clearLocation, clearObject, getIds, getLocation, handleArrays } from "../utils/mutations-utils"
+import { getLable } from "../utils/sizes-utils"
 
 //.........................ARTIFACT.........................//
 export function useCreateArtifact(access_token?: string) {
@@ -150,6 +31,13 @@ export function useCreateArtifact(access_token?: string) {
               displayName: value.displayName,
               description: value.description,
               primaryImageURL: value.primaryImageURL,
+              weight: value.weight,
+              width: value.sizes.width,
+              height: value.sizes.height,
+              length: value.sizes.length,
+              depth: value.sizes.depth,
+              diameter: value.sizes.diameter,
+              dimensions: getLable(value.sizes),
               typology: value.typology,
               chemicalComposition: value.chemicalComposition,
               culturalAffiliationID: value.culturalAffiliation?.id,
@@ -227,6 +115,12 @@ export function useUpdateArtifact(access_token?: string) {
                         primaryImageURL: newValue.primaryImageURL,
                         description: newValue.description,
                         weight: newValue.weight,
+                        width: newValue.sizes.width,
+                        height: newValue.sizes.height,
+                        length: newValue.sizes.length,
+                        depth: newValue.sizes.depth,
+                        diameter: newValue.sizes.diameter,
+                        dimensions: getLable(newValue.sizes),
                         typology: newValue.typology,
                         admissionDate: newValue.admissionDate,
                         chemicalComposition: newValue.chemicalComposition,
