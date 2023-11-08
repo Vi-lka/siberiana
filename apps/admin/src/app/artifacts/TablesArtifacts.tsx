@@ -70,6 +70,17 @@ export default async function TablesArtifacts({
       chemicalComposition: "",
       typology: "",
       weight: "",
+      sizes: {
+        width: 0,
+        height: 0,
+        length: 0,
+        depth: 0,
+        diameter: 0,
+      },
+      datingRow: {
+        datingStart: 0,
+        datingEnd: 0,
+      },
       culturalAffiliation: null,
       set: null,
       monument: null,
@@ -113,22 +124,56 @@ export default async function TablesArtifacts({
     const {
       status,
       collection,
+      location,
+      country,
+      region,
+      district,
+      settlement,
+      width,
+      height,
+      length,
+      depth,
+      diameter,
+      datingStart,
+      datingEnd,
       ...rest // assigns remaining
     } = node;
-    const statusForTable = {
-      id: status,
-      displayName: getStatusName(status)
-    }
-    const collectionForTable = {
-      id: collection.id,
-      displayName: collection.displayName
-    }
+
+    const locationForTabel = location
+      ? { ...location, type: "location" }
+      : settlement 
+        ? { ...settlement, type: "settlement" }
+        : district
+          ? { ...district, type: "district" }
+          : region
+            ? { ...region, type: "region" }
+            : country
+              ? { ...country, type: "country" }
+              : null
 
     return { 
-      status: statusForTable,
-      collection: collectionForTable,
+      status: {
+        id: status,
+        displayName: getStatusName(status)
+      },
+      collection: {
+        id: collection.id,
+        displayName: collection.displayName
+      },
+      location: locationForTabel,
+      sizes: {
+        width,
+        height,
+        length,
+        depth,
+        diameter,
+      },
+      datingRow: {
+        datingStart,
+        datingEnd
+      },
       ...rest
-    }
+    } as ArtifactForTable
   })
 
   if (mode === 'add') return (

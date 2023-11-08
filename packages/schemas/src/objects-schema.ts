@@ -30,6 +30,48 @@ export const Location = z.object({
     country: z.object({
         id: z.string(),
         displayName: z.string(),
+    }).nullable().optional(),
+    region: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable().optional(),
+    district: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable().optional(),
+    settlement: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable().optional(),
+});
+export type Location = z.infer<typeof Location>;
+
+//.........................ARTIFACT.........................//
+export const ArtifactById = z.object({
+    id: z.string(),
+    status: StatusEnum,
+    displayName: z.string(),
+    description: z.string(),
+    primaryImageURL: z.string(),
+    additionalImagesUrls: z.string().array().nullable(),
+    admissionDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
+    chemicalComposition: z.string(),
+    typology: z.string(),
+    weight: z.string(),
+    width: z.number(),
+    height: z.number(),
+    length: z.number(),
+    depth: z.number(),
+    diameter: z.number(),
+    datingStart: z.number().int(),
+    datingEnd: z.number().int(),
+    dating: z.string().optional(),
+    dimensions: z.string().optional(),
+    collection: Collection,
+    location: Location.nullable(),
+    country: z.object({
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     region: z.object({
         id: z.string(),
@@ -43,36 +85,6 @@ export const Location = z.object({
         id: z.string(),
         displayName: z.string(),
     }).nullable(),
-});
-export type Location = z.infer<typeof Location>;
-
-//.........................HOLDERS.........................//
-export const Holders = z.object({
-    organization: z.object({
-        displayName: z.string(),
-    }).nullable(),
-    person: z.object({
-        displayName: z.string(),
-    }).nullable(),
-}).array();
-export type Holders = z.infer<typeof Holders>;
-
-//.........................ARTIFACT.........................//
-export const ArtifactById = z.object({
-    id: z.string(),
-    status: StatusEnum,
-    displayName: z.string(),
-    description: z.string(),
-    primaryImageURL: z.string(),
-    additionalImagesUrls: z.string().array().nullable(),
-    dating: z.string(),
-    admissionDate: z.preprocess((val) => new Date(val as string), z.date()).nullable(),
-    chemicalComposition: z.string(),
-    typology: z.string(),
-    weight: z.string(),
-    collection: Collection,
-    location: Location.nullable(),
-    // holders: Holders,
     mediums: z.object({
         id: z.string(),
         displayName: z.string(),  

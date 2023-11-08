@@ -55,8 +55,8 @@ export default function DateSelect({
                   {!!field.value
                     ? (
                       <X 
-                        className="h-5 w-5 opacity-50 hover:opacity-100 hover:scale-125 z-50 transition-all cursor-pointer mx-auto" 
-                        onClick={() => form.setValue(name, null)}
+                        className="h-5 w-5 opacity-50 hover:opacity-100 hover:scale-125 z-20 transition-all cursor-pointer mx-auto" 
+                        onClick={() => form.setValue(name, null, {shouldDirty: true, shouldValidate: true, shouldTouch: true})}
                       />
                     )
                     : null

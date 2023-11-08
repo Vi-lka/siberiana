@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import { getDatingLable } from "~/lib/utils/getDating";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -42,6 +43,7 @@ export default function DataTable<TData, TValue>({
   const [loading, setLoading] = React.useState(false)
 
   const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
+  const [isPendingRefresh, startTransitionRefresh] = React.useTransition()
 
   const router = useRouter()
   const session = useSession()
@@ -90,7 +92,6 @@ export default function DataTable<TData, TValue>({
     [router],
   );
 
-
   async function handleDelete() {
     setLoading(true)
 
@@ -107,7 +108,6 @@ export default function DataTable<TData, TValue>({
     const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
     if (rejected) {
-      setLoading(false)
       toast({
         variant: "destructive",
         title: "Oшибка!",
@@ -115,8 +115,8 @@ export default function DataTable<TData, TValue>({
         className: "font-Inter"
       })
       console.log(rejected.reason)
-    } else {
       setLoading(false)
+    } else {
       toast({
         title: "Успешно!",
         description: "Артефакты удалены",
@@ -124,11 +124,16 @@ export default function DataTable<TData, TValue>({
       })
       console.log("results: ", results)
       table.toggleAllPageRowsSelected(false)
-      router.refresh()
+      startTransitionRefresh(() => {
+        router.refresh()
+      })
+      setLoading(false)
     }
   }
 
   async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
+    setLoading(true)
+
     const noLines = dataForm.artifacts.map(artifact => {
       const {
         displayName,
@@ -137,17 +142,12 @@ export default function DataTable<TData, TValue>({
         chemicalComposition,
         ...rest
       } = artifact
-      
-      const displayNameReplace = displayName?.replace(/\n/g, " ")
-      const descriptionReplace = description?.replace(/\n/g, " ")
-      const typologyReplace = typology?.replace(/\n/g, " ")
-      const chemicalCompositionReplace = chemicalComposition?.replace(/\n/g, " ")
 
       return {
-        displayName: displayNameReplace,
-        description: descriptionReplace,
-        typology: typologyReplace,
-        chemicalComposition: chemicalCompositionReplace,
+        displayName: displayName.replace(/\n/g, " "),
+        description: description?.replace(/\n/g, " "),
+        typology: typology?.replace(/\n/g, " "),
+        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest
       }
     })
@@ -176,7 +176,6 @@ export default function DataTable<TData, TValue>({
     const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
 
     if (rejected) {
-      setLoading(false)
       toast({
         variant: "destructive",
         title: "Oшибка!",
@@ -184,8 +183,8 @@ export default function DataTable<TData, TValue>({
         className: "font-Inter"
       })
       console.log(rejected.reason)
-    } else {
       setLoading(false)
+    } else {
       toast({
         title: "Успешно!",
         description: "Артефакты изменены",
@@ -193,9 +192,19 @@ export default function DataTable<TData, TValue>({
       })
       console.log("results: ", results)
       table.toggleAllPageRowsSelected(false)
-      router.refresh()
+      startTransitionRefresh(() => {
+        router.refresh()
+      })
+      setLoading(false)
     }
   }
+
+  const start = 1745
+  const end = 1745
+
+  console.log(getDatingLable(start, end))
+
+  if (loading || isPendingRefresh) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>

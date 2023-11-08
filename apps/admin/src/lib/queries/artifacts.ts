@@ -57,40 +57,47 @@ export const getArtifacts = async ({
                     description
                     primaryImageURL
                     additionalImagesUrls
-                    dating
                     admissionDate
                     chemicalComposition
                     typology
-                    dimensions
                     weight
+                    width
+                    height
+                    length
+                    depth
+                    diameter
+                    datingStart
+                    datingEnd
+                    dating
+                    dimensions
                     collection {
                       id
                       slug
                       displayName
                       category {
-                          slug
-                          displayName
+                        slug
+                        displayName
                       }
                     }
                     location {
                       id
                       displayName
-                      country {
-                        id  
-                        displayName
-                      }
-                      region {
-                        id  
-                        displayName
-                      }
-                      district {
-                        id  
-                        displayName
-                      }
-                      settlement {
-                        id  
-                        displayName
-                      }
+                    }
+                    country {
+                      id
+                      displayName
+                    }
+                    region {
+                      id
+                      displayName
+                    }
+                    district {
+                      id
+                      displayName
+                    }
+                    settlement {
+                      id
+                      displayName
                     }
                     mediums {
                       id

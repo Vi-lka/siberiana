@@ -63,13 +63,6 @@ export function FormSelectMulti({
     });
   }
 
-  const clearSelect = () => {
-    form.setValue(formValueName, [], {shouldDirty: true, shouldValidate: true, shouldTouch: true})
-    inputRef.current?.blur();
-    handleSearch("")
-    setOpenCombobox(false)
-  };
-
   const toggleItem = (item: Item) => {
     
     let newValues = [] as Item[]
@@ -89,6 +82,13 @@ export function FormSelectMulti({
   const onComboboxOpenChange = (value: boolean) => {
     inputRef.current?.blur(); // HACK: otherwise, would scroll automatically to the bottom of page
     setOpenCombobox(value);
+  };
+
+  const clearSelect = () => {
+    form.setValue(formValueName, [], {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+    inputRef.current?.blur();
+    handleSearch("")
+    setOpenCombobox(false)
   };
 
   const handleSelected = React.useCallback(
@@ -154,16 +154,6 @@ export function FormSelectMulti({
                 value={inputSearch}
                 onValueChange={(input) => handleSearch(input)}
               />
-              {(!!selected && selected.length > 0)
-                ? 
-                  <span 
-                    className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
-                    onClick={clearSelect}
-                  >
-                    <X className="h-5 w-5"/> Удалить
-                  </span>
-                : null
-              }
               {isPendingSearch 
                 ? (
                     <div className="absolute top-[10px] right-2">
@@ -178,7 +168,17 @@ export function FormSelectMulti({
                         />
                       )
                     : null 
-                }
+              }
+              {(!!selected && selected.length > 0)
+                ? 
+                  <span 
+                    className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
+                    onClick={clearSelect}
+                  >
+                    <X className="h-5 w-5"/> Удалить
+                  </span>
+                : null
+              }
             </div>
             <CommandList>
               <CommandEmpty>
@@ -197,7 +197,7 @@ export function FormSelectMulti({
               <CommandGroup>
                 {
                     isLoading 
-                    ? <Loader2 className='animate-spin w-12 h-12 mx-auto mb-6' />
+                    ? <Loader2 className='animate-spin w-12 h-12 mx-auto mb-6 mt-6' />
                     : (
                         <ScrollArea type="always" classNameViewport="max-h-[220px]">
                             {

@@ -3,11 +3,8 @@
 import type { ArtifactForTable } from "@siberiana/schemas"
 import { useMutation } from "@tanstack/react-query"
 import request from "graphql-request"
-
-function getIds(values: { id: string, displayName: string }[]) {
-    const ids = values.map(value => value.id)
-    return ids
-}
+import { clearDate, clearLocation, clearObject, getIds, getLocation, handleArrays } from "../utils/mutations-utils"
+import { getLable } from "../utils/sizes-utils"
 
 //.........................ARTIFACT.........................//
 export function useCreateArtifact(access_token?: string) {
@@ -24,8 +21,8 @@ export function useCreateArtifact(access_token?: string) {
         'Content-Type': 'application/json',
     };
     const mutation = useMutation({
-        mutationFn: (value: ArtifactForTable) => 
-          request(
+        mutationFn: (value: ArtifactForTable) => {
+          return request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
             mutationString,
             {input: {
@@ -34,12 +31,23 @@ export function useCreateArtifact(access_token?: string) {
               displayName: value.displayName,
               description: value.description,
               primaryImageURL: value.primaryImageURL,
+              weight: value.weight,
+              width: value.sizes.width,
+              height: value.sizes.height,
+              length: value.sizes.length,
+              depth: value.sizes.depth,
+              diameter: value.sizes.diameter,
+              dimensions: getLable(value.sizes),
               typology: value.typology,
               chemicalComposition: value.chemicalComposition,
               culturalAffiliationID: value.culturalAffiliation?.id,
               setID: value.set?.id,
               monumentID: value.monument?.id,
-              locationID: value.location?.id,
+              countryID: getLocation(value.location, "country"),
+              regionID: getLocation(value.location, "region"),
+              districtID: getLocation(value.location, "district"),
+              settlementID: getLocation(value.location, "settlement"),
+              locationID: getLocation(value.location, "location"),
               mediumIDs: getIds(value.mediums),
               techniqueIDs: getIds(value.techniques),
               authorIDs: getIds(value.authors),
@@ -48,7 +56,8 @@ export function useCreateArtifact(access_token?: string) {
               admissionDate: value.admissionDate,
             }},
             requestHeaders
-          ),
+          )
+        }
       })
     return mutation
 }
@@ -76,39 +85,6 @@ export function useDeleteArtifact(access_token?: string) {
 }
 
 export function useUpdateArtifact(access_token?: string) {
-
-    function changedValues(
-        newValues: {
-          id: string;
-          displayName: string;
-        }[], 
-        oldValues: {
-          id: string;
-          displayName: string;
-        }[]
-      ) {
-        const addValues = newValues.map(item => {
-            return item.id
-        }).filter(id => {
-          // includes() doesn't work with object, so we do this:
-          const contains = oldValues.some(elem => elem.id === id)
-          if (!contains) {
-            return id
-          }
-        })
-        const removeValues = oldValues.map(item => {
-            return item.id
-        }).filter(id => {
-          // includes() doesn't work with object, so we do this:
-          const contains = newValues.some(elem => elem.id === id)
-          if (!contains) {
-            return id
-          }
-        })
-    
-        return { addValues, removeValues }
-    }
-
     const mutationString = `
         mutation UpdateArtifact($updateArtifactId: ID!, $input: UpdateArtifactInput!) {
             updateArtifact(id: $updateArtifactId, input: $input) {
@@ -123,11 +99,11 @@ export function useUpdateArtifact(access_token?: string) {
     };
     const mutation = useMutation({
         mutationFn: ({ id, newValue, oldValue }: { id: string, newValue: ArtifactForTable, oldValue: ArtifactForTable }) => {
-            const authorsIds = changedValues(newValue.authors, oldValue.authors)
-            const mediumIDs = changedValues(newValue.mediums, oldValue.mediums)
-            const projectIDs = changedValues(newValue.projects, oldValue.projects)
-            const publicationIDs = changedValues(newValue.publications, oldValue.publications)
-            const techniqueIDs = changedValues(newValue.techniques, oldValue.techniques)
+            const authorsIds = handleArrays(newValue.authors, oldValue.authors)
+            const mediumIDs = handleArrays(newValue.mediums, oldValue.mediums)
+            const projectIDs = handleArrays(newValue.projects, oldValue.projects)
+            const publicationIDs = handleArrays(newValue.publications, oldValue.publications)
+            const techniqueIDs = handleArrays(newValue.techniques, oldValue.techniques)
             return request(
                 `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
                 mutationString,
@@ -139,18 +115,37 @@ export function useUpdateArtifact(access_token?: string) {
                         primaryImageURL: newValue.primaryImageURL,
                         description: newValue.description,
                         weight: newValue.weight,
+                        width: newValue.sizes.width,
+                        height: newValue.sizes.height,
+                        length: newValue.sizes.length,
+                        depth: newValue.sizes.depth,
+                        diameter: newValue.sizes.diameter,
+                        dimensions: getLable(newValue.sizes),
                         typology: newValue.typology,
                         admissionDate: newValue.admissionDate,
                         chemicalComposition: newValue.chemicalComposition,
                         setID: newValue.set?.id,
                         monumentID: newValue.monument?.id,
                         culturalAffiliationID: newValue.culturalAffiliation?.id,
-                        locationID: newValue.location?.id,
+                        countryID: getLocation(newValue.location, "country"),
+                        regionID: getLocation(newValue.location, "region"),
+                        districtID: getLocation(newValue.location, "district"),
+                        settlementID: getLocation(newValue.location, "settlement"),
+                        locationID: getLocation(newValue.location, "location"),
                         addAuthorIDs: authorsIds.addValues,
                         addMediumIDs: mediumIDs.addValues,
                         addProjectIDs: projectIDs.addValues,
                         addPublicationIDs: publicationIDs.addValues,
                         addTechniqueIDs: techniqueIDs.addValues,
+                        clearAdmissionDate: clearDate(newValue.admissionDate),
+                        clearSet: clearObject(newValue.set),
+                        clearMonument: clearObject(newValue.monument),
+                        clearCulturalAffiliation: clearObject(newValue.culturalAffiliation),
+                        clearCountry: clearLocation(newValue.location, "country"),
+                        clearRegion: clearLocation(newValue.location, "region"),
+                        clearDistrict: clearLocation(newValue.location, "district"),
+                        clearSettlement: clearLocation(newValue.location, "settlement"),
+                        clearLocation: clearLocation(newValue.location, "location"),
                         removeAuthorIDs: authorsIds.removeValues,
                         removeMediumIDs: mediumIDs.removeValues,
                         removeProjectIDs: projectIDs.removeValues,

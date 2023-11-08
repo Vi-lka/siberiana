@@ -1,6 +1,30 @@
 import { z } from "zod";
 import { ArtifactById, StatusEnum } from "../objects-schema";
 
+export const LocationEnum = z.enum([ 
+    "location", 
+    "country",
+    "region",
+    "district",
+    "settlement"
+])
+export type LocationEnum = z.infer<typeof LocationEnum>;
+
+export const Sizes = z.object({
+    width: z.number(),
+    height: z.number(),
+    length: z.number(),
+    depth: z.number(),
+    diameter: z.number(),
+});
+export type Sizes = z.infer<typeof Sizes>;
+
+export const Dating = z.object({
+    datingStart: z.number().int(),
+    datingEnd: z.number().int(),
+});
+export type Dating = z.infer<typeof Dating>;
+
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
     totalCount: z.number(),
@@ -19,9 +43,13 @@ export const ArtifactForTable = z.object({
     displayName: z.string().min(1),
     primaryImageURL: z.string(),
     description: z.string().optional(),
+    chemicalComposition: z.string().optional(),
     typology: z.string().optional(),
     weight: z.string().optional(),
-    chemicalComposition: z.string().optional(),
+    sizes: Sizes,
+    datingRow: Dating,
+    dating: z.string().optional(),
+    dimensions: z.string().optional(),
     admissionDate: z.date().nullable().optional(),
     collection: z.object({
         id: z.string(),
@@ -42,6 +70,7 @@ export const ArtifactForTable = z.object({
     location: z.object({
         id: z.string(),
         displayName: z.string(),
+        type: LocationEnum,
     }).nullable(),
     mediums: z.object({
         id: z.string(),

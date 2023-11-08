@@ -19,6 +19,9 @@ import Locations from "~/components/tables/global-fields/Locations"
 import DateSelect from "~/components/tables/inputs/DateSelect"
 import Status from "~/components/tables/global-fields/Status";
 import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
+import FormInputText from "~/components/tables/inputs/FormInputText";
+import SizesSelect from "~/components/tables/global-fields/SizesSelect";
+import { centurize, romanize } from "~/lib/utils/getDating";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -118,6 +121,24 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
   },
   {
+    accessorKey: "dating",
+    header: () => <div className="text-center">dating</div>,
+    cell: ({ row }) => {
+      return (
+        <p>{row.original.dating}</p>
+      )
+    },
+  },
+  {
+    accessorKey: "datingRow",
+    header: () => <div className="text-center">Датировка</div>,
+    cell: ({ row }) => {
+      return (
+        <p>{romanize(centurize(row.original.datingRow.datingStart))} - {romanize(centurize(row.original.datingRow.datingEnd))}</p>
+      )
+    },
+  },
+  {
     accessorKey: "typology",
     header: () => <div className="text-center">Типология</div>,
     cell: ({ row }) => {
@@ -150,6 +171,24 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     cell: ({ row }) => {
       return (
         <Techniques defaultTechniques={row.original.techniques} rowIndex={row.index} />
+      )
+    },
+  },
+  {
+    accessorKey: "sizes",
+    header: () => <div className="text-center">Размеры</div>,
+    cell: ({ row }) => {
+      return (
+        <SizesSelect formValueName={`artifacts[${row.index}].sizes`}/>
+      )
+    },
+  },
+  {
+    accessorKey: "weight",
+    header: () => <div className="text-center">Вес</div>,
+    cell: ({ row }) => {
+      return (
+        <FormInputText name={`artifacts[${row.index}].weight`} className="text-center bg-transparent border-background" placeholder="__"/>
       )
     },
   },

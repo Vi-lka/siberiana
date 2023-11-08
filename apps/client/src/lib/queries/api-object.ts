@@ -17,12 +17,21 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     description
                     primaryImageURL
                     additionalImagesUrls
-                    dating
                     admissionDate
                     chemicalComposition
                     typology
                     weight
+                    width
+                    height
+                    length
+                    depth
+                    diameter
+                    datingStart
+                    datingEnd
+                    dating
+                    dimensions
                     collection {
+                        id
                         slug
                         displayName
                         category {
@@ -49,6 +58,22 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                             id
                             displayName
                         }
+                    }
+                    country {
+                        id
+                        displayName
+                    }
+                    region {
+                        id
+                        displayName
+                    }
+                    district {
+                        id
+                        displayName
+                    }
+                    settlement {
+                        id
+                        displayName
                     }
                     mediums {
                         id
@@ -147,6 +172,7 @@ export const getBookById = async (id: string): Promise<BookById> => {
                     additionalImagesUrls
                     year
                     collection {
+                        id
                         slug
                         displayName
                         category {
