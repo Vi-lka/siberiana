@@ -78,7 +78,7 @@ export default function Century(props: {
                 <div className="flex w-full max-w-sm items-center gap-1">
                     <Input 
                         type="number"
-                        placeholder={props.century?.toString()}
+                        placeholder={(Number(props.century) + 1).toString()}
                         className="px-2 py-6 m-0 max-w-[4rem] max-h-8 text-sm border-solid w-auto overflow-visible truncate"
                         onChange={props.onChangeCentury}
                     />

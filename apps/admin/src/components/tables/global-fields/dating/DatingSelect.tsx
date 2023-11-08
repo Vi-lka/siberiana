@@ -263,7 +263,13 @@ export default function DatingSelect({
                       />
                       <Era
                         selected={selected}
-                        handleNewValue={handleNewValue}
+                        handleNewValue={(newValue) => {
+                          setValues({
+                            datingStart: newValue.datingStart,
+                            datingEnd: newValue.datingEnd,
+                          })
+                          handleNewValue(newValue)
+                        }}
                       />
                     </DropdownMenuGroup>
                 </ScrollArea>
