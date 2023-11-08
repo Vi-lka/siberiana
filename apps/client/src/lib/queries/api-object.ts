@@ -31,6 +31,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     dating
                     dimensions
                     collection {
+                        id
                         slug
                         displayName
                         category {
@@ -171,6 +172,7 @@ export const getBookById = async (id: string): Promise<BookById> => {
                     additionalImagesUrls
                     year
                     collection {
+                        id
                         slug
                         displayName
                         category {

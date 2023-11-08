@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import { getDatingLable } from "~/lib/utils/getDating";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -197,6 +198,11 @@ export default function DataTable<TData, TValue>({
       setLoading(false)
     }
   }
+
+  const start = 1745
+  const end = 1745
+
+  console.log(getDatingLable(start, end))
 
   if (loading || isPendingRefresh) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 

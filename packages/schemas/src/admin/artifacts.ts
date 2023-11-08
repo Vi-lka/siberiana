@@ -19,6 +19,12 @@ export const Sizes = z.object({
 });
 export type Sizes = z.infer<typeof Sizes>;
 
+export const Dating = z.object({
+    datingStart: z.number().int(),
+    datingEnd: z.number().int(),
+});
+export type Dating = z.infer<typeof Dating>;
+
 //.........................ARTIFACTS.........................//
 export const ArtifactsArray = z.object({
     totalCount: z.number(),
@@ -41,10 +47,7 @@ export const ArtifactForTable = z.object({
     typology: z.string().optional(),
     weight: z.string().optional(),
     sizes: Sizes,
-    datingRow: z.object({
-        datingStart: z.number().int(),
-        datingEnd: z.number().int(),
-    }),
+    datingRow: Dating,
     dating: z.string().optional(),
     dimensions: z.string().optional(),
     admissionDate: z.date().nullable().optional(),

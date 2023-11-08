@@ -21,6 +21,7 @@ import Status from "~/components/tables/global-fields/Status";
 import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
+import { centurize, romanize } from "~/lib/utils/getDating";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -133,7 +134,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Датировка</div>,
     cell: ({ row }) => {
       return (
-        <p>{row.original.datingRow.datingStart} - {row.original.datingRow.datingEnd}</p>
+        <p>{romanize(centurize(row.original.datingRow.datingStart))} - {romanize(centurize(row.original.datingRow.datingEnd))}</p>
       )
     },
   },
