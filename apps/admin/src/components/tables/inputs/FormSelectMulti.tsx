@@ -76,7 +76,7 @@ export function FormSelectMulti({
 
     handleSelected(newValues)
 
-    setOpenCombobox(false)
+    // setOpenCombobox(false)
   };
 
   const onComboboxOpenChange = (value: boolean) => {

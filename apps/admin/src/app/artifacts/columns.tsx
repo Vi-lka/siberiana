@@ -21,7 +21,7 @@ import Status from "~/components/tables/global-fields/Status";
 import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
-import { centurize, romanize } from "~/lib/utils/getDating";
+import DatingSelect from "~/components/tables/global-fields/dating/DatingSelect";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -122,10 +122,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "dating",
-    header: () => <div className="text-center">dating</div>,
+    header: () => <div className="text-center">dating (string)</div>,
     cell: ({ row }) => {
       return (
-        <p>{row.original.dating}</p>
+        <FormTextArea name={`artifacts[${row.index}].dating`} defaultValue={row.original.dating}/>
       )
     },
   },
@@ -134,7 +134,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Датировка</div>,
     cell: ({ row }) => {
       return (
-        <p>{romanize(centurize(row.original.datingRow.datingStart))} - {romanize(centurize(row.original.datingRow.datingEnd))}</p>
+        <DatingSelect formValueName={`artifacts[${row.index}].datingRow`}/>
       )
     },
   },

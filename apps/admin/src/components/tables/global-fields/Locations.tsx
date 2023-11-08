@@ -274,36 +274,34 @@ function DropdownItem(props: {
               ? <Loader2 className='animate-spin w-12 h-12 mx-auto mb-6 mt-6' />
               : (
                 <ScrollArea type="always" classNameViewport="max-h-[220px]">
-                  {
-                    props.data?.map((item, index) => {
-                      const isActive = props.selected?.id === item.id
-                      return (
-                        <CommandItem
-                          key={index}
-                          value={item.id}
+                  {props.data?.map((item, index) => {
+                    const isActive = props.selected?.id === item.id
+                    return (
+                      <CommandItem
+                        key={index}
+                        value={item.displayName}
+                        className={cn(
+                          (isPendingSearch)
+                            ? "opacity-30 cursor-wait"
+                            : "opacity-100 cursor-pointer"
+                        )}
+                        onSelect={() => props.handleSelected(item)}
+                      >
+                        <CircleDot
                           className={cn(
-                            (isPendingSearch)
-                              ? "opacity-30 cursor-wait"
-                              : "opacity-100 cursor-pointer"
+                            "mr-2 h-4 w-4",
+                            isActive ? "opacity-100" : "opacity-0"
                           )}
-                          onSelect={() => props.handleSelected(item)}
-                        >
-                          <CircleDot
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              isActive ? "opacity-100" : "opacity-0"
-                            )}
-                          />
-                          <div className="flex-1">
-                            {item.displayName.length > 0
-                              ? item.displayName
-                              : `id: ${item.id}` 
-                            }
-                          </div>
-                        </CommandItem>
-                      );
-                    })
-                  }
+                        />
+                        <div className="flex-1">
+                          {item.displayName.length > 0
+                            ? item.displayName
+                            : `id: ${item.id}` 
+                          }
+                        </div>
+                      </CommandItem>
+                    );
+                  })}
                 </ScrollArea>
               )
             }
