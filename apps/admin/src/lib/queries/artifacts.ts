@@ -70,6 +70,10 @@ export const getArtifacts = async ({
                     datingEnd
                     dating
                     dimensions
+                    inventoryNumber
+                    kpNumber
+                    goskatalogNumber
+                    externalLink
                     collection {
                       id
                       slug

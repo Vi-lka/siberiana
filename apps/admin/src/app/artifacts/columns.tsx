@@ -50,7 +50,58 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">ID</div>,
     cell: ({ row }) => {
       const id = row.original.id.includes("random") ? row.index : parseFloat(row.original.id)
-      return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
+      return <div className="text-right font-light text-[8px] w-[1.5rem] break-words">{id}</div>
+    },
+  },
+  {
+    accessorKey: "inventoryNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Инвентарный номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].inventoryNumber`} 
+          defaultValue={row.original.inventoryNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
+    },
+  },
+  {
+    accessorKey: "kpNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="КП номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].kpNumber`} 
+          defaultValue={row.original.kpNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
+    },
+  },
+  {
+    accessorKey: "goskatalogNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Госкаталог номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].goskatalogNumber`} 
+          defaultValue={row.original.goskatalogNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
     },
   },
   {
@@ -121,15 +172,6 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
   },
   {
-    accessorKey: "dating",
-    header: () => <div className="text-center">dating (string)</div>,
-    cell: ({ row }) => {
-      return (
-        <FormTextArea name={`artifacts[${row.index}].dating`} defaultValue={row.original.dating}/>
-      )
-    },
-  },
-  {
     accessorKey: "datingRow",
     header: () => <div className="text-center">Датировка</div>,
     cell: ({ row }) => {
@@ -140,6 +182,15 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
           defaultDating={row.original.datingRow}
           defaultDatingString={row.original.dating}
         />
+      )
+    },
+  },
+  {
+    accessorKey: "dating",
+    header: () => <div className="text-center">датировка (string)</div>,
+    cell: ({ row }) => {
+      return (
+        <FormTextArea name={`artifacts[${row.index}].dating`} defaultValue={row.original.dating}/>
       )
     },
   },
@@ -234,6 +285,15 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     cell: ({ row }) => {
       return (
         <Projects defaultProjects={row.original.projects} rowIndex={row.index} />
+      )
+    },
+  },
+  {
+    accessorKey: "externalLink",
+    header: () => <div className="text-center">Внешняя ссылка</div>,
+    cell: ({ row }) => {
+      return (
+        <FormTextArea name={`artifacts[${row.index}].externalLink`} defaultValue={row.original.externalLink}/>
       )
     },
   },

@@ -30,6 +30,10 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     datingEnd
                     dating
                     dimensions
+                    inventoryNumber
+                    kpNumber
+                    goskatalogNumber
+                    externalLink
                     collection {
                         id
                         slug

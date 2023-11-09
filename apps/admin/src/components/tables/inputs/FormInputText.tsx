@@ -33,7 +33,7 @@ export default function FormInputText({
                                 className,
                                 form.getFieldState(name).invalid 
                                     ? "border-red-500" 
-                                    : form.getFieldState(name).isDirty ? "border-green-400" : ""
+                                    : (form.getFieldState(name).isDirty || field.value !== defaultValue) ? "border-green-400" : ""
                             )}
                             placeholder={placeholder}
                             {...field}

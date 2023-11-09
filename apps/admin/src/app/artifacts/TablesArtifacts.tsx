@@ -68,6 +68,10 @@ export default async function TablesArtifacts({
       description: "",
       primaryImageURL: "",
       chemicalComposition: "",
+      inventoryNumber: "",
+      kpNumber: "",
+      goskatalogNumber: "",
+      externalLink: "",
       typology: "",
       weight: "",
       sizes: {

@@ -50,6 +50,10 @@ export const ArtifactForTable = z.object({
     datingRow: Dating,
     dating: z.string().optional(),
     dimensions: z.string().optional(),
+    inventoryNumber: z.string().optional(),
+    kpNumber: z.string().optional(),
+    goskatalogNumber: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
     admissionDate: z.date().nullable().optional(),
     collection: z.object({
         id: z.string(),
