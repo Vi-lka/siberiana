@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, Input, Label } from '@siberiana/ui'
-import { ChevronsUpDown, CircleDot, Loader2, X } from 'lucide-react'
+import { ChevronsUpDown, CircleDot, Loader2, RotateCcw, X } from 'lucide-react'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
@@ -11,9 +11,11 @@ import { getLable, isWhat, isZero } from '~/lib/utils/sizes-utils'
 
 export default function SizesSelect({ 
   formValueName,
+  defaultValues,
   className,
 }: { 
   formValueName: string,
+  defaultValues: Sizes
   className?: string,
 }) {
 
@@ -55,19 +57,21 @@ export default function SizesSelect({
     if (!open) handleNewValue(values)
   }
 
+  const customDirty =  JSON.stringify(selected) !== JSON.stringify(defaultValues) 
+
   return (
-    <div className={cn("h-full w-full", className)}>
+    <div className={cn("h-full w-full relative", className)}>
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button 
-            variant={form.getFieldState(formValueName).isDirty ? "outline" : "ghost"}
+            variant={(form.getFieldState(formValueName).isDirty || customDirty) ? "outline" : "ghost"}
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
               "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-max h-fit",
               form.getFieldState(formValueName).invalid 
                 ? "border-red-600" 
-                : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
+                : (form.getFieldState(formValueName).isDirty || customDirty) ? "border-green-500" : ""
             )}
           >
             {isPending 
@@ -254,6 +258,18 @@ export default function SizesSelect({
           }
         </DropdownMenuContent>
       </DropdownMenu>
+      {(form.getFieldState(formValueName).isDirty || customDirty)
+        ? (
+          <RotateCcw 
+            className='w-3.5 h-3.5 absolute top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+            onClick={() => {
+              setValues(defaultValues)
+              form.setValue(formValueName, defaultValues, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+            }}
+          />
+        )
+        : null
+      }
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}

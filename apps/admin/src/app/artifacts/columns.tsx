@@ -134,7 +134,12 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Датировка</div>,
     cell: ({ row }) => {
       return (
-        <DatingSelect formValueName={`artifacts[${row.index}].datingRow`}/>
+        <DatingSelect 
+          formValueName={`artifacts[${row.index}].datingRow`} 
+          datingStringName={`artifacts[${row.index}].dating`}
+          defaultDating={row.original.datingRow}
+          defaultDatingString={row.original.dating}
+        />
       )
     },
   },
@@ -179,7 +184,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Размеры</div>,
     cell: ({ row }) => {
       return (
-        <SizesSelect formValueName={`artifacts[${row.index}].sizes`}/>
+        <SizesSelect formValueName={`artifacts[${row.index}].sizes`} defaultValues={row.original.sizes}/>
       )
     },
   },
@@ -188,7 +193,11 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Вес</div>,
     cell: ({ row }) => {
       return (
-        <FormInputText name={`artifacts[${row.index}].weight`} className="text-center bg-transparent border-background" placeholder="__"/>
+        <FormInputText 
+          name={`artifacts[${row.index}].weight`} 
+          defaultValue={row.original.weight}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
       )
     },
   },

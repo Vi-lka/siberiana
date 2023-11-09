@@ -4,7 +4,7 @@ import React from 'react'
 import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, Input, PopoverForModal, PopoverContentForModal, PopoverTriggerForModal, ScrollArea, Toggle } from '@siberiana/ui'
 import { PREFIXES  } from '~/lib/utils/getDating'
 import type {Prefix} from '~/lib/utils/getDating';
-import { CircleDot } from 'lucide-react';
+import { CircleDot, X } from 'lucide-react';
 import { cn } from '@siberiana/ui/src/lib/utils';
 
 export default function Century(props: {
@@ -43,6 +43,16 @@ export default function Century(props: {
                                 <CommandList>
                                     <CommandEmpty>No results found.</CommandEmpty>
                                     <CommandGroup>
+                                        {props.prefix
+                                          ? 
+                                            <span 
+                                              className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
+                                              onClick={() => props.onSelectPrefix(undefined)}
+                                            >
+                                              <X className="h-5 w-5"/> Удалить
+                                            </span>
+                                          : null
+                                        }
                                         <ScrollArea type="always" classNameViewport="max-h-[260px]">
                                             {PREFIXES.map((prefix, index) => {
                                                 const isActive = props.prefix && (prefix?.label === props.prefix.label)
@@ -78,7 +88,8 @@ export default function Century(props: {
                 <div className="flex w-full max-w-sm items-center gap-1">
                     <Input 
                         type="number"
-                        placeholder={(Number(props.century) + 1).toString()}
+                        // placeholder={props.century}
+                        placeholder={"1"}
                         className="px-2 py-6 m-0 max-w-[4rem] max-h-8 text-sm border-solid w-auto overflow-visible truncate"
                         onChange={props.onChangeCentury}
                     />

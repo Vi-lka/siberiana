@@ -2,32 +2,40 @@
 
 import React from 'react'
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, ScrollArea } from '@siberiana/ui'
-import { ChevronsUpDown, Loader2, X } from 'lucide-react'
+import { ChevronsUpDown, Loader2, RotateCcw, X } from 'lucide-react'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
 import type { Dating } from "@siberiana/schemas"
-import type { Prefix } from '~/lib/utils/getDating';
-import { PREFIXES, getDating } from '~/lib/utils/getDating'
+import type { DatingType, Prefix } from '~/lib/utils/getDating';
+import { PREFIXES, centurize, generateValues, getDating } from '~/lib/utils/getDating'
 import OneYear from './OneYear'
 import TwoYears from './TwoYears'
 import Era from './Era'
 import Century from './Century'
+import MultiCentury from './MultiCentury'
 
 export default function DatingSelect({ 
   formValueName,
+  datingStringName,
+  defaultDating,
+  defaultDatingString,
   className,
 }: { 
   formValueName: string,
+  datingStringName: string,
+  defaultDating: Dating,
+  defaultDatingString?: string,
   className?: string,
 }) {
 
   const [openCombobox, setOpenCombobox] = React.useState(false);
+  const [datingType, setDatingType] = React.useState<DatingType>("century");
   const [isPending, startTransition] = React.useTransition();
 
   const form = useFormContext();
   const selected = form.getValues(formValueName) as Dating
-  const selectedLable = getDating(selected.datingStart, selected.datingEnd)
+  const selectedLable = getDating(selected.datingStart, selected.datingEnd, datingType)
 
   const [values, setValues] = React.useState(selected);
 
@@ -40,22 +48,50 @@ export default function DatingSelect({
 
   const selectedCentury = 
     Math.abs(Math.abs(selected.datingStart) - Math.abs(selected.datingEnd)) <= 99
-      ? isAD ? Math.floor(selected.datingEnd / 100).toString() : Math.floor(selected.datingStart / 100).toString()
+      ? isAD ? centurize(selected.datingEnd).toString() : centurize(selected.datingStart).toString()
       : ''
 
+  const startForPrefix = (values.datingStart % 100).toString()
+  const endForPrefix = (values.datingEnd % 100).toString()
+
   const selectedPrefix = PREFIXES.find((prefix) => 
-    prefix.start === (values.datingStart % 100).toString() 
+    prefix.start === (startForPrefix.length < 2 ? "0" + startForPrefix : startForPrefix)
     && 
-    prefix.end === (values.datingEnd % 100).toString() 
+    prefix.end === (endForPrefix.length < 2 ? "0" + endForPrefix : endForPrefix) 
   );
   
   const [century, setCentury] = React.useState<string>(selectedCentury);
   const [prefix, setPrefix] = React.useState<Prefix | undefined>(selectedPrefix);
 
+  const [isADMulti, setIsADMulti] = React.useState({
+    first: selected.datingStart >= 0 ? true : false,
+    second: selected.datingEnd >= 0 ? true : false
+  });
+  const [centuryMulti, setCenturyMulti] = React.useState({
+    first: centurize(selected.datingStart).toString(),
+    second: centurize(selected.datingEnd).toString(),
+  });
+
+  const selectedPrefixFirst = PREFIXES.find((prefix) => 
+    prefix.start === (startForPrefix.length < 2 ? "0" + startForPrefix : startForPrefix)
+  );
+  const selectedPrefixSecond = PREFIXES.find((prefix) => 
+    prefix.start === (endForPrefix.length < 2 ? "0" + endForPrefix : endForPrefix) 
+  );
+
+  const [prefixMulti, setPrefixMulti] = React.useState({
+    first: selectedPrefixFirst,
+    second: selectedPrefixSecond
+  });
+
   const clear = () => {
     setValues(zeroObj)
+    setDatingType("century")
     setCentury('')
     setPrefix(undefined)
+    setCenturyMulti({first: '', second: ''})
+    setPrefixMulti({first: undefined, second: undefined})
+    form.setValue(datingStringName, '', {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     form.setValue(formValueName, zeroObj, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
     setOpenCombobox(false)
   };
@@ -63,11 +99,12 @@ export default function DatingSelect({
   const handleNewValue = React.useCallback(
     (newValue: Dating) => {
       startTransition(() => {
+        form.setValue(datingStringName, getDating(newValue.datingStart, newValue.datingEnd, datingType), {shouldDirty: true, shouldValidate: true, shouldTouch: true})
         form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
       })
       setOpenCombobox(false)
     },
-    [form, formValueName]
+    [datingStringName, datingType, form, formValueName]
   );
 
   const handleOpen = (open: boolean) => {
@@ -76,56 +113,174 @@ export default function DatingSelect({
   }
 
   const onSelectPrefix = (prefix: Prefix | undefined) => {
+    setDatingType("century")
     setPrefix(prefix)
-
-    const start = Number(century) < 11 
-      ? "0"+(Number(century) - 1).toString() 
-      : (Number(century) - 1).toString()
+    const { forStart, forEnd } = generateValues(century, prefix)
 
     if (prefix) {
-      const valueStart = isAD ? Number(start + prefix.start) : -Number(start + prefix.start)
-      const valueEnd = isAD ? Number(start + prefix.end) : -Number(start + prefix.end)
-      setValues({
+      const valueStart = isAD ? Number(forStart + prefix.start) : -Number(forStart + prefix.start)
+      const valueEnd = isAD ? Number(forEnd + prefix.end) : -Number(forEnd + prefix.end)
+      if (isAD) setValues({
+          datingStart: valueStart,
+          datingEnd: valueEnd
+      })
+      else setValues({
+        datingStart: valueEnd,
+        datingEnd: valueStart
+      })
+    } else {
+      const valueStart = isAD ? Number(forStart + "01") : -Number(forStart + "01")
+      const valueEnd = isAD ? Number(century + "00") : -Number(century + "00")
+      if (isAD) setValues({
         datingStart: valueStart,
         datingEnd: valueEnd
+      })
+      else setValues({
+        datingStart: valueEnd,
+        datingEnd: valueStart
       })
     }
   }
 
   const onChangeCentury = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCentury(e.target.value)
-
-    const start = Number(e.target.value) < 11 
-      ? "0"+(Number(e.target.value) - 1).toString() 
-      : (Number(e.target.value) - 1).toString()
+    setDatingType("century")
+    const value = e.target.value
+    setCentury(value)
+    const { forStart, forEnd } = generateValues(value, prefix)
 
     if (prefix) {
-      const valueStart = isAD ? Number(start + prefix.start) : -Number(start + prefix.start)
-      const valueEnd = isAD ? Number(start + prefix.end) : -Number(start + prefix.end)
-      setValues({
+      const valueStart = isAD ? Number(forStart + prefix.start) : -Number(forStart + prefix.start)
+      const valueEnd = isAD ? Number(forEnd + prefix.end) : -Number(forEnd + prefix.end)
+      if (isAD) setValues({
         datingStart: valueStart,
         datingEnd: valueEnd
       })
+      else setValues({
+        datingStart: valueEnd,
+        datingEnd: valueStart
+      })
     } else {
-      const valueStart = isAD ? Number(start + "01") : -Number(start + "01")
-      const valueEnd = isAD ? Number(e.target.value + "00") : -Number(e.target.value + "00")
-      setValues({
+      const valueStart = isAD ? Number(forStart + "01") : -Number(forStart + "01")
+      const valueEnd = isAD ? Number(value + "00") : -Number(value + "00")
+      if (isAD) setValues({
         datingStart: valueStart,
         datingEnd: valueEnd
+      })
+      else setValues({
+        datingStart: valueEnd,
+        datingEnd: valueStart
       })
     }
   }
 
   const onIsADChange = (pressed: boolean) => {
+    setDatingType("century")
     setIsAD(pressed)
     setValues({
-      datingStart: -values.datingStart,
-      datingEnd: -values.datingEnd
+      datingStart: -values.datingEnd,
+      datingEnd: -values.datingStart
+    })
+  }
+
+  const onSelectPrefixMulti = (prefix: Prefix | undefined, isFirst: boolean) => {
+    setDatingType("century")
+    if (isFirst) {
+      setPrefixMulti({
+        ...prefixMulti,
+        first: prefix
+      })
+      const century = Number(centuryMulti.first)
+      const newString = prefix ? `${century -1}${prefix.start}` : `${century}00`
+      const newNumber = isADMulti.first ? Number(newString) : -Number(newString)
+
+      setValues({
+        ...values,
+        datingStart: newNumber
+      }) 
+    } else {
+      setPrefixMulti({
+        ...prefixMulti,
+        second: prefix
+      })
+      const century = Number(centuryMulti.second)
+      const newString = prefix ? `${century - 1}${prefix.start}` : `${century}00`
+      const newNumber = isADMulti.second ? Number(newString) : -Number(newString)
+
+      setValues({
+        ...values,
+        datingEnd: newNumber
+      }) 
+    }
+  }
+
+  const onChangeCenturyMulti = (inputValue: number, isFirst: boolean) => {
+    setDatingType("century")
+    if (isFirst) {
+      setCenturyMulti({
+        ...centuryMulti,
+        first: inputValue.toString(),
+      })
+
+      const newString = prefixMulti.first 
+        ? `${inputValue - 1}${prefixMulti.first.start}` 
+        : `${inputValue}00`
+      const newNumber = isADMulti.first ? Number(newString) : -Number(newString)
+
+      setValues({
+        ...values,
+        datingStart: newNumber
+      }) 
+    } else {
+      setCenturyMulti({
+        ...centuryMulti,
+        second: inputValue.toString()
+      })
+
+      const newString = prefixMulti.second 
+        ? `${inputValue - 1}${prefixMulti.second.start}`
+        : `${inputValue}00`
+      const newNumber = isADMulti.second ? Number(newString) : -Number(newString)
+
+      setValues({
+        ...values,
+        datingEnd: newNumber
+      }) 
+    }
+  }
+
+  const onIsADChangeMulti = (pressed: boolean, isFirst: boolean) => {
+    setDatingType("century")
+    if (isFirst) {
+      setIsADMulti({
+        ...isADMulti,
+        first: pressed
+      })
+      setValues({
+        datingStart: -values.datingStart,
+        datingEnd: values.datingEnd
+      })
+    } else {
+      setIsADMulti({
+        ...isADMulti,
+        second: pressed
+      })
+      setValues({
+        datingStart: values.datingStart,
+        datingEnd: -values.datingEnd
+      })
+    }
+  }
+
+  const handleSetValue = (newValue: Dating) => {
+    setDatingType("year")
+    setValues({
+      datingStart: newValue.datingStart,
+      datingEnd: newValue.datingEnd,
     })
   }
 
   return (
-    <div className={cn("h-full w-full", className)}>
+    <div className={cn("h-full w-full relative", className)}>
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button 
@@ -133,7 +288,7 @@ export default function DatingSelect({
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-max h-fit max-w-[12rem]",
+              "justify-between text-foreground font-normal text-xs text-left relative px-2 py-8 w-full h-fit min-w-[12rem] max-w-[14rem]",
               form.getFieldState(formValueName).invalid 
                 ? "border-red-600" 
                 : form.getFieldState(formValueName).isDirty ? "border-green-500" : ""
@@ -142,12 +297,23 @@ export default function DatingSelect({
             {isPending 
                 ? <Loader2 className='animate-spin w-5 h-5' /> 
                 : (<>
-                    {selectedLable}
+                    {selected.datingStart === 0 && selected.datingEnd === 0 
+                      ? "__"
+                      : selectedLable
+                    }
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />   
                 </>)
             }
           </Button>
         </DropdownMenuTrigger>
+        {(values.datingStart !== 0 && values.datingEnd !== 0)
+          ? (
+            <div className='w-full text-center text-[10px] font-light text-muted-foreground'>
+              <span>{values.datingStart}</span> - <span>{values.datingEnd}</span>
+            </div>
+          )
+          : null
+        }
         <DropdownMenuContent side='bottom' align="start" className="w-[200px] font-Inter">
           <DropdownMenuLabel className='flex items-center justify-between'>
             Выберите:
@@ -168,52 +334,54 @@ export default function DatingSelect({
                   : null
                 }
                 <ScrollArea type="always" classNameViewport="max-h-72">
-                    <DropdownMenuGroup>
+                    <DropdownMenuGroup className='w-max'>
                       <OneYear
                         title='XXXX год'
                         placeholder={values.datingStart.toString()}
                         postfix='год'
-                        onChange={(e) => {
-                          setValues({
-                            datingStart: Number(e.target.value),
-                            datingEnd: 0,
-                          })
-                        }}
+                        onChange={(e) => handleSetValue({
+                          datingStart: Number(e.target.value),
+                          datingEnd: 0,
+                        })}
                       />
                       <OneYear
                         title='около XXXX года'
                         placeholder={values.datingStart.toString()}
                         prefix='около'
                         postfix='года'
-                        onChange={(e) => {
-                          setValues({
-                            datingStart: Number(e.target.value),
-                            datingEnd: Number(e.target.value),
-                          })
-                        }}
+                        onChange={(e) => handleSetValue({
+                          datingStart: Number(e.target.value),
+                          datingEnd: Number(e.target.value),
+                        })}
                       />
                       <OneYear
                         title='не ранее XXXX года'
                         placeholder={values.datingStart.toString()}
                         prefix='не ранее'
                         postfix='года'
-                        onChange={(e) => {
-                          setValues({
-                            datingStart: Number(e.target.value),
-                            datingEnd: 999999,
-                          })
-                        }}
+                        onChange={(e) => handleSetValue({
+                          datingStart: Number(e.target.value),
+                          datingEnd: 999999,
+                        })}
+                      />
+                      <OneYear
+                        title='не позднее XXXX года'
+                        placeholder={values.datingEnd.toString()}
+                        prefix='не позднее'
+                        postfix='года'
+                        onChange={(e) => handleSetValue({
+                          datingStart: 999999,
+                          datingEnd: Number(e.target.value),
+                        })}
                       />
                       <OneYear
                         title='XXXX-e годы'
                         placeholder={`${Math.floor(values.datingStart/10)*10}`}
                         postfix='-е годы'
-                        onChange={(e) => {
-                          setValues({
-                            datingStart: Math.floor(Number(e.target.value)/10)*10,
-                            datingEnd: Math.floor(Number(e.target.value)/10)*10 + 9,
-                          })
-                        }}
+                        onChange={(e) => handleSetValue({
+                          datingStart: Math.floor(Number(e.target.value)/10)*10,
+                          datingEnd: Math.floor(Number(e.target.value)/10)*10 + 9,
+                        })}
                       />
                       <TwoYears
                         id='yy'
@@ -221,18 +389,14 @@ export default function DatingSelect({
                         placeholderStart={values.datingStart.toString()}
                         placeholderEnd={values.datingEnd.toString()}
                         postfix='гг.'
-                        onChangeStart={(e) => {
-                          setValues({
-                            ...values,
-                            datingStart: Number(e.target.value)
-                          })
-                        }}
-                        onChangeEnd={(e) => {
-                          setValues({
-                            ...values,
-                            datingEnd: Number(e.target.value)
-                          })
-                        }}
+                        onChangeStart={(e) => handleSetValue({
+                          ...values,
+                          datingStart: Number(e.target.value)
+                        })}
+                        onChangeEnd={(e) => handleSetValue({
+                          ...values,
+                          datingEnd: Number(e.target.value)
+                        })}
                       />
                       <TwoYears
                         id='yy-e'
@@ -240,18 +404,14 @@ export default function DatingSelect({
                         placeholderStart={`${Math.floor(values.datingStart/10)*10}`}
                         placeholderEnd={`${Math.floor(values.datingEnd/10)*10}`}
                         postfix='-е годы'
-                        onChangeStart={(e) => {
-                          setValues({
-                            ...values,
-                            datingStart: Math.floor(Number(e.target.value)/10)*10,
-                          })
-                        }}
-                        onChangeEnd={(e) => {
-                          setValues({
-                            ...values,
-                            datingEnd: Math.floor(Number(e.target.value)/10)*10+9,
-                          })
-                        }}
+                        onChangeStart={(e) => handleSetValue({
+                          ...values,
+                          datingStart: Math.floor(Number(e.target.value)/10)*10,
+                        })}
+                        onChangeEnd={(e) => handleSetValue({
+                          ...values,
+                          datingEnd: Math.floor(Number(e.target.value)/10)*10+9,
+                        })}
                       />
                       <Century 
                         prefix={prefix}
@@ -260,6 +420,14 @@ export default function DatingSelect({
                         onSelectPrefix={onSelectPrefix}
                         onChangeCentury={onChangeCentury}
                         onIsADChange={onIsADChange}
+                      />
+                      <MultiCentury 
+                        prefix={prefixMulti}
+                        century={centuryMulti}
+                        isAD={isADMulti}
+                        onSelectPrefix={onSelectPrefixMulti}
+                        onChangeCentury={onChangeCenturyMulti}
+                        onIsADChange={onIsADChangeMulti}
                       />
                       <Era
                         selected={selected}
@@ -277,6 +445,24 @@ export default function DatingSelect({
           }
         </DropdownMenuContent>
       </DropdownMenu>
+      {(form.getFieldState(formValueName).isDirty)
+        ? (
+          <RotateCcw 
+            className='w-3.5 h-3.5 absolute top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+            onClick={() => {
+              setValues(defaultDating)
+              setDatingType("century")
+              setCentury('')
+              setPrefix(undefined)
+              setCenturyMulti({first: '', second: ''})
+              setPrefixMulti({first: undefined, second: undefined})
+              form.setValue(datingStringName, defaultDatingString, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+              form.setValue(formValueName, defaultDating, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+            }}
+          />
+        )
+        : null
+      }
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}

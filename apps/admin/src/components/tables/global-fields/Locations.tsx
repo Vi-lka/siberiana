@@ -5,7 +5,7 @@ import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { useLocationsQuery } from '~/lib/queries/client/global'
 import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, ScrollArea } from '@siberiana/ui'
-import { ChevronsUpDown, CircleDot, Loader2, SearchX, X } from 'lucide-react'
+import { ChevronsUpDown, CircleDot, Loader2, RotateCcw, SearchX, X } from 'lucide-react'
 import { cn } from '@siberiana/ui/src/lib/utils'
 import { useFormContext } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
@@ -107,7 +107,7 @@ export default function Locations({
   const customDirty = defaultLocation?.id !== selected?.id
 
   return (
-    <div className={cn("h-full w-full", className)}>
+    <div className={cn("h-full w-full relative", className)}>
       <DropdownMenu open={openCombobox} onOpenChange={setOpenCombobox}>
         <DropdownMenuTrigger asChild>
           <Button 
@@ -187,6 +187,17 @@ export default function Locations({
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+      {(form.getFieldState(formValueName).isDirty || customDirty)
+        ? (
+          <RotateCcw 
+            className='w-3.5 h-3.5 absolute top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+            onClick={() => {
+              form.setValue(formValueName, defaultLocation, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+            }}
+          />
+        )
+        : null
+      }
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}
