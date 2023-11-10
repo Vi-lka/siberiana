@@ -1,3 +1,5 @@
+"server-only"
+
 import { Categories, Collections } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 import getMultiFilter from "../utils/getMultiFilter";

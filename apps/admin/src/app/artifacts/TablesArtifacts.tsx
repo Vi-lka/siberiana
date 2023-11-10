@@ -5,7 +5,7 @@ import ErrorHandler from '~/components/errors/ErrorHandler'
 import { ClientHydration } from '~/components/providers/ClientHydration'
 import { getArtifacts } from '~/lib/queries/artifacts'
 import { authOptions } from '../api/auth/[...nextauth]/route'
-import DataTable from './DataTable'
+import UpdateTable from './UpdateTable'
 import { columns, moderatorsColumns } from './columns'
 import CreateTable from './CreateTable'
 import getStatusName from '~/lib/utils/getStatusName'
@@ -200,7 +200,7 @@ export default async function TablesArtifacts({
         Редактирование
       </h1> 
       <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto mt-12' />}>
-        <DataTable columns={columns} moderatorsColumns={moderatorsColumns} data={dataForUpdate} userRoles={roles} />
+        <UpdateTable columns={columns} moderatorsColumns={moderatorsColumns} data={dataForUpdate} userRoles={roles} />
       </ClientHydration>
     </div>
   )

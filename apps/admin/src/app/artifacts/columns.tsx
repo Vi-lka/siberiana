@@ -336,10 +336,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: () => <div className="text-center">Создано at</div>,
+    header: () => <div className="text-center min-w-[6rem]">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
-        ? format(row.original.createdAt, "PPP", {locale: ru})
+        ? format(row.original.createdAt, "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{createdAt}</div>
     },
@@ -353,10 +353,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: () => <div className="text-center">Обновлено at</div>,
+    header: () => <div className="text-center min-w-[6rem]">Обновлено at</div>,
     cell: ({ row }) => {
       const updatedAt = (row.original.updatedAt && row.original.updatedBy)
-        ? format(row.original.updatedAt, "PPP", {locale: ru})
+        ? format(row.original.updatedAt, "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{updatedAt}</div>
     },

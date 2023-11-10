@@ -133,6 +133,48 @@ export const CulturesList = z.object({
 })
 export type CulturesList = z.infer<typeof CulturesList>;
 
+export const CulturesArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            petroglyphs: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
+})
+export type CulturesArray = z.infer<typeof CulturesArray>;
+
+export const CultureForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    petroglyphs: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
+})
+export type CultureForTable = z.infer<typeof CultureForTable>;
+
+export const CulturesForm = z.object({
+    cultures: CultureForTable.array()
+})
+export type CulturesForm = z.infer<typeof CulturesForm>;
+
 //.........................SETS.........................//
 export const SetsList = z.object({
     sets: z.object({

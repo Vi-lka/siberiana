@@ -25,11 +25,11 @@ export default function FormTextArea({
             control={form.control}
             name={name}
             render={({ field }) => (
-                <FormItem className='h-full relative'>
+                <FormItem className='w-full h-full relative'>
                     <FormControl>
                         <Textarea
                             className={cn(
-                                "py-0 px-2 pr-4 m-0 text-xs border-solid border-transparent w-auto overflow-visible",
+                                "w-full py-0 px-2 pr-4 m-0 text-xs border-solid border-transparent min-w-[12rem] overflow-visible",
                                 className,
                                 form.getFieldState(name).invalid 
                                     ? "border-red-600" 
