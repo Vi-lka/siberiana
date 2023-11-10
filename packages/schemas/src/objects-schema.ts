@@ -89,6 +89,10 @@ export const ArtifactById = z.object({
         id: z.string(),
         displayName: z.string(),
     }).nullable(),
+    donor: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
     mediums: z.object({
         id: z.string(),
         displayName: z.string(),  
@@ -110,7 +114,8 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).array(),
     license: z.object({
-        displayName: z.string(),  
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     culturalAffiliation: z.object({
         id: z.string(),
@@ -125,7 +130,8 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).nullable(),
     model: z.object({
-        displayName: z.string(),  
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     createdBy: z.string().optional(),
     createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),

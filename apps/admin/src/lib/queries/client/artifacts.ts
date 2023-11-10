@@ -95,48 +95,10 @@ export function getTechniquesQuery() {
   return query
 }
 
-export function getAuthorsQuery() {
+export function getModelsQuery() {
   const query = `
-    query Persons() {
-      persons(
-        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
-      ) {
-        totalCount
-        edges {
-          node {
-            id
-            displayName
-          }
-        }
-      }
-    }
-  `
-  return query
-}
-
-export function getPublicationsQuery() {
-  const query = `
-    query Publications() {
-      publications(
-        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
-      ) {
-        totalCount
-        edges {
-          node {
-            id
-            displayName
-          }
-        }
-      }
-    }
-  `
-  return query
-}
-
-export function getProjectsQuery() {
-  const query = `
-    query Projects() {
-      projects(
+    query Models() {
+      models(
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
       ) {
         totalCount

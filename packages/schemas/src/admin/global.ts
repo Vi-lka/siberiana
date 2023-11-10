@@ -2,16 +2,6 @@ import { z } from "zod";
 import { Location } from "../objects-schema"
 import { CollectionTypeEnum } from "../collections-schemas";
 
-//.........................LOCATIONS.........................//
-export const LocationsList = z.object({
-    locations: z.object({
-        edges: z.object({
-            node: Location
-        }).array()
-    })
-})
-export type LocationsList = z.infer<typeof LocationsList>;
-
 //.........................CATEGORIES.........................//
 export const CategoriesList = z.object({
     categories: z.object({
@@ -40,3 +30,66 @@ export const CollectionsList = z.object({
     })
 })
 export type CollectionsList = z.infer<typeof CollectionsList>;
+
+//.........................LOCATIONS.........................//
+export const LocationsList = z.object({
+    locations: z.object({
+        edges: z.object({
+            node: Location
+        }).array()
+    })
+})
+export type LocationsList = z.infer<typeof LocationsList>;
+
+//.........................LICENSE.........................//
+export const LicenseList = z.object({
+    licenses: z.object({
+        edges: z.object({
+            node: z.object({
+                id: z.string(),
+                displayName: z.string(),
+            })
+        }).array()
+    })
+})
+export type LicenseList = z.infer<typeof LicenseList>;
+
+//.........................PERSONS.........................//
+export const PersonsList = z.object({
+    persons: z.object({
+        edges: z.object({
+            node: z.object({
+                id: z.string(),
+                displayName: z.string(),
+            })
+        }).array()
+    })
+})
+export type PersonsList = z.infer<typeof PersonsList>;
+
+//.........................PUBLICATIONS.........................//
+export const PublicationsList = z.object({
+    publications: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type PublicationsList = z.infer<typeof PublicationsList>;
+
+//.........................PROJECTS.........................//
+export const ProjectsList = z.object({
+    projects: z.object({
+        edges: z.object({
+            node: z.object({
+              id: z.string(),
+              displayName: z.string()
+            })
+        }).array()
+    })
+})
+export type ProjectsList = z.infer<typeof ProjectsList>;
+

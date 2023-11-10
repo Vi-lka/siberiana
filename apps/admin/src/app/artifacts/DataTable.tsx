@@ -43,6 +43,7 @@ export default function DataTable<TData, TValue>({
 
   const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
   const [isPendingRefresh, startTransitionRefresh] = React.useTransition()
+  const [isPendingSearch, startTransitionSearch] = React.useTransition()
 
   const router = useRouter()
   const session = useSession()
@@ -210,13 +211,17 @@ export default function DataTable<TData, TValue>({
         >
           <div className="flex lg:flex-row flex-col-reverse gap-3 lg:items-center w-full justify-between mb-3">
             <div className='flex flex-wrap gap-3'>
-              <div className="flex items-center gap-1">
-                <Search className="w-4 h-4 stroke-muted-foreground" />
+              <div className="flex items-center gap-1.5">
+                {isPendingSearch
+                  ? <Loader2 className='animate-spin w-5 h-5' />
+                  : <Search className="w-5 h-5 stroke-muted-foreground" />
+                }
                 <Input
                   placeholder="Поиск..."
-                  value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
                   onChange={(event) =>
-                    table.getColumn("displayName")?.setFilterValue(event.target.value)
+                    startTransitionSearch(() => {
+                      table.getColumn("displayName")?.setFilterValue(event.target.value)
+                    })
                   }
                   className="lg:max-w-xs h-8"
                 />

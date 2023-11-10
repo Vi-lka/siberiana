@@ -59,6 +59,10 @@ export const ArtifactForTable = z.object({
         id: z.string(),
         displayName: z.string(),
     }),
+    license: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
     culturalAffiliation: z.object({
         id: z.string(),
         displayName: z.string(),
@@ -75,6 +79,14 @@ export const ArtifactForTable = z.object({
         id: z.string(),
         displayName: z.string(),
         type: LocationEnum,
+    }).nullable(),
+    donor: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    model: z.object({
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     mediums: z.object({
         id: z.string(),
@@ -173,43 +185,17 @@ export const TechniquesList = z.object({
 })
 export type TechniquesList = z.infer<typeof TechniquesList>;
 
-//.........................AUTHORS.........................//
-export const AuthorsList = z.object({
-    persons: z.object({
+//.........................MODELS.........................//
+export const ModelsList = z.object({
+    models: z.object({
         edges: z.object({
             node: z.object({
-              id: z.string(),
-              displayName: z.string()
+                id: z.string(),
+                displayName: z.string(),
             })
         }).array()
     })
 })
-export type AuthorsList = z.infer<typeof AuthorsList>;
-
-//.........................PUBLICATIONS.........................//
-export const PublicationsList = z.object({
-    publications: z.object({
-        edges: z.object({
-            node: z.object({
-              id: z.string(),
-              displayName: z.string()
-            })
-        }).array()
-    })
-})
-export type PublicationsList = z.infer<typeof PublicationsList>;
-
-//.........................PROJECTS.........................//
-export const ProjectsList = z.object({
-    projects: z.object({
-        edges: z.object({
-            node: z.object({
-              id: z.string(),
-              displayName: z.string()
-            })
-        }).array()
-    })
-})
-export type ProjectsList = z.infer<typeof ProjectsList>;
+export type ModelsList = z.infer<typeof ModelsList>;
 
 

@@ -103,6 +103,14 @@ export const getArtifacts = async ({
                       id
                       displayName
                     }
+                    donor {
+                      id
+                      displayName
+                    }
+                    license {
+                      id
+                      displayName
+                    }
                     mediums {
                       id
                       displayName
@@ -139,7 +147,8 @@ export const getArtifacts = async ({
                       displayName
                     }
                     model {
-                        displayName
+                      id
+                      displayName
                     }
                     createdBy
                     createdAt

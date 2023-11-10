@@ -8,7 +8,7 @@ import { getSetsQuery } from '~/lib/queries/client/artifacts'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { FormSelect } from '../inputs/FormSelect'
 
-export default function Sets({ 
+export default function Set({ 
   defaultSet,
   rowIndex
 }: { 

@@ -28,6 +28,8 @@ export default function MultiCentury(props: {
     const [openFirst, setOpenFirst] = React.useState(false);
     const [openSecond, setOpenSecond] = React.useState(false);
 
+    const prefixesForMulti = PREFIXES.slice(0, 3)
+
     return (
         <DropdownMenuSub>
             <DropdownMenuSubTrigger className='p-3'>
@@ -65,7 +67,7 @@ export default function MultiCentury(props: {
                                               : null
                                             }
                                             <ScrollArea type="always" classNameViewport="max-h-[260px]">
-                                                {PREFIXES.map((prefix, index) => {
+                                                {prefixesForMulti.map((prefix, index) => {
                                                     const isActive = props.prefix.first && (prefix?.label === props.prefix.first.label)
                                                     // const isActive = false
                                                     return (
@@ -101,8 +103,8 @@ export default function MultiCentury(props: {
                     <div className="flex w-full max-w-sm items-center gap-1">
                         <Input 
                             type="number"
-                            // placeholder={props.century.first}
-                            placeholder={"1"}
+                            placeholder={props.century.first}
+                            // placeholder={"1"}
                             className="px-2 py-6 m-0 max-w-[4rem] max-h-8 text-sm border-solid w-auto overflow-visible truncate"
                             onChange={(e) => props.onChangeCentury(Number(e.target.value), true)}
                         />
@@ -161,7 +163,7 @@ export default function MultiCentury(props: {
                                               : null
                                             }
                                             <ScrollArea type="always" classNameViewport="max-h-[260px]">
-                                                {PREFIXES.map((prefix, index) => {
+                                                {prefixesForMulti.map((prefix, index) => {
                                                     const isActive = props.prefix.second && (prefix?.label === props.prefix.second.label)
                                                     // const isActive = false
                                                     return (
@@ -197,8 +199,8 @@ export default function MultiCentury(props: {
                     <div className="flex w-full max-w-sm items-center gap-1">
                         <Input 
                             type="number"
-                            // placeholder={props.century.second}
-                            placeholder={"1"}
+                            placeholder={props.century.second}
+                            // placeholder={"1"}
                             className="px-2 py-6 m-0 max-w-[4rem] max-h-8 text-sm border-solid w-auto overflow-visible truncate"
                             onChange={(e) => props.onChangeCentury(Number(e.target.value), false)}
                         />

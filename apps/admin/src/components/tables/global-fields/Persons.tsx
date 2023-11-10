@@ -1,30 +1,32 @@
-import type { AuthorsList } from '@siberiana/schemas'
+import type { PersonsList } from '@siberiana/schemas'
 import { useQuery } from '@tanstack/react-query'
 import request from 'graphql-request'
 import React from 'react'
 import ErrorToast from '~/components/errors/ErrorToast'
-import { getAuthorsQuery } from '~/lib/queries/client/artifacts'
 import { FormSelectMulti } from '../inputs/FormSelectMulti'
+import { getPersonsQuery } from '~/lib/queries/client/global'
 
-export default function Authors({ 
-  defaultAuthors,
-  rowIndex
+export default function Persons({ 
+  defaultPersons,
+  formValueName,
+  className,
 }: { 
-  defaultAuthors: {
+  defaultPersons: {
     id: string, 
     displayName: string
   }[],
-  rowIndex: number
+  formValueName: string,
+  className?: string,
 }) {
 
-  const defaultItems = (defaultAuthors.length > 0) ? defaultAuthors : [{ id: "", displayName: "__" }]
+  const defaultItems = (defaultPersons.length > 0) ? defaultPersons : [{ id: "", displayName: "__" }]
   
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<AuthorsList, Error>({
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<PersonsList, Error>({
     queryKey: ['persons'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getAuthorsQuery(),
+        getPersonsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
@@ -38,7 +40,7 @@ export default function Authors({
         ))}
         <ErrorToast
           error={error.message}
-          place="Авторы"
+          place="Persons"
         />
       </>
     );
@@ -60,10 +62,11 @@ export default function Authors({
     <div className='h-full w-full'>
       <FormSelectMulti 
         itemsData={itemsData} 
-        defaultValues={defaultAuthors}
-        formValueName={`artifacts[${rowIndex}].authors`}
+        defaultValues={defaultPersons}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
+        className={className}
       />
     </div>
   )

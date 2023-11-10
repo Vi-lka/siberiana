@@ -37,22 +37,47 @@ export default function DatingSelect({
   const selected = form.getValues(formValueName) as Dating
   const selectedLable = getDating(selected.datingStart, selected.datingEnd, datingType)
 
-  const [values, setValues] = React.useState(selected);
-
-  const zeroObj = {
-    datingStart: 0,
-    datingEnd: 0
-  }
-
-  const [isAD, setIsAD] = React.useState(selected.datingStart >= 0 ? true : false);
-
-  const selectedCentury = 
-    Math.abs(Math.abs(selected.datingStart) - Math.abs(selected.datingEnd)) <= 99
-      ? isAD ? centurize(selected.datingEnd).toString() : centurize(selected.datingStart).toString()
+  // Default values
+  const defaultCentury = 
+    Math.abs(Math.abs(defaultDating.datingStart) - Math.abs(defaultDating.datingEnd)) <= 99
+      ? defaultDating.datingStart >= 0 ? centurize(defaultDating.datingEnd).toString() : centurize(defaultDating.datingStart).toString()
       : ''
 
-  const startForPrefix = (values.datingStart % 100).toString()
-  const endForPrefix = (values.datingEnd % 100).toString()
+    const startForDefaultPrefix = Math.abs(defaultDating.datingStart % 100).toString()
+    const endForDefaultPrefix = Math.abs(defaultDating.datingEnd % 100).toString()
+    const defaultPrefix = PREFIXES.find((prefix) => 
+      prefix.start === (startForDefaultPrefix.length < 2 ? "0" + startForDefaultPrefix : startForDefaultPrefix)
+      && 
+      prefix.end === (endForDefaultPrefix.length < 2 ? "0" + endForDefaultPrefix : endForDefaultPrefix) 
+    );
+
+  const defaultMutliCentury = {
+    first: centurize(defaultDating.datingStart).toString(),
+    second: centurize(defaultDating.datingEnd).toString(), 
+  }
+
+  const defaultPrefixFirst = PREFIXES.find((prefix) => 
+    prefix.start === (startForDefaultPrefix.length < 2 ? "0" + startForDefaultPrefix : startForDefaultPrefix)
+  );
+  const defaultPrefixSecond = PREFIXES.find((prefix) => 
+    prefix.start === (endForDefaultPrefix.length < 2 ? "0" + endForDefaultPrefix : endForDefaultPrefix) 
+  );
+  const defaultMutliPrefix = {
+    first: defaultPrefixFirst,
+    second: defaultPrefixSecond
+  }
+
+  // Values
+  const [values, setValues] = React.useState(selected);
+  const [isAD, setIsAD] = React.useState(values.datingStart >= 0 ? true : false);
+
+  const selectedCentury = 
+    Math.abs(Math.abs(values.datingStart) - Math.abs(values.datingEnd)) <= 99
+      ? isAD ? centurize(values.datingEnd).toString() : centurize(values.datingStart).toString()
+      : ''
+
+  const startForPrefix = Math.abs(values.datingStart % 100).toString()
+  const endForPrefix = Math.abs(values.datingEnd % 100).toString()
 
   const selectedPrefix = PREFIXES.find((prefix) => 
     prefix.start === (startForPrefix.length < 2 ? "0" + startForPrefix : startForPrefix)
@@ -63,13 +88,14 @@ export default function DatingSelect({
   const [century, setCentury] = React.useState<string>(selectedCentury);
   const [prefix, setPrefix] = React.useState<Prefix | undefined>(selectedPrefix);
 
+  // Multi Values
   const [isADMulti, setIsADMulti] = React.useState({
-    first: selected.datingStart >= 0 ? true : false,
-    second: selected.datingEnd >= 0 ? true : false
+    first: values.datingStart >= 0 ? true : false,
+    second: values.datingEnd >= 0 ? true : false
   });
   const [centuryMulti, setCenturyMulti] = React.useState({
-    first: centurize(selected.datingStart).toString(),
-    second: centurize(selected.datingEnd).toString(),
+    first: centurize(values.datingStart).toString(),
+    second: centurize(values.datingEnd).toString(),
   });
 
   const selectedPrefixFirst = PREFIXES.find((prefix) => 
@@ -83,18 +109,6 @@ export default function DatingSelect({
     first: selectedPrefixFirst,
     second: selectedPrefixSecond
   });
-
-  const clear = () => {
-    setValues(zeroObj)
-    setDatingType("century")
-    setCentury('')
-    setPrefix(undefined)
-    setCenturyMulti({first: '', second: ''})
-    setPrefixMulti({first: undefined, second: undefined})
-    form.setValue(datingStringName, '', {shouldDirty: true, shouldValidate: true, shouldTouch: true})
-    form.setValue(formValueName, zeroObj, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
-    setOpenCombobox(false)
-  };
 
   const handleNewValue = React.useCallback(
     (newValue: Dating) => {
@@ -111,6 +125,18 @@ export default function DatingSelect({
     setOpenCombobox(open)
     if (!open) handleNewValue(values)
   }
+
+  const clear = () => {
+    setValues({datingStart: 0, datingEnd: 0})
+    setDatingType("century")
+    setCentury('')
+    setPrefix(undefined)
+    setCenturyMulti({first: '', second: ''})
+    setPrefixMulti({first: undefined, second: undefined})
+    form.setValue(datingStringName, '', {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+    form.setValue(formValueName, {datingStart: 0, datingEnd: 0}, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+    setOpenCombobox(false)
+  };
 
   const onSelectPrefix = (prefix: Prefix | undefined) => {
     setDatingType("century")
@@ -430,7 +456,7 @@ export default function DatingSelect({
                         onIsADChange={onIsADChangeMulti}
                       />
                       <Era
-                        selected={selected}
+                        selected={values}
                         handleNewValue={(newValue) => {
                           setValues({
                             datingStart: newValue.datingStart,
@@ -452,10 +478,10 @@ export default function DatingSelect({
             onClick={() => {
               setValues(defaultDating)
               setDatingType("century")
-              setCentury('')
-              setPrefix(undefined)
-              setCenturyMulti({first: '', second: ''})
-              setPrefixMulti({first: undefined, second: undefined})
+              setCentury(defaultCentury)
+              setPrefix(defaultPrefix)
+              setCenturyMulti(defaultMutliCentury)
+              setPrefixMulti(defaultMutliPrefix)
               form.setValue(datingStringName, defaultDatingString, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
               form.setValue(formValueName, defaultDating, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
             }}
