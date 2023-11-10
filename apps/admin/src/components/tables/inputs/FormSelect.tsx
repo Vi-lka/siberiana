@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, CircleDot, Loader2, SearchX, X } from "lucide-react";
+import { ChevronsUpDown, CircleDot, Loader2, RotateCcw, SearchX, X } from "lucide-react";
 import { 
     Button, 
     Command,
@@ -210,6 +210,15 @@ export function FormSelect({
           </Command>
         </PopoverContentForModal>
       </PopoverForModal>
+      {(form.getFieldState(formValueName).isDirty || customDirty)
+        ? (
+          <RotateCcw 
+            className='w-3.5 h-3.5 absolute top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+            onClick={() => form.setValue(formValueName, defaultValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})}
+          />
+        )
+        : null
+      }
       <ErrorMessage
         errors={form.formState.errors}
         name={formValueName}

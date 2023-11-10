@@ -75,7 +75,6 @@ type Edges = {
     };
   }[]
 }
-
 export function useLocationsQuery() {
   const queryString = `
     query Locations() {
@@ -145,5 +144,81 @@ export function useLocationsQuery() {
     refetchOnWindowFocus: true,
   })
 
+  return query
+}
+
+export function getLicensesQuery() {
+  const query = `
+    query Licenses() {
+      licenses(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getPersonsQuery() {
+  const query = `
+    query Persons() {
+      persons(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getPublicationsQuery() {
+  const query = `
+    query Publications() {
+      publications(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
+  return query
+}
+
+export function getProjectsQuery() {
+  const query = `
+    query Projects() {
+      projects(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `
   return query
 }

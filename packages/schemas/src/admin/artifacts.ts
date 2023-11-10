@@ -50,11 +50,19 @@ export const ArtifactForTable = z.object({
     datingRow: Dating,
     dating: z.string().optional(),
     dimensions: z.string().optional(),
+    inventoryNumber: z.string().optional(),
+    kpNumber: z.string().optional(),
+    goskatalogNumber: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
     admissionDate: z.date().nullable().optional(),
     collection: z.object({
         id: z.string(),
         displayName: z.string(),
     }),
+    license: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
     culturalAffiliation: z.object({
         id: z.string(),
         displayName: z.string(),
@@ -71,6 +79,14 @@ export const ArtifactForTable = z.object({
         id: z.string(),
         displayName: z.string(),
         type: LocationEnum,
+    }).nullable(),
+    donor: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    model: z.object({
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     mediums: z.object({
         id: z.string(),
@@ -117,6 +133,48 @@ export const CulturesList = z.object({
 })
 export type CulturesList = z.infer<typeof CulturesList>;
 
+export const CulturesArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            petroglyphs: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
+})
+export type CulturesArray = z.infer<typeof CulturesArray>;
+
+export const CultureForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    petroglyphs: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
+})
+export type CultureForTable = z.infer<typeof CultureForTable>;
+
+export const CulturesForm = z.object({
+    cultures: CultureForTable.array()
+})
+export type CulturesForm = z.infer<typeof CulturesForm>;
+
 //.........................SETS.........................//
 export const SetsList = z.object({
     sets: z.object({
@@ -156,6 +214,44 @@ export const MaterialsList = z.object({
 })
 export type MaterialsList = z.infer<typeof MaterialsList>;
 
+export const MaterialsArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
+})
+export type MaterialsArray = z.infer<typeof MaterialsArray>;
+
+export const MaterialForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
+})
+export type MaterialForTable = z.infer<typeof MaterialForTable>;
+
+export const MaterialsForm = z.object({
+    materials: MaterialForTable.array()
+})
+export type MaterialsForm = z.infer<typeof MaterialsForm>;
+
 //.........................TECHNIQUES.........................//
 export const TechniquesList = z.object({
     techniques: z.object({
@@ -169,43 +265,63 @@ export const TechniquesList = z.object({
 })
 export type TechniquesList = z.infer<typeof TechniquesList>;
 
-//.........................AUTHORS.........................//
-export const AuthorsList = z.object({
-    persons: z.object({
-        edges: z.object({
-            node: z.object({
-              id: z.string(),
-              displayName: z.string()
-            })
-        }).array()
-    })
+export const TechniquesArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            art: z.object({
+                id: z.string()
+            }).array(),
+            petroglyphs: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
 })
-export type AuthorsList = z.infer<typeof AuthorsList>;
+export type TechniquesArray = z.infer<typeof TechniquesArray>;
 
-//.........................PUBLICATIONS.........................//
-export const PublicationsList = z.object({
-    publications: z.object({
-        edges: z.object({
-            node: z.object({
-              id: z.string(),
-              displayName: z.string()
-            })
-        }).array()
-    })
+export const TechniqueForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    art: z.number().optional(),
+    petroglyphs: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
 })
-export type PublicationsList = z.infer<typeof PublicationsList>;
+export type TechniqueForTable = z.infer<typeof TechniqueForTable>;
 
-//.........................PROJECTS.........................//
-export const ProjectsList = z.object({
-    projects: z.object({
+export const TechniquesForm = z.object({
+    techniques: TechniqueForTable.array()
+})
+export type TechniquesForm = z.infer<typeof TechniquesForm>;
+
+//.........................MODELS.........................//
+export const ModelsList = z.object({
+    models: z.object({
         edges: z.object({
             node: z.object({
-              id: z.string(),
-              displayName: z.string()
+                id: z.string(),
+                displayName: z.string(),
             })
         }).array()
     })
 })
-export type ProjectsList = z.infer<typeof ProjectsList>;
+export type ModelsList = z.infer<typeof ModelsList>;
 
 

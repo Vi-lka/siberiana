@@ -1,13 +1,58 @@
-export const prefix = [
-    "Начало", "Конец", "Середина",
-    "Первая половина", "Вторая половина", 
-    "Первая треть", "Вторая треть", "Третья треть",
-    "Первая четверть", "Вторая четверть", "Третья четверть", "Четвертая четверть",
-    "около", "не ранее", "не позднее"
+export type Prefix = {
+    label: string;
+    start: string;
+    end: string;
+}
+
+export type DatingType = "year" | "century"
+
+export const ERA = [
+    {start: -2500000, end: -9001, label: "Палеолит"},
+    {start: -100000, end: -40001, label: "Средний палеолит"},
+    {start: -40000, end: -9001, label: "Верхний палеолит"},
+    {start: -2500000, end: -100001, label: "Нижний палеолит"},
+    {start: -9000, end: -7001, label: "Мезолит"},
+    {start: -7000, end: -3901, label: "Неолит"},
+    {start: -7000, end: -5501, label: "Ранний неолит"},
+    {start: -5500, end: -3901, label: "Поздний неолит"},
+    {start: -3900, end: -3501, label: "Энеолит"},
+    {start: -3500, end: -1000, label: "Бронзовый век"},
+    {start: -3500, end: -2101, label: "Ранний бронзовый век"},
+    {start: -2100, end: -1601, label: "Средний бронзовый век"},
+    {start: -1600, end: -1201, label: "Развитый бронзовый век"},
+    {start: -1200, end: -1001, label: "Финальный бронзовый век"},
+    {start: -1000, end: -801, label: "Переход от бронзового к раннему железному веку"},
+    {start: -800, end: -501, label: "Ранний железный век"},
+    {start: -800, end: -201, label: "Скифское время"},
+    {start: -150, end: 150, label: "Хуннское время"},
+    {start: 250, end: 550, label: "Сяньбийско-жужанское время"},
+    {start: 550, end: 800, label: "Тюркское время"},
+    {start: 550, end: 1601, label: "Средневековье"},
+    {start: 550, end: 1000, label: "Раннее средневековье"},
+    {start: 1001, end: 1401, label: "Развитое средневековье"},
+    {start: 1401, end: 1601, label: "Позднее средневековье"},
+    {start: 1201, end: 1550, label: "Монгольское время"},
+    {start: 1601, end: 1800, label: "Раннее Новое время"},
+    {start: 1601, end: 1900, label: "Новое время"},
 ]
 
+export const PREFIXES = [
+    {label: "Начало", start: "01", end: "15"},
+    {label: "Конец", start: "85", end: "00"},
+    {label: "Середина", start: "45", end: "55"},
+    {label: "Первая половина", start: "01", end: "50"},
+    {label: "Вторая половина", start: "51", end: "00"},
+    {label: "Первая треть", start: "01", end: "33"},
+    {label: "Вторая треть", start: "34", end: "66"},
+    {label: "Третья треть", start: "67", end: "00"},
+    {label: "Первая четверть", start: "01", end: "25"},
+    {label: "Вторая четверть", start: "26", end: "50"},
+    {label: "Третья четверть", start: "51", end: "75"},
+    {label: "Четвертая четверть", start: "76", end: "00"},
+] as Prefix[]
+
 export function centurize(year: number) {
-    return Math.ceil(year/100)
+    return Math.ceil(Math.abs(year/100))
 }
 
 export const romanize = (original: number): string => {
@@ -35,10 +80,19 @@ export const romanize = (original: number): string => {
     }, '');
 }
 
+export function getEra(start: number, end: number): string | false {
+    const result = ERA.find(item => (item.start === start && item.end === end))
+    if (!!result) return result.label
+    else return false
+}
+
+// OOOOO MYYYY GOOOOOOD, THIS IS SHIT
 export function getPrefix(start: number, end: number) {
-    if (Math.abs(start) < Math.abs(end)) {
-        if ((start - 1) % 100 === 0) {
-            switch (end - start) {
+    const startAbs = (start < 0 && end < 0) ? Math.abs(end) : Math.abs(start)
+    const endAbs = (start < 0 && end < 0) ? Math.abs(start) : Math.abs(end)
+    if (startAbs < endAbs) {
+        if ((startAbs - 1) % 100 === 0 && end < 999999) {
+            switch (endAbs - startAbs) {
                 case 14:
                     return {prefix: "Начало", century: true}
                 case 49:
@@ -47,11 +101,9 @@ export function getPrefix(start: number, end: number) {
                     return {prefix: "Первая треть", century: true}
                 case 24:
                     return {prefix: "Первая четверть", century: true}
-                default:
-                    return null;
             }
-        } else if (end % 100 === 0) {
-            switch (end - start) {
+        } else if (endAbs % 100 === 0 && startAbs < 999999) {
+            switch (endAbs - startAbs) {
                 case 15:
                     return {prefix: "Конец", century: true}
                 case 49:
@@ -60,44 +112,112 @@ export function getPrefix(start: number, end: number) {
                     return {prefix: "Третья треть", century: true}
                 case 24:
                     return {prefix: "Четвертая четверть", century: true}
-                default:
-                    return null;
             }
-        } else if ((start % 100 === 34) && (end - start === 32)) {
+        } else if ((startAbs % 100 === 34) && (endAbs - startAbs === 32)) {
             return {prefix: "Вторая треть", century: true}
-        } else if ((start % 100 === 26) && (end - start === 34)) {
+        } else if ((startAbs % 100 === 26) && (endAbs - startAbs === 24)) {
             return {prefix: "Вторая четверть", century: true}
-        } else if ((start % 100 === 51) && (end - start === 24)) {
+        } else if ((startAbs % 100 === 51) && (endAbs - startAbs === 24)) {
             return {prefix: "Третья четверть", century: true}
-        } else if ((start % 100 === 45) && (end - start === 10)) {
+        } else if ((startAbs % 100 === 45) && (endAbs - startAbs === 10)) {
             return {prefix: "Середина", century: true}
-        } else if (end === Infinity) {
+        } else if (endAbs === 999999) {
             return {prefix: "не ранее", century: false}
         }
-    } else if (start === Infinity) {
+    } else if (startAbs === 999999) {
         return {prefix: "не позднее", century: false}
-    } else if ((start !== 0) && (start === end)) {
+    } else if ((startAbs !== 0) && (start === end)) {
         return {prefix: "около", century: false}
     }
     return null;
 }
 
-export function getDatingLable(start: number, end: number) {
+export function getMultiPrefixData(start: number, end: number) {
+    const startAbs = Math.abs(start)
+    const endAbs = Math.abs(end)
+
+    // const startStarting = startAbs.toString().slice(0, 2)
+    let startEnding = startAbs.toString().slice(-2) 
+    if (startEnding.length < 2) startEnding = "0" + startEnding
+    // const endStarting = endAbs.toString().slice(0, 2)
+    let endEnding = endAbs.toString().slice(-2)
+    if (endEnding.length < 2) endEnding = "0" + endEnding
+
+    const startPrefix = PREFIXES.find(item => item.start === startEnding)
+    const endPrefix = PREFIXES.find(item => item.start === endEnding)
+
+    const startCentury = romanize(centurize(Math.abs(start)))
+    const endCentury = romanize(centurize(Math.abs(end)))
+    
+    const startString = startPrefix 
+        ? `${startPrefix.label} ${startCentury} века ${start >= 0 ? '' : 'до н.э.'}` 
+        : `${startCentury} век ${start >= 0 ? '' : 'до н.э.'}`
+
+    const endString = endPrefix 
+        ? `${endPrefix.label} ${endCentury} века ${end >= 0 ? '' : 'до н.э.'}` 
+        : `${endCentury} век ${end >= 0 ? '' : 'до н.э.'}`
+
+    return `${startString} - ${endString}`
+}
+
+// OOOOO MYYYY GOOOOOOD, THIS IS SHIT
+export function getDating(start: number, end: number, type: DatingType): string {
     const prefix = getPrefix(start, end)
     const difference = Math.abs(Math.abs(start) - Math.abs(end))
 
-    if (start === 0 && end === 0) return "__"
+    if (start === 0 && end === 0) return ""
 
     if (!!prefix) {
         if (prefix.century) {
             const century = romanize(centurize(Math.abs(start)))
-            return `${prefix.prefix} ${century} века`
+            return start > 0 ? `${prefix.prefix} ${century} века` : `${prefix.prefix} ${century} века до н.э.`
         } else {
-            const year = start === Infinity ? end : start
+            const year = start === 999999 ? end : start
             return `${prefix.prefix} ${year} года`
         }
     } else if (difference === 99) {
-        if (start > 0) return `${romanize(centurize(start))} век`
-        else return `${romanize(centurize(end))} век до н.э.`
+        if (start > 0) return `${romanize(centurize(Math.abs(start)))} век`
+        else return `${romanize(centurize(Math.abs(end)))} век до н.э.`
     }
+    else {
+        const era = getEra(start, end)
+
+        if (era) {
+            return era
+        } else {
+            if ((start % 10 === 0) && (end - start === 9)) return `${start}-е годы`
+            if ((start % 10 === 0) && ((end - start) > 9) && ((end - start)%10 === 9)) return `${start}-${end-9}-е годы`
+            else {
+                if (end !== 0) {
+                    if (type === "century") return getMultiPrefixData(start, end)
+                    else return `${start}-${end} гг.`
+                } else return `${start} г.`
+            }
+        }
+    }
+}
+
+export function generateValues(value: string, prefix: Prefix | undefined) {
+    const valueNum = Number(value)
+    const valueNumAbs = Math.abs(valueNum)
+
+    const prefixStartNum = Number(prefix?.start)
+    const prefixEndNum = Number(prefix?.end)
+
+    const isDoubleDigitCentury = valueNumAbs < 11
+    const isInMiddle = prefixStartNum >= 51 && prefixEndNum < 75
+
+    const forStart = isDoubleDigitCentury
+        ? "0"+(valueNum - 1).toString() 
+        : (valueNum - 1).toString()
+
+    const forEnd = isDoubleDigitCentury
+        ? isInMiddle
+            ? "0" + value 
+            : "0" + (valueNum - 1).toString() 
+        : isInMiddle
+            ? value
+            : (valueNum - 1).toString()
+
+    return { forStart, forEnd }
 }

@@ -4,7 +4,7 @@ import { Button, Calendar, FormControl, FormField, FormItem, FormMessage, Popove
 import { cn } from '@siberiana/ui/src/lib/utils';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { CalendarIcon, X } from 'lucide-react';
+import { CalendarIcon, RotateCcw, X } from 'lucide-react';
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 
@@ -20,6 +20,8 @@ export default function DateSelect({
     defaultValue?: Date | null,
 }) {
 
+    const [open, setOpenChange] = React.useState(false);
+
     const form = useFormContext();
 
     const dateNow = new Date()
@@ -29,18 +31,18 @@ export default function DateSelect({
             control={form.control}
             name={name}
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <Popover>
+              <FormItem className="flex flex-col relative">
+                <Popover open={open} onOpenChange={setOpenChange}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "max-w-[240px] px-3 text-left font-normal w-max",
+                          "max-w-[240px] px-3 py-8 text-left font-normal w-max",
                           !field.value && "text-muted-foreground",
                           form.getFieldState(name).invalid 
                             ? "border-red-600" 
-                            : (form.getFieldState(name).isDirty || field.value !== defaultValue)? "border-green-500" : ""
+                            : (form.getFieldState(name).isDirty)? "border-green-500" : ""
                         )}
                       >
                         {field.value ? (
@@ -52,30 +54,51 @@ export default function DateSelect({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  {!!field.value
-                    ? (
-                      <X 
-                        className="h-5 w-5 opacity-50 hover:opacity-100 hover:scale-125 z-20 transition-all cursor-pointer mx-auto" 
-                        onClick={() => form.setValue(name, null, {shouldDirty: true, shouldValidate: true, shouldTouch: true})}
-                      />
-                    )
-                    : null
-                  }
                   <PopoverContent className="w-auto p-0 font-Inter" align="start">
+                    {!!field.value
+                      ? (
+                        <span 
+                          className="my-1 text-xs text-muted-foreground flex items-center justify-center cursor-pointer hover:text-foreground hover:scale-110 transition-all" 
+                          onClick={() => {
+                            setOpenChange(false)
+                            form.setValue(name, null, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+                          }}
+                        >
+                          <X className="h-5 w-5"/> Удалить
+                        </span>
+                      )
+                      : null
+                    }
                     <Calendar
                       mode="single"
                       captionLayout="dropdown-buttons"
                       selected={new Date(field.value as string)}
-                      onSelect={field.onChange}
+                      onSelect={(e: any) => {
+                        field.onChange(e)
+                        setOpenChange(false)
+                      }}
                       disabled={(date) =>
                         date > dateNow
                       }
                       fromYear={!!fromYear ? fromYear : 1900}
                       toYear={dateNow.getFullYear()}
                       initialFocus
+                      className='pt-0.5'
                     />
                   </PopoverContent>
                 </Popover>
+                {(form.getFieldState(name).isDirty)
+                    ? (
+                        <RotateCcw 
+                            className='w-3.5 h-3.5 absolute -top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+                            onClick={() => {
+                              setOpenChange(false)
+                              form.setValue(name, defaultValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
+                            }}
+                        />
+                    )
+                    : null
+                }
                 <FormMessage />
               </FormItem>
             )}

@@ -1,7 +1,7 @@
 "use client"
 
-import type { ArtifactForTable} from '@siberiana/schemas';
-import { ArtifactsForm } from '@siberiana/schemas'
+import type { TechniqueForTable} from '@siberiana/schemas';
+import { TechniquesForm } from '@siberiana/schemas';
 import { toast } from '@siberiana/ui'
 import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
@@ -10,29 +10,24 @@ import React from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import type { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
-import getStatusName from '~/lib/utils/getStatusName'
 import { useRouter } from 'next/navigation';
-import { useCreateArtifact } from '~/lib/mutations/objects';
 import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
+import { useCreateTechnique } from '~/lib/mutations/additionals';
 import DataTable from '~/components/tables/DataTable';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
-  moderatorsColumns: ColumnDef<TData, TValue>[],
-  data: ArtifactForTable[] & TData[],
-  userRoles?: string[],
+  data: TechniqueForTable[] & TData[],
   hasObjectsToUpdate?: boolean
 }
 
 export default function CreateTable<TData, TValue>({
   columns,
-  moderatorsColumns,
   data,
-  userRoles,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<ArtifactForTable[] & TData[]>(data)
+  const [dataState, setDataState] = React.useState<TechniqueForTable[] & TData[]>(data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
@@ -46,15 +41,11 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter()
   const session = useSession()
 
-  const mutation = useCreateArtifact(session.data?.access_token)
-
-  const isModerator = userRoles?.includes("moderator")
-
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator ? moderatorsColumns : columns
+  const mutation = useCreateTechnique(session.data?.access_token)
 
   const table = useReactTable({
     data: dataState,
-    columns: allowСolumns,
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -69,65 +60,25 @@ export default function CreateTable<TData, TValue>({
       rowSelection,
     },
   })
-  const form = useForm<z.infer<typeof ArtifactsForm>>({
-    resolver: zodResolver(ArtifactsForm),
+  const form = useForm<z.infer<typeof TechniquesForm>>({
+    resolver: zodResolver(TechniquesForm),
     mode: 'onChange',
     defaultValues: {
-      artifacts: dataState
+      techniques: dataState
     }
   });
   const control = form.control
   const { append, remove } = useFieldArray({
     control,
-    name: "artifacts",
+    name: "techniques",
   });
 
-  const statusForModerator = {
-    id: "listed",
-    displayName: getStatusName("listed")
-  }
-  const statusForAdmin = {
-    id: "draft",
-    displayName: getStatusName("draft")
-  }
   const defaultAdd = {
     id: "random" + Math.random().toString(),
-    status: isModerator ? statusForModerator : statusForAdmin,
     displayName: "",
     description: "",
-    primaryImageURL: "",
-    chemicalComposition: "",
-    inventoryNumber: "",
-    kpNumber: "",
-    goskatalogNumber: "",
-    externalLink: "",
-    typology: "",
-    weight: "",
-    sizes: {
-      width: 0,
-      height: 0,
-      length: 0,
-      depth: 0,
-      diameter: 0,
-    },
-    datingRow: {
-      datingStart: 0,
-      datingEnd: 0,
-    },
-    donor: null,
-    model: null,
-    license: null,
-    culturalAffiliation: null,
-    set: null,
-    monument: null,
-    location: null,
-    mediums: [],
-    techniques: [],
-    authors: [],
-    publications: [],
-    projects: [],
-    collection: dataState[0].collection,
-  } as ArtifactForTable & TData
+    externalLink: ""
+  } as TechniqueForTable & TData
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -145,9 +96,9 @@ export default function CreateTable<TData, TValue>({
   const handleDelete = () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows
 
-    const filteredData = form.getValues().artifacts.filter(
+    const filteredData = form.getValues().techniques.filter(
       item => !selectedRows.some(row => row.getValue("id") === item.id)
-    ) as ArtifactForTable[] & TData[]
+    ) as TechniqueForTable[] & TData[]
 
     if (filteredData.length === 0) {
       toast({
@@ -168,8 +119,8 @@ export default function CreateTable<TData, TValue>({
         remove(row.index - i)
         i++
       }
-      // form.reset({artifacts: filteredData}, { keepValues: false, keepDirtyValues: false, keepIsValid: true })
     })
+    form.reset({}, { keepValues: true, keepDirtyValues: false }) // dosn't need default dirty because all new data is dirty
 
     table.toggleAllPageRowsSelected(false)
   }
@@ -179,33 +130,25 @@ export default function CreateTable<TData, TValue>({
       const params = new URLSearchParams(window.location.search);
       params.delete("mode")
       startTransitionGoToUpdate(() => {
-        router.push(`artifacts?${params.toString()}`);
+        router.push(`techniques?${params.toString()}`);
       });
     },
     [router],
   );
 
-  // console.log("DATA_STATE: ", dataState)
-  // console.log("TABLE: ", table.getRowModel().rows[0].original)
-  // console.log("FORM: ", form.getValues().artifacts)
-
-  async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleSave(dataForm: z.infer<typeof TechniquesForm>) {
     setLoading(true)
 
-    const noLines = dataForm.artifacts.map(artifact => {
+    const noLines = dataForm.techniques.map(technique => {
       const {
         displayName,
         description,
-        typology,
-        chemicalComposition,
         ...rest
-      } = artifact
+      } = technique
 
       return {
         displayName: displayName.replace(/\n/g, " "), 
         description: description?.replace(/\n/g, " "), 
-        typology: typology?.replace(/\n/g, " "),
-        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest,
       }
     })
@@ -228,7 +171,7 @@ export default function CreateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты добавлены",
+        description: "Техники добавлены",
         className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       })
       console.log("results: ", results)
@@ -237,7 +180,7 @@ export default function CreateTable<TData, TValue>({
       params.delete("mode")
       startTransitionRouter(() => {
         router.refresh()
-        router.push(`artifacts?${params.toString()}`)
+        router.push(`techniques?${params.toString()}`)
       })
       setLoading(false)
     }
@@ -248,7 +191,7 @@ export default function CreateTable<TData, TValue>({
   return (
     <DataTable 
       table={table}
-      columnsLength={allowСolumns.length}
+      columnsLength={columns.length}
       form={form}
       isLoading={isPendingTable || isPendingForm}
       isPendingChangeMode={isPendingGoToUpdate}

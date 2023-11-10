@@ -1,7 +1,8 @@
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@siberiana/ui"
 import { cn } from "@siberiana/ui/src/lib/utils"
 import type { Column } from "@tanstack/react-table"
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDown, XCircle } from "lucide-react"
+import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDown, Loader2, XCircle } from "lucide-react"
+import { useTransition } from "react"
   
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,52 +15,80 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  const [isPending, startTransition] = useTransition();
+
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>
   }
 
   return (
     <div className={cn("flex items-center justify-center space-x-2", className)}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent text-center"
-          >
-            <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" />
-            ) : (
-              <ChevronsUpDown className="ml-2 h-4 w-4" />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="font-Inter">
-          <DropdownMenuItem className="cursor-pointer" onClick={() => column.toggleSorting(false)}>
-            <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => column.toggleSorting(true)}>
-            <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
-          </DropdownMenuItem>
-          {column.getIsSorted() 
-            ? (
-                <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer" onClick={() => column.clearSorting()}>
-                      <XCircle className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                      Reset
-                    </DropdownMenuItem>
-                </>
-            )
-            : null
-          }
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {isPending 
+        ? <Loader2 className='animate-spin w-4 h-4 mx-auto' />
+        : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="-ml-3 h-8 data-[state=open]:bg-accent text-center"
+              >
+                <span>{title}</span>
+                {column.getIsSorted() === "desc" ? (
+                  <ArrowDownIcon className="ml-2 h-4 w-4" />
+                ) : column.getIsSorted() === "asc" ? (
+                  <ArrowUpIcon className="ml-2 h-4 w-4" />
+                ) : (
+                  <ChevronsUpDown className="ml-2 h-4 w-4" />
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="font-Inter">
+              <DropdownMenuItem 
+                className="cursor-pointer" 
+                onClick={() => {
+                  startTransition(() => {
+                    column.toggleSorting(false)
+                  });
+                }}
+              >
+                <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Asc
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                className="cursor-pointer" 
+                onClick={() => {
+                  startTransition(() => {
+                    column.toggleSorting(true)
+                  });
+                }}
+              >
+                <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                Desc
+              </DropdownMenuItem>
+              {column.getIsSorted() 
+                ? (
+                    <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem 
+                          className="cursor-pointer" 
+                          onClick={() => {
+                            startTransition(() => {
+                              column.clearSorting()
+                            });
+                          }}
+                        >
+                          <XCircle className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+                          Reset
+                        </DropdownMenuItem>
+                    </>
+                )
+                : null
+              }
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      }
     </div>
   )
 }

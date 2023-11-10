@@ -7,21 +7,24 @@ import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader"
 import FormTextArea from "~/components/tables/inputs/FormTextArea"
-import Authors from "~/components/tables/artifacts/Authors"
-import Cultures from "~/components/tables/artifacts/Cultures"
+import Culture from "~/components/tables/artifacts/Culture"
 import Materials from "~/components/tables/artifacts/Materials"
-import Monuments from "~/components/tables/artifacts/Monuments"
-import Publications from "~/components/tables/artifacts/Publications"
-import Sets from "~/components/tables/artifacts/Sets"
+import Monument from "~/components/tables/artifacts/Monument"
+import Set from "~/components/tables/artifacts/Set"
 import Techniques from "~/components/tables/artifacts/Techniques"
-import Projects from "~/components/tables/artifacts/Projects";
+import Projects from "~/components/tables/global-fields/Projects";
 import Locations from "~/components/tables/global-fields/Locations"
 import DateSelect from "~/components/tables/inputs/DateSelect"
 import Status from "~/components/tables/global-fields/Status";
 import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
-import { centurize, romanize } from "~/lib/utils/getDating";
+import DatingSelect from "~/components/tables/global-fields/dating/DatingSelect";
+import Persons from "~/components/tables/global-fields/Persons";
+import PersonSingle from "~/components/tables/global-fields/PersonSingle";
+import License from "~/components/tables/global-fields/License";
+import Publications from "~/components/tables/global-fields/Publications";
+import Model from "~/components/tables/artifacts/Model";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -50,7 +53,58 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">ID</div>,
     cell: ({ row }) => {
       const id = row.original.id.includes("random") ? row.index : parseFloat(row.original.id)
-      return <div className="text-right font-light text-[9px] w-[2rem] break-words">{id}</div>
+      return <div className="text-right font-light text-[8px] w-[1.5rem] break-words">{id}</div>
+    },
+  },
+  {
+    accessorKey: "inventoryNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Инвентарный номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].inventoryNumber`} 
+          defaultValue={row.original.inventoryNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
+    },
+  },
+  {
+    accessorKey: "kpNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="КП номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].kpNumber`} 
+          defaultValue={row.original.kpNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
+    },
+  },
+  {
+    accessorKey: "goskatalogNumber",
+    header: ({ column }) => {
+      return (
+        <DataTableColumnHeader column={column} title="Госкаталог номер" className="ml-2" />
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <FormInputText 
+          name={`artifacts[${row.index}].goskatalogNumber`} 
+          defaultValue={row.original.goskatalogNumber}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
+      )
     },
   },
   {
@@ -89,7 +143,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Культура</div>,
     cell: ({ row }) => {
       return (
-        <Cultures defaultCulture={row.original.culturalAffiliation} rowIndex={row.index} />
+        <Culture defaultCulture={row.original.culturalAffiliation} rowIndex={row.index} />
       )
     },
   },
@@ -98,7 +152,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Комплекс</div>,
     cell: ({ row }) => {
       return (
-        <Sets defaultSet={row.original.set} rowIndex={row.index} />
+        <Set defaultSet={row.original.set} rowIndex={row.index} />
       )
     },
   },
@@ -107,7 +161,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Памятник</div>,
     cell: ({ row }) => {
       return (
-        <Monuments defaultMonument={row.original.monument} rowIndex={row.index} />
+        <Monument defaultMonument={row.original.monument} rowIndex={row.index} />
       )
     },
   },
@@ -121,20 +175,25 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
   },
   {
-    accessorKey: "dating",
-    header: () => <div className="text-center">dating</div>,
-    cell: ({ row }) => {
-      return (
-        <p>{row.original.dating}</p>
-      )
-    },
-  },
-  {
     accessorKey: "datingRow",
     header: () => <div className="text-center">Датировка</div>,
     cell: ({ row }) => {
       return (
-        <p>{romanize(centurize(row.original.datingRow.datingStart))} - {romanize(centurize(row.original.datingRow.datingEnd))}</p>
+        <DatingSelect 
+          formValueName={`artifacts[${row.index}].datingRow`} 
+          datingStringName={`artifacts[${row.index}].dating`}
+          defaultDating={row.original.datingRow}
+          defaultDatingString={row.original.dating}
+        />
+      )
+    },
+  },
+  {
+    accessorKey: "dating",
+    header: () => <div className="text-center">датировка (string)</div>,
+    cell: ({ row }) => {
+      return (
+        <FormTextArea name={`artifacts[${row.index}].dating`} defaultValue={row.original.dating}/>
       )
     },
   },
@@ -179,7 +238,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Размеры</div>,
     cell: ({ row }) => {
       return (
-        <SizesSelect formValueName={`artifacts[${row.index}].sizes`}/>
+        <SizesSelect formValueName={`artifacts[${row.index}].sizes`} defaultValues={row.original.sizes}/>
       )
     },
   },
@@ -188,7 +247,11 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Вес</div>,
     cell: ({ row }) => {
       return (
-        <FormInputText name={`artifacts[${row.index}].weight`} className="text-center bg-transparent border-background" placeholder="__"/>
+        <FormInputText 
+          name={`artifacts[${row.index}].weight`} 
+          defaultValue={row.original.weight}
+          className="text-center bg-transparent border-background" 
+          placeholder="__"/>
       )
     },
   },
@@ -206,7 +269,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Авторы работ</div>,
     cell: ({ row }) => {
       return (
-        <Authors defaultAuthors={row.original.authors} rowIndex={row.index} />
+        <Persons formValueName={`artifacts[${row.index}].authors`} defaultPersons={row.original.authors} />
       )
     },
   },
@@ -215,7 +278,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Публикации</div>,
     cell: ({ row }) => {
       return (
-        <Publications defaultPublications={row.original.publications} rowIndex={row.index} />
+        <Publications formValueName={`artifacts[${row.index}].publications`} defaultPublications={row.original.publications} />
       )
     },
   },
@@ -224,7 +287,43 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Проекты</div>,
     cell: ({ row }) => {
       return (
-        <Projects defaultProjects={row.original.projects} rowIndex={row.index} />
+        <Projects formValueName={`artifacts[${row.index}].projects`} defaultProjects={row.original.projects} />
+      )
+    },
+  },
+  {
+    accessorKey: "donor",
+    header: () => <div className="text-center">Донор</div>,
+    cell: ({ row }) => {
+      return (
+        <PersonSingle formValueName={`artifacts[${row.index}].donor`} defaultPerson={row.original.donor} />
+      )
+    },
+  },
+  {
+    accessorKey: "license",
+    header: () => <div className="text-center">Лицензия</div>,
+    cell: ({ row }) => {
+      return (
+        <License formValueName={`artifacts[${row.index}].license`} defaultLicense={row.original.license} />
+      )
+    },
+  },
+  {
+    accessorKey: "model",
+    header: () => <div className="text-center">3D Модель</div>,
+    cell: ({ row }) => {
+      return (
+        <Model formValueName={`artifacts[${row.index}].model`} defaultModel={row.original.model} />
+      )
+    },
+  },
+  {
+    accessorKey: "externalLink",
+    header: () => <div className="text-center">Внешняя ссылка</div>,
+    cell: ({ row }) => {
+      return (
+        <FormTextArea name={`artifacts[${row.index}].externalLink`} defaultValue={row.original.externalLink}/>
       )
     },
   },
@@ -237,10 +336,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: () => <div className="text-center">Создано at</div>,
+    header: () => <div className="text-center min-w-[6rem]">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
-        ? format(row.original.createdAt, "PPP", {locale: ru})
+        ? format(row.original.createdAt, "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{createdAt}</div>
     },
@@ -254,10 +353,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: () => <div className="text-center">Обновлено at</div>,
+    header: () => <div className="text-center min-w-[6rem]">Обновлено at</div>,
     cell: ({ row }) => {
       const updatedAt = (row.original.updatedAt && row.original.updatedBy)
-        ? format(row.original.updatedAt, "PPP", {locale: ru})
+        ? format(row.original.updatedAt, "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{updatedAt}</div>
     },

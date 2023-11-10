@@ -65,8 +65,12 @@ export const ArtifactById = z.object({
     diameter: z.number(),
     datingStart: z.number().int(),
     datingEnd: z.number().int(),
-    dating: z.string().optional(),
-    dimensions: z.string().optional(),
+    dating: z.string(),
+    dimensions: z.string(),
+    inventoryNumber: z.string(),
+    kpNumber: z.string(),
+    goskatalogNumber: z.string(),
+    externalLink: z.string(),
     collection: Collection,
     location: Location.nullable(),
     country: z.object({
@@ -82,6 +86,10 @@ export const ArtifactById = z.object({
         displayName: z.string(),
     }).nullable(),
     settlement: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).nullable(),
+    donor: z.object({
         id: z.string(),
         displayName: z.string(),
     }).nullable(),
@@ -106,7 +114,8 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).array(),
     license: z.object({
-        displayName: z.string(),  
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     culturalAffiliation: z.object({
         id: z.string(),
@@ -121,7 +130,8 @@ export const ArtifactById = z.object({
         displayName: z.string(),  
     }).nullable(),
     model: z.object({
-        displayName: z.string(),  
+        id: z.string(),
+        displayName: z.string(),
     }).nullable(),
     createdBy: z.string().optional(),
     createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),

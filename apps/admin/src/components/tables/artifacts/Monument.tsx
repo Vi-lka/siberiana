@@ -1,51 +1,51 @@
-import type { PublicationsList } from '@siberiana/schemas'
-import { useQuery } from '@tanstack/react-query'
-import request from 'graphql-request'
-import React from 'react'
-import ErrorToast from '~/components/errors/ErrorToast'
-import { getPublicationsQuery } from '~/lib/queries/client/artifacts'
-import { FormSelectMulti } from '../inputs/FormSelectMulti'
+"use client"
 
-export default function Publications({ 
-  defaultPublications,
+import type { MonumentsList } from '@siberiana/schemas'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
+import request from 'graphql-request'
+import { getMonumentsQuery } from '~/lib/queries/client/artifacts'
+import ErrorToast from '~/components/errors/ErrorToast'
+import { FormSelect } from '../inputs/FormSelect'
+
+export default function Monument({ 
+  defaultMonument,
   rowIndex
 }: { 
-  defaultPublications: {
+  defaultMonument: {
     id: string, 
     displayName: string
-  }[],
+  } | null,
   rowIndex: number
 }) {
 
-  const defaultItems = (defaultPublications.length > 0) ? defaultPublications : [{ id: "", displayName: "__" }]
-  
-  const { data, isFetching, isPending, isError, error, refetch } = useQuery<PublicationsList, Error>({
-    queryKey: ['publications'],
+  const defaultLable = !!defaultMonument ? defaultMonument.displayName : "__"
+
+  const { data, isFetching, isPending, isError, error, refetch } = useQuery<MonumentsList, Error>({
+    queryKey: ['monuments'],
     queryFn: async () => 
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getPublicationsQuery(),
+        getMonumentsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false // disable this query from automatically running
   })
-      
+    
   if (isError && !!error){
     return (
       <>
-        {defaultItems.map((item, index) => (
-          <p key={index} className=''>{item.displayName}</p>
-        ))}
+        {defaultLable}
         <ErrorToast
           error={error.message}
-          place="Публикации"
+          place="Памятники"
         />
       </>
     );
   }
 
   const itemsData = data 
-    ? data.publications.edges.map(({ node }) => {
+    ? data.monuments.edges.map(({ node }) => {
       const id = node.id
       const displayName = node.displayName
       return { id, displayName }
@@ -58,10 +58,10 @@ export default function Publications({
 
   return (
     <div className='h-full w-full'>
-      <FormSelectMulti 
+      <FormSelect 
+        defaultValue={defaultMonument}
         itemsData={itemsData} 
-        defaultValues={defaultPublications}
-        formValueName={`artifacts[${rowIndex}].publications`}
+        formValueName={`artifacts[${rowIndex}].monument`}
         isLoading={isFetching && isPending}
         onClick={handleClick} 
       />

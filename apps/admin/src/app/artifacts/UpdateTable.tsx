@@ -1,18 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Form, Input, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, toast } from '@siberiana/ui';
+import { toast } from '@siberiana/ui';
 import { 
   useReactTable, 
   getCoreRowModel, 
-  flexRender, 
   getPaginationRowModel, 
   getSortedRowModel, 
   getFilteredRowModel
 } from '@tanstack/react-table'
 import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
-import { DataTablePagination } from '../../components/tables/DataTablePagination';
-import { CornerRightUp, Loader2, MoreHorizontal, Search } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import { getDatingLable } from "~/lib/utils/getDating";
+import DataTable from "~/components/tables/DataTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -31,7 +29,7 @@ interface DataTableProps<TData, TValue> {
   userRoles?: string[],
 }
 
-export default function DataTable<TData, TValue>({
+export default function UpdateTable<TData, TValue>({
   columns,
   moderatorsColumns,
   data,
@@ -199,134 +197,22 @@ export default function DataTable<TData, TValue>({
     }
   }
 
-  const start = 1745
-  const end = 1745
-
-  console.log(getDatingLable(start, end))
-
   if (loading || isPendingRefresh) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
 
   return (
-    <div className='flex flex-col gap-3 font-OpenSans'>
-      <Form {...form}>
-        <form
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={form.handleSubmit(handleUpdate)}
-          className="mt-1 h-full w-full flex flex-col"
-        >
-          <div className="flex lg:flex-row flex-col-reverse gap-3 lg:items-center w-full justify-between mb-3">
-            <div className='flex flex-wrap gap-3'>
-              <div className="flex items-center gap-1">
-                <Search className="w-4 h-4 stroke-muted-foreground" />
-                <Input
-                  placeholder="Поиск..."
-                  value={(table.getColumn("displayName")?.getFilterValue() as string) ?? ""}
-                  onChange={(event) =>
-                    table.getColumn("displayName")?.setFilterValue(event.target.value)
-                  }
-                  className="lg:max-w-xs h-8"
-                />
-              </div>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    disabled={loading}
-                    className="flex h-10 w-10 p-0 data-[state=open]:bg-muted"
-                  >
-                    {loading
-                      ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
-                      : <MoreHorizontal className="h-6 w-6" />
-                    }
-                    <span className="sr-only">Open menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[160px] font-Inter">
-                  <DropdownMenuLabel>Выбранные</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem
-                      disabled={(table.getFilteredSelectedRowModel().rows.length === 0) || loading} 
-                      className='cursor-pointer destructive group border-destructive bg-destructive text-destructive-foreground'
-                      onClick={() => void handleDelete()}
-                    >Удалить</DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            <div className="flex flex-wrap lg:gap-6 gap-3 items-center lg:justify-end justify-between">
-              <Button
-                disabled={!form.formState.isValid || isPendingGoToCreate || loading}
-                type="button"
-                variant="link"
-                className="p-0 text-sm uppercase gap-1 font-medium"
-                onClick={handleGoToCreate}
-              >
-                {isPendingGoToCreate
-                  ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
-                  : <> Перейти к добавлению <CornerRightUp className="mb-2"/> </>
-                }
-              </Button>
-
-              <Button
-                disabled={!(form.formState.isDirty && form.formState.isValid) || loading}
-                type="submit"
-                className="px-6 text-sm uppercase mr-0 ml-auto"
-              >
-                Сохранить
-              </Button>
-            </div>
-          </div>
-
-          <div className="border rounded-lg shadow-md">
-            <Table>
-              <TableHeader className='font-OpenSans'>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      )
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody className='font-Inter text-xs'>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && "selected"}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={allowСolumns.length} className="h-24 text-center">
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </form>
-      </Form>
-      <DataTablePagination table={table} />
-    </div>
+    <DataTable 
+      table={table}
+      columnsLength={allowСolumns.length}
+      form={form}
+      isLoading={loading}
+      isPendingChangeMode={isPendingGoToCreate}
+      submitTitle="Сохранить"
+      changeModeTitle="Перейти к добавлению"
+      handleSubmit={handleUpdate}
+      handleDelete={handleDelete}
+      handleChangeMode={handleGoToCreate}
+      isHasAdd={false}
+      isChangeModeAvailable
+    />
   )
 }

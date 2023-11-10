@@ -30,6 +30,10 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     datingEnd
                     dating
                     dimensions
+                    inventoryNumber
+                    kpNumber
+                    goskatalogNumber
+                    externalLink
                     collection {
                         id
                         slug
@@ -75,6 +79,14 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         id
                         displayName
                     }
+                    donor {
+                        id
+                        displayName
+                    }
+                    license {
+                        id
+                        displayName
+                    }
                     mediums {
                         id
                         displayName
@@ -111,6 +123,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         displayName
                     }
                     model {
+                        id
                         displayName
                     }
                 }

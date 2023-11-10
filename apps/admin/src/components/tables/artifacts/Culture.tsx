@@ -8,7 +8,7 @@ import { getCulturesQuery } from '~/lib/queries/client/artifacts'
 import ErrorToast from '~/components/errors/ErrorToast'
 import { FormSelect } from '../inputs/FormSelect'
 
-export default function Cultures({ 
+export default function Culture({ 
   defaultCulture,
   rowIndex
 }: { 
