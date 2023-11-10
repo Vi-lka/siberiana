@@ -214,6 +214,44 @@ export const MaterialsList = z.object({
 })
 export type MaterialsList = z.infer<typeof MaterialsList>;
 
+export const MaterialsArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
+})
+export type MaterialsArray = z.infer<typeof MaterialsArray>;
+
+export const MaterialForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
+})
+export type MaterialForTable = z.infer<typeof MaterialForTable>;
+
+export const MaterialsForm = z.object({
+    materials: MaterialForTable.array()
+})
+export type MaterialsForm = z.infer<typeof MaterialsForm>;
+
 //.........................TECHNIQUES.........................//
 export const TechniquesList = z.object({
     techniques: z.object({
@@ -226,6 +264,52 @@ export const TechniquesList = z.object({
     })
 })
 export type TechniquesList = z.infer<typeof TechniquesList>;
+
+export const TechniquesArray = z.object({
+    totalCount: z.number(),
+    edges: z.object({
+        node: z.object({
+            id: z.string(),
+            displayName: z.string().min(1),
+            description: z.string(),
+            externalLink: z.string(),
+            artifacts: z.object({
+                id: z.string()
+            }).array(),
+            art: z.object({
+                id: z.string()
+            }).array(),
+            petroglyphs: z.object({
+                id: z.string()
+            }).array(),
+            createdBy: z.string().optional(),
+            createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+            updatedBy: z.string().optional(),
+            updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+        })
+    }).array()
+})
+export type TechniquesArray = z.infer<typeof TechniquesArray>;
+
+export const TechniqueForTable = z.object({
+    id: z.string(),
+    displayName: z.string().min(1),
+    description: z.string().optional(),
+    externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+    artifacts: z.number().optional(),
+    art: z.number().optional(),
+    petroglyphs: z.number().optional(),
+    createdBy: z.string().optional(),
+    createdAt: z.date().optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.date().optional(),
+})
+export type TechniqueForTable = z.infer<typeof TechniqueForTable>;
+
+export const TechniquesForm = z.object({
+    techniques: TechniqueForTable.array()
+})
+export type TechniquesForm = z.infer<typeof TechniquesForm>;
 
 //.........................MODELS.........................//
 export const ModelsList = z.object({
