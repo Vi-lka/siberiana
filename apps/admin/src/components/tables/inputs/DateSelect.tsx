@@ -90,7 +90,7 @@ export default function DateSelect({
                 {(form.getFieldState(name).isDirty)
                     ? (
                         <RotateCcw 
-                            className='w-3.5 h-3.5 absolute -top-1 right-1 z-50 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
+                            className='w-3.5 h-3.5 absolute -top-1 right-1 text-muted-foreground hover:text-foreground hover:scale-150 cursor-pointer transition-all' 
                             onClick={() => {
                               setOpenChange(false)
                               form.setValue(name, defaultValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})

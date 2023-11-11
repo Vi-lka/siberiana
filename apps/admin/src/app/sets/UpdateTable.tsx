@@ -14,26 +14,22 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ArtifactForTable } from "@siberiana/schemas";
-import { ArtifactsForm } from "@siberiana/schemas";
+import type { SetForTable } from "@siberiana/schemas";
+import { SetsForm } from "@siberiana/schemas";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import { useDeleteSet, useUpdateSet } from "~/lib/mutations/additionals";
 import DataTable from "~/components/tables/DataTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
-  moderatorsColumns: ColumnDef<TData, TValue>[],
-  data: ArtifactForTable[] & TData[],
-  userRoles?: string[],
+  data: SetForTable[] & TData[],
 }
 
 export default function UpdateTable<TData, TValue>({
   columns,
-  moderatorsColumns,
   data,
-  userRoles,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -46,16 +42,12 @@ export default function UpdateTable<TData, TValue>({
   const router = useRouter()
   const session = useSession()
 
-  const deleteMutation = useDeleteArtifact(session.data?.access_token)
-  const updateMutation = useUpdateArtifact(session.data?.access_token)
-
-  const isModerator = userRoles?.includes("moderator")
-
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator ? moderatorsColumns : columns
+  const deleteMutation = useDeleteSet(session.data?.access_token)
+  const updateMutation = useUpdateSet(session.data?.access_token)
 
   const table = useReactTable({
     data: data,
-    columns: allowСolumns,
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -71,11 +63,11 @@ export default function UpdateTable<TData, TValue>({
     },
   }) 
 
-  const form = useForm<z.infer<typeof ArtifactsForm>>({
-    resolver: zodResolver(ArtifactsForm),
+  const form = useForm<z.infer<typeof SetsForm>>({
+    resolver: zodResolver(SetsForm),
     mode: 'onChange',
     defaultValues: {
-      artifacts: data
+      sets: data
     }
   });
 
@@ -84,7 +76,7 @@ export default function UpdateTable<TData, TValue>({
       const params = new URLSearchParams(window.location.search);
       params.set("mode", "add");
       startTransitionGoToCreate(() => {
-        router.push(`artifacts?${params.toString()}`);
+        router.push(`sets?${params.toString()}`);
       });
     },
     [router],
@@ -94,9 +86,9 @@ export default function UpdateTable<TData, TValue>({
     setLoading(true)
 
     const selectedRows = table.getFilteredSelectedRowModel().rows
-    const dataToDelete = form.getValues().artifacts.filter(
+    const dataToDelete = form.getValues().sets.filter(
       item => selectedRows.some(row => row.getValue("id") === item.id)
-    ) as ArtifactForTable[] & TData[]
+    ) as SetForTable[] & TData[]
     const idsToDelete = dataToDelete.map(item => item.id)
 
     const mutationsArray = idsToDelete.map(id => deleteMutation.mutateAsync(id))
@@ -117,7 +109,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты удалены",
+        description: "Комплексы удалены",
         className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       })
       console.log("results: ", results)
@@ -129,36 +121,32 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleUpdate(dataForm: z.infer<typeof SetsForm>) {
     setLoading(true)
 
-    const noLines = dataForm.artifacts.map(artifact => {
+    const noLines = dataForm.sets.map(set => {
       const {
         displayName,
         description,
-        typology,
-        chemicalComposition,
         ...rest
-      } = artifact
+      } = set
 
       return {
         displayName: displayName.replace(/\n/g, " "),
         description: description?.replace(/\n/g, " "),
-        typology: typology?.replace(/\n/g, " "),
-        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest
       }
     })
 
-    const dirtyFields = form.formState.dirtyFields.artifacts
+    const dirtyFields = form.formState.dirtyFields.sets
 
     const dirtyFieldsArray = noLines.map((item, index) => {
       if (!!dirtyFields && (typeof dirtyFields[index] !== 'undefined')) {
         return { new: item, old: data[index] }
       }
     }).filter((item) => item !== undefined) as {
-      new: ArtifactForTable, 
-      old: ArtifactForTable
+      new: SetForTable, 
+      old: SetForTable
     }[]
 
     const mutationsArray = dirtyFieldsArray.map(
@@ -185,7 +173,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты изменены",
+        description: "Комплексы изменены",
         className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       })
       console.log("results: ", results)
@@ -202,7 +190,7 @@ export default function UpdateTable<TData, TValue>({
   return (
     <DataTable 
       table={table}
-      columnsLength={allowСolumns.length}
+      columnsLength={columns.length}
       form={form}
       isLoading={loading}
       isPendingChangeMode={isPendingGoToCreate}

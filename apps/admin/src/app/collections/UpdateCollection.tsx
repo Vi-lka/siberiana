@@ -149,12 +149,12 @@ export default function UpdateCollection(props: CollectionNode) {
                                 <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Название</p>
-                                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
+                                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' defaultValue={props.displayName} />
                                     </div>
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Slug <span className='font-light text-sm'>(URL имя)</span></p>
-                                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
+                                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' defaultValue={props.slug} />
                                     </div>
                             
                                     <div className="mb-6">
@@ -180,7 +180,7 @@ export default function UpdateCollection(props: CollectionNode) {
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Аббревиатура</p>
-                                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' />
+                                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' defaultValue={props.abbreviation} />
                                     </div>
                             
                                     <div className="mb-6">

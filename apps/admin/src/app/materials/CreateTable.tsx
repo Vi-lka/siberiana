@@ -163,7 +163,7 @@ export default function CreateTable<TData, TValue>({
       toast({
         variant: "destructive",
         title: "Oшибка!",
-        description: <p>{getShortDescription(rejected.reason as string)}</p>,
+        description: getShortDescription((rejected.reason as Error).message),
         className: "font-Inter"
       })
       console.log(rejected.reason)

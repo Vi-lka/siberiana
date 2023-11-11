@@ -149,12 +149,12 @@ export default function AddCategory({
                                 <ScrollArea className='pt-3' classNameViewport='lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2'>
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Название</p>
-                                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' />
+                                        <FormInputText name='displayName' className='w-full max-w-lg text-base border-border' defaultValue={DEFAULT_VALUES.displayName} />
                                     </div>
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Slug <span className='font-light text-sm'>(URL имя)</span></p>
-                                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' />
+                                        <FormInputText name='slug' className='w-full max-w-lg text-sm border-border' defaultValue={DEFAULT_VALUES.slug} />
                                     </div>
                         
                                     <div className="mb-6">
@@ -164,12 +164,12 @@ export default function AddCategory({
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Аббревиатура</p>
-                                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' />
+                                        <FormInputText name='abbreviation' className='w-full max-w-lg text-base border-border' defaultValue={DEFAULT_VALUES.abbreviation} />
                                     </div>
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Описание</p>
-                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={""}  />
+                                        <FormTextArea name='description' className='w-full max-w-lg text-sm border-border' defaultValue={DEFAULT_VALUES.description}  />
                                     </div>
                                 </ScrollArea>
                             </form>
