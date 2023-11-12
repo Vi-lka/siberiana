@@ -164,6 +164,7 @@ export default function CreateTable<TData, TValue>({
       depth: 0,
       diameter: 0,
     },
+    dating: "",
     datingRow: {
       datingStart: 0,
       datingEnd: 0,

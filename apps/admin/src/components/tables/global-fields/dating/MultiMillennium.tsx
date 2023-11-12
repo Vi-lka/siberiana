@@ -25,7 +25,7 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 import { PREFIXES } from "~/lib/utils/getDating";
 import type { DatingType, Prefix } from "~/lib/utils/getDating";
 
-export default function MultiCentury(props: {
+export default function MultiMillennium(props: {
   prefix: {
     first: Prefix | undefined;
     second: Prefix | undefined;
@@ -45,7 +45,7 @@ export default function MultiCentury(props: {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger className="p-3">
-        <span>Век - Век</span>
+        <span>Тыс. - Тыс.</span>
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent className="flex flex-col items-center">
         <div className="flex items-center gap-2 p-1">
@@ -72,7 +72,7 @@ export default function MultiCentury(props: {
                     {props.prefix.first ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, true, "century")}
+                        onClick={() => props.onSelectPrefix(undefined, true, "millennium")}
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>
@@ -89,7 +89,7 @@ export default function MultiCentury(props: {
                             value={prefix.label}
                             className="h-fit w-full cursor-pointer justify-start px-2 py-2 text-left"
                             onSelect={() => {
-                              props.onSelectPrefix(prefix, true, "century");
+                              props.onSelectPrefix(prefix, true, "millennium");
                               setOpenFirst(false);
                               setOpenSecond(false);
                             }}
@@ -118,16 +118,16 @@ export default function MultiCentury(props: {
               // placeholder={"1"}
               className="m-0 max-h-8 w-auto max-w-[4rem] overflow-visible truncate border-solid px-2 py-6 text-sm"
               onChange={(e) =>
-                props.onChangeCentury(Number(e.target.value), true, "century")
+                props.onChangeCentury(Number(e.target.value), true, "millennium")
               }
             />
           </div>
           <span className="whitespace-nowrap">
-            {!!props.prefix.first ? "века" : "век"}
+            тыс.
           </span>
 
           <span className="whitespace-nowrap">
-            {Number(props.century.first) >= 0 ? "н.э." : "до н.э."} 
+            {Number(props.century.first) >= 0 ? "н.э." : "до н.э."}
           </span>
         </div>
 
@@ -157,7 +157,7 @@ export default function MultiCentury(props: {
                     {props.prefix.second ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, false, "century")}
+                        onClick={() => props.onSelectPrefix(undefined, false, "millennium")}
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>
@@ -174,7 +174,7 @@ export default function MultiCentury(props: {
                             value={prefix.label}
                             className="h-fit w-full cursor-pointer justify-start px-2 py-2 text-left"
                             onSelect={() => {
-                              props.onSelectPrefix(prefix, false, "century");
+                              props.onSelectPrefix(prefix, false, "millennium");
                               setOpenFirst(false);
                               setOpenSecond(false);
                             }}
@@ -203,12 +203,12 @@ export default function MultiCentury(props: {
               // placeholder={"1"}
               className="m-0 max-h-8 w-auto max-w-[4rem] overflow-visible truncate border-solid px-2 py-6 text-sm"
               onChange={(e) =>
-                props.onChangeCentury(Number(e.target.value), false, "century")
+                props.onChangeCentury(Number(e.target.value), false, "millennium")
               }
             />
           </div>
           <span className="whitespace-nowrap">
-            {!!props.prefix.second ? "века" : "век"}
+            тыс.
           </span>
 
           <span className="whitespace-nowrap">

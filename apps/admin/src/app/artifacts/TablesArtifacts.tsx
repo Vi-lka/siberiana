@@ -87,6 +87,7 @@ export default async function TablesArtifacts({
         depth: 0,
         diameter: 0,
       },
+      dating: "",
       datingRow: {
         datingStart: 0,
         datingEnd: 0,

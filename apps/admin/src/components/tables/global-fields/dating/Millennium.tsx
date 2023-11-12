@@ -25,7 +25,7 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 import { PREFIXES } from "~/lib/utils/getDating";
 import type { DatingType, Prefix } from "~/lib/utils/getDating";
 
-export default function Century(props: {
+export default function Millennium(props: {
   prefix: Prefix | undefined;
   century: string;
   onSelectPrefix: (prefix: Prefix | undefined, type: DatingType) => void;
@@ -36,7 +36,7 @@ export default function Century(props: {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger className="p-3">
-        <span>Век</span>
+        <span>Тысячелетие</span>
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent className="flex items-center gap-2 p-4">
         <PopoverForModal open={open} onOpenChange={setOpen}>
@@ -62,7 +62,7 @@ export default function Century(props: {
                   {props.prefix ? (
                     <span
                       className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                      onClick={() => props.onSelectPrefix(undefined, "century")}
+                      onClick={() => props.onSelectPrefix(undefined, "millennium")}
                     >
                       <X className="h-5 w-5" /> Удалить
                     </span>
@@ -77,7 +77,7 @@ export default function Century(props: {
                           value={prefix.label}
                           className="h-fit w-full cursor-pointer justify-start px-2 py-2 text-left"
                           onSelect={() => {
-                            props.onSelectPrefix(prefix, "century");
+                            props.onSelectPrefix(prefix, "millennium");
                             setOpen(false);
                           }}
                         >
@@ -104,15 +104,15 @@ export default function Century(props: {
             placeholder={props.century}
             // placeholder={"1"}
             className="m-0 max-h-8 w-auto max-w-[4rem] overflow-visible truncate border-solid px-2 py-6 text-sm"
-            onChange={(e) => props.onChangeCentury(e, "century")}
+            onChange={(e) => props.onChangeCentury(e, "millennium")}
           />
         </div>
         <span className="whitespace-nowrap">
-          {!!props.prefix ? "века" : "век"}
+          тыс.
         </span>
 
         <span className="whitespace-nowrap">
-          {Number(props.century) >= 0 ? "н.э." : "до н.э."}
+            {Number(props.century) >= 0 ? "н.э." : "до н.э."}
         </span>
       </DropdownMenuSubContent>
     </DropdownMenuSub>

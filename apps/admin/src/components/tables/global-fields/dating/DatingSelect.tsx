@@ -30,6 +30,9 @@ import Era from "./Era";
 import MultiCentury from "./MultiCentury";
 import OneYear from "./OneYear";
 import TwoYears from "./TwoYears";
+import Millennium from "./Millennium";
+import MultiMillennium from "./MultiMillennium";
+import MultiEra from "./MultiEra";
 
 export default function DatingSelect({
   formValueName,
@@ -45,11 +48,14 @@ export default function DatingSelect({
   className?: string;
 }) {
   const [openCombobox, setOpenCombobox] = React.useState(false);
-  const [datingType, setDatingType] = React.useState<DatingType>("century");
   const [isPending, startTransition] = React.useTransition();
 
   const form = useFormContext();
   const selected = form.getValues(formValueName) as Dating;
+
+  const isMaybeMillennium = Math.abs(selected.datingStart) >= 800 && Math.abs(selected.datingEnd) >= 800
+  const [datingType, setDatingType] = React.useState<DatingType>(isMaybeMillennium ? "millennium" : "century");
+
   const selectedLable = getDating(
     selected.datingStart,
     selected.datingEnd,
@@ -110,13 +116,13 @@ export default function DatingSelect({
 
   // Values
   const [values, setValues] = React.useState(selected);
-  const [isAD, setIsAD] = React.useState(
-    values.datingStart >= 0 ? true : false,
-  );
+  // const [isAD, setIsAD] = React.useState(
+  //   values.datingStart >= 0 ? true : false,
+  // );
 
   const selectedCentury =
     Math.abs(Math.abs(values.datingStart) - Math.abs(values.datingEnd)) <= 99
-      ? isAD
+      ? values.datingStart >= 0
         ? centurize(values.datingEnd).toString()
         : centurize(values.datingStart).toString()
       : "";
@@ -132,16 +138,14 @@ export default function DatingSelect({
         (endForPrefix.length < 2 ? "0" + endForPrefix : endForPrefix),
   );
 
-  const [century, setCentury] = React.useState<string>(selectedCentury);
+  const [century, setCentury] = React.useState<string>(
+    datingType === "millennium" ? Math.ceil(Number(selectedCentury)/10).toString() : selectedCentury 
+  );
   const [prefix, setPrefix] = React.useState<Prefix | undefined>(
     selectedPrefix,
   );
 
   // Multi Values
-  const [isADMulti, setIsADMulti] = React.useState({
-    first: values.datingStart >= 0 ? true : false,
-    second: values.datingEnd >= 0 ? true : false,
-  });
   const [centuryMulti, setCenturyMulti] = React.useState({
     first: centurize(values.datingStart).toString(),
     second: centurize(values.datingEnd).toString(),
@@ -187,6 +191,13 @@ export default function DatingSelect({
     if (!open) handleNewValue(values);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' && openCombobox) {
+      setOpenCombobox(false);
+      handleNewValue(values);
+    }
+  }
+
   const clear = () => {
     setValues({ datingStart: 0, datingEnd: 0 });
     setDatingType("century");
@@ -207,117 +218,140 @@ export default function DatingSelect({
     setOpenCombobox(false);
   };
 
-  const onSelectPrefix = (prefix: Prefix | undefined) => {
-    setDatingType("century");
+  const onSelectPrefix = (prefix: Prefix | undefined, type: DatingType) => {
+    setDatingType(type);
     setPrefix(prefix);
     const { forStart, forEnd } = generateValues(century, prefix);
+    const isMillennium = type === "millennium"
 
     if (prefix) {
-      const valueStart = isAD
+      const valueStart = Number(century) >= 0
         ? Number(forStart + prefix.start)
         : -Number(forStart + prefix.start);
-      const valueEnd = isAD
+      const valueEnd = Number(century) >= 0
         ? Number(forEnd + prefix.end)
         : -Number(forEnd + prefix.end);
-      if (isAD)
+      if (Number(century) >= 0)
         setValues({
-          datingStart: valueStart,
-          datingEnd: valueEnd,
+          datingStart: isMillennium ? valueStart*10 : valueStart,
+          datingEnd: isMillennium? valueEnd*10 : valueEnd,
         });
       else
         setValues({
-          datingStart: valueEnd,
-          datingEnd: valueStart,
+          datingStart: isMillennium? valueEnd*10 : valueEnd,
+          datingEnd: isMillennium ? valueStart*10 : valueStart,
         });
     } else {
-      const valueStart = isAD
+      const valueStart = Number(century) >= 0
         ? Number(forStart + "01")
         : -Number(forStart + "01");
-      const valueEnd = isAD ? Number(century + "00") : -Number(century + "00");
-      if (isAD)
+      const valueEnd = Number(century + "00");
+      if (Number(century) >= 0)
         setValues({
-          datingStart: valueStart,
-          datingEnd: valueEnd,
+          datingStart: isMillennium ? valueStart*10 : valueStart,
+          datingEnd: isMillennium? valueEnd*10 : valueEnd,
         });
       else
         setValues({
-          datingStart: valueEnd,
-          datingEnd: valueStart,
+          datingStart: isMillennium? valueEnd*10 : valueEnd,
+          datingEnd: isMillennium ? valueStart*10 : valueStart,
         });
     }
   };
 
-  const onChangeCentury = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDatingType("century");
+  const onChangeCentury = (e: React.ChangeEvent<HTMLInputElement>, type: DatingType) => {
+    setDatingType(type);
     const value = e.target.value;
     setCentury(value);
     const { forStart, forEnd } = generateValues(value, prefix);
+    const isMillennium = type === "millennium"
 
     if (prefix) {
-      const valueStart = isAD
+      const valueStart = Number(value) >= 0
         ? Number(forStart + prefix.start)
         : -Number(forStart + prefix.start);
-      const valueEnd = isAD
+      const valueEnd = Number(value) >= 0
         ? Number(forEnd + prefix.end)
         : -Number(forEnd + prefix.end);
-      if (isAD)
+      if (Number(value) >= 0)
         setValues({
-          datingStart: valueStart,
-          datingEnd: valueEnd,
+          datingStart: isMillennium ? valueStart*10 : valueStart,
+          datingEnd: isMillennium? valueEnd*10 : valueEnd,
         });
       else
         setValues({
-          datingStart: valueEnd,
-          datingEnd: valueStart,
+          datingStart: isMillennium? valueEnd*10 : valueEnd,
+          datingEnd: isMillennium ? valueStart*10 : valueStart,
         });
     } else {
-      const valueStart = isAD
+      const valueStart = Number(value) >= 0
         ? Number(forStart + "01")
         : -Number(forStart + "01");
-      const valueEnd = isAD ? Number(value + "00") : -Number(value + "00");
-      if (isAD)
+      const valueEnd = Number(value + "00") 
+
+      if (Number(value) >= 0)
         setValues({
-          datingStart: valueStart,
-          datingEnd: valueEnd,
+          datingStart: isMillennium ? valueStart*10 : valueStart,
+          datingEnd: isMillennium? valueEnd*10 : valueEnd,
         });
       else
         setValues({
-          datingStart: valueEnd,
-          datingEnd: valueStart,
+          datingStart: isMillennium? valueEnd*10 : valueEnd,
+          datingEnd: isMillennium ? valueStart*10 : valueStart,
         });
     }
   };
 
-  const onIsADChange = (pressed: boolean) => {
-    setDatingType("century");
-    setIsAD(pressed);
-    setValues({
-      datingStart: -values.datingEnd,
-      datingEnd: -values.datingStart,
-    });
-  };
+  // const onIsADChange = (pressed: boolean, type: DatingType) => {
+  //   setDatingType(type);
+  //   setIsAD(pressed);
+  //   setValues({
+  //     datingStart: -values.datingEnd,
+  //     datingEnd: -values.datingStart,
+  //   });
+  // };
+
+  function minus(isFirst: boolean, isAd: boolean, prefix: boolean) {
+    if (prefix) return 0
+    // prevent collisions with prefixes
+    if (isFirst) {
+      if (isAd) return +2
+      else return -1
+    } else {
+      if (isAd) return +1
+      else return -2
+    }
+  } 
 
   const onSelectPrefixMulti = (
     prefix: Prefix | undefined,
     isFirst: boolean,
+    type: DatingType,
   ) => {
-    setDatingType("century");
+    setDatingType(type);
+    const isMillennium = type === "millennium"
+
     if (isFirst) {
       setPrefixMulti({
         ...prefixMulti,
         first: prefix,
       });
       const century = Number(centuryMulti.first);
+      const minusValue = minus(isFirst, century >= 0, !!prefix)
+
       const newString = prefix
-        ? `${century - 1}${prefix.start}`
-        : `${century}00`;
-      const newNumber = isADMulti.first
-        ? Number(newString)
-        : -Number(newString);
+        ? century >= 0
+          ? `${century - 1}${prefix.start}`
+          : `${century + 1}${prefix.startBC}`
+        : century >= 0
+          ? `${century - 1}00`
+          : `${century + 1}99`
+
+      const newNumber = Math.abs(century) > 1 ? Number(newString) : -Number(newString)
 
       setValues({
         ...values,
-        datingStart: newNumber,
+        datingStart: isMillennium? newNumber*10 + minusValue : newNumber + minusValue,
       });
     } else {
       setPrefixMulti({
@@ -325,78 +359,73 @@ export default function DatingSelect({
         second: prefix,
       });
       const century = Number(centuryMulti.second);
+      const minusValue = minus(isFirst, century >= 0, !!prefix)
+
       const newString = prefix
-        ? `${century - 1}${prefix.start}`
-        : `${century}00`;
-      const newNumber = isADMulti.second
-        ? Number(newString)
-        : -Number(newString);
+        ? century >= 0
+          ? `${century - 1}${prefix.start}`
+          : `${century + 1}${prefix.startBC}`
+        : century >= 0 
+          ? `${century - 1}99`
+          : `${century + 1}00`
+        
+      const newNumber = Math.abs(century) > 1 ? Number(newString) : -Number(newString)
 
       setValues({
         ...values,
-        datingEnd: newNumber,
+        datingEnd: isMillennium? newNumber*10 + minusValue : newNumber + minusValue,
       });
     }
   };
 
-  const onChangeCenturyMulti = (inputValue: number, isFirst: boolean) => {
-    setDatingType("century");
+  const onChangeCenturyMulti = (inputValue: number, isFirst: boolean, type: DatingType,) => {
+    setDatingType(type);
+    const isMillennium = type === "millennium"
+
+    const isAD = inputValue >= 0
+
     if (isFirst) {
       setCenturyMulti({
         ...centuryMulti,
         first: inputValue.toString(),
       });
+      const minusValue = minus(isFirst, isAD, !!prefixMulti.first)
 
       const newString = prefixMulti.first
-        ? `${inputValue - 1}${prefixMulti.first.start}`
-        : `${inputValue}00`;
-      const newNumber = isADMulti.first
-        ? Number(newString)
-        : -Number(newString);
+        ? isAD 
+          ? `${inputValue - 1}${prefixMulti.first.start}`
+          : `${inputValue + 1}${prefixMulti.first.startBC}`
+        : isAD 
+          ? `${inputValue - 1}00`
+          : `${inputValue + 1}99`
+
+      const newNumber = Math.abs(inputValue) > 1 ? Number(newString) : -Number(newString)
 
       setValues({
         ...values,
-        datingStart: newNumber,
+        datingStart: isMillennium? newNumber*10 + minusValue : newNumber + minusValue,
       });
     } else {
       setCenturyMulti({
         ...centuryMulti,
         second: inputValue.toString(),
       });
+      const minusValue = minus(isFirst, isAD, !!prefixMulti.second)
+
 
       const newString = prefixMulti.second
-        ? `${inputValue - 1}${prefixMulti.second.start}`
-        : `${inputValue}00`;
-      const newNumber = isADMulti.second
-        ? Number(newString)
-        : -Number(newString);
+        ? isAD 
+          ? `${inputValue - 1}${prefixMulti.second.start}`
+          : `${inputValue + 1}${prefixMulti.second.startBC}`
+        : isAD
+          ? `${inputValue - 1}99`
+          : `${inputValue + 1}00`
+
+      const newNumber = Math.abs(inputValue) > 1 ? Number(newString) : -Number(newString)
 
       setValues({
         ...values,
-        datingEnd: newNumber,
-      });
-    }
-  };
-
-  const onIsADChangeMulti = (pressed: boolean, isFirst: boolean) => {
-    setDatingType("century");
-    if (isFirst) {
-      setIsADMulti({
-        ...isADMulti,
-        first: pressed,
-      });
-      setValues({
-        datingStart: -values.datingStart,
-        datingEnd: values.datingEnd,
-      });
-    } else {
-      setIsADMulti({
-        ...isADMulti,
-        second: pressed,
-      });
-      setValues({
-        datingStart: values.datingStart,
-        datingEnd: -values.datingEnd,
+        datingEnd: isMillennium? newNumber*10 + minusValue : newNumber + minusValue,
       });
     }
   };
@@ -449,6 +478,7 @@ export default function DatingSelect({
           side="bottom"
           align="start"
           className="font-Inter w-[200px]"
+          onKeyDown={handleKeyDown}
         >
           <DropdownMenuLabel className="flex items-center justify-between">
             Выберите:
@@ -511,7 +541,7 @@ export default function DatingSelect({
                     postfix="года"
                     onChange={(e) =>
                       handleSetValue({
-                        datingStart: 999999,
+                        datingStart: -999999,
                         datingEnd: Number(e.target.value),
                       })
                     }
@@ -574,18 +604,26 @@ export default function DatingSelect({
                   <Century
                     prefix={prefix}
                     century={century}
-                    isAD={isAD}
                     onSelectPrefix={onSelectPrefix}
                     onChangeCentury={onChangeCentury}
-                    onIsADChange={onIsADChange}
                   />
                   <MultiCentury
                     prefix={prefixMulti}
                     century={centuryMulti}
-                    isAD={isADMulti}
                     onSelectPrefix={onSelectPrefixMulti}
                     onChangeCentury={onChangeCenturyMulti}
-                    onIsADChange={onIsADChangeMulti}
+                  />
+                  <Millennium
+                    prefix={prefix}
+                    century={century}
+                    onSelectPrefix={onSelectPrefix}
+                    onChangeCentury={onChangeCentury}
+                  />
+                  <MultiMillennium
+                    prefix={prefixMulti}
+                    century={centuryMulti}
+                    onSelectPrefix={onSelectPrefixMulti}
+                    onChangeCentury={onChangeCenturyMulti}
                   />
                   <Era
                     selected={values}
@@ -595,6 +633,15 @@ export default function DatingSelect({
                         datingEnd: newValue.datingEnd,
                       });
                       handleNewValue(newValue);
+                    }}
+                  />
+                  <MultiEra
+                    selected={values}
+                    handleNewValue={(newValue) => {
+                      setValues({
+                        datingStart: newValue.datingStart,
+                        datingEnd: newValue.datingEnd,
+                      });
                     }}
                   />
                 </DropdownMenuGroup>
