@@ -293,7 +293,9 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
                     primaryImageURL
                     additionalImagesUrls
                     shootingDate
+                    geometry
                     protectedArea {
+                        id
                         displayName
                         description
                         area

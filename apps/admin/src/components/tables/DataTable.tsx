@@ -50,6 +50,7 @@ interface DataTableProps<TData, TFieldValues extends FieldValues> {
   handleChangeMode: () => void;
 }
 
+
 type HasAdd = {
   isHasAdd: true;
   handleAdd: () => void;

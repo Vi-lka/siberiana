@@ -5,6 +5,7 @@ import { Dictionary } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import Description from "~/components/objects/Description";
 import PhotoZoom from "~/components/objects/PhotoZoom";
+import ShowOnMap from "~/components/objects/ShowOnMap";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getPAPById } from "~/lib/queries/api-object";
@@ -63,6 +64,8 @@ export default async function ProtectedAreaPictures({
           {/* Desktop Main Info */}
           <div className="mt-12 hidden md:block">
             <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
+
+            {dataResult.value.geometry && <ShowOnMap data={dataResult.value} />}
           </div>
         </div>
 
@@ -80,6 +83,8 @@ export default async function ProtectedAreaPictures({
         {/* Mobile Main Info */}
         <div className="mt-3 block w-full md:hidden">
           <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
+
+          {dataResult.value.geometry && <ShowOnMap data={dataResult.value} />}
         </div>
       </div>
     </div>

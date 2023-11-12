@@ -3,7 +3,7 @@
 import request from "graphql-request";
 import useSWR from "swr";
 
-import type { Questions } from "@siberiana/schemas";
+import type { ProtectedAreaById, Questions } from "@siberiana/schemas";
 
 const fetcher = (query: string): Promise<Questions> =>
   request(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/graphql`, query);
@@ -37,6 +37,44 @@ export function useQuestions() {
       }
     }`,
     fetcher,
+  );
+
+  return {
+    data: data,
+    isLoading,
+    error: error,
+  };
+}
+
+//.........................MAP.........................//
+
+type ProtectedAreaByIdResponse = {
+  protectedAreas: {
+    edges: [{ node: ProtectedAreaById }];
+  };
+};
+
+export function useProtectedAreaPoints(id?: string) {
+  const { data, error, isLoading } = useSWR<ProtectedAreaByIdResponse, Error>(
+    `query ProtectedAreas {
+      protectedAreas(where: { id: "${id}" }) {
+        edges {
+          node {
+            id
+            displayName
+            protectedAreaPictures {
+              geometry
+              displayName
+              description
+              id
+              primaryImageURL
+            }
+          }
+        }
+      }
+    }`,
+    (query: string): Promise<ProtectedAreaByIdResponse> =>
+      request(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, query),
   );
 
   return {

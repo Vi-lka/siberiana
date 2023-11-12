@@ -221,6 +221,7 @@ export type BookById = z.infer<typeof BookById>;
 
 //.........................PAP (protectedAreaPictures).........................//
 export const ProtectedArea = z.object({
+  id: z.string(),
   displayName: z.string(),
   description: z.string(),
   area: z.string(),
@@ -235,12 +236,29 @@ export const ProtectedArea = z.object({
 });
 export type ProtectedArea = z.infer<typeof ProtectedArea>;
 
+export const ProtectedAreaById = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  protectedAreaPictures: z.array(
+    z.object({
+      id: z.string(),
+      geometry: z.string().nullable(),
+      displayName: z.string(),
+      description: z.string(),
+      primaryImageURL: z.string().nullable(),
+    }),
+  ),
+});
+
+export type ProtectedAreaById = z.infer<typeof ProtectedAreaById>;
+
 export const PAPById = z.object({
   id: z.string(),
   status: StatusEnum,
   displayName: z.string(),
   description: z.string(),
   primaryImageURL: z.string(),
+  geometry: z.string().nullable(),
   additionalImagesUrls: z.string().array().nullable(),
   shootingDate: z
     .preprocess((val) => new Date(val as string), z.date())
