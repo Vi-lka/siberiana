@@ -101,7 +101,7 @@ export const updateColumns: ColumnDef<CultureForTable>[] = [
     header: () => <div className="text-center min-w-[6rem]">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
-        ? format(row.original.createdAt, "PPpp", {locale: ru})
+        ? format(new Date(row.original.createdAt), "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{createdAt}</div>
     },
@@ -118,7 +118,7 @@ export const updateColumns: ColumnDef<CultureForTable>[] = [
     header: () => <div className="text-center min-w-[6rem]">Обновлено at</div>,
     cell: ({ row }) => {
       const updatedAt = (row.original.updatedAt && row.original.updatedBy)
-        ? format(row.original.updatedAt, "PPpp", {locale: ru})
+        ? format(new Date(row.original.updatedAt), "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{updatedAt}</div>
     },

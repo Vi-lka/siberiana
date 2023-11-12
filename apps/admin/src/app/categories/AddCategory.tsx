@@ -1,6 +1,6 @@
 "use client"
 
-import { CategoryNode } from '@siberiana/schemas'
+import { CategoryForm } from '@siberiana/schemas'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form';
@@ -10,27 +10,31 @@ import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
 import { Loader2, Plus } from 'lucide-react';
 import { cn } from '@siberiana/ui/src/lib/utils';
-import Dropzone from '~/components/tables/inputs/Dropzone';
 import { useMutation } from '@tanstack/react-query';
 import request from 'graphql-request';
 import { createCategory } from '~/lib/mutations/collections';
 import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { useRouter } from 'next/navigation';
+import { putObjects } from '~/lib/auth/siberiana';
+import InputDropzone from '~/components/tables/inputs/InputDropzone';
 
 const DEFAULT_VALUES = {
     id: "",
     slug: "",
     displayName: "",
     abbreviation: "",
-    primaryImageURL: "",
+    primaryImage: {
+        file: undefined,
+        url: ""
+    },
     description: "",
     collections: [],
     createdBy: "",
     createdAt: new Date(),
     updatedBy: "",
     updatedAt: new Date()
-} as CategoryNode
+} as CategoryForm
 
 export default function AddCategory({
     className
@@ -51,8 +55,8 @@ export default function AddCategory({
         return ids
     }
 
-    const form = useForm<z.infer<typeof CategoryNode>>({
-        resolver: zodResolver(CategoryNode),
+    const form = useForm<z.infer<typeof CategoryForm>>({
+        resolver: zodResolver(CategoryForm),
         mode: 'onChange',
         defaultValues: DEFAULT_VALUES
     });
@@ -64,8 +68,17 @@ export default function AddCategory({
 
     const mutation = useMutation({
         mutationKey: ['createCategory', requestHeaders],
-        mutationFn: (values: CategoryNode) => 
-          request(
+        mutationFn: async (values: CategoryForm) => {
+            const resUpload = values.primaryImage.file 
+                ? await putObjects({ files: [values.primaryImage.file] })
+                    .then((res) => res.data)
+                    .catch((err) => {
+                        console.error(err)
+                        return null
+                    })
+                : null
+
+          return request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
             createCategory(),
             {input: {
@@ -73,11 +86,12 @@ export default function AddCategory({
                 description: values.description,
                 abbreviation: values.abbreviation,
                 collectionIDs: getCollectionsIds(values.collections),
-                primaryImageURL: values.primaryImageURL,
+                primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
                 slug: values.slug
             }},
             requestHeaders
-          ),
+          )
+        },
         onMutate: () => setLoading(true),
         onError: (err) => {
             setLoading(false)
@@ -102,7 +116,7 @@ export default function AddCategory({
         },
     })
 
-    function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+    function handleSave(dataForm: z.infer<typeof CategoryForm>) {
         const {
             description,
             ...rest // assigns remaining
@@ -159,7 +173,7 @@ export default function AddCategory({
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Фото</p>
-                                        <Dropzone formValueName="primaryImageURL" />
+                                        <InputDropzone formValueName="primaryImage"/>
                                     </div>
                         
                                     <div className="mb-6">

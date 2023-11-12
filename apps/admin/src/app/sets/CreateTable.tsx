@@ -15,6 +15,9 @@ import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { useCreateSet } from '~/lib/mutations/additionals';
 import DataTable from '~/components/tables/DataTable';
+import { getSavedData, usePersistForm } from '~/lib/utils/usePersistForm';
+
+const FORM_DATA_KEY = "setsCreate"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -27,7 +30,10 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<SetForTable[] & TData[]>(data)
+
+  const savedResult = getSavedData<SetForTable, TData>({ data, key: FORM_DATA_KEY })
+
+  const [dataState, setDataState] = React.useState<SetForTable[] & TData[]>(savedResult.data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
@@ -62,7 +68,7 @@ export default function CreateTable<TData, TValue>({
   })
   const form = useForm<z.infer<typeof SetsForm>>({
     resolver: zodResolver(SetsForm),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       sets: dataState
     }
@@ -73,6 +79,19 @@ export default function CreateTable<TData, TValue>({
     name: "sets",
   });
 
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("sets")
+    }
+    triggerValidation().catch(console.error)
+  }, [form])
+
+  usePersistForm<SetForTable[]>({ 
+    value: { data: form.getValues().sets }, 
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter
+  });
+
   const defaultAdd = {
     id: "random" + Math.random().toString(),
     displayName: "",
@@ -80,6 +99,16 @@ export default function CreateTable<TData, TValue>({
     externalLink: "",
     monuments: [],
   } as SetForTable & TData
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data)
+    })
+    startTransitionForm(() => {
+      form.reset({sets: data}, { keepValues: false, keepDirtyValues: false })
+    })
+    localStorage.removeItem(FORM_DATA_KEY);
+  }
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -184,6 +213,7 @@ export default function CreateTable<TData, TValue>({
         router.push(`sets?${params.toString()}`)
       })
       setLoading(false)
+      localStorage.removeItem(FORM_DATA_KEY)
     }
   }
 
@@ -203,6 +233,7 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
   )

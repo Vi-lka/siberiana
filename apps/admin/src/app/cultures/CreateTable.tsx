@@ -15,6 +15,9 @@ import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { useCreateCulture } from '~/lib/mutations/additionals';
 import DataTable from '~/components/tables/DataTable';
+import { getSavedData, usePersistForm } from '~/lib/utils/usePersistForm';
+
+const FORM_DATA_KEY = "culturesCreate"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -27,7 +30,10 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<CultureForTable[] & TData[]>(data)
+
+  const savedResult = getSavedData<CultureForTable, TData>({ data, key: FORM_DATA_KEY })
+
+  const [dataState, setDataState] = React.useState<CultureForTable[] & TData[]>(savedResult.data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
@@ -62,15 +68,28 @@ export default function CreateTable<TData, TValue>({
   })
   const form = useForm<z.infer<typeof CulturesForm>>({
     resolver: zodResolver(CulturesForm),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       cultures: dataState
-    }
+    },
   });
   const control = form.control
   const { append, remove } = useFieldArray({
     control,
     name: "cultures",
+  });
+
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("cultures")
+    }
+    triggerValidation().catch(console.error)
+  }, [form])
+
+  usePersistForm<CultureForTable[]>({ 
+    value: { data: form.getValues().cultures }, 
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter
   });
 
   const defaultAdd = {
@@ -79,6 +98,16 @@ export default function CreateTable<TData, TValue>({
     description: "",
     externalLink: ""
   } as CultureForTable & TData
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data)
+    })
+    startTransitionForm(() => {
+      form.reset({cultures: data}, { keepValues: false, keepDirtyValues: false })
+    })
+    localStorage.removeItem(FORM_DATA_KEY);
+  }
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -183,6 +212,7 @@ export default function CreateTable<TData, TValue>({
         router.push(`cultures?${params.toString()}`)
       })
       setLoading(false)
+      localStorage.removeItem(FORM_DATA_KEY)
     }
   }
 
@@ -202,6 +232,7 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
   )

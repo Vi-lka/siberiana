@@ -16,6 +16,9 @@ import { useCreateArtifact } from '~/lib/mutations/objects';
 import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import DataTable from '~/components/tables/DataTable';
+import { getSavedData, usePersistForm } from '~/lib/utils/usePersistForm';
+
+const FORM_DATA_KEY = "artifactsCreate"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -32,7 +35,10 @@ export default function CreateTable<TData, TValue>({
   userRoles,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<ArtifactForTable[] & TData[]>(data)
+
+  const savedResult = getSavedData<ArtifactForTable, TData>({ data, key: FORM_DATA_KEY})
+
+  const [dataState, setDataState] = React.useState<ArtifactForTable[] & TData[]>(savedResult.data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
@@ -71,7 +77,7 @@ export default function CreateTable<TData, TValue>({
   })
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       artifacts: dataState
     }
@@ -80,6 +86,29 @@ export default function CreateTable<TData, TValue>({
   const { append, remove } = useFieldArray({
     control,
     name: "artifacts",
+  });
+
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("artifacts")
+    }
+    triggerValidation().catch(console.error)
+  }, [form])
+
+  const dataPersistNoImage = form.getValues().artifacts.map(elem => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { primaryImage, ...rest } = elem
+    const nullImage = {
+      file: undefined,
+      url: ""
+    }
+    return { primaryImage: nullImage, ...rest }
+  })
+
+  usePersistForm<ArtifactForTable[]>({ 
+    value: { data: dataPersistNoImage }, 
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter
   });
 
   const statusForModerator = {
@@ -95,7 +124,10 @@ export default function CreateTable<TData, TValue>({
     status: isModerator ? statusForModerator : statusForAdmin,
     displayName: "",
     description: "",
-    primaryImageURL: "",
+    primaryImage: {
+      file: undefined,
+      url: ""
+    },
     chemicalComposition: "",
     inventoryNumber: "",
     kpNumber: "",
@@ -103,6 +135,7 @@ export default function CreateTable<TData, TValue>({
     externalLink: "",
     typology: "",
     weight: "",
+    admissionDate: undefined,
     sizes: {
       width: 0,
       height: 0,
@@ -128,6 +161,14 @@ export default function CreateTable<TData, TValue>({
     projects: [],
     collection: dataState[0].collection,
   } as ArtifactForTable & TData
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data)
+    })
+    form.reset({artifacts: data}, { keepValues: false, keepDirtyValues: false })
+    localStorage.removeItem(FORM_DATA_KEY);
+  }
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -185,10 +226,6 @@ export default function CreateTable<TData, TValue>({
     [router],
   );
 
-  // console.log("DATA_STATE: ", dataState)
-  // console.log("TABLE: ", table.getRowModel().rows[0].original)
-  // console.log("FORM: ", form.getValues().artifacts)
-
   async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
     setLoading(true)
 
@@ -240,6 +277,7 @@ export default function CreateTable<TData, TValue>({
         router.push(`artifacts?${params.toString()}`)
       })
       setLoading(false)
+      localStorage.removeItem(FORM_DATA_KEY)
     }
   }
 
@@ -259,6 +297,7 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
   )

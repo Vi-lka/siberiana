@@ -1,6 +1,6 @@
 "use client"
 
-import { CategoryNode } from '@siberiana/schemas'
+import { CategoryForm } from '@siberiana/schemas'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form';
@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from 'zod';
 import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
-import Dropzone from '~/components/tables/inputs/Dropzone';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import ImageComp from '~/components/lists/ImageComp';
@@ -19,8 +18,10 @@ import { Loader2 } from 'lucide-react';
 import request from 'graphql-request';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { updateCategory } from '~/lib/mutations/collections';
+import { putObjects } from '~/lib/auth/siberiana';
+import InputDropzone from '~/components/tables/inputs/InputDropzone';
 
-export default function UpdateCategory(props: CategoryNode) {
+export default function UpdateCategory(props: CategoryForm) {
     
     const [loading, setLoading] = React.useState(false)
     const [openDialog, setOpenDialog] = React.useState(false)
@@ -28,8 +29,8 @@ export default function UpdateCategory(props: CategoryNode) {
     const router = useRouter()
     const session = useSession()
 
-    const form = useForm<z.infer<typeof CategoryNode>>({
-        resolver: zodResolver(CategoryNode),
+    const form = useForm<z.infer<typeof CategoryForm>>({
+        resolver: zodResolver(CategoryForm),
         mode: 'onChange',
         defaultValues: props
     });
@@ -41,8 +42,17 @@ export default function UpdateCategory(props: CategoryNode) {
 
     const mutation = useMutation({
         mutationKey: ['updateCategory', requestHeaders],
-        mutationFn: (values: CategoryNode) => 
-          request(
+        mutationFn: async (values: CategoryForm) => {
+            const resUpload = (values.primaryImage.url !== props.primaryImage.url) && values.primaryImage.file 
+                ? await putObjects({ files: [values.primaryImage.file] })
+                    .then((res) => res.data)
+                    .catch((err) => {
+                        console.error(err)
+                        return null
+                    })
+                : null
+
+          return request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
             updateCategory(),
             {
@@ -52,11 +62,12 @@ export default function UpdateCategory(props: CategoryNode) {
                   description: values.description,
                   slug: values.slug,
                   abbreviation: values.abbreviation,
-                  primaryImageURL: values.primaryImageURL,
+                  primaryImageURL: resUpload !== null ? resUpload.urls[0] : values.primaryImage.url,
                 }
             },
             requestHeaders
-          ),
+          )
+        },
         onMutate: () => setLoading(true),
         onError: (err) => {
             setLoading(false)
@@ -81,7 +92,7 @@ export default function UpdateCategory(props: CategoryNode) {
         },
     })
 
-    function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+    function handleSave(dataForm: z.infer<typeof CategoryForm>) {
         const {
             description,
             ...rest // assigns remaining
@@ -99,7 +110,7 @@ export default function UpdateCategory(props: CategoryNode) {
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger disabled={loading} className='flex flex-col gap-2 justify-start h-fit'>
                 <ImageComp
-                    src={props.primaryImageURL}
+                    src={props.primaryImage.url}
                     title={props.displayName}
                     className={"aspect-[1.5/1] min-h-[215px] max-h-[220px]"}
                     classNameImage='w-full object-cover h-full'
@@ -153,7 +164,7 @@ export default function UpdateCategory(props: CategoryNode) {
                             
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Фото</p>
-                                        <Dropzone formValueName="primaryImageURL" defaultValue={props.primaryImageURL} />
+                                        <InputDropzone formValueName="primaryImage"/>
                                     </div>
                             
                                     <div className="mb-6">

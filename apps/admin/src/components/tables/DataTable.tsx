@@ -1,7 +1,7 @@
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Input, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@siberiana/ui'
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Input, Skeleton, Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@siberiana/ui'
 import type { Table as TableTanstack } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table'
-import { CornerRightUp, Loader2, MoreHorizontal, Plus, Search } from 'lucide-react'
+import { CornerRightUp, ListRestart, Loader2, MoreHorizontal, Plus, Search } from 'lucide-react'
 import React from 'react'
 import type { UseFormReturn } from 'react-hook-form';
 import type { FieldValues } from 'react-hook-form';
@@ -18,13 +18,14 @@ interface DataTableProps<TData, TFieldValues extends FieldValues> {
   submitTitle: string,
   changeModeTitle: string,
   handleSubmit(dataForm: FieldValues): Promise<void>,
-  handleChangeMode: () => void
+  handleChangeMode: () => void,
 }
  
 type HasAdd = {
   isHasAdd: true,
   handleAdd: () => void
   handleDelete: () => void,
+  handleDeleteSaved: () => void,
 }
 type NoHasAdd = {
   isHasAdd: false,
@@ -38,6 +39,10 @@ export default function DataTable<TData, TFieldValues extends FieldValues>
 ) {
 
   const [isPendingSearch, startTransitionSearch] = React.useTransition()
+
+  const submitButtonDisabled = props.isHasAdd 
+    ? (!props.form.formState.isValid || props.isLoading)
+    : (!props.form.formState.isValid || !props.form.formState.isDirty || props.isLoading)
 
   return (
     <div className='flex flex-col gap-3 font-OpenSans'>
@@ -91,6 +96,33 @@ export default function DataTable<TData, TFieldValues extends FieldValues>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {props.isHasAdd
+                ? (
+                  <TooltipProvider>
+                    <Tooltip delayDuration={100}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          disabled={props.isLoading}
+                          className="flex h-10 w-10 p-0 data-[state=open]:bg-muted"
+                          onClick={props.handleDeleteSaved}
+                        >
+                          {props.isLoading
+                            ? <Loader2 className='animate-spin w-6 h-6 mx-8' />
+                            : <ListRestart className="h-6 w-6" />
+                          }
+                          <span className="sr-only">Delete saved data</span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>Очистить историю изменений</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )
+                : null
+              }
             </div>
 
             <div className="flex flex-wrap lg:gap-6 gap-3 items-center lg:justify-end justify-between">
@@ -130,7 +162,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>
               }
 
               <Button
-                disabled={!(props.form.formState.isDirty && props.form.formState.isValid) || props.isLoading}
+                disabled={submitButtonDisabled}
                 type="submit"
                 className="px-6 text-sm uppercase mr-0 ml-auto"
               >

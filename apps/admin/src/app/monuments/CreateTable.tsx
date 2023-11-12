@@ -15,6 +15,9 @@ import { useSession } from 'next-auth/react';
 import getShortDescription from '~/lib/utils/getShortDescription';
 import { useCreateMonument } from '~/lib/mutations/additionals';
 import DataTable from '~/components/tables/DataTable';
+import { getSavedData, usePersistForm } from '~/lib/utils/usePersistForm';
+
+const FORM_DATA_KEY = "monumentsCreate"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -27,7 +30,10 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<MonumentForTable[] & TData[]>(data)
+
+  const savedResult = getSavedData<MonumentForTable, TData>({ data, key: FORM_DATA_KEY })
+
+  const [dataState, setDataState] = React.useState<MonumentForTable[] & TData[]>(savedResult.data)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = React.useState({})
@@ -62,7 +68,7 @@ export default function CreateTable<TData, TValue>({
   })
   const form = useForm<z.infer<typeof MonumentsForm>>({
     resolver: zodResolver(MonumentsForm),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       monuments: dataState
     }
@@ -73,6 +79,19 @@ export default function CreateTable<TData, TValue>({
     name: "monuments",
   });
 
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("monuments")
+    }
+    triggerValidation().catch(console.error)
+  }, [form])
+
+  usePersistForm<MonumentForTable[]>({ 
+    value: { data: form.getValues().monuments }, 
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter
+  });
+
   const defaultAdd = {
     id: "random" + Math.random().toString(),
     displayName: "",
@@ -80,6 +99,16 @@ export default function CreateTable<TData, TValue>({
     externalLink: "",
     sets: [],
   } as MonumentForTable & TData
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data)
+    })
+    startTransitionForm(() => {
+      form.reset({monuments: data}, { keepValues: false, keepDirtyValues: false })
+    })
+    localStorage.removeItem(FORM_DATA_KEY);
+  }
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -184,6 +213,7 @@ export default function CreateTable<TData, TValue>({
         router.push(`monuments?${params.toString()}`)
       })
       setLoading(false)
+      localStorage.removeItem(FORM_DATA_KEY)
     }
   }
 
@@ -203,6 +233,7 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
   )

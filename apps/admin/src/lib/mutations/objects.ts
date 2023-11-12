@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import request from "graphql-request"
 import { clearDate, clearLocation, clearObject, getIds, getLocation, handleArrays } from "../utils/mutations-utils"
 import { getLable } from "../utils/sizes-utils"
+import { putObjects } from "../auth/siberiana"
 
 //.........................ARTIFACT.........................//
 export function useCreateArtifact(access_token?: string) {
@@ -21,52 +22,62 @@ export function useCreateArtifact(access_token?: string) {
         'Content-Type': 'application/json',
     };
     const mutation = useMutation({
-        mutationFn: (value: ArtifactForTable) => {
-          return request(
-            `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-            mutationString,
-            {input: {
-              status: value.status.id,
-              collectionID: value.collection.id,
-              displayName: value.displayName,
-              description: value.description,
-              primaryImageURL: value.primaryImageURL,
-              weight: value.weight,
-              width: value.sizes.width,
-              height: value.sizes.height,
-              length: value.sizes.length,
-              depth: value.sizes.depth,
-              diameter: value.sizes.diameter,
-              dimensions: getLable(value.sizes),
-              dating: value.dating,
-              datingStart: value.datingRow.datingStart,
-              datingEnd: value.datingRow.datingEnd,
-              typology: value.typology,
-              chemicalComposition: value.chemicalComposition,
-              inventoryNumber: value.inventoryNumber,
-              kpNumber: value.kpNumber,
-              goskatalogNumber: value.goskatalogNumber,
-              externalLink: value.externalLink,
-              donorID: value.donor?.id,
-              modelID: value.model?.id,
-              licenseID: value.license?.id,
-              culturalAffiliationID: value.culturalAffiliation?.id,
-              setID: value.set?.id,
-              monumentID: value.monument?.id,
-              countryID: getLocation(value.location, "country"),
-              regionID: getLocation(value.location, "region"),
-              districtID: getLocation(value.location, "district"),
-              settlementID: getLocation(value.location, "settlement"),
-              locationID: getLocation(value.location, "location"),
-              mediumIDs: getIds(value.mediums),
-              techniqueIDs: getIds(value.techniques),
-              authorIDs: getIds(value.authors),
-              publicationIDs: getIds(value.publications),
-              projectIDs: getIds(value.projects),
-              admissionDate: value.admissionDate,
-            }},
-            requestHeaders
-          )
+        mutationFn: async (value: ArtifactForTable) => {
+
+            const resUpload = value.primaryImage.file 
+                ? await putObjects({ bucket: "artifacts", files: [value.primaryImage.file] })
+                    .then((res) => res.data)
+                    .catch((err) => {
+                        console.error(err)
+                        return null
+                    })
+                : null
+
+            return request(
+                `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+                mutationString,
+                {input: {
+                    status: value.status.id,
+                    collectionID: value.collection.id,
+                    displayName: value.displayName,
+                    description: value.description,
+                    primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
+                    weight: value.weight,
+                    width: value.sizes.width,
+                    height: value.sizes.height,
+                    length: value.sizes.length,
+                    depth: value.sizes.depth,
+                    diameter: value.sizes.diameter,
+                    dimensions: getLable(value.sizes),
+                    dating: value.dating,
+                    datingStart: value.datingRow.datingStart,
+                    datingEnd: value.datingRow.datingEnd,
+                    typology: value.typology,
+                    chemicalComposition: value.chemicalComposition,
+                    inventoryNumber: value.inventoryNumber,
+                    kpNumber: value.kpNumber,
+                    goskatalogNumber: value.goskatalogNumber,
+                    externalLink: value.externalLink,
+                    donorID: value.donor?.id,
+                    modelID: value.model?.id,
+                    licenseID: value.license?.id,
+                    culturalAffiliationID: value.culturalAffiliation?.id,
+                    setID: value.set?.id,
+                    monumentID: value.monument?.id,
+                    countryID: getLocation(value.location, "country"),
+                    regionID: getLocation(value.location, "region"),
+                    districtID: getLocation(value.location, "district"),
+                    settlementID: getLocation(value.location, "settlement"),
+                    locationID: getLocation(value.location, "location"),
+                    mediumIDs: getIds(value.mediums),
+                    techniqueIDs: getIds(value.techniques),
+                    authorIDs: getIds(value.authors),
+                    publicationIDs: getIds(value.publications),
+                    projectIDs: getIds(value.projects),
+                    admissionDate: value.admissionDate,
+                }},
+                requestHeaders
+            )
         }
       })
     return mutation
@@ -108,12 +119,22 @@ export function useUpdateArtifact(access_token?: string) {
         'Content-Type': 'application/json',
     };
     const mutation = useMutation({
-        mutationFn: ({ id, newValue, oldValue }: { id: string, newValue: ArtifactForTable, oldValue: ArtifactForTable }) => {
+        mutationFn: async ({ id, newValue, oldValue }: { id: string, newValue: ArtifactForTable, oldValue: ArtifactForTable }) => {
             const authorsIds = handleArrays(newValue.authors, oldValue.authors)
             const mediumIDs = handleArrays(newValue.mediums, oldValue.mediums)
             const projectIDs = handleArrays(newValue.projects, oldValue.projects)
             const publicationIDs = handleArrays(newValue.publications, oldValue.publications)
             const techniqueIDs = handleArrays(newValue.techniques, oldValue.techniques)
+
+            const resUpload = (newValue.primaryImage.url !== oldValue.primaryImage.url) && newValue.primaryImage.file 
+                ? await putObjects({ bucket: "artifacts", files: [newValue.primaryImage.file] })
+                    .then((res) => res.data)
+                    .catch((err) => {
+                        console.error(err)
+                        return null
+                    })
+                : null
+
             return request(
                 `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
                 mutationString,
@@ -122,7 +143,9 @@ export function useUpdateArtifact(access_token?: string) {
                     input: {
                         status: newValue.status.id,
                         displayName: newValue.displayName,
-                        primaryImageURL: newValue.primaryImageURL,
+                        primaryImageURL: resUpload !== null 
+                            ? resUpload.urls[0] 
+                            : newValue.primaryImage.url.length === 0 ? newValue.primaryImage.url : oldValue.primaryImage.url,
                         description: newValue.description,
                         weight: newValue.weight,
                         width: newValue.sizes.width,

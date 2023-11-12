@@ -1,14 +1,6 @@
 import { z } from "zod";
 import { ArtifactById, StatusEnum } from "../objects-schema";
-
-export const LocationEnum = z.enum([ 
-    "location", 
-    "country",
-    "region",
-    "district",
-    "settlement"
-])
-export type LocationEnum = z.infer<typeof LocationEnum>;
+import { ImageFile, LocationEnum } from "./global";
 
 export const Sizes = z.object({
     width: z.number(),
@@ -41,7 +33,10 @@ export const ArtifactForTable = z.object({
         displayName: z.string(),
     }),
     displayName: z.string().min(1),
-    primaryImageURL: z.string(),
+    primaryImage: z.object({
+        file: ImageFile.nullable().optional(),
+        url: z.string()
+    }),
     description: z.string().optional(),
     chemicalComposition: z.string().optional(),
     typology: z.string().optional(),
@@ -54,7 +49,7 @@ export const ArtifactForTable = z.object({
     kpNumber: z.string().optional(),
     goskatalogNumber: z.string().optional(),
     externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
-    admissionDate: z.date().nullable().optional(),
+    admissionDate: z.union([z.date(), z.string().datetime()]).nullable().optional(),
     collection: z.object({
         id: z.string(),
         displayName: z.string(),

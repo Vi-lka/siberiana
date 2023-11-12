@@ -85,8 +85,8 @@ export function clearObject(object: {
     else false
 }
   
-export function clearDate(date: Date | null | undefined) {
-  if (!date || date.toISOString().length === 0) return true
+export function clearDate(date: Date | string | null | undefined) {
+  if (!date || new Date(date).toISOString().length === 0) return true
   else false
 }
   

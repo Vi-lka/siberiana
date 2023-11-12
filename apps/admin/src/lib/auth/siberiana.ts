@@ -14,6 +14,30 @@ siberiana.interceptors.request.use(async (config) => {
   return config;
 });
 
+export const putObjects = ({
+  bucket,
+  files,
+  folder,
+}: {
+  bucket?: string;
+  files: File[];
+  folder?: string;
+}) => {
+  const formData = new FormData();
+
+  files.map((file) => formData.append("file", file));
+
+  return siberiana.post<{ urls: Array<string> }>("/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    params: {
+      bucket,
+      folder,
+    },
+  });
+};
+
 export const usePutObjects = () => {
 
   const [progress, setProgress] = useState(0);

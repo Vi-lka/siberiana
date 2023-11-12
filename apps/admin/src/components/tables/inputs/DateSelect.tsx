@@ -17,7 +17,7 @@ export default function DateSelect({
     name: string,
     placeholder: string,
     fromYear?: number,
-    defaultValue?: Date | null,
+    defaultValue?: Date | string | null,
 }) {
 
     const [open, setOpenChange] = React.useState(false);

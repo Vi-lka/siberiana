@@ -2,6 +2,21 @@ import { z } from "zod";
 import { Location } from "../objects-schema"
 import { CollectionTypeEnum } from "../collections-schemas";
 
+// const MAX_FILE_SIZE = 10000000;
+// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+export const ImageFile = z.custom<File>()
+export type ImageFile = z.infer<typeof ImageFile>;
+
+export const LocationEnum = z.enum([ 
+    "location", 
+    "country",
+    "region",
+    "district",
+    "settlement"
+])
+export type LocationEnum = z.infer<typeof LocationEnum>;
+
 //.........................CATEGORIES.........................//
 export const CategoriesList = z.object({
     categories: z.object({
@@ -15,6 +30,27 @@ export const CategoriesList = z.object({
     })
 })
 export type CategoriesList = z.infer<typeof CategoriesList>;
+
+export const CategoryForm = z.object({
+    id: z.string(),
+    slug: z.string().min(1).regex(new RegExp("^[a-z](-?[a-z])*$")),
+    displayName: z.string().min(1),
+    abbreviation: z.string(),
+    primaryImage: z.object({
+        file: ImageFile.nullable().optional(),
+        url: z.string()
+    }),
+    description: z.string(),
+    collections: z.object({
+        id: z.string(),
+        displayName: z.string(),
+    }).array(),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+})
+export type CategoryForm = z.infer<typeof CategoryForm>;
 
 //.........................COLLECTIONS.........................//
 export const CollectionsList = z.object({
@@ -30,6 +66,29 @@ export const CollectionsList = z.object({
     })
 })
 export type CollectionsList = z.infer<typeof CollectionsList>;
+
+export const CollectionForm = z.object({
+    id: z.string(),
+    type: CollectionTypeEnum,
+    slug: z.string().min(1).regex(new RegExp("^[a-z](-?[a-z])*$")),
+    displayName: z.string().min(1),
+    abbreviation: z.string(),
+    primaryImage: z.object({
+        file: ImageFile.nullable().optional(),
+        url: z.string()
+    }),
+    description: z.string(),
+    category : z.object({
+        id: z.string(),
+        slug: z.string().optional(),
+        displayName: z.string(),
+    }),
+    createdBy: z.string().optional(),
+    createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+    updatedBy: z.string().optional(),
+    updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+});
+export type CollectionForm = z.infer<typeof CollectionForm>;
 
 //.........................LOCATIONS.........................//
 export const LocationsList = z.object({

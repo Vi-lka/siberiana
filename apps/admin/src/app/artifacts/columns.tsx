@@ -121,11 +121,11 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
   },
   {
-    accessorKey: "primaryImageURL",
+    accessorKey: "primaryImage",
     header: () => <div className="text-center min-w-[80px]">Фото</div>,
     cell: ({ row }) => {
       return (
-        <PopoverDropzone formValueName={`artifacts[${row.index}].primaryImageURL`} bucket="default" className="px-6 py-6" /> // change later on "artifacts"
+        <PopoverDropzone formValueName={`artifacts[${row.index}].primaryImage`} className="px-6 py-6" /> // change later on "artifacts"
       )
     },
   },
@@ -339,7 +339,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center min-w-[6rem]">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
-        ? format(row.original.createdAt, "PPpp", {locale: ru})
+        ? format(new Date(row.original.createdAt), "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{createdAt}</div>
     },
@@ -356,7 +356,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center min-w-[6rem]">Обновлено at</div>,
     cell: ({ row }) => {
       const updatedAt = (row.original.updatedAt && row.original.updatedBy)
-        ? format(row.original.updatedAt, "PPpp", {locale: ru})
+        ? format(new Date(row.original.updatedAt), "PPpp", {locale: ru})
         : ""
       return <div className="text-center break-words">{updatedAt}</div>
     },

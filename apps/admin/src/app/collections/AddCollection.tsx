@@ -1,6 +1,6 @@
 "use client"
 
-import { CollectionNode } from '@siberiana/schemas'
+import { CollectionForm } from '@siberiana/schemas'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Form, ScrollArea, Separator, useToast } from '@siberiana/ui'
 import React from 'react'
 import { useForm } from 'react-hook-form';
@@ -10,7 +10,6 @@ import FormInputText from '~/components/tables/inputs/FormInputText';
 import FormTextArea from '~/components/tables/inputs/FormTextArea';
 import { Loader2, Plus } from 'lucide-react';
 import { cn } from '@siberiana/ui/src/lib/utils';
-import Dropzone from '~/components/tables/inputs/Dropzone';
 import { useMutation } from '@tanstack/react-query';
 import request from 'graphql-request';
 import { createCollection } from '~/lib/mutations/collections';
@@ -19,19 +18,24 @@ import getShortDescription from '~/lib/utils/getShortDescription';
 import { useRouter } from 'next/navigation';
 import Categories from '~/components/tables/global-fields/Categories';
 import TypeSelect from './TypeSelect';
+import InputDropzone from '~/components/tables/inputs/InputDropzone';
+import { putObjects } from '~/lib/auth/siberiana';
 
 const DEFAULT_VALUES = {
     id: "",
     slug: "",
     displayName: "",
     abbreviation: "",
-    primaryImageURL: "",
+    primaryImage: {
+        file: undefined,
+        url: ""
+    },
     description: "",
     createdBy: "",
     createdAt: new Date(),
     updatedBy: "",
     updatedAt: new Date()
-} as CollectionNode
+} as CollectionForm
 
 export default function AddCollection({
     className
@@ -45,8 +49,8 @@ export default function AddCollection({
     const router = useRouter()
     const session = useSession()
 
-    const form = useForm<z.infer<typeof CollectionNode>>({
-        resolver: zodResolver(CollectionNode),
+    const form = useForm<z.infer<typeof CollectionForm>>({
+        resolver: zodResolver(CollectionForm),
         mode: 'onChange',
         defaultValues: DEFAULT_VALUES
     });
@@ -58,8 +62,17 @@ export default function AddCollection({
 
     const mutation = useMutation({
         mutationKey: ['createCollection', requestHeaders],
-        mutationFn: (values: CollectionNode) => 
-          request(
+        mutationFn: async (values: CollectionForm) => {
+            const resUpload = values.primaryImage.file 
+                ? await putObjects({ files: [values.primaryImage.file] })
+                    .then((res) => res.data)
+                    .catch((err) => {
+                        console.error(err)
+                        return null
+                    })
+                : null
+
+            return  request(
             `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
             createCollection(),
             {input: {
@@ -67,12 +80,13 @@ export default function AddCollection({
                 description: values.description,
                 abbreviation: values.abbreviation,
                 categoryID: values.category.id,
-                primaryImageURL: values.primaryImageURL,
+                primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
                 slug: values.slug,
                 type: values.type,
             }},
             requestHeaders
-          ),
+          )
+        },
         onMutate: () => setLoading(true),
         onError: (err) => {
             setLoading(false)
@@ -97,7 +111,7 @@ export default function AddCollection({
         },
     })
 
-    function handleSave(dataForm: z.infer<typeof CollectionNode>) {
+    function handleSave(dataForm: z.infer<typeof CollectionForm>) {
         const {
             description,
             ...rest // assigns remaining
@@ -168,7 +182,7 @@ export default function AddCollection({
                         
                                     <div className="mb-6">
                                         <p className='mb-2 font-medium'>Фото</p>
-                                        <Dropzone formValueName="primaryImageURL" />
+                                        <InputDropzone formValueName="primaryImage"/>
                                     </div>
                         
                                     <div className="mb-6">
