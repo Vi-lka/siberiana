@@ -18,7 +18,7 @@ export default function ShowOnMap({ data }: { data: PAPById }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="font-Inter hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-10 w-full rounded-3xl px-10 px-3 py-5 py-6 text-xs font-normal uppercase md:w-auto md:px-10 md:py-6 xl:text-sm">
+        <Button className="font-Inter hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-10 w-full rounded-3xl px-3 py-6 text-xs font-normal uppercase md:w-auto md:px-10 md:py-6 xl:text-sm">
           Показать на карте
         </Button>
       </DialogTrigger>
