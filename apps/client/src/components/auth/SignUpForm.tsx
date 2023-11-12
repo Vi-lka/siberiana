@@ -21,7 +21,6 @@ import {
 import ButtonComponent from "../ui/ButtonComponent";
 
 export default function SignUpForm({ dict }: { dict: AuthDict }) {
-
   const SignUpFormSchema = z
     .object({
       lastName: z.string({
@@ -109,7 +108,7 @@ export default function SignUpForm({ dict }: { dict: AuthDict }) {
     <div className="flex flex-col items-center justify-around">
       <Form {...form}>
         <form
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={form.handleSubmit(handleSignUp)}
           className="mt-1 h-full lg:w-[45%]"
         >

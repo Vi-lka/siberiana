@@ -1,90 +1,89 @@
-import { Dictionary } from '@siberiana/schemas';
-import React from 'react'
-import ErrorHandler from '~/components/errors/ErrorHandler';
-import BreadcrumbsObject from '~/components/ui/BreadcrumbsObject';
-import { getBookById } from '~/lib/queries/api-object';
-import { getDictionary } from '~/lib/utils/getDictionary';
-import MainInfoBlock from './MainInfoBlock';
-import GoBackButton from '~/components/ui/GoBackButton';
-import Description from '~/components/objects/Description';
-import ReadPDF from '~/components/objects/buttons/ReadPDF';
-import PhotoZoom from '~/components/objects/PhotoZoom';
+import React from "react";
 
-export const dynamic = 'force-dynamic'
+import { Dictionary } from "@siberiana/schemas";
+
+import ErrorHandler from "~/components/errors/ErrorHandler";
+import ReadPDF from "~/components/objects/buttons/ReadPDF";
+import Description from "~/components/objects/Description";
+import PhotoZoom from "~/components/objects/PhotoZoom";
+import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
+import GoBackButton from "~/components/ui/GoBackButton";
+import { getBookById } from "~/lib/queries/api-object";
+import { getDictionary } from "~/lib/utils/getDictionary";
+import MainInfoBlock from "./MainInfoBlock";
+
+export const dynamic = "force-dynamic";
 
 export default async function Book({
-    params: { id },
+  params: { id },
 }: {
-    params: { id: string };
+  params: { id: string };
 }) {
+  const dict = await getDictionary();
+  const dictResult = Dictionary.parse(dict);
 
-    const dict = await getDictionary();
-    const dictResult = Dictionary.parse(dict);
+  // const session = await getServerSession(authOptions);
+  // const haveSession = !!session
 
-    // const session = await getServerSession(authOptions);
-    // const haveSession = !!session
-
-    const [ dataResult ] = await Promise.allSettled([ getBookById(id) ])
-    if (dataResult.status === 'rejected') return (
-        <ErrorHandler 
-          error={dataResult.reason as unknown} 
-          place={`Book ${id}`} 
-          notFound 
-          goBack
-        />
-    )
-
+  const [dataResult] = await Promise.allSettled([getBookById(id)]);
+  if (dataResult.status === "rejected")
     return (
-        <div className='relative'>
-            <div className="absolute lg:-left-12 sm:-left-8 left-0 sm:top-0 -top-10">
-                <GoBackButton />
-            </div>
+      <ErrorHandler
+        error={dataResult.reason as unknown}
+        place={`Book ${id}`}
+        notFound
+        goBack
+      />
+    );
 
-            <BreadcrumbsObject 
-                dict={dictResult.breadcrumbs}
-                title={dataResult.value.displayName}
-                categorySlug={dataResult.value.collection.category?.slug}
-                categoryTitle={dataResult.value.collection.category?.displayName}
-                collectionSlug={dataResult.value.collection.slug}
-                collectionTitle={dataResult.value.collection.displayName}
-            />
+  return (
+    <div className="relative">
+      <div className="absolute -top-10 left-0 sm:-left-8 sm:top-0 lg:-left-12">
+        <GoBackButton />
+      </div>
 
-            <div className="flex md:flex-row flex-col items-start mt-10 mb-24 gap-6">
-                <div className="md:w-1/2 w-full">
-                    <div className="mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
-                        <h1 className="text-foreground lg:text-2xl text-xl font-bold uppercase">
-                          {dataResult.value.displayName}
-                        </h1>
-                    </div>
+      <BreadcrumbsObject
+        dict={dictResult.breadcrumbs}
+        title={dataResult.value.displayName}
+        categorySlug={dataResult.value.collection.category?.slug}
+        categoryTitle={dataResult.value.collection.category?.displayName}
+        collectionSlug={dataResult.value.collection.slug}
+        collectionTitle={dataResult.value.collection.displayName}
+      />
 
-                    <Description text={dataResult.value.description} />
+      <div className="mb-24 mt-10 flex flex-col items-start gap-6 md:flex-row">
+        <div className="w-full md:w-1/2">
+          <div className="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+            <h1 className="text-foreground text-xl font-bold uppercase lg:text-2xl">
+              {dataResult.value.displayName}
+            </h1>
+          </div>
 
-                    {/* Desktop Main Info */}
-                    <div className="mt-12 md:block hidden">
-                        <MainInfoBlock 
-                            dict={dictResult.objects} 
-                            data={dataResult.value}
-                        />
-                    </div>
-                </div>
+          <Description text={dataResult.value.description} />
 
-                <div className="md:w-1/2 w-full">
-                    <PhotoZoom src={dataResult.value.primaryImageURL} alt={dataResult.value.displayName} />
-                    <div className="mt-3 flex flex-wrap gap-3">
-                        {/* <AddFavorites session={haveSession} /> */}
-                        <ReadPDF files={dataResult.value.files} />
-                        {/* <UnloadCSV session={haveSession} /> */}
-                    </div>
-                </div>    
-
-                {/* Mobile Main Info */}
-                <div className="mt-3 md:hidden block w-full">
-                    <MainInfoBlock 
-                        dict={dictResult.objects} 
-                        data={dataResult.value}
-                    />
-                </div>
-            </div>
+          {/* Desktop Main Info */}
+          <div className="mt-12 hidden md:block">
+            <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
+          </div>
         </div>
-    )
+
+        <div className="w-full md:w-1/2">
+          <PhotoZoom
+            src={dataResult.value.primaryImageURL}
+            alt={dataResult.value.displayName}
+          />
+          <div className="mt-3 flex flex-wrap gap-3">
+            {/* <AddFavorites session={haveSession} /> */}
+            <ReadPDF files={dataResult.value.files} />
+            {/* <UnloadCSV session={haveSession} /> */}
+          </div>
+        </div>
+
+        {/* Mobile Main Info */}
+        <div className="mt-3 block w-full md:hidden">
+          <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
+        </div>
+      </div>
+    </div>
+  );
 }

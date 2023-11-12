@@ -1,25 +1,37 @@
-"use client"
+"use client";
 
-import type { TechniqueForTable} from '@siberiana/schemas';
-import { TechniquesForm } from '@siberiana/schemas';
-import { toast } from '@siberiana/ui'
-import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
-import { Loader2 } from 'lucide-react'
-import React from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
-import type { z } from 'zod'
+import React from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import getShortDescription from '~/lib/utils/getShortDescription';
-import { useCreateTechnique } from '~/lib/mutations/additionals';
-import DataTable from '~/components/tables/DataTable';
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+} from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useFieldArray, useForm } from "react-hook-form";
+import type { z } from "zod";
+
+import type { TechniqueForTable } from "@siberiana/schemas";
+import { TechniquesForm } from "@siberiana/schemas";
+import { toast } from "@siberiana/ui";
+
+import DataTable from "~/components/tables/DataTable";
+import { useCreateTechnique } from "~/lib/mutations/additionals";
+import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[],
-  data: TechniqueForTable[] & TData[],
-  hasObjectsToUpdate?: boolean
+  columns: ColumnDef<TData, TValue>[];
+  data: TechniqueForTable[] & TData[];
+  hasObjectsToUpdate?: boolean;
 }
 
 export default function CreateTable<TData, TValue>({
@@ -27,21 +39,26 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<TechniqueForTable[] & TData[]>(data)
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [loading, setLoading] = React.useState(false)
-  
-  const [isPendingTable, startTransitionTable] = React.useTransition()
-  const [isPendingForm, startTransitionForm] = React.useTransition()
-  const [isPendingGoToUpdate, startTransitionGoToUpdate] = React.useTransition()
-  const [isPendingRouter, startTransitionRouter] = React.useTransition()
+  const [dataState, setDataState] = React.useState<
+    TechniqueForTable[] & TData[]
+  >(data);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
-  const router = useRouter()
-  const session = useSession()
+  const [isPendingTable, startTransitionTable] = React.useTransition();
+  const [isPendingForm, startTransitionForm] = React.useTransition();
+  const [isPendingGoToUpdate, startTransitionGoToUpdate] =
+    React.useTransition();
+  const [isPendingRouter, startTransitionRouter] = React.useTransition();
 
-  const mutation = useCreateTechnique(session.data?.access_token)
+  const router = useRouter();
+  const session = useSession();
+
+  const mutation = useCreateTechnique(session.data?.access_token);
 
   const table = useReactTable({
     data: dataState,
@@ -59,15 +76,15 @@ export default function CreateTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-  })
+  });
   const form = useForm<z.infer<typeof TechniquesForm>>({
     resolver: zodResolver(TechniquesForm),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      techniques: dataState
-    }
+      techniques: dataState,
+    },
   });
-  const control = form.control
+  const control = form.control;
   const { append, remove } = useFieldArray({
     control,
     name: "techniques",
@@ -77,119 +94,115 @@ export default function CreateTable<TData, TValue>({
     id: "random" + Math.random().toString(),
     displayName: "",
     description: "",
-    externalLink: ""
-  } as TechniqueForTable & TData
+    externalLink: "",
+  } as TechniqueForTable & TData;
 
   const handleAdd = () => {
     startTransitionTable(() => {
-      setDataState((prev) => [
-        ...prev,
-        defaultAdd,
-      ])
-    })
+      setDataState((prev) => [...prev, defaultAdd]);
+    });
     startTransitionForm(() => {
-      append(defaultAdd) // only append, prepend doesn't work correctly with table
-    })
-    form.reset({}, { keepValues: true, keepDirtyValues: false }) // dosn't need default dirty because all new data is dirty
-  }
+      append(defaultAdd); // only append, prepend doesn't work correctly with table
+    });
+    form.reset({}, { keepValues: true, keepDirtyValues: false }); // dosn't need default dirty because all new data is dirty
+  };
 
   const handleDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
 
-    const filteredData = form.getValues().techniques.filter(
-      item => !selectedRows.some(row => row.getValue("id") === item.id)
-    ) as TechniqueForTable[] & TData[]
+    const filteredData = form
+      .getValues()
+      .techniques.filter(
+        (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
+      ) as TechniqueForTable[] & TData[];
 
     if (filteredData.length === 0) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
         description: <p>А есть смысл оставлять таблицу пустой?</p>,
-        className: "font-Inter"
-      })
-      return
+        className: "font-Inter",
+      });
+      return;
     }
 
     startTransitionTable(() => {
-      setDataState(filteredData)
-    })
+      setDataState(filteredData);
+    });
     startTransitionForm(() => {
-      let i = 0
+      let i = 0;
       for (const row of selectedRows) {
-        remove(row.index - i)
-        i++
+        remove(row.index - i);
+        i++;
       }
-    })
-    form.reset({}, { keepValues: true, keepDirtyValues: false }) // dosn't need default dirty because all new data is dirty
+    });
+    form.reset({}, { keepValues: true, keepDirtyValues: false }); // dosn't need default dirty because all new data is dirty
 
-    table.toggleAllPageRowsSelected(false)
-  }
+    table.toggleAllPageRowsSelected(false);
+  };
 
-  const handleGoToUpdate = React.useCallback(
-    () => {
-      const params = new URLSearchParams(window.location.search);
-      params.delete("mode")
-      startTransitionGoToUpdate(() => {
-        router.push(`techniques?${params.toString()}`);
-      });
-    },
-    [router],
-  );
+  const handleGoToUpdate = React.useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.delete("mode");
+    startTransitionGoToUpdate(() => {
+      router.push(`techniques?${params.toString()}`);
+    });
+  }, [router]);
 
   async function handleSave(dataForm: z.infer<typeof TechniquesForm>) {
-    setLoading(true)
+    setLoading(true);
 
-    const noLines = dataForm.techniques.map(technique => {
-      const {
-        displayName,
-        description,
-        ...rest
-      } = technique
+    const noLines = dataForm.techniques.map((technique) => {
+      const { displayName, description, ...rest } = technique;
 
       return {
-        displayName: displayName.replace(/\n/g, " "), 
-        description: description?.replace(/\n/g, " "), 
+        displayName: displayName.replace(/\n/g, " "),
+        description: description?.replace(/\n/g, " "),
         ...rest,
-      }
-    })
+      };
+    });
 
-    const mutationsArray = noLines.map(item => mutation.mutateAsync(item))
+    const mutationsArray = noLines.map((item) => mutation.mutateAsync(item));
 
-    const results = await Promise.allSettled(mutationsArray)
+    const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+    const rejected = results.find(
+      (elem) => elem.status === "rejected",
+    ) as PromiseRejectedResult;
 
     if (rejected) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
         description: <p>{getShortDescription(rejected.reason as string)}</p>,
-        className: "font-Inter"
-      })
-      console.log(rejected.reason)
-      setLoading(false)
+        className: "font-Inter",
+      });
+      console.log(rejected.reason);
+      setLoading(false);
     } else {
       toast({
         title: "Успешно!",
         description: "Техники добавлены",
-        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
-      })
-      console.log("results: ", results)
+        className:
+          "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      });
+      console.log("results: ", results);
 
       const params = new URLSearchParams(window.location.search);
-      params.delete("mode")
+      params.delete("mode");
       startTransitionRouter(() => {
-        router.refresh()
-        router.push(`techniques?${params.toString()}`)
-      })
-      setLoading(false)
+        router.refresh();
+        router.push(`techniques?${params.toString()}`);
+      });
+      setLoading(false);
     }
   }
 
-  if (loading || isPendingRouter) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
+  if (loading || isPendingRouter)
+    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
 
   return (
-    <DataTable 
+    <DataTable
       table={table}
       columnsLength={columns.length}
       form={form}
@@ -204,5 +217,5 @@ export default function CreateTable<TData, TValue>({
       handleAdd={handleAdd}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
-  )
+  );
 }

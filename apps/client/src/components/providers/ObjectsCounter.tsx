@@ -1,38 +1,44 @@
-"use client"
-import React from 'react'
-import { useSetAtom } from 'jotai'
-import { PAPCountAtom, artifactsCountAtom, booksCountAtom } from '~/lib/utils/atoms'
+"use client";
 
-export default function ObjectsCounter({ 
-    artifactsCount,
-    booksCount,
-    PAPCount
-}: { 
-    artifactsCount?: number,
-    booksCount?: number,
-    PAPCount?: number
+import React from "react";
+import { useSetAtom } from "jotai";
+
+import {
+  artifactsCountAtom,
+  booksCountAtom,
+  PAPCountAtom,
+} from "~/lib/utils/atoms";
+
+export default function ObjectsCounter({
+  artifactsCount,
+  booksCount,
+  PAPCount,
+}: {
+  artifactsCount?: number;
+  booksCount?: number;
+  PAPCount?: number;
 }) {
-    const setArtifactsCount = useSetAtom(artifactsCountAtom)
-    const setBooksCount = useSetAtom(booksCountAtom)
-    const setPAPCount = useSetAtom(PAPCountAtom)
-    
-    React.useEffect(() => {
-        if (artifactsCount !== undefined) {
-            setArtifactsCount(artifactsCount)
-        }
-    }, [artifactsCount, setArtifactsCount])
+  const setArtifactsCount = useSetAtom(artifactsCountAtom);
+  const setBooksCount = useSetAtom(booksCountAtom);
+  const setPAPCount = useSetAtom(PAPCountAtom);
 
-    React.useEffect(() => {
-        if (booksCount !== undefined) {
-            setBooksCount(booksCount)
-        }
-    }, [booksCount, setBooksCount])
+  React.useEffect(() => {
+    if (artifactsCount !== undefined) {
+      setArtifactsCount(artifactsCount);
+    }
+  }, [artifactsCount, setArtifactsCount]);
 
-    React.useEffect(() => {
-        if (PAPCount !== undefined) {
-            setPAPCount(PAPCount)
-        }
-    }, [PAPCount, setPAPCount])
+  React.useEffect(() => {
+    if (booksCount !== undefined) {
+      setBooksCount(booksCount);
+    }
+  }, [booksCount, setBooksCount]);
 
-  return null
+  React.useEffect(() => {
+    if (PAPCount !== undefined) {
+      setPAPCount(PAPCount);
+    }
+  }, [PAPCount, setPAPCount]);
+
+  return null;
 }

@@ -42,7 +42,7 @@ export const CustomBlock = z.object(
   {
     required_error: "Custom Block missing",
   },
-)
+);
 export type CustomBlock = z.infer<typeof CustomBlock>;
 
 //.........................QUESTIONS.........................//
@@ -133,15 +133,17 @@ export const OrganizationBySlug = z.object({
     .object({
       title: z.string(),
       map: z.string(),
-      schedule: z.object({
-        monday: z.string(),
-        tuesday: z.string(),
-        wednesday: z.string(),
-        thursday: z.string(),
-        friday: z.string(),
-        saturday: z.string(),
-        sunday: z.string(),
-      }).nullable(),
+      schedule: z
+        .object({
+          monday: z.string(),
+          tuesday: z.string(),
+          wednesday: z.string(),
+          thursday: z.string(),
+          friday: z.string(),
+          saturday: z.string(),
+          sunday: z.string(),
+        })
+        .nullable(),
     })
     .nullable(),
 });
@@ -154,16 +156,16 @@ export const Organization = z.object({
     image: Image,
     consortium: z.boolean(),
   }),
-})
+});
 export type Organization = z.infer<typeof Organization>;
 
 export const Organizations = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
-    })
+    }),
   }),
-  data: Organization.array()
+  data: Organization.array(),
 });
 export type Organizations = z.infer<typeof Organizations>;
 
@@ -175,16 +177,16 @@ export const Project = z.object({
     url: z.string().url(),
     image: Image,
   }),
-})
+});
 export type Project = z.infer<typeof Project>;
 
 export const Projects = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
-    })
+    }),
   }),
-  data: Project.array()
+  data: Project.array(),
 });
 export type Projects = z.infer<typeof Projects>;
 
@@ -196,16 +198,16 @@ export const Service = z.object({
     url: z.string().url(),
     image: Image,
   }),
-})
+});
 export type Service = z.infer<typeof Service>;
 
 export const Services = z.object({
   meta: z.object({
     pagination: z.object({
       total: z.number(),
-    })
+    }),
   }),
-  data: Service.array()
+  data: Service.array(),
 });
 export type Services = z.infer<typeof Services>;
 
@@ -213,25 +215,28 @@ export type Services = z.infer<typeof Services>;
 export const About = z.object({
   title: z.string(),
   description: z.string().nullable(),
-  team: z.object({
-    name: z.string(),
-    description: z.string(),
-    image: Image
-  }).array()
-})
+  team: z
+    .object({
+      name: z.string(),
+      description: z.string(),
+      image: Image,
+    })
+    .array(),
+});
 export type About = z.infer<typeof About>;
 
 //.........................FAQ.........................//
 export const FAQ = z.object({
-  category: z.object({
-    title: z.string(),
-    item: z.object({
-      question: z.string(),
-      answer: z.string()
-    }).array()
-  }).array()
-})
+  category: z
+    .object({
+      title: z.string(),
+      item: z
+        .object({
+          question: z.string(),
+          answer: z.string(),
+        })
+        .array(),
+    })
+    .array(),
+});
 export type FAQ = z.infer<typeof FAQ>;
-
-
-

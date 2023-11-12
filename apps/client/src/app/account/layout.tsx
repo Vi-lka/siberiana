@@ -1,16 +1,18 @@
 import React from "react";
 import type { Metadata } from "next";
-import { getDictionary } from "~/lib/utils/getDictionary";
-import Breadcrumbs from "~/components/ui/Breadcrumbs";
+
 import { Dictionary } from "@siberiana/schemas";
+
+import Breadcrumbs from "~/components/ui/Breadcrumbs";
+import { getDictionary } from "~/lib/utils/getDictionary";
 
 export async function generateMetadata(): Promise<Metadata> {
   // fetch data
   const dict = await getDictionary();
 
   return {
-    title: dict.breadcrumbs.account
-  }
+    title: dict.breadcrumbs.account,
+  };
 }
 
 export default async function AccountLayout({
@@ -18,7 +20,6 @@ export default async function AccountLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
 

@@ -4,7 +4,9 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Repeat } from "lucide-react";
 import type { ZodIssue } from "zod";
+
 import { ToastAction, useToast } from "@siberiana/ui";
+
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 export default function ErrorToast({
@@ -12,7 +14,7 @@ export default function ErrorToast({
   place,
 }: {
   error: string | ZodIssue[];
-  place: string,
+  place: string;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -36,7 +38,11 @@ export default function ErrorToast({
     toast({
       variant: "destructive",
       title: "Error",
-      description: <p>In {place}: {getShortDescription(messageError)}</p>,
+      description: (
+        <p>
+          In {place}: {getShortDescription(messageError)}
+        </p>
+      ),
       className: "font-Inter",
       action: (
         <ToastAction
@@ -50,5 +56,5 @@ export default function ErrorToast({
     });
   }, [messageError, place, router, toast]);
 
-  return null
+  return null;
 }

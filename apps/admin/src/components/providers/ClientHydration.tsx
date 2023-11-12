@@ -1,23 +1,23 @@
-'use client'
+"use client";
 
-import {  useEffect, useState } from 'react'
-import type {ReactNode} from 'react';
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 type Props = {
-  children: ReactNode
-  fallback?: ReactNode
-}
+  children: ReactNode;
+  fallback?: ReactNode;
+};
 
 export const ClientHydration = ({ children, fallback = null }: Props) => {
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
-    return fallback
+    return fallback;
   }
 
-  return children
-}
+  return children;
+};

@@ -4,16 +4,17 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
+
 import type { BreadcrumbsDict } from "@siberiana/schemas";
 
 export default function Breadcrumbs({
   dict,
   slug,
-  title
+  title,
 }: {
   dict: BreadcrumbsDict;
-  slug?: string,
-  title?: string
+  slug?: string;
+  title?: string;
 }) {
   const pathname = usePathname();
 
@@ -21,9 +22,8 @@ export default function Breadcrumbs({
     (subpath: string | null) => {
       if (subpath) {
         if (subpath === slug) {
-          return title
-        }
-        else
+          return title;
+        } else
           return {
             categories: dict.categories,
             collections: dict.collections,
@@ -53,17 +53,13 @@ export default function Breadcrumbs({
 
       // Create crumb list
       const crumblist = pathNestedRoutes.map((subpath, index) => {
-        const href =
-          `/` + pathNestedRoutes.slice(0, index + 1).join("/");
+        const href = `/` + pathNestedRoutes.slice(0, index + 1).join("/");
         const title = getTextGenerator(subpath);
         return { href, title };
       });
 
       // Add Home Page
-      const pathWithHome = [
-        { href: `/`, title: `${dict.home}` },
-        ...crumblist,
-      ];
+      const pathWithHome = [{ href: `/`, title: `${dict.home}` }, ...crumblist];
 
       // Full path
       const pathFull = pathWithHome;
@@ -74,7 +70,7 @@ export default function Breadcrumbs({
   );
 
   return (
-    <div className="font-Inter flex items-center flex-wrap">
+    <div className="font-Inter flex flex-wrap items-center">
       {breadcrumbs.map((crumb, index) => (
         <Crumb
           key={index}
@@ -100,15 +96,22 @@ function Crumb({
 
   // The last crumb is rendered as normal text
   if (last) {
-    return <span className="sm:px-3 sm:py-2 p-1 font-semibold lg:text-base md:text-sm text-xs">{text}</span>;
+    return (
+      <span className="p-1 text-xs font-semibold sm:px-3 sm:py-2 md:text-sm lg:text-base">
+        {text}
+      </span>
+    );
   }
 
   return (
     <>
-      <Link href={href} className="hover:bg-accent rounded-md sm:px-3 sm:py-2 p-1 lg:text-base md:text-sm text-xs">
+      <Link
+        href={href}
+        className="hover:bg-accent rounded-md p-1 text-xs sm:px-3 sm:py-2 md:text-sm lg:text-base"
+      >
         {text}
       </Link>
-      <ChevronRight className="sm:mx-1 h-5 w-5" />
+      <ChevronRight className="h-5 w-5 sm:mx-1" />
     </>
   );
 }

@@ -16,10 +16,13 @@ const nextConfig = {
     NEXT_PUBLIC_STRAPI_API_URL: process.env.NEXT_PUBLIC_STRAPI_API_URL,
     NEXT_PUBLIC_STRAPI_DOMAIN: process.env.NEXT_PUBLIC_STRAPI_DOMAIN,
     NEXT_PUBLIC_S3_DOMAIN: process.env.NEXT_PUBLIC_S3_DOMAIN,
-    NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL
+    NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL,
   },
   images: {
-    domains: [process.env.NEXT_PUBLIC_STRAPI_DOMAIN, process.env.NEXT_PUBLIC_S3_DOMAIN],
+    domains: [
+      process.env.NEXT_PUBLIC_STRAPI_DOMAIN,
+      process.env.NEXT_PUBLIC_S3_DOMAIN,
+    ],
   },
   async rewrites() {
     return [

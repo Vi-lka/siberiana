@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,14 +18,13 @@ import {
 } from "@siberiana/ui";
 
 import { HomeInputSearch } from "./HomeInputSearch";
-import { Loader2 } from "lucide-react";
 
 export default function HomeSearch({ dict }: { dict: SearchDict }) {
   const [searchButton, setSearchButton] = React.useState<boolean>(false);
 
-  const [focus, setFocus] = React.useState<boolean>(false)
+  const [focus, setFocus] = React.useState<boolean>(false);
 
-  const [isPending, startTransition] = React.useTransition()
+  const [isPending, startTransition] = React.useTransition();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -70,7 +70,7 @@ export default function HomeSearch({ dict }: { dict: SearchDict }) {
     [pathname, router],
   );
 
-  if (isPending) return <Loader2 className='animate-spin' />;
+  if (isPending) return <Loader2 className="animate-spin" />;
 
   return (
     <Form {...form}>
@@ -83,9 +83,11 @@ export default function HomeSearch({ dict }: { dict: SearchDict }) {
             <FormItem className="text-center">
               <FormControl>
                 <HomeInputSearch
-                  className={focus ? 
-                    'w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw] ring-ring ring-2 ring-offset-2' : 
-                    'w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]'}
+                  className={
+                    focus
+                      ? "ring-ring w-[85vw] border-[1.5px] py-6 pl-2 pr-1 ring-2 ring-offset-2 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
+                      : "w-[85vw] border-[1.5px] py-6 pl-2 pr-1 sm:pl-6 md:w-[60vw] lg:w-[50vw] xl:w-[40vw]"
+                  }
                   placeholder={dict.placeholder}
                   {...field}
                   onFocus={() => setFocus(true)}

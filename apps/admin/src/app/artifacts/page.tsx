@@ -1,68 +1,57 @@
-import React, { Suspense } from 'react'
-import CategoryFilter from '~/components/filters/CategoryFilter'
-import CollectionFilter from '~/components/filters/CollectionFilter'
-import TablesArtifacts from './TablesArtifacts'
-import { ArrowBigUp, Loader2 } from 'lucide-react'
+import React, { Suspense } from "react";
+import { ArrowBigUp, Loader2 } from "lucide-react";
 
-export const dynamic = 'force-dynamic'
+import CategoryFilter from "~/components/filters/CategoryFilter";
+import CollectionFilter from "~/components/filters/CollectionFilter";
+import TablesArtifacts from "./TablesArtifacts";
+
+export const dynamic = "force-dynamic";
 
 export default function ArtifactsPage({
-  searchParams
+  searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-
-  const category = searchParams['category'] as string | undefined
-  const collection = searchParams['collection'] as string | undefined
+  const category = searchParams["category"] as string | undefined;
+  const collection = searchParams["collection"] as string | undefined;
 
   return (
     <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
-      <div className="flex md:flex-row flex-col gap-2 text-sm">
+      <div className="flex flex-col gap-2 text-sm md:flex-row">
         <div className="">
           <CategoryFilter artifactsType />
-          {!(!!category || !!collection) 
-            ? (
-              <div className="flex flex-col items-center text-center">
-                <ArrowBigUp />
-                <p>Выберите категорию</p>
-              </div>
-            )
-            : null
-          }
+          {!(!!category || !!collection) ? (
+            <div className="flex flex-col items-center text-center">
+              <ArrowBigUp />
+              <p>Выберите категорию</p>
+            </div>
+          ) : null}
         </div>
-        
-        <div className=''>
+
+        <div className="">
           <CollectionFilter artifactsType searchParams={searchParams} />
-          {!(!!category || !!collection)
-            ? (
-              <div className="flex flex-col items-center text-center">
-                <ArrowBigUp />
-                <p>Или коллекцию</p>
-              </div>
-            )
-            : null
-          }
-          {(!!category && !!!collection) 
-            ? (
-              <div className="flex flex-col items-center text-center">
-                <ArrowBigUp />
-                <p>Выберите коллекцию</p>
-              </div>
-            )
-            : null
-          }
+          {!(!!category || !!collection) ? (
+            <div className="flex flex-col items-center text-center">
+              <ArrowBigUp />
+              <p>Или коллекцию</p>
+            </div>
+          ) : null}
+          {!!category && !!!collection ? (
+            <div className="flex flex-col items-center text-center">
+              <ArrowBigUp />
+              <p>Выберите коллекцию</p>
+            </div>
+          ) : null}
         </div>
       </div>
 
-      {
-        (!!collection)
-        ? (
-          <Suspense fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto' />}>
-            <TablesArtifacts searchParams={searchParams} />
-          </Suspense>
-        )
-        : null
-      }
+      {!!collection ? (
+        <Suspense
+          fallback={<Loader2 className="mx-auto h-12 w-12 animate-spin" />}
+        >
+          <TablesArtifacts searchParams={searchParams} />
+        </Suspense>
+      ) : null}
     </div>
-  )
+  );
 }

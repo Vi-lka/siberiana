@@ -9,6 +9,7 @@ import type { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import type { ProviderType } from "next-auth/providers/index";
 import KeycloakProvider from "next-auth/providers/keycloak";
+
 import { logoutRequest, refreshTokenRequest } from "~/lib/auth/oidc";
 import { encrypt } from "~/lib/utils/encryption";
 

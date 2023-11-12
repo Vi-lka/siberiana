@@ -1,11 +1,11 @@
 export default function getMultiFilter(string: string) {
-    let filter = ""
+  let filter = "";
 
-    const arrayFormString = string.split('_')
+  const arrayFormString = string.split("_");
 
-    arrayFormString.forEach(filterString => {
-      filter = filter + `"${filterString}",`
-    })
+  arrayFormString.forEach((filterString) => {
+    filter = filter + `"${filterString}",`;
+  });
 
-    return filter
+  return filter;
 }

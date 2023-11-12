@@ -1,29 +1,39 @@
-"use client"
+"use client";
 
-import { Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@siberiana/ui'
-import { ArrowLeftToLine } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import React from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeftToLine } from "lucide-react";
+
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@siberiana/ui";
 
 export default function GoBackButton() {
-    const router = useRouter()
+  const router = useRouter();
 
-    return (
-        <TooltipProvider>
-            <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                    <Button
-                        variant={'ghost'}
-                        className='flex items-center gap-1 md:p-2 p-1 h-fit w-fit'
-                        onClick={() => router.back()}
-                    >
-                        <ArrowLeftToLine className='lg:w-6 lg:h-6 sm:w-5 sm:h-5 w-7 h-7' />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="bg-accent text-foreground font-OpenSans font-normal cursor-help">
-                    Назад
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
-    )
+  return (
+    <TooltipProvider>
+      <Tooltip delayDuration={300}>
+        <TooltipTrigger asChild>
+          <Button
+            variant={"ghost"}
+            className="flex h-fit w-fit items-center gap-1 p-1 md:p-2"
+            onClick={() => router.back()}
+          >
+            <ArrowLeftToLine className="h-7 w-7 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent
+          side="bottom"
+          className="bg-accent text-foreground font-OpenSans cursor-help font-normal"
+        >
+          Назад
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
 }

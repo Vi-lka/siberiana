@@ -1,4 +1,6 @@
 import React from "react";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
 
 import { Dictionary } from "@siberiana/schemas";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@siberiana/ui";
@@ -6,9 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@siberiana/ui";
 import LogInForm from "~/components/auth/LogInForm";
 import SignUpForm from "~/components/auth/SignUpForm";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
 
 export default async function LoginUnused() {
   const dict = await getDictionary();
@@ -16,7 +16,7 @@ export default async function LoginUnused() {
 
   const session = await getServerSession(authOptions);
   if (session) {
-    redirect('/account')
+    redirect("/account");
   }
 
   return (

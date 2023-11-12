@@ -10,7 +10,7 @@ const payload = {
   grant_type: "password",
   client_id: process.env.OIDC_CLIENT_ID || "",
   client_secret: process.env.OIDC_CLIENT_SECRET || "",
-  scope: "profile email openid"
+  scope: "profile email openid",
 };
 
 export const oidc = axios.create({
@@ -44,8 +44,8 @@ export const logoutRequest = (refresh_token: string) => {
 };
 
 export const getToken = (credentials: {
-  username: string,
-  password: string,
+  username: string;
+  password: string;
 }) => {
   return oidc({
     method: "POST",
@@ -63,7 +63,7 @@ export const getUserInfo = (token: string) => {
     method: "GET",
     url: "/userinfo",
     headers: {
-      "Authorization": `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 };
