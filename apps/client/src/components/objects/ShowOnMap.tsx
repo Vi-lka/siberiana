@@ -1,8 +1,8 @@
 "use client";
 
-import { divIcon } from "leaflet";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
+import { divIcon } from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { parse } from "wellknown";
 
@@ -12,6 +12,7 @@ import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 import "leaflet/dist/leaflet.css";
 
 import Image from "next/image";
+
 import { useProtectedAreaPoints } from "~/lib/queries/api-client";
 
 export default function ShowOnMap({ data }: { data: PAPById }) {

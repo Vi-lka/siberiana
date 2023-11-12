@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 import { ArtifactById, StatusEnum } from "../objects-schema";
 import { ImageFile, LocationEnum } from "./global";
 
