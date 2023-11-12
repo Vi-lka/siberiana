@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const inter = Inter({
-  subsets: ["cyrillic", "latin"],
+  subsets: ["latin"],
   variable: "--Inter",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
