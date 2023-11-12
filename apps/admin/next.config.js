@@ -16,11 +16,11 @@ const nextConfig = {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL_ADMIN,
     NEXT_PUBLIC_S3_DOMAIN: process.env.NEXT_PUBLIC_S3_DOMAIN,
     NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL_ADMIN
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL_ADMIN,
   },
   images: {
     domains: [process.env.NEXT_PUBLIC_S3_DOMAIN],
-  }
+  },
 };
 
 module.exports = nextConfig;

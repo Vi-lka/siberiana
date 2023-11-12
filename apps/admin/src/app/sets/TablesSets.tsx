@@ -1,26 +1,27 @@
-import { Loader2 } from 'lucide-react'
-import React from 'react'
-import ErrorHandler from '~/components/errors/ErrorHandler'
-import { ClientHydration } from '~/components/providers/ClientHydration'
-import { getSets } from '~/lib/queries/artifacts'
-import UpdateTable from './UpdateTable'
-import CreateTable from './CreateTable'
-import type { SetForTable } from '@siberiana/schemas'
-import { columns, updateColumns } from './columns'
+import React from "react";
+import { Loader2 } from "lucide-react";
+
+import type { SetForTable } from "@siberiana/schemas";
+
+import ErrorHandler from "~/components/errors/ErrorHandler";
+import { ClientHydration } from "~/components/providers/ClientHydration";
+import { getSets } from "~/lib/queries/artifacts";
+import { columns, updateColumns } from "./columns";
+import CreateTable from "./CreateTable";
+import UpdateTable from "./UpdateTable";
 
 export default async function TablesSets({
-    searchParams
+  searchParams,
 }: {
-    searchParams: { [key: string]: string | string[] | undefined },
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const mode = searchParams["mode"] as string | undefined;
 
-  const mode = searchParams['mode'] as string | undefined
-    
-  const [ dataResult ] = await Promise.allSettled([ 
-    getSets({ 
+  const [dataResult] = await Promise.allSettled([
+    getSets({
       first: null,
     }),
-  ])
+  ]);
 
   const dataForCreate = [
     {
@@ -29,65 +30,81 @@ export default async function TablesSets({
       description: "",
       externalLink: "",
       monuments: [],
-    }
-  ] as SetForTable[]
+    },
+  ] as SetForTable[];
 
   if (dataResult.status === "rejected") {
-    if ((dataResult.reason as Error).message === 'NEXT_NOT_FOUND') {
+    if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
       return (
-        <div className="w-full mx-auto pt-3">
-          <h1 className='flex-grow text-center text-2xl font-Inter font-semibold lg:mb-1 mb-6'>
+        <div className="mx-auto w-full pt-3">
+          <h1 className="font-Inter mb-6 flex-grow text-center text-2xl font-semibold lg:mb-1">
             Добавление
-          </h1> 
-          <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto mt-12' />}>
+          </h1>
+          <ClientHydration
+            fallback={
+              <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
+            }
+          >
             <CreateTable columns={columns} data={dataForCreate} />
           </ClientHydration>
         </div>
-      ) 
-    } else return (
-      <ErrorHandler
-        error={dataResult.reason as unknown} 
-        place="Sets"
-        notFound 
-        goBack
-      />
-    )
+      );
+    } else
+      return (
+        <ErrorHandler
+          error={dataResult.reason as unknown}
+          place="Sets"
+          notFound
+          goBack
+        />
+      );
   }
-  
+
   const dataForUpdate = dataResult.value.edges.map((data) => {
-    const node = data.node
+    const node = data.node;
     const {
       artifacts,
       ...rest // assigns remaining
     } = node;
 
-    const artifactsForTable = artifacts.length
+    const artifactsForTable = artifacts.length;
 
-    return { 
+    return {
       artifacts: artifactsForTable,
-      ...rest
-    } as SetForTable
-  })
+      ...rest,
+    } as SetForTable;
+  });
 
-  if (mode === 'add') return (
-    <div className="w-full mx-auto pt-3">
-      <h1 className='flex-grow text-center text-2xl font-Inter font-semibold lg:mb-1 mb-4'>
-        Добавление
-      </h1> 
-      <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto mt-12' />}>
-        <CreateTable columns={columns} data={dataForCreate} hasObjectsToUpdate />
-      </ClientHydration>
-    </div>
-  )
+  if (mode === "add")
+    return (
+      <div className="mx-auto w-full pt-3">
+        <h1 className="font-Inter mb-4 flex-grow text-center text-2xl font-semibold lg:mb-1">
+          Добавление
+        </h1>
+        <ClientHydration
+          fallback={
+            <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
+          }
+        >
+          <CreateTable
+            columns={columns}
+            data={dataForCreate}
+            hasObjectsToUpdate
+          />
+        </ClientHydration>
+      </div>
+    );
 
   return (
-    <div className="w-full mx-auto pt-3">
-      <h1 className='flex-grow text-center text-2xl font-Inter font-semibold lg:mb-1 mb-4'>
+    <div className="mx-auto w-full pt-3">
+      <h1 className="font-Inter mb-4 flex-grow text-center text-2xl font-semibold lg:mb-1">
         Редактирование
-      </h1> 
-      <ClientHydration fallback={<Loader2 className='animate-spin w-12 h-12 mx-auto mt-12' />}>
+      </h1>
+      <ClientHydration
+        fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
+      >
         <UpdateTable columns={updateColumns} data={dataForUpdate} />
       </ClientHydration>
     </div>
-  )
+  );
 }

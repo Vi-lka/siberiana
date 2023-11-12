@@ -1,66 +1,60 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React from "react";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogTrigger } from '@siberiana/ui';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
-export default function PhotoZoom({
-    alt,
-    src,
-}: {
-    alt: string,
-    src: string,
-}) {
+import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 
-    const [image, setImage] = React.useState("/images/image-placeholder.png");
+export default function PhotoZoom({ alt, src }: { alt: string; src: string }) {
+  const [image, setImage] = React.useState("/images/image-placeholder.png");
 
-    React.useEffect(() => {
-        if (!!src) {
-            setImage(src)
-        } else {
-          setImage("/images/image-placeholder.png")
-        }
-    }, [src])
+  React.useEffect(() => {
+    if (!!src) {
+      setImage(src);
+    } else {
+      setImage("/images/image-placeholder.png");
+    }
+  }, [src]);
 
   return (
     <Dialog>
-        <DialogTrigger className='w-full max-h-fit'>
-            <Image
+      <DialogTrigger className="max-h-fit w-full">
+        <Image
+          src={image}
+          onError={() => setImage("/images/image-placeholder.png")}
+          priority={true}
+          width={650}
+          height={650}
+          className="mx-auto max-h-[70vh] w-auto overflow-hidden rounded-md object-contain"
+          alt={alt}
+        />
+      </DialogTrigger>
+      <DialogContent className="bg-accent h-[90vh] max-w-[95vw] overflow-hidden p-0 sm:max-w-[95vw]">
+        <TransformWrapper>
+          <TransformComponent
+            contentStyle={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "90vh",
+              width: "95vw",
+            }}
+          >
+            <div className="relative h-full w-full">
+              <Image
                 src={image}
                 onError={() => setImage("/images/image-placeholder.png")}
-                priority={true}
-                width={650}
-                height={650}
-                className='object-contain max-h-[70vh] mx-auto w-auto rounded-md overflow-hidden'
+                fill
+                sizes="150vw"
+                quality={100}
+                className="object-contain"
                 alt={alt}
-            />
-        </DialogTrigger>
-        <DialogContent className='sm:max-w-[95vw] max-w-[95vw] h-[90vh] p-0 bg-accent overflow-hidden'>
-            <TransformWrapper>
-                <TransformComponent
-                    contentStyle={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '90vh',
-                        width: '95vw',
-                    }}
-                >
-                    <div className="relative w-full h-full">
-                        <Image
-                            src={image}
-                            onError={() => setImage("/images/image-placeholder.png")}
-                            fill
-                            sizes="150vw"
-                            quality={100}
-                            className='object-contain'
-                            alt={alt}
-                        />
-                    </div>
-                </TransformComponent>
-            </TransformWrapper>
-        </DialogContent>
+              />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
+      </DialogContent>
     </Dialog>
-  )
+  );
 }

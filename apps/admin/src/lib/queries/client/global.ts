@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import request from "graphql-request"
+import { useQuery } from "@tanstack/react-query";
+import request from "graphql-request";
 
 export function getCategoriesQuery() {
-    const query = `
+  const query = `
       query Categories() {
         categories(
           orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
@@ -17,37 +17,35 @@ export function getCategoriesQuery() {
           }
         }
       }
-    `
-    return query
+    `;
+  return query;
 }
 
 export function getCollectionsQuery({
   hasCategory = null,
   categoryId,
 }: {
-  hasCategory?: boolean | null,
-  categoryId?: string, 
+  hasCategory?: boolean | null;
+  categoryId?: string;
 }) {
-    const query = `
+  const query = `
       query Collections() {
         collections(
           orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
           where: {
             or: [
-              ${!!categoryId
-                ? `{
+              ${
+                !!categoryId
+                  ? `{
                   hasCategoryWith: [
                     {
                       id: "${categoryId}"
                     }
                   ]
                 },`
-                : ''
+                  : ""
               }
-              ${hasCategory !== null 
-                ? `{ hasCategory: ${hasCategory} },`
-                : ''
-              }
+              ${hasCategory !== null ? `{ hasCategory: ${hasCategory} },` : ""}
             ]
           }
         ) {
@@ -62,8 +60,8 @@ export function getCollectionsQuery({
           }
         }
       }
-    `
-    return query
+    `;
+  return query;
 }
 
 type Edges = {
@@ -73,8 +71,8 @@ type Edges = {
       id: string;
       displayName: string;
     };
-  }[]
-}
+  }[];
+};
 export function useLocationsQuery() {
   const queryString = `
     query Locations() {
@@ -124,27 +122,27 @@ export function useLocationsQuery() {
         }}
       }
     }
-  `
+  `;
   const query = useQuery<
     {
-      locations: Edges,
-      countries: Edges,
-      regions: Edges,
-      districts: Edges,
-      settlements: Edges,
-    }, 
+      locations: Edges;
+      countries: Edges;
+      regions: Edges;
+      districts: Edges;
+      settlements: Edges;
+    },
     Error
   >({
-    queryKey: ['locations', queryString],
-    queryFn: async () => 
+    queryKey: ["locations", queryString],
+    queryFn: async () =>
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         queryString,
       ),
     refetchOnWindowFocus: true,
-  })
+  });
 
-  return query
+  return query;
 }
 
 export function getLicensesQuery() {
@@ -162,8 +160,8 @@ export function getLicensesQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getPersonsQuery() {
@@ -181,8 +179,8 @@ export function getPersonsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getPublicationsQuery() {
@@ -200,8 +198,8 @@ export function getPublicationsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getProjectsQuery() {
@@ -219,6 +217,6 @@ export function getProjectsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }

@@ -1,50 +1,51 @@
-"use client"
+"use client";
 
-import type { ErrorsDict } from '@siberiana/schemas'
-import { useRouter } from 'next/navigation'
-import React from 'react'
-import ButtonComponent from '../ui/ButtonComponent'
-import { SearchX, Undo2  } from 'lucide-react'
+import React from "react";
+import { useRouter } from "next/navigation";
+import { SearchX, Undo2 } from "lucide-react";
 
-export default function NotFound({ 
-    dict, 
-    children,
-    goBack
-}: { 
-    dict: ErrorsDict, 
-    children?: React.ReactNode,
-    goBack: boolean
+import type { ErrorsDict } from "@siberiana/schemas";
+
+import ButtonComponent from "../ui/ButtonComponent";
+
+export default function NotFound({
+  dict,
+  children,
+  goBack,
+}: {
+  dict: ErrorsDict;
+  children?: React.ReactNode;
+  goBack: boolean;
 }) {
+  const router = useRouter();
 
-    const router = useRouter()
-    
   return (
     <>
-        {children}
-        
-        <div className='flex flex-col items-center text-center gap-10 mx-auto my-10'>
-            <div className='flex flex-col items-center text-center gap-4'>
-                <SearchX size={36} />
+      {children}
 
-                <h2 className='font-OpenSans uppercase text-3xl font-bold'>
-                    {dict.notFound.title}
-                </h2>
+      <div className="mx-auto my-10 flex flex-col items-center gap-10 text-center">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <SearchX size={36} />
 
-                <p className='font-Inter font-normal text-sm'>
-                    {dict.notFound.description}
-                </p>
-            </div>
+          <h2 className="font-OpenSans text-3xl font-bold uppercase">
+            {dict.notFound.title}
+          </h2>
 
-            {goBack ? (
-                <ButtonComponent 
-                    className="p-6 uppercase font-Inter w-full max-w-[240px]"
-                    onClick={() => router.back()}
-                >
-                    {dict.notFound.goBack}
-                    <Undo2 className='ml-1' size={18} />
-                </ButtonComponent>
-            ) : null}
+          <p className="font-Inter text-sm font-normal">
+            {dict.notFound.description}
+          </p>
         </div>
+
+        {goBack ? (
+          <ButtonComponent
+            className="font-Inter w-full max-w-[240px] p-6 uppercase"
+            onClick={() => router.back()}
+          >
+            {dict.notFound.goBack}
+            <Undo2 className="ml-1" size={18} />
+          </ButtonComponent>
+        ) : null}
+      </div>
     </>
-  )
+  );
 }

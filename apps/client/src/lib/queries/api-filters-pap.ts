@@ -1,24 +1,26 @@
 import "server-only";
 
 import { notFound } from "next/navigation";
-import getMultiFilter from "../utils/getMultiFilter";
+
 import { PAPFilters } from "@siberiana/schemas";
 
-type Entitys = "protectedAreas" | "protectedAreaCategories" | "licenses"
+import getMultiFilter from "../utils/getMultiFilter";
+
+type Entitys = "protectedAreas" | "protectedAreaCategories" | "licenses";
 
 type PAPQueryType = {
-  entity?: Entitys,
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  protectedAreaIds?: string,
-  protectedAreaCategoryIds?: string,
-  licenseIds?: string,
-}
+  entity?: Entitys;
+  search?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  protectedAreaIds?: string;
+  protectedAreaCategoryIds?: string;
+  licenseIds?: string;
+};
 
 export const protectedAreaPictures = `
     protectedAreaPictures {
@@ -53,9 +55,9 @@ export const protectedAreaPictures = `
             }
         }
   }
-`
+`;
 
-function PAPQuery({ 
+function PAPQuery({
   entity,
   search = "",
   categories,
@@ -66,7 +68,7 @@ function PAPQuery({
   settlementIds,
   protectedAreaIds,
   protectedAreaCategoryIds,
-  licenseIds
+  licenseIds,
 }: PAPQueryType) {
   const queryString = /* GraphGL */ `
     query {
@@ -75,27 +77,69 @@ function PAPQuery({
         where: {
           hasProtectedAreaPicturesWith: [{
             hasCollectionWith: [
-              ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-              ${!!categories ? `{
+              ${
+                !!collections
+                  ? `{slugIn: [${getMultiFilter(collections)}]},`
+                  : ""
+              }
+              ${
+                !!categories
+                  ? `{
                 hasCategoryWith: [
                   {slugIn: [${getMultiFilter(categories)}]}
                 ]
-              },` : ''}
+              },`
+                  : ""
+              }
             ],
             hasLocationWith: [
-              ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
-              ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
-              ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
-              ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+              ${
+                !!countryIds
+                  ? `{hasCountryWith: [ {idIn: [${getMultiFilter(
+                      countryIds,
+                    )}]} ]}`
+                  : ""
+              }
+              ${
+                !!regionIds
+                  ? `{hasRegionWith: [ {idIn: [${getMultiFilter(
+                      regionIds,
+                    )}]} ]}`
+                  : ""
+              }
+              ${
+                !!districtIds
+                  ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(
+                      districtIds,
+                    )}]} ]}`
+                  : ""
+              }
+              ${
+                !!settlementIds
+                  ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(
+                      settlementIds,
+                    )}]} ]}`
+                  : ""
+              }
             ],
-            hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+            hasLicenseWith: [ ${
+              !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+            } ],
             hasProtectedAreaWith: [ 
-              ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
-              ${!!protectedAreaCategoryIds ? `{
+              ${
+                !!protectedAreaIds
+                  ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},`
+                  : ""
+              } 
+              ${
+                !!protectedAreaCategoryIds
+                  ? `{
                 hasProtectedAreaCategoryWith: [
                   {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
                 ]
-              },` : ''}
+              },`
+                  : ""
+              }
             ],
             or: [ 
               {displayNameContainsFold: "${search}"}
@@ -115,87 +159,95 @@ function PAPQuery({
       }
     }
   `;
-  return queryString
+  return queryString;
 }
 
 //.........................LICENSES.........................//
-export const getLicensesFilter = async (args: PAPQueryType): Promise<PAPFilters> => {
+export const getLicensesFilter = async (
+  args: PAPQueryType,
+): Promise<PAPFilters> => {
+  const headers = { "Content-Type": "application/json" };
 
-    const headers = { "Content-Type": "application/json" };
-  
-    const query = PAPQuery({
-      entity: "licenses",
-      ...args
-    })
-  
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+  const query = PAPQuery({
+    entity: "licenses",
+    ...args,
+  });
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
       headers,
       method: "POST",
       body: JSON.stringify({
         query,
       }),
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error("Failed to fetch data 'Licenses PAP Filter'");
-    }
-    
-    const json = await res.json() as { data: { licenses: PAPFilters } };
-    
-    if (json.data.licenses.totalCount === 0) {
-      notFound()
-    }
-    
-    const licenses = PAPFilters.parse(json.data.licenses);
-    
-    return licenses;
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Licenses PAP Filter'");
+  }
+
+  const json = (await res.json()) as { data: { licenses: PAPFilters } };
+
+  if (json.data.licenses.totalCount === 0) {
+    notFound();
+  }
+
+  const licenses = PAPFilters.parse(json.data.licenses);
+
+  return licenses;
 };
 
 //.........................PROTECTED AREAS.........................//
-export const getProtectedAreasFilter = async (args: PAPQueryType): Promise<PAPFilters> => {
+export const getProtectedAreasFilter = async (
+  args: PAPQueryType,
+): Promise<PAPFilters> => {
+  const headers = { "Content-Type": "application/json" };
 
-    const headers = { "Content-Type": "application/json" };
-  
-    const query = PAPQuery({
-      entity: "protectedAreas",
-      ...args
-    })
-  
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+  const query = PAPQuery({
+    entity: "protectedAreas",
+    ...args,
+  });
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
       headers,
       method: "POST",
       body: JSON.stringify({
         query,
       }),
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error("Failed to fetch data 'Protected Areas Filter'");
-    }
-    
-    const json = await res.json() as { data: { protectedAreas: PAPFilters } };
-    
-    if (json.data.protectedAreas.totalCount === 0) {
-      notFound()
-    }
-    
-    const protectedAreas = PAPFilters.parse(json.data.protectedAreas);
-    
-    return protectedAreas;
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Protected Areas Filter'");
+  }
+
+  const json = (await res.json()) as { data: { protectedAreas: PAPFilters } };
+
+  if (json.data.protectedAreas.totalCount === 0) {
+    notFound();
+  }
+
+  const protectedAreas = PAPFilters.parse(json.data.protectedAreas);
+
+  return protectedAreas;
 };
 
 //.........................PROTECTED AREA CATEGORY.........................//
-export const getProtectedAreaCategorysFilter = async ({ 
+export const getProtectedAreaCategorysFilter = async ({
   search = "",
   categories,
   collections,
@@ -205,9 +257,8 @@ export const getProtectedAreaCategorysFilter = async ({
   settlementIds,
   protectedAreaIds,
   protectedAreaCategoryIds,
-  licenseIds
+  licenseIds,
 }: PAPQueryType): Promise<PAPFilters> => {
-
   const headers = { "Content-Type": "application/json" };
 
   const query = /* GraphGL */ `  
@@ -218,27 +269,69 @@ export const getProtectedAreaCategorysFilter = async ({
           hasProtectedAreasWith: [{ 
             hasProtectedAreaPicturesWith: [{
               hasCollectionWith: [
-                ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-                ${!!categories ? `{
+                ${
+                  !!collections
+                    ? `{slugIn: [${getMultiFilter(collections)}]},`
+                    : ""
+                }
+                ${
+                  !!categories
+                    ? `{
                   hasCategoryWith: [
                     {slugIn: [${getMultiFilter(categories)}]}
                   ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
               hasLocationWith: [
-                ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
-                ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
-                ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
-                ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+                ${
+                  !!countryIds
+                    ? `{hasCountryWith: [ {idIn: [${getMultiFilter(
+                        countryIds,
+                      )}]} ]}`
+                    : ""
+                }
+                ${
+                  !!regionIds
+                    ? `{hasRegionWith: [ {idIn: [${getMultiFilter(
+                        regionIds,
+                      )}]} ]}`
+                    : ""
+                }
+                ${
+                  !!districtIds
+                    ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(
+                        districtIds,
+                      )}]} ]}`
+                    : ""
+                }
+                ${
+                  !!settlementIds
+                    ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(
+                        settlementIds,
+                      )}]} ]}`
+                    : ""
+                }
               ],
-              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+              hasLicenseWith: [ ${
+                !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+              } ],
               hasProtectedAreaWith: [ 
-                ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
-                ${!!protectedAreaCategoryIds ? `{
+                ${
+                  !!protectedAreaIds
+                    ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},`
+                    : ""
+                } 
+                ${
+                  !!protectedAreaCategoryIds
+                    ? `{
                   hasProtectedAreaCategoryWith: [
                     {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
                   ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
               or: [ 
                 {displayNameContainsFold: "${search}"}
@@ -262,14 +355,17 @@ export const getProtectedAreaCategorysFilter = async ({
     }
   `;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -278,14 +374,18 @@ export const getProtectedAreaCategorysFilter = async ({
     // Throw an error
     throw new Error("Failed to fetch data 'Protected Area Categorys Filter'");
   }
-  
-  const json = await res.json() as { data: { protectedAreaCategories: PAPFilters } };
-  
+
+  const json = (await res.json()) as {
+    data: { protectedAreaCategories: PAPFilters };
+  };
+
   if (json.data.protectedAreaCategories.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  
-  const protectedAreaCategories = PAPFilters.parse(json.data.protectedAreaCategories);
-  
+
+  const protectedAreaCategories = PAPFilters.parse(
+    json.data.protectedAreaCategories,
+  );
+
   return protectedAreaCategories;
 };

@@ -1,11 +1,11 @@
-import { ArtifactById, BookById, PAPById } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 
+import { ArtifactById, BookById, PAPById } from "@siberiana/schemas";
 
 //.........................ARTIFACT.........................//
 export const getArtifactById = async (id: string): Promise<ArtifactById> => {
-    const headers = { "Content-Type": "application/json" };
-    const query = /* GraphGL */ `
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
     query ArtifactById {
         artifacts(where: { id: "${id}", status: listed }) {
             totalCount
@@ -131,47 +131,53 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
         }
     }
     `;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
       headers,
       method: "POST",
       body: JSON.stringify({
         query,
       }),
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error(`Failed to fetch data 'Artifact ${id}'`);
-    }
-  
-    const json = await res.json() as { 
-        data: { 
-            artifacts: { 
-                totalCount: number,
-                edges: { 
-                    node: ArtifactById 
-                }[] 
-            }
-        } 
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Artifact ${id}'`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      artifacts: {
+        totalCount: number;
+        edges: {
+          node: ArtifactById;
+        }[];
+      };
     };
-  
-    if ((json.data.artifacts.totalCount === 0) || (json.data.artifacts.edges.length === 0)) {
-      notFound()
-    }
-  
-    const artifact = ArtifactById.parse(json.data?.artifacts.edges[0].node);
-  
-    return artifact;
+  };
+
+  if (
+    json.data.artifacts.totalCount === 0 ||
+    json.data.artifacts.edges.length === 0
+  ) {
+    notFound();
+  }
+
+  const artifact = ArtifactById.parse(json.data?.artifacts.edges[0].node);
+
+  return artifact;
 };
 
 //.........................BOOK.........................//
 export const getBookById = async (id: string): Promise<BookById> => {
-    const headers = { "Content-Type": "application/json" };
-    const query = /* GraphGL */ `
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
     query BookById {
         books(where: { id: "${id}", status: listed }) {
             totalCount
@@ -231,47 +237,50 @@ export const getBookById = async (id: string): Promise<BookById> => {
         }
     }
     `;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
       headers,
       method: "POST",
       body: JSON.stringify({
         query,
       }),
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error(`Failed to fetch data 'Book ${id}'`);
-    }
-  
-    const json = await res.json() as { 
-        data: { 
-            books: { 
-                totalCount: number,
-                edges: { 
-                    node: BookById 
-                }[] 
-            }
-        } 
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Book ${id}'`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      books: {
+        totalCount: number;
+        edges: {
+          node: BookById;
+        }[];
+      };
     };
-  
-    if ((json.data.books.totalCount === 0) || (json.data.books.edges.length === 0)) {
-      notFound()
-    }
-  
-    const book = BookById.parse(json.data?.books.edges[0].node);
-  
-    return book;
+  };
+
+  if (json.data.books.totalCount === 0 || json.data.books.edges.length === 0) {
+    notFound();
+  }
+
+  const book = BookById.parse(json.data?.books.edges[0].node);
+
+  return book;
 };
 
 //.........................PAP (protectedAreaPictures).........................//
 export const getPAPById = async (id: string): Promise<PAPById> => {
-    const headers = { "Content-Type": "application/json" };
-    const query = /* GraphGL */ `
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
     query PAPById {
         protectedAreaPictures(where: { id: "${id}", status: listed }) {
             totalCount
@@ -330,41 +339,49 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
         }
     }
     `;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
       headers,
       method: "POST",
       body: JSON.stringify({
         query,
       }),
-      cache: 'no-store',
-    });
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error(`Failed to fetch data 'Protected Area Picture ${id}'`);
-    }
-  
-    const json = await res.json() as { 
-        data: { 
-            protectedAreaPictures: { 
-                totalCount: number,
-                edges: { 
-                    node: PAPById 
-                }[] 
-            }
-        } 
-    };
+      cache: "no-store",
+    },
+  );
 
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-  
-    if ((json.data.protectedAreaPictures.totalCount === 0) || (json.data.protectedAreaPictures.edges.length === 0)) {
-      notFound()
-    }
-  
-    const protectedAreaPicture = PAPById.parse(json.data?.protectedAreaPictures.edges[0].node);
-  
-    return protectedAreaPicture;
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Protected Area Picture ${id}'`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      protectedAreaPictures: {
+        totalCount: number;
+        edges: {
+          node: PAPById;
+        }[];
+      };
+    };
+  };
+
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  if (
+    json.data.protectedAreaPictures.totalCount === 0 ||
+    json.data.protectedAreaPictures.edges.length === 0
+  ) {
+    notFound();
+  }
+
+  const protectedAreaPicture = PAPById.parse(
+    json.data?.protectedAreaPictures.edges[0].node,
+  );
+
+  return protectedAreaPicture;
 };

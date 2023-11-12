@@ -1,4 +1,3 @@
-
 export const artifactsMenuItems = {
   id: 1,
   name: "Артефакты",
@@ -32,10 +31,9 @@ export const artifactsMenuItems = {
       id: 7,
       name: "3D модели",
       url: "/models",
-    }
-  ]
-}
-
+    },
+  ],
+};
 
 export const booksMenuItems = {
   id: 2,
@@ -51,8 +49,8 @@ export const booksMenuItems = {
       name: "Издатели",
       url: "/publishers",
     },
-  ]
-}
+  ],
+};
 
 export const ooptMenuItems = {
   id: 3,
@@ -73,8 +71,8 @@ export const ooptMenuItems = {
       name: "Территории и объекты",
       url: "/oopt-areas",
     },
-  ]
-}
+  ],
+};
 
 export const artsMenuItems = {
   id: 4,
@@ -90,8 +88,8 @@ export const artsMenuItems = {
       name: "Стили",
       url: "/arts-styles",
     },
-  ]
-}
+  ],
+};
 
 export const locationsMenuItems = {
   id: 5,
@@ -117,8 +115,8 @@ export const locationsMenuItems = {
       name: "Населенные пункты",
       url: "/settlements",
     },
-  ]
-}
+  ],
+};
 
 export const organizationsMenuItems = {
   id: 6,
@@ -128,9 +126,9 @@ export const organizationsMenuItems = {
       id: 1,
       name: "Типы",
       url: "/organizations-types",
-    }
-  ]
-}
+    },
+  ],
+};
 
 export const holdersMenuItems = {
   id: 7,
@@ -140,9 +138,9 @@ export const holdersMenuItems = {
       id: 1,
       name: "Ответственности",
       url: "/holders-responsibilities",
-    }
-  ]
-}
+    },
+  ],
+};
 
 export const personsMenuItems = {
   id: 8,
@@ -152,9 +150,9 @@ export const personsMenuItems = {
       id: 1,
       name: "Роли",
       url: "/persons-roles",
-    }
-  ]
-}
+    },
+  ],
+};
 
 export const projectsMenuItems = {
   id: 9,
@@ -164,6 +162,6 @@ export const projectsMenuItems = {
       id: 1,
       name: "Типы",
       url: "/projects-types",
-    }
-  ]
-}
+    },
+  ],
+};

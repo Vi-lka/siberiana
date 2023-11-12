@@ -1,5 +1,7 @@
 import "server-only";
 
+import { notFound } from "next/navigation";
+
 import {
   About,
   CustomBlock,
@@ -10,7 +12,6 @@ import {
   Services,
   Slider,
 } from "@siberiana/schemas";
-import { notFound } from "next/navigation";
 
 //.........................SLIDER.........................//
 export const getSlider = async (): Promise<Slider> => {
@@ -39,9 +40,9 @@ export const getSlider = async (): Promise<Slider> => {
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -54,23 +55,21 @@ export const getSlider = async (): Promise<Slider> => {
     throw new Error("Failed to fetch data 'Slider'");
   }
 
-  const json = await res.json() as {
+  const json = (await res.json()) as {
     data: {
       slider: {
         data: {
           attributes: {
             Images: {
-              data: Slider
-            }
-          }
-        }
-      }
-    }
+              data: Slider;
+            };
+          };
+        };
+      };
+    };
   };
 
-  const data = Slider.parse(
-    json.data?.slider.data.attributes.Images.data,
-  );
+  const data = Slider.parse(json.data?.slider.data.attributes.Images.data);
 
   return data;
 };
@@ -110,9 +109,9 @@ export const getCustomBlock = async (): Promise<CustomBlock> => {
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -125,25 +124,23 @@ export const getCustomBlock = async (): Promise<CustomBlock> => {
     throw new Error("Failed to fetch data 'Custom Block'");
   }
 
-  const json = await res.json() as {
+  const json = (await res.json()) as {
     data: {
       custom: {
         data: {
           attributes: {
-            content: CustomBlock
-          } 
-        }
-      }
-    }
+            content: CustomBlock;
+          };
+        };
+      };
+    };
   };
 
   if (!json.data.custom.data) {
-    notFound()
+    notFound();
   }
 
-  const data = CustomBlock.parse(
-    json.data?.custom.data?.attributes.content,
-  );
+  const data = CustomBlock.parse(json.data?.custom.data?.attributes.content);
 
   return data;
 };
@@ -154,13 +151,13 @@ export const getOrganizations = async ({
   per,
   sort = "order:asc",
   search = "",
-  consortium
+  consortium,
 }: {
-  page: number,
-  per: number,
-  sort?: string,
-  search?: string,
-  consortium?: boolean,
+  page: number;
+  per: number;
+  sort?: string;
+  search?: string;
+  consortium?: boolean;
 }): Promise<Organizations> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -175,11 +172,13 @@ export const getOrganizations = async ({
           title: {
             containsi: "${search}"
           },
-          ${consortium ? (
-            `consortium: {
+          ${
+            consortium
+              ? `consortium: {
               eqi: true
             }`
-          ) : ''}
+              : ""
+          }
         }
       ) {
         meta {
@@ -210,9 +209,9 @@ export const getOrganizations = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -225,10 +224,13 @@ export const getOrganizations = async ({
     throw new Error("Failed to fetch data 'Organizations'");
   }
 
-  const json = await res.json() as {data: { organizations: Organizations}};
+  const json = (await res.json()) as { data: { organizations: Organizations } };
 
-  if ((json.data.organizations.meta.pagination.total === 0) || (json.data.organizations.data.length === 0)) {
-    notFound()
+  if (
+    json.data.organizations.meta.pagination.total === 0 ||
+    json.data.organizations.data.length === 0
+  ) {
+    notFound();
   }
 
   const organizations = Organizations.parse(json.data.organizations);
@@ -344,11 +346,11 @@ export const getOrganizationBySlug = async (
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
-     },
+    },
   });
 
   if (!res.ok) {
@@ -359,21 +361,23 @@ export const getOrganizationBySlug = async (
     throw new Error("Failed to fetch data 'Organization By Slug'");
   }
 
-  const json = await res.json() as { 
-    data: { 
-      organizations: { 
-        data: { 
-          attributes: OrganizationBySlug 
-        }[] 
-      }
-    }
+  const json = (await res.json()) as {
+    data: {
+      organizations: {
+        data: {
+          attributes: OrganizationBySlug;
+        }[];
+      };
+    };
   };
-  
+
   if (json.data.organizations.data.length === 0) {
-    notFound()
+    notFound();
   }
 
-  const data = OrganizationBySlug.parse(json.data?.organizations.data[0].attributes);
+  const data = OrganizationBySlug.parse(
+    json.data?.organizations.data[0].attributes,
+  );
 
   return data;
 };
@@ -383,12 +387,12 @@ export const getProjects = async ({
   page,
   per,
   sort = "order:asc",
-  search = ""
+  search = "",
 }: {
-  page: number,
-  per: number,
-  sort?: string,
-  search?: string,
+  page: number;
+  per: number;
+  sort?: string;
+  search?: string;
 }): Promise<Projects> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -433,9 +437,9 @@ export const getProjects = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -448,10 +452,13 @@ export const getProjects = async ({
     throw new Error("Failed to fetch data 'Projects'");
   }
 
-  const json = await res.json() as { data: { projects: Projects } };
-  
-  if ((json.data.projects.meta.pagination.total === 0) || (json.data.projects.data.length === 0)) {
-    notFound()
+  const json = (await res.json()) as { data: { projects: Projects } };
+
+  if (
+    json.data.projects.meta.pagination.total === 0 ||
+    json.data.projects.data.length === 0
+  ) {
+    notFound();
   }
 
   const projects = Projects.parse(json.data?.projects);
@@ -464,12 +471,12 @@ export const getServices = async ({
   page,
   per,
   sort = "order:asc",
-  search = ""
+  search = "",
 }: {
-  page: number,
-  per: number,
-  sort?: string,
-  search?: string
+  page: number;
+  per: number;
+  sort?: string;
+  search?: string;
 }): Promise<Services> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -514,9 +521,9 @@ export const getServices = async ({
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -529,10 +536,13 @@ export const getServices = async ({
     throw new Error("Failed to fetch data 'Services'");
   }
 
-  const json = await res.json() as { data: { services: Services } };
-  
-  if ((json.data.services.meta.pagination.total === 0) || (json.data.services.data.length === 0)) {
-    notFound()
+  const json = (await res.json()) as { data: { services: Services } };
+
+  if (
+    json.data.services.meta.pagination.total === 0 ||
+    json.data.services.data.length === 0
+  ) {
+    notFound();
   }
 
   const services = Services.parse(json.data?.services);
@@ -572,9 +582,9 @@ export const getAbout = async (): Promise<About> => {
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -587,18 +597,18 @@ export const getAbout = async (): Promise<About> => {
     throw new Error("Failed to fetch data 'About'");
   }
 
-  const json = await res.json() as {
+  const json = (await res.json()) as {
     data: {
       about: {
         data: {
-          attributes: About
-        }
-      }
-    }
+          attributes: About;
+        };
+      };
+    };
   };
-  
+
   if (!json.data.about.data) {
-    notFound()
+    notFound();
   }
 
   const about = About.parse(json.data?.about.data.attributes);
@@ -632,9 +642,9 @@ export const getFAQ = async (): Promise<FAQ> => {
     body: JSON.stringify({
       query,
     }),
-    next: { 
+    next: {
       tags: ["strapi"],
-      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly 
+      // Next.js issue: if fetch in the component, not on the page, the cache is always MISS with tags, but with Time-based Revalidation both works correctly
       revalidate: 60,
     },
   });
@@ -647,18 +657,18 @@ export const getFAQ = async (): Promise<FAQ> => {
     throw new Error("Failed to fetch data 'FAQ'");
   }
 
-  const json = await res.json() as {
+  const json = (await res.json()) as {
     data: {
       faq: {
         data: {
-          attributes: FAQ
-        }
-      }
-    }
+          attributes: FAQ;
+        };
+      };
+    };
   };
-  
+
   if (!json.data.faq.data) {
-    notFound()
+    notFound();
   }
 
   const faq = FAQ.parse(json.data?.faq.data.attributes);

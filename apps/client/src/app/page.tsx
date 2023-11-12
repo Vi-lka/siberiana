@@ -1,19 +1,21 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { ArrowDown } from "lucide-react";
+
 import { Dictionary } from "@siberiana/schemas";
+import { Skeleton } from "@siberiana/ui";
+
+import CategoriesBlock from "~/components/home/CategoriesBlock";
 import CustomBlock from "~/components/home/CustomBlock";
 import HomeSearch from "~/components/home/HomeSearch";
 import HomeSliderServer from "~/components/home/HomeSliderServer";
 import OrganizationsBlock from "~/components/home/OrganizationsBlock";
+import ProjectsBlock from "~/components/home/ProjectsBlock";
 import GridBlockSkeleton from "~/components/skeletons/GridBlockSkeleton";
 import HomeSliderSkeleton from "~/components/skeletons/HomeSliderSkeleton";
+import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
 import RowBlockSkeleton from "~/components/skeletons/RowBlockSkeleton";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import RowBigBlockSkeleton from "~/components/skeletons/RowBigBlockSkeleton";
-import ProjectsBlock from "~/components/home/ProjectsBlock";
-import { Skeleton } from "@siberiana/ui";
-import CategoriesBlock from "~/components/home/CategoriesBlock";
 
 const Quiz = dynamic(() => import("~/components/home/Quiz"));
 
@@ -41,17 +43,19 @@ export default async function Home() {
       </div>
 
       {/* CATEGORIES */}
-      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-        <Suspense fallback={
-          <>
-            <div className="mb-10 flex items-center justify-between">
-              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
-              <Skeleton className="h-full w-[20%] py-5" />
-            </div>
-            <RowBlockSkeleton />
-          </>
-        }>
-            <CategoriesBlock />
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+        <Suspense
+          fallback={
+            <>
+              <div className="mb-10 flex items-center justify-between">
+                <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+                <Skeleton className="h-full w-[20%] py-5" />
+              </div>
+              <RowBlockSkeleton />
+            </>
+          }
+        >
+          <CategoriesBlock />
         </Suspense>
       </div>
 
@@ -61,46 +65,52 @@ export default async function Home() {
       </div>
 
       {/* CUSTOM */}
-      <div className="mx-auto w-[85%] max-w-[1600px] font-OpenSans">
-        <Suspense fallback={
-          <div className="mb-24">
-            <div className="mb-10 flex items-center justify-between">
-              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
-              <Skeleton className="h-full w-[20%] py-5" />
+      <div className="font-OpenSans mx-auto w-[85%] max-w-[1600px]">
+        <Suspense
+          fallback={
+            <div className="mb-24">
+              <div className="mb-10 flex items-center justify-between">
+                <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+                <Skeleton className="h-full w-[20%] py-5" />
+              </div>
+              <RowBlockSkeleton />
             </div>
-            <RowBlockSkeleton />
-          </div>
-        }>
-            <CustomBlock />
+          }
+        >
+          <CustomBlock />
         </Suspense>
       </div>
 
       {/* ORGANIZATIONS */}
-      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-        <Suspense fallback={
-          <>
-            <div className="mb-10 flex items-center justify-between">
-              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
-              <Skeleton className="h-full w-[20%] py-5" />
-            </div>
-            <GridBlockSkeleton />
-          </>
-        }>
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+        <Suspense
+          fallback={
+            <>
+              <div className="mb-10 flex items-center justify-between">
+                <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+                <Skeleton className="h-full w-[20%] py-5" />
+              </div>
+              <GridBlockSkeleton />
+            </>
+          }
+        >
           <OrganizationsBlock />
         </Suspense>
       </div>
 
       {/* PROJECTS */}
-      <div className="mx-auto mb-24 w-[85%] max-w-[1600px] font-OpenSans">
-        <Suspense fallback={
-          <>
-            <div className="mb-10 flex items-center justify-between">
-              <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
-              <Skeleton className="h-full w-[20%] py-5" />
-            </div>
-            <RowBigBlockSkeleton />
-          </>
-        }>
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+        <Suspense
+          fallback={
+            <>
+              <div className="mb-10 flex items-center justify-between">
+                <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
+                <Skeleton className="h-full w-[20%] py-5" />
+              </div>
+              <RowBigBlockSkeleton />
+            </>
+          }
+        >
           <ProjectsBlock />
         </Suspense>
       </div>

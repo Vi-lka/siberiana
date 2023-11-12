@@ -1,6 +1,6 @@
 export default function LogoSvg({
   isAdaptive = false,
-  className
+  className,
 }: {
   isAdaptive?: boolean;
   className?: string;

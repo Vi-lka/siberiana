@@ -31,7 +31,7 @@ export const PaginationDict = z.object({
   firstPage: z.string(),
   lastPage: z.string(),
   previousPage: z.string(),
-  nextPage: z.string()
+  nextPage: z.string(),
 });
 export type PaginationDict = z.infer<typeof PaginationDict>;
 
@@ -44,7 +44,7 @@ export const SortDict = z.object({
   descText: z.string(),
   byName: z.string(),
   byAdded: z.string(),
-  reset: z.string()
+  reset: z.string(),
 });
 export type SortDict = z.infer<typeof SortDict>;
 
@@ -62,10 +62,10 @@ export const ErrorsDict = z.object({
   notFound: z.object({
     title: z.string(),
     description: z.string(),
-    goBack: z.string()
+    goBack: z.string(),
   }),
   sessionTitle: z.string(),
-  sessionDescription: z.string()
+  sessionDescription: z.string(),
 });
 export type ErrorsDict = z.infer<typeof ErrorsDict>;
 
@@ -89,9 +89,7 @@ export const GroupLink = z.object({
 export type GroupLink = z.infer<typeof GroupLink>;
 
 //......MENU ZONE.......//
-export const MenuDict = z
-  .union([SingleLink, GroupLink])
-  .array();
+export const MenuDict = z.union([SingleLink, GroupLink]).array();
 export type MenuDict = z.infer<typeof MenuDict>;
 
 //.........................SEARCH.........................//
@@ -238,7 +236,7 @@ export const AccountDict = z.object({
   roles: z.object({
     admin: z.string(),
     research: z.string(),
-    moder: z.string()
+    moder: z.string(),
   }),
   token: z.string(),
 });
@@ -248,16 +246,18 @@ export type AccountDict = z.infer<typeof AccountDict>;
 export const FAQDict = z.object({
   title: z.string(),
   subTitle: z.string(),
-  techSupport: z.string()
+  techSupport: z.string(),
 });
 export type FAQDict = z.infer<typeof FAQDict>;
 
 //.........................FOOTER.........................//
 export const FooterDict = z.object({
-  links: z.object({
-    name: z.string(),
-    url: z.string()
-  }).array(),
+  links: z
+    .object({
+      name: z.string(),
+      url: z.string(),
+    })
+    .array(),
   allRightRes: z.string(),
   privacyPol: z.string(),
   termsOfUse: z.string(),

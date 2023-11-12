@@ -1,27 +1,31 @@
 import React from "react";
-import { Dictionary } from "@siberiana/schemas";
-import { getOrganizations } from "~/lib/queries/strapi-server";
-import ImgTextOn from "../thumbnails/ImgTextOn";
-import { PiHandshakeLight } from "react-icons/pi";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { PiHandshakeLight } from "react-icons/pi";
+
+import { Dictionary } from "@siberiana/schemas";
+
+import { getOrganizations } from "~/lib/queries/strapi-server";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import ErrorHandler from "../errors/ErrorHandler";
+import ImgTextOn from "../thumbnails/ImgTextOn";
 
 export default async function OrganizationsBlock() {
-
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
 
-  const [ dataResult ] = await Promise.allSettled([ getOrganizations({ page: 1, per: 5 }) ])
-  if  (dataResult.status === 'rejected') return (
-    <ErrorHandler 
-      error={dataResult.reason as unknown} 
-      place="Organizations Block" 
-      notFound
-      goBack={false}
-    />
-  )
+  const [dataResult] = await Promise.allSettled([
+    getOrganizations({ page: 1, per: 5 }),
+  ]);
+  if (dataResult.status === "rejected")
+    return (
+      <ErrorHandler
+        error={dataResult.reason as unknown}
+        place="Organizations Block"
+        notFound
+        goBack={false}
+      />
+    );
 
   function handleClassName(index: number) {
     switch (index) {
@@ -55,14 +59,12 @@ export default async function OrganizationsBlock() {
           href={`/organizations`}
           className="font-Inter text-beaver dark:text-beaverLight flex gap-3 uppercase hover:underline"
         >
-          <p className="hidden md:block">
-            {dictResult.organizations.textUrl}
-          </p>
+          <p className="hidden md:block">{dictResult.organizations.textUrl}</p>
           <ArrowRight className="h-10 w-10 stroke-1 lg:h-6 lg:w-6" />
         </Link>
       </div>
 
-      <div className="md:w-full w-[85%] mx-auto grid aspect-auto grid-flow-row-dense md:aspect-[4/2] md:grid-cols-4 md:grid-rows-2 grid-cols-1 grid-rows-5 gap-6">
+      <div className="mx-auto grid aspect-auto w-[85%] grid-flow-row-dense grid-cols-1 grid-rows-5 gap-6 md:aspect-[4/2] md:w-full md:grid-cols-4 md:grid-rows-2">
         {dataResult.value.data.map((org, index) => (
           <ImgTextOn
             showIcon={org.attributes.consortium}
@@ -75,7 +77,7 @@ export default async function OrganizationsBlock() {
             width={450}
             height={450}
           >
-            <PiHandshakeLight className='w-full h-full' />
+            <PiHandshakeLight className="h-full w-full" />
           </ImgTextOn>
         ))}
       </div>

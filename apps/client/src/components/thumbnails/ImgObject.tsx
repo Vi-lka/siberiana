@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
 export default function ImgObject(props: Props) {
   const [image, setImage] = React.useState("/images/image-placeholder.png");
@@ -21,26 +22,26 @@ export default function ImgObject(props: Props) {
 
   React.useEffect(() => {
     if (props.src) {
-      setImage(props.src)
+      setImage(props.src);
     } else {
-      setImage("/images/image-placeholder.png")
+      setImage("/images/image-placeholder.png");
     }
-  }, [props.src])
+  }, [props.src]);
 
   React.useEffect(() => {
     if (image === "/images/image-placeholder.png") {
-      setIsPlaceholder(true)
+      setIsPlaceholder(true);
     } else {
-      setIsPlaceholder(false)
+      setIsPlaceholder(false);
     }
-  }, [image])
+  }, [image]);
 
   return (
     <Link
       href={props.href}
       target={props.target}
       className={cn(
-        "object break-inside-avoid bg-background flex w-full max-h-[35rem]",
+        "object bg-background flex max-h-[35rem] w-full break-inside-avoid",
         props.className,
       )}
     >
@@ -51,18 +52,15 @@ export default function ImgObject(props: Props) {
           height={props.height ? props.height : 320}
           onError={() => setImage("/images/image-placeholder.png")}
           className={cn(
-            "w-full overflow-hidden rounded-md outline outline-offset-1 outline-1 outline-accent shadow-md ring-ring ring-offset-background transition-all duration-200",
-            (!isPlaceholder) ? 
-              "object-contain"
-              : 
-              "object-cover"
+            "outline-accent ring-ring ring-offset-background w-full overflow-hidden rounded-md shadow-md outline outline-1 outline-offset-1 transition-all duration-200",
+            !isPlaceholder ? "object-contain" : "object-cover",
           )}
           alt={props.title ? props.title : ""}
           priority={true}
         />
 
-        <p className="lg:text-base text-sm font-Inter font-normal transition-all duration-200 underline-offset-4 decoration-primary decoration-[3px] dark:decoration-2">
-            {props.title}
+        <p className="font-Inter decoration-primary text-sm font-normal decoration-[3px] underline-offset-4 transition-all duration-200 dark:decoration-2 lg:text-base">
+          {props.title}
         </p>
       </div>
     </Link>

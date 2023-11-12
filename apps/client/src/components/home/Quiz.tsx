@@ -4,13 +4,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ZodError } from "zod";
+
 import { Questions } from "@siberiana/schemas";
 import type { ErrorsDict, QuizDict } from "@siberiana/schemas";
+
 import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
+import ErrorToast from "../errors/ErrorToast";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
 import ButtonComponent from "../ui/ButtonComponent";
-import ErrorToast from "../errors/ErrorToast";
 
 export default function Quiz({
   qiuzDict,
@@ -38,17 +40,11 @@ export default function Quiz({
 
   // Check for data
   if (isLoading) return <QuizSkeleton />;
-  if (error){
-    return (
-      <ErrorToast
-        dict={errorDict}
-        error={error.message}
-        place="Quiz"
-      />
-    );
+  if (error) {
+    return <ErrorToast dict={errorDict} error={error.message} place="Quiz" />;
   }
-  if (!data || !(data.questions.data) || !(data.questions.data[questionRandomId])){
-    return null
+  if (!data || !data.questions.data || !data.questions.data[questionRandomId]) {
+    return null;
   }
 
   // Validate data
@@ -56,7 +52,13 @@ export default function Quiz({
     Questions.parse(data);
   } catch (error) {
     console.log((error as ZodError).issues);
-    return <ErrorToast dict={errorDict} error={(error as ZodError).issues} place="Quiz" />;
+    return (
+      <ErrorToast
+        dict={errorDict}
+        error={(error as ZodError).issues}
+        place="Quiz"
+      />
+    );
   }
 
   const dataResult = data;
@@ -77,11 +79,11 @@ export default function Quiz({
   }
 
   return (
-    <div className="grid md:grid-cols-2 justify-center gap-6 mb-24">
-      <h1 className="md:hidden font-OpenSans mb-0 text-xl font-bold uppercase lg:text-2xl">
+    <div className="mb-24 grid justify-center gap-6 md:grid-cols-2">
+      <h1 className="font-OpenSans mb-0 text-xl font-bold uppercase md:hidden lg:text-2xl">
         {question.attributes.title}
       </h1>
-      <div className="relative h-[300px] md:w-full w-[85%] mx-auto max-w-[800px] overflow-hidden rounded-md 2xl:h-[350px]">
+      <div className="relative mx-auto h-[300px] w-[85%] max-w-[800px] overflow-hidden rounded-md md:w-full 2xl:h-[350px]">
         <Image
           src={
             question.attributes.image.data
@@ -96,18 +98,18 @@ export default function Quiz({
         />
       </div>
 
-      <div className="flex flex-col justify-between md:w-full w-[85%] mx-auto">
+      <div className="mx-auto flex w-[85%] flex-col justify-between md:w-full">
         <div>
-          <h1 className="md:block hidden font-OpenSans mb-6 text-lg font-bold uppercase lg:text-2xl">
+          <h1 className="font-OpenSans mb-6 hidden text-lg font-bold uppercase md:block lg:text-2xl">
             {question.attributes.title}
           </h1>
-          <p className="font-Inter mb- text-xs lg:text-sm md:mb-0 mb-6">
+          <p className="font-Inter mb- mb-6 text-xs md:mb-0 lg:text-sm">
             {question.attributes.tip}
           </p>
         </div>
 
         {answer === undefined ? (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid gap-6 md:grid-cols-2">
             {question.attributes.variants.map((elem) => (
               <ButtonComponent
                 key={elem.index}
@@ -138,7 +140,7 @@ export default function Quiz({
             </h1>
 
             <ButtonComponent
-              className="w-fit px-8 py-6 text-xs lg:text-sm mx-auto"
+              className="mx-auto w-fit px-8 py-6 text-xs lg:text-sm"
               onClick={() => handleWrong()}
             >
               {qiuzDict.tryAgain}
