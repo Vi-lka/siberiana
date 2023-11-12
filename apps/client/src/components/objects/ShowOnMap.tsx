@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactNode, useMemo } from "react";
 import { divIcon } from "leaflet";
+import type { ReactNode } from "react";
+import { useMemo } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-//@ts-ignore
-import { parse } from "wkt";
+import { parse } from "wellknown";
 
-import { PAPById } from "@siberiana/schemas";
+import type { PAPById } from "@siberiana/schemas";
 import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 
 import { useProtectedAreaPoints } from "~/lib/queries/strapi-client";
@@ -67,7 +67,7 @@ const Map = ({ data }: { data: PAPById }) => {
       acc.push(
         <Marker
           key={p.id}
-          position={parse(p.geometry).coordinates}
+          position={geojson.coordinates}
           zIndexOffset={p.id === data.id ? 999 : 1}
           icon={divIcon({
             html: `
@@ -109,11 +109,13 @@ const Map = ({ data }: { data: PAPById }) => {
 
       return acc;
     }, []);
-  }, [protectedArea]);
+  }, [protectedArea, data.id]);
+
+  const geojson = data.geometry ? parse(data.geometry) : null;
 
   return (
     <MapContainer
-      center={parse(data.geometry).coordinates}
+      center={geojson?.type === "Point" ? geojson.coordinates : [0, 0]}
       zoom={15}
       attributionControl={false}
       preferCanvas={true}

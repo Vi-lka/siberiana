@@ -55,12 +55,6 @@ type ProtectedAreaByIdResponse = {
 };
 
 export function useProtectedAreaPoints(id?: string) {
-  if (!id) {
-    return {
-      isLoading: false,
-    };
-  }
-
   const { data, error, isLoading } = useSWR<ProtectedAreaByIdResponse, Error>(
     `query ProtectedAreas {
       protectedAreas(where: { id: "${id}" }) {

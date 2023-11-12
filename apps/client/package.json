@@ -16,6 +16,7 @@
     "@siberiana/ui": "*",
     "@types/leaflet": "^1.9.8",
     "@types/react-responsive-masonry": "^2.1.0",
+    "@types/wellknown": "^0.5.8",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "client-only": "^0.0.1",
@@ -44,7 +45,7 @@
     "sharp": "^0.32.1",
     "swr": "^2.2.0",
     "tailwindcss": "^3.3.2",
-    "wkt": "^0.1.1",
+    "wellknown": "^0.5.0",
     "zod": "^3.21.4",
     "zod-validation-error": "^1.3.0"
   },
