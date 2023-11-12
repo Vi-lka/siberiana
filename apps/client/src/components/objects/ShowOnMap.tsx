@@ -9,11 +9,10 @@ import { parse } from "wellknown";
 import type { PAPById } from "@siberiana/schemas";
 import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 
-import { useProtectedAreaPoints } from "~/lib/queries/strapi-client";
-
 import "leaflet/dist/leaflet.css";
 
 import Image from "next/image";
+import { useProtectedAreaPoints } from "~/lib/queries/api-client";
 
 export default function ShowOnMap({ data }: { data: PAPById }) {
   return (
