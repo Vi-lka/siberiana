@@ -7,6 +7,7 @@ import type { ZodIssue } from "zod";
 
 import type { ErrorsDict } from "@siberiana/schemas";
 import { ToastAction, useToast } from "@siberiana/ui";
+
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 export default function ErrorToast({
@@ -15,7 +16,7 @@ export default function ErrorToast({
   dict,
 }: {
   error: string | ZodIssue[];
-  place: string,
+  place: string;
   dict: ErrorsDict;
 }) {
   const { toast } = useToast();
@@ -40,7 +41,11 @@ export default function ErrorToast({
     toast({
       variant: "destructive",
       title: dict.title,
-      description: <p>In {place}: {getShortDescription(messageError)}</p>,
+      description: (
+        <p>
+          In {place}: {getShortDescription(messageError)}
+        </p>
+      ),
       className: "font-Inter",
       action: (
         <ToastAction
@@ -54,5 +59,5 @@ export default function ErrorToast({
     });
   }, [dict, messageError, place, router, toast]);
 
-  return null
+  return null;
 }

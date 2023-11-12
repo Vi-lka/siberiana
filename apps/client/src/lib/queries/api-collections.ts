@@ -1,7 +1,9 @@
 import "server-only";
 
-import { Categories, Collections, ObjectsArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
+
+import { Categories, Collections, ObjectsArray } from "@siberiana/schemas";
+
 import getMultiFilter from "../utils/getMultiFilter";
 
 //.........................CATEGORIES.........................//
@@ -11,10 +13,10 @@ export const getCategories = async ({
   search = "",
   sort = "DISPLAY_NAME:ASC",
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
 }): Promise<Categories> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -23,8 +25,8 @@ export const getCategories = async ({
         first: ${first}, 
         offset: ${offset},
         orderBy: [{
-          field: ${sort.split(':')[0]},
-          direction: ${sort.split(':')[1]}
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
         }],
         where: {or: [ 
           {displayNameContainsFold: "${search}"}, 
@@ -52,14 +54,17 @@ export const getCategories = async ({
       }
     }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -69,10 +74,13 @@ export const getCategories = async ({
     throw new Error("Failed to fetch data 'Categories'");
   }
 
-  const json = await res.json() as { data: { categories: Categories } };
+  const json = (await res.json()) as { data: { categories: Categories } };
 
-  if ((json.data.categories.totalCount === 0) || (json.data.categories.edges.length === 0)) {
-    notFound()
+  if (
+    json.data.categories.totalCount === 0 ||
+    json.data.categories.edges.length === 0
+  ) {
+    notFound();
   }
 
   const categories = Categories.parse(json.data?.categories);
@@ -86,13 +94,13 @@ export const getCollections = async ({
   offset = 0,
   search = "",
   sort = "DISPLAY_NAME:ASC",
-  categories
+  categories,
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
-  categories?: string
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  categories?: string;
 }): Promise<Collections> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -101,15 +109,17 @@ export const getCollections = async ({
         first: ${first}, 
         offset: ${offset},
         orderBy: [{
-          field: ${sort.split(':')[0]},
-          direction: ${sort.split(':')[1]}
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
         }],
         where: {
-          ${!!categories ? (
-            `hasCategoryWith: [
+          ${
+            !!categories
+              ? `hasCategoryWith: [
               {slugIn: [${getMultiFilter(categories)}]}
             ]`
-          ) : ''}
+              : ""
+          }
           or: [ 
           {displayNameContainsFold: "${search}"}, 
           {descriptionContainsFold: "${search}"}, 
@@ -136,14 +146,17 @@ export const getCollections = async ({
       }
     }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -153,10 +166,13 @@ export const getCollections = async ({
     throw new Error("Failed to fetch data 'Collections'");
   }
 
-  const json = await res.json() as { data: { collections: Collections } };
+  const json = (await res.json()) as { data: { collections: Collections } };
 
-  if ((json.data.collections.totalCount === 0) || (json.data.collections.edges.length === 0)) {
-    notFound()
+  if (
+    json.data.collections.totalCount === 0 ||
+    json.data.collections.edges.length === 0
+  ) {
+    notFound();
   }
 
   const collections = Collections.parse(json.data?.collections);
@@ -184,21 +200,21 @@ export const getArtifacts = async ({
   monumentIds,
   techniqueIds,
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  licenseIds?: string,
-  cultureIds?: string,
-  setIds?: string,
-  monumentIds?: string,
-  techniqueIds?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  licenseIds?: string;
+  cultureIds?: string;
+  setIds?: string;
+  monumentIds?: string;
+  techniqueIds?: string;
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -207,30 +223,68 @@ export const getArtifacts = async ({
         first: ${first}, 
         offset: ${offset}, 
         orderBy: [{
-          field: ${sort.split(':')[0]},
-          direction: ${sort.split(':')[1]}
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
         }],
         where: {
           status: listed,
           hasCollectionWith: [
-            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-            ${!!categories ? `{
+            ${
+              !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""
+            }
+            ${
+              !!categories
+                ? `{
               hasCategoryWith: [
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
-            },` : ''}
+            },`
+                : ""
+            }
           ],
           hasLocationWith: [
-            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
-            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
-            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
-            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+            ${
+              !!countryIds
+                ? `{hasCountryWith: [ {idIn: [${getMultiFilter(
+                    countryIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!regionIds
+                ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}`
+                : ""
+            }
+            ${
+              !!districtIds
+                ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(
+                    districtIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!settlementIds
+                ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(
+                    settlementIds,
+                  )}]} ]}`
+                : ""
+            }
           ],
-          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
-          hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
-          hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
-          hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
-          hasTechniquesWith: [ ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''} ],
+          hasLicenseWith: [ ${
+            !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+          } ],
+          hasCulturalAffiliationWith: [ ${
+            !!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ""
+          } ],
+          hasSetWith: [ ${
+            !!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ""
+          } ],
+          hasMonumentWith: [ ${
+            !!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ""
+          } ],
+          hasTechniquesWith: [ ${
+            !!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ""
+          } ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [
@@ -256,14 +310,17 @@ export const getArtifacts = async ({
       }
     }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -273,10 +330,10 @@ export const getArtifacts = async ({
     throw new Error("Failed to fetch data 'Artifacts'");
   }
 
-  const json = await res.json() as { data: { artifacts: ObjectsArray } };
+  const json = (await res.json()) as { data: { artifacts: ObjectsArray } };
 
   if (json.data.artifacts.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const artifacts = ObjectsArray.parse(json.data.artifacts);
@@ -299,18 +356,18 @@ export const getBooks = async ({
   licenseIds,
   bookGenreIds,
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  licenseIds?: string,
-  bookGenreIds?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  licenseIds?: string;
+  bookGenreIds?: string;
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -319,27 +376,59 @@ export const getBooks = async ({
         first: ${first}, 
         offset: ${offset}, 
         orderBy: [{
-          field: ${sort.split(':')[0]},
-          direction: ${sort.split(':')[1]}
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
         }],
         where: {
           status: listed,
           hasCollectionWith: [
-            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-            ${!!categories ? `{
+            ${
+              !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""
+            }
+            ${
+              !!categories
+                ? `{
               hasCategoryWith: [
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
-            },` : ''}
+            },`
+                : ""
+            }
           ],
           hasLocationWith: [
-            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
-            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
-            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
-            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+            ${
+              !!countryIds
+                ? `{hasCountryWith: [ {idIn: [${getMultiFilter(
+                    countryIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!regionIds
+                ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}`
+                : ""
+            }
+            ${
+              !!districtIds
+                ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(
+                    districtIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!settlementIds
+                ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(
+                    settlementIds,
+                  )}]} ]}`
+                : ""
+            }
           ],
-          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
-          hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
+          hasLicenseWith: [ ${
+            !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+          } ],
+          hasBookGenresWith: [ ${
+            !!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ""
+          } ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
             {hasCollectionWith: [
@@ -365,14 +454,17 @@ export const getBooks = async ({
       }
     }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -382,10 +474,10 @@ export const getBooks = async ({
     throw new Error("Failed to fetch data 'Books'");
   }
 
-  const json = await res.json() as { data: { books: ObjectsArray } };
+  const json = (await res.json()) as { data: { books: ObjectsArray } };
 
   if (json.data.books.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const books = ObjectsArray.parse(json.data.books);
@@ -409,19 +501,19 @@ export const getProtectedAreaPictures = async ({
   protectedAreaIds,
   protectedAreaCategoryIds,
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  licenseIds?: string,
-  protectedAreaIds?: string,
-  protectedAreaCategoryIds?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  licenseIds?: string;
+  protectedAreaIds?: string;
+  protectedAreaCategoryIds?: string;
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -430,33 +522,71 @@ export const getProtectedAreaPictures = async ({
         first: ${first}, 
         offset: ${offset}, 
         orderBy: [{
-          field: ${sort.split(':')[0]},
-          direction: ${sort.split(':')[1]}
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
         }],
         where: {
           status: listed,
           hasCollectionWith: [
-            ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-            ${!!categories ? `{
+            ${
+              !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""
+            }
+            ${
+              !!categories
+                ? `{
               hasCategoryWith: [
                 {slugIn: [${getMultiFilter(categories)}]}
               ]
-            },` : ''}
+            },`
+                : ""
+            }
           ],
           hasLocationWith: [
-            ${!!countryIds ? `{hasCountryWith: [ {idIn: [${getMultiFilter(countryIds)}]} ]}` : ''}
-            ${!!regionIds ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}` : ''}
-            ${!!districtIds ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(districtIds)}]} ]}` : ''}
-            ${!!settlementIds ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(settlementIds)}]} ]}` : ''}
+            ${
+              !!countryIds
+                ? `{hasCountryWith: [ {idIn: [${getMultiFilter(
+                    countryIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!regionIds
+                ? `{hasRegionWith: [ {idIn: [${getMultiFilter(regionIds)}]} ]}`
+                : ""
+            }
+            ${
+              !!districtIds
+                ? `{hasDistrictWith: [ {idIn: [${getMultiFilter(
+                    districtIds,
+                  )}]} ]}`
+                : ""
+            }
+            ${
+              !!settlementIds
+                ? `{hasSettlementWith: [ {idIn: [${getMultiFilter(
+                    settlementIds,
+                  )}]} ]}`
+                : ""
+            }
           ],
-          hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+          hasLicenseWith: [ ${
+            !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+          } ],
           hasProtectedAreaWith: [ 
-            ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
-            ${!!protectedAreaCategoryIds ? `{
+            ${
+              !!protectedAreaIds
+                ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},`
+                : ""
+            } 
+            ${
+              !!protectedAreaCategoryIds
+                ? `{
               hasProtectedAreaCategoryWith: [
                 {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
               ]
-            },` : ''}
+            },`
+                : ""
+            }
           ],
           or: [ 
             {displayNameContainsFold: "${search}"}, 
@@ -483,14 +613,17 @@ export const getProtectedAreaPictures = async ({
       }
     }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -500,13 +633,17 @@ export const getProtectedAreaPictures = async ({
     throw new Error("Failed to fetch data 'ProtectedAreaPictures'");
   }
 
-  const json = await res.json() as { data: { protectedAreaPictures: ObjectsArray } };
+  const json = (await res.json()) as {
+    data: { protectedAreaPictures: ObjectsArray };
+  };
 
   if (json.data.protectedAreaPictures.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
-  const protectedAreaPictures = ObjectsArray.parse(json.data.protectedAreaPictures);
+  const protectedAreaPictures = ObjectsArray.parse(
+    json.data.protectedAreaPictures,
+  );
 
   return protectedAreaPictures;
 };

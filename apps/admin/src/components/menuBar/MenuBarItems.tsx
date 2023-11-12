@@ -1,120 +1,131 @@
-"use client"
+"use client";
 
-import { HoverCard, HoverCardContent, HoverCardTrigger, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from '@siberiana/ui'
-import Link from 'next/link'
-import React from 'react'
+import React from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from '@siberiana/ui/src/lib/utils';
+import { ChevronDown } from "lucide-react";
+
 import type { GroupLink } from "@siberiana/schemas";
-import { ChevronDown } from 'lucide-react';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
+} from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 export function MenuBarSingle({
-    children,
-    href,
+  children,
+  href,
 }: {
-    children: React.ReactNode
-    href: string,
+  children: React.ReactNode;
+  href: string;
 }) {
+  const pathName = usePathname();
 
-    const pathName = usePathname();
+  // Remove query parameters
+  const pathWithoutQuery = pathName.split("?")[0];
 
-    // Remove query parameters
-    const pathWithoutQuery = pathName.split("?")[0];
-  
-    // Ex:"/my/nested/path" --> ["my", "nested", "path"]
-    const pathNestedRoutes = pathWithoutQuery
-      .split("/")
-      .filter((v) => v.length > 0);
-  
-    const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
+  // Ex:"/my/nested/path" --> ["my", "nested", "path"]
+  const pathNestedRoutes = pathWithoutQuery
+    .split("/")
+    .filter((v) => v.length > 0);
 
-    return (
-        <NavigationMenuItem className='w-full flex ml-1'>
-            <Link href={href} legacyBehavior passHref>
-                <NavigationMenuLink 
-                    active={pathCurrentPage === href} 
-                    className={cn(
-                        navigationMenuTriggerStyle(),
-                        "w-full font-normal text-base justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
-                    )}
-                >
-                    {children}
-                </NavigationMenuLink>
-            </Link>
-        </NavigationMenuItem>
-    )
+  const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
+
+  return (
+    <NavigationMenuItem className="ml-1 flex w-full">
+      <Link href={href} legacyBehavior passHref>
+        <NavigationMenuLink
+          active={pathCurrentPage === href}
+          className={cn(
+            navigationMenuTriggerStyle(),
+            "hover:bg-primary/80 focus:bg-primary/80 data-[state=open]:bg-primary data-[active]:bg-primary w-full justify-start text-base font-normal hover:text-white focus:text-white data-[active]:text-white data-[state=open]:text-white",
+          )}
+        >
+          {children}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
+  );
 }
 
 export function MenuBarGroup({
-    menuItem,
-    href,
+  menuItem,
+  href,
 }: {
-    menuItem: GroupLink,
-    href: string,
+  menuItem: GroupLink;
+  href: string;
 }) {
+  const pathName = usePathname();
 
-    const pathName = usePathname();
+  // Remove query parameters
+  const pathWithoutQuery = pathName.split("?")[0];
 
-    // Remove query parameters
-    const pathWithoutQuery = pathName.split("?")[0];
-  
-    // Ex:"/my/nested/path" --> ["my", "nested", "path"]
-    const pathNestedRoutes = pathWithoutQuery
-      .split("/")
-      .filter((v) => v.length > 0);
-  
-    const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
+  // Ex:"/my/nested/path" --> ["my", "nested", "path"]
+  const pathNestedRoutes = pathWithoutQuery
+    .split("/")
+    .filter((v) => v.length > 0);
 
-    function isNavStyle(menuItem: GroupLink) {
-        const result = menuItem.list.find((item) => {
-          if (pathCurrentPage === item.url) {
-              return true; // stop searching
-          } else return false
-        })
-    
-        if (result) return true
-    
-        return false
-      }
+  const pathCurrentPage = "/" + pathNestedRoutes[pathNestedRoutes.length - 1];
 
-    return (
-        <HoverCard openDelay={320} closeDelay={300}>
-            <HoverCardTrigger asChild>
-                <NavigationMenuItem className='w-full flex ml-1'>
-                    <Link href={href} legacyBehavior passHref>
-                        <NavigationMenuLink 
-                            active={pathCurrentPage === href} 
-                            className={cn(
-                                navigationMenuTriggerStyle(),
-                                isNavStyle(menuItem) ? "bg-primary text-white" : "",
-                                "w-full text-base font-normal justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
-                            )}
-                        >
-                            {menuItem.name} <ChevronDown className='w-4 h-4 self-center'/>
-                        </NavigationMenuLink>
-                    </Link>
-                </NavigationMenuItem>
-            </HoverCardTrigger>
+  function isNavStyle(menuItem: GroupLink) {
+    const result = menuItem.list.find((item) => {
+      if (pathCurrentPage === item.url) {
+        return true; // stop searching
+      } else return false;
+    });
 
-            <HoverCardContent className='flex w-fit gap-1 p-1 z-50' side="right" align="start" sideOffset={8}>
-                <ul className="flex flex-col justify-between gap-1 w-full">
-                    {menuItem.list.map((item, index) => (
-                        <NavigationMenuItem key={index} className='w-full flex ml-0'>
-                            <Link href={item.url} legacyBehavior passHref>
-                                <NavigationMenuLink 
-                                    active={pathCurrentPage === item.url} 
-                                    className={cn(
-                                        navigationMenuTriggerStyle(),
-                                        "w-full font-normal justify-start hover:bg-primary/80 focus:bg-primary/80 hover:text-white focus:text-white data-[state=open]:bg-primary data-[active]:bg-primary data-[state=open]:text-white data-[active]:text-white"
-                                    )}
-                                >
-                                    {item.name}
-                                </NavigationMenuLink>
-                            </Link>
-                        </NavigationMenuItem>
-                    ))}
-                </ul>
-            </HoverCardContent>
-        </HoverCard>
-    )
+    if (result) return true;
+
+    return false;
+  }
+
+  return (
+    <HoverCard openDelay={320} closeDelay={300}>
+      <HoverCardTrigger asChild>
+        <NavigationMenuItem className="ml-1 flex w-full">
+          <Link href={href} legacyBehavior passHref>
+            <NavigationMenuLink
+              active={pathCurrentPage === href}
+              className={cn(
+                navigationMenuTriggerStyle(),
+                isNavStyle(menuItem) ? "bg-primary text-white" : "",
+                "hover:bg-primary/80 focus:bg-primary/80 data-[state=open]:bg-primary data-[active]:bg-primary w-full justify-start text-base font-normal hover:text-white focus:text-white data-[active]:text-white data-[state=open]:text-white",
+              )}
+            >
+              {menuItem.name} <ChevronDown className="h-4 w-4 self-center" />
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+      </HoverCardTrigger>
+
+      <HoverCardContent
+        className="z-50 flex w-fit gap-1 p-1"
+        side="right"
+        align="start"
+        sideOffset={8}
+      >
+        <ul className="flex w-full flex-col justify-between gap-1">
+          {menuItem.list.map((item, index) => (
+            <NavigationMenuItem key={index} className="ml-0 flex w-full">
+              <Link href={item.url} legacyBehavior passHref>
+                <NavigationMenuLink
+                  active={pathCurrentPage === item.url}
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    "hover:bg-primary/80 focus:bg-primary/80 data-[state=open]:bg-primary data-[active]:bg-primary w-full justify-start font-normal hover:text-white focus:text-white data-[active]:text-white data-[state=open]:text-white",
+                  )}
+                >
+                  {item.name}
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ))}
+        </ul>
+      </HoverCardContent>
+    </HoverCard>
+  );
 }

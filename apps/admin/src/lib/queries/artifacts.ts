@@ -1,7 +1,15 @@
-"server-only"
+"server-only";
 
-import { ArtifactsArray, CulturesArray, MaterialsArray, TechniquesArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
+
+import {
+  ArtifactsArray,
+  CulturesArray,
+  MaterialsArray,
+  MonumentsArray,
+  SetsArray,
+  TechniquesArray,
+} from "@siberiana/schemas";
 
 //.........................ARTIFACTS.........................//
 export const getArtifacts = async ({
@@ -12,12 +20,12 @@ export const getArtifacts = async ({
   category,
   collection,
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
-  category?: string,
-  collection?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  category?: string;
+  collection?: string;
 }): Promise<ArtifactsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -26,17 +34,21 @@ export const getArtifacts = async ({
       first: ${first}, 
       offset: ${offset}, 
       orderBy: [{
-        field: ${sort.split(':')[0]},
-        direction: ${sort.split(':')[1]}
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
       }],
       where: {
         hasCollectionWith: [
-          ${!!collection ? `{slug: "${collection}"},` : ''}
-          ${!!category ? `{
+          ${!!collection ? `{slug: "${collection}"},` : ""}
+          ${
+            !!category
+              ? `{
             hasCategoryWith: [
               {slug: "${category}"}
             ]
-          },` : ''}
+          },`
+              : ""
+          }
         ],
         or: [ 
           {displayNameContainsFold: "${search}"}, 
@@ -159,14 +171,17 @@ export const getArtifacts = async ({
     }
   }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store'
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -176,9 +191,9 @@ export const getArtifacts = async ({
     throw new Error(`Failed to fetch data 'Artifacts'`);
   }
 
-  const json = await res.json() as { data: { artifacts: ArtifactsArray } };
+  const json = (await res.json()) as { data: { artifacts: ArtifactsArray } };
   if (json.data.artifacts.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const artifacts = ArtifactsArray.parse(json.data.artifacts);
@@ -193,10 +208,10 @@ export const getCultures = async ({
   search = "",
   sort = "CREATED_AT:DESC",
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
 }): Promise<CulturesArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -205,8 +220,8 @@ export const getCultures = async ({
       first: ${first}, 
       offset: ${offset}, 
       orderBy: [{
-        field: ${sort.split(':')[0]},
-        direction: ${sort.split(':')[1]}
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
       }],
       where: {
         displayNameContainsFold: "${search}"
@@ -234,14 +249,17 @@ export const getCultures = async ({
     }
   }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store'
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -251,9 +269,9 @@ export const getCultures = async ({
     throw new Error(`Failed to fetch data 'Cultures'`);
   }
 
-  const json = await res.json() as { data: { cultures: CulturesArray } };
+  const json = (await res.json()) as { data: { cultures: CulturesArray } };
   if (json.data.cultures.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const cultures = CulturesArray.parse(json.data.cultures);
@@ -268,10 +286,10 @@ export const getMaterials = async ({
   search = "",
   sort = "CREATED_AT:DESC",
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
 }): Promise<MaterialsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -280,8 +298,8 @@ export const getMaterials = async ({
       first: ${first}, 
       offset: ${offset}, 
       orderBy: [{
-        field: ${sort.split(':')[0]},
-        direction: ${sort.split(':')[1]}
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
       }],
       where: {
         displayNameContainsFold: "${search}"
@@ -306,14 +324,17 @@ export const getMaterials = async ({
     }
   }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store'
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -323,9 +344,9 @@ export const getMaterials = async ({
     throw new Error(`Failed to fetch data 'Materials'`);
   }
 
-  const json = await res.json() as { data: { media: MaterialsArray } };
+  const json = (await res.json()) as { data: { media: MaterialsArray } };
   if (json.data.media.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const media = MaterialsArray.parse(json.data.media);
@@ -340,10 +361,10 @@ export const getTechniques = async ({
   search = "",
   sort = "CREATED_AT:DESC",
 }: {
-  first: number | null,
-  offset?: number | null,
-  search?: string,
-  sort?: string,
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
 }): Promise<TechniquesArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -352,8 +373,8 @@ export const getTechniques = async ({
       first: ${first}, 
       offset: ${offset}, 
       orderBy: [{
-        field: ${sort.split(':')[0]},
-        direction: ${sort.split(':')[1]}
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
       }],
       where: {
         displayNameContainsFold: "${search}"
@@ -384,14 +405,17 @@ export const getTechniques = async ({
     }
   }
   `;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store'
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) {
     // Log the error to an error reporting service
@@ -401,12 +425,170 @@ export const getTechniques = async ({
     throw new Error(`Failed to fetch data 'Techniques'`);
   }
 
-  const json = await res.json() as { data: { techniques: TechniquesArray } };
+  const json = (await res.json()) as { data: { techniques: TechniquesArray } };
   if (json.data.techniques.totalCount === 0) {
-    notFound()
+    notFound();
   }
 
   const techniques = TechniquesArray.parse(json.data.techniques);
 
   return techniques;
+};
+
+//.........................SETS.........................//
+export const getSets = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+}): Promise<SetsArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+  query GetSets {
+    sets(
+      first: ${first}, 
+      offset: ${offset}, 
+      orderBy: [{
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
+      }],
+      where: {
+        displayNameContainsFold: "${search}"
+      }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          displayName
+          description
+          externalLink
+          artifacts {
+            id
+          }
+          monuments {
+            id
+            displayName
+          }
+          createdBy
+          createdAt
+          updatedBy
+          updatedAt
+        }
+      }
+    }
+  }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Sets'`);
+  }
+
+  const json = (await res.json()) as { data: { sets: SetsArray } };
+  if (json.data.sets.totalCount === 0) {
+    notFound();
+  }
+
+  const sets = SetsArray.parse(json.data.sets);
+
+  return sets;
+};
+
+//.........................MONUMENTS.........................//
+export const getMonuments = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+}): Promise<MonumentsArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+  query GetMonuments {
+    monuments(
+      first: ${first}, 
+      offset: ${offset}, 
+      orderBy: [{
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
+      }],
+      where: {
+        displayNameContainsFold: "${search}"
+      }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          displayName
+          description
+          externalLink
+          artifacts {
+            id
+          }
+          sets {
+            id
+            displayName
+          }
+          createdBy
+          createdAt
+          updatedBy
+          updatedAt
+        }
+      }
+    }
+  }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Monuments'`);
+  }
+
+  const json = (await res.json()) as { data: { monuments: MonumentsArray } };
+  if (json.data.monuments.totalCount === 0) {
+    notFound();
+  }
+
+  const monuments = MonumentsArray.parse(json.data.monuments);
+
+  return monuments;
 };

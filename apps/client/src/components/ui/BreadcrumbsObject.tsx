@@ -3,30 +3,34 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+
 import type { BreadcrumbsDict } from "@siberiana/schemas";
 
 type Props = {
   dict: BreadcrumbsDict;
-  title: string,
-  categorySlug: string,
-  categoryTitle: string,
-  collectionSlug: string,
-  collectionTitle: string
-}
-
+  title: string;
+  categorySlug: string;
+  categoryTitle: string;
+  collectionSlug: string;
+  collectionTitle: string;
+};
 
 export default function BreadcrumbsObject(props: Props) {
-
   const breadcrumbs = React.useMemo(
     function generateBreadcrumbs() {
-
       // Create crumb list
       const crumblist = [
         { href: `/`, title: `${props.dict.home}` },
-        { href: `/collections?category=${props.categorySlug}`, title: props.categoryTitle },
-        { href: `/objects?category=${props.categorySlug}&collection=${props.collectionSlug}`, title: props.collectionTitle },
+        {
+          href: `/collections?category=${props.categorySlug}`,
+          title: props.categoryTitle,
+        },
+        {
+          href: `/objects?category=${props.categorySlug}&collection=${props.collectionSlug}`,
+          title: props.collectionTitle,
+        },
         { href: ``, title: `${props.title}` },
-      ]
+      ];
 
       return crumblist;
     },
@@ -34,7 +38,7 @@ export default function BreadcrumbsObject(props: Props) {
   );
 
   return (
-    <div className="font-Inter flex items-center flex-wrap">
+    <div className="font-Inter flex flex-wrap items-center">
       {breadcrumbs.map((crumb, index) => (
         <Crumb
           key={index}
@@ -60,15 +64,22 @@ function Crumb({
 
   // The last crumb is rendered as normal text
   if (last) {
-    return <span className="sm:px-3 sm:py-2 p-1 font-semibold lg:text-base md:text-sm text-xs">{text}</span>;
+    return (
+      <span className="p-1 text-xs font-semibold sm:px-3 sm:py-2 md:text-sm lg:text-base">
+        {text}
+      </span>
+    );
   }
 
   return (
     <>
-      <Link href={href} className="hover:bg-accent rounded-md sm:px-3 px-1 py-2 lg:text-base md:text-sm text-xs">
+      <Link
+        href={href}
+        className="hover:bg-accent rounded-md px-1 py-2 text-xs sm:px-3 md:text-sm lg:text-base"
+      >
         {text}
       </Link>
-      <ChevronRight className="sm:mx-1 h-5 w-5" />
+      <ChevronRight className="h-5 w-5 sm:mx-1" />
     </>
   );
 }

@@ -1,13 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import "./globals.css";
+
 import type { Metadata } from "next";
 import { Inter, Open_Sans } from "next/font/google";
-import { Toaster } from "@siberiana/ui";
-import Header from "~/components/header/Header";
-import Footer from "~/components/Footer";
-import { getDictionary } from "~/lib/utils/getDictionary";
-import Providers from "~/components/providers/Providers";
 import Script from "next/script";
+
+import { Toaster } from "@siberiana/ui";
+
+import Footer from "~/components/Footer";
+import Header from "~/components/header/Header";
+import Providers from "~/components/providers/Providers";
+import { getDictionary } from "~/lib/utils/getDictionary";
 
 const inter = Inter({
   subsets: ["cyrillic", "latin"],
@@ -26,7 +29,6 @@ const openSans = Open_Sans({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-
   // fetch data
   const dict = await getDictionary();
 
@@ -41,9 +43,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description: dict.siteInfo.siteDescription,
       url: process.env.NEXT_PUBLIC_URL,
       siteName: dict.siteInfo.siteName,
-      images: ['/images/image-placeholder.png'],
+      images: ["/images/image-placeholder.png"],
     },
-  }
+  };
 }
 
 export default function RootLayout({
@@ -51,19 +53,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html
       lang={"ru"}
       suppressHydrationWarning
       className={`${inter.variable} ${openSans.variable}`}
     >
-      <body className="m min-h-screen m-0 flex flex-col">
+      <body className="m m-0 flex min-h-screen flex-col">
         <Providers>
           <Header />
-          <main className="pt-20 flex-1">
-            {children}
-          </main>
+          <main className="flex-1 pt-20">{children}</main>
           <Footer />
         </Providers>
         <Toaster />
@@ -89,7 +88,7 @@ export default function RootLayout({
           <div>
             <img
               src="https://mc.yandex.ru/watch/92475151"
-              style={{ position: 'absolute', left: '-9999px' }}
+              style={{ position: "absolute", left: "-9999px" }}
               alt=""
               width={1}
               height={1}

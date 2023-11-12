@@ -4,13 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import type {
-  MenuDict,
-} from "@siberiana/schemas";
-import {
-  GroupLink,
-  SingleLink
-} from "@siberiana/schemas";
+import type { MenuDict } from "@siberiana/schemas";
+import { GroupLink, SingleLink } from "@siberiana/schemas";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,12 +15,11 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@siberiana/ui";
-
-import NavListItem from "./NavListItem";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export default function NavMenu({ menuDict }: { menuDict: MenuDict }) {
+import NavListItem from "./NavListItem";
 
+export default function NavMenu({ menuDict }: { menuDict: MenuDict }) {
   return (
     <NavigationMenu delayDuration={100}>
       <NavigationMenuList>
@@ -37,11 +31,7 @@ export default function NavMenu({ menuDict }: { menuDict: MenuDict }) {
   );
 }
 
-function NavMenuItem({
-  menuItem,
-}: {
-  menuItem: SingleLink | GroupLink;
-}) {
+function NavMenuItem({ menuItem }: { menuItem: SingleLink | GroupLink }) {
   const pathName = usePathname();
 
   // Remove query parameters
@@ -56,14 +46,14 @@ function NavMenuItem({
 
   function isNavStyle(menuItem: GroupLink) {
     const result = menuItem.list.find((item) => {
-      if (pathCurrentPage === item.url.replace('?type=artifacts','')) {
-          return true; // stop searching
-      } else return false
-    })
+      if (pathCurrentPage === item.url.replace("?type=artifacts", "")) {
+        return true; // stop searching
+      } else return false;
+    });
 
-    if (result) return true
+    if (result) return true;
 
-    return false
+    return false;
   }
 
   if (SingleLink.safeParse(menuItem).success) {
@@ -73,7 +63,10 @@ function NavMenuItem({
       <NavigationMenuItem className="uppercase">
         <Link href={`${menuItemResult.url}`} legacyBehavior passHref>
           <NavigationMenuLink
-            active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
+            active={
+              pathCurrentPage ===
+              `${menuItemResult.url.replace("?type=artifacts", "")}`
+            }
             className={navigationMenuTriggerStyle()}
           >
             {menuItemResult.name}
@@ -86,10 +79,10 @@ function NavMenuItem({
 
     return (
       <NavigationMenuItem>
-        <NavigationMenuTrigger 
+        <NavigationMenuTrigger
           className={cn(
             "uppercase transition-all",
-            isNavStyle(menuItemResult) ? "bg-accent/50 font-semibold" : ""
+            isNavStyle(menuItemResult) ? "bg-accent/50 font-semibold" : "",
           )}
         >
           {menuItemResult.name}
@@ -97,14 +90,17 @@ function NavMenuItem({
 
         <NavigationMenuContent>
           <div className="flex w-[385px] gap-1 p-4">
-            <ul className="flex flex-col justify-between gap-3 w-full">
+            <ul className="flex w-full flex-col justify-between gap-3">
               {menuItemResult.list.map((item, index) => (
                 <NavListItem
                   key={index}
                   title={item.name}
                   href={`${item.url}`}
-                  active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
-                  className="w-full data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
+                  active={
+                    pathCurrentPage ===
+                    `${item.url.replace("?type=artifacts", "")}`
+                  }
+                  className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50 w-full"
                 />
               ))}
             </ul>

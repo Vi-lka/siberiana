@@ -1,63 +1,63 @@
 //.........................CATEGORY.........................//
 export function createCategory() {
-    const mutation = `
+  const mutation = `
         mutation CreateCategory($input: CreateCategoryInput!) {
             createCategory(input: $input) {
                 displayName
             }
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }
 
 export function updateCategory() {
-    const mutation = `
+  const mutation = `
         mutation UpdateCategory($updateCategoryId: ID!, $input: UpdateCategoryInput!) {
             updateCategory(id: $updateCategoryId, input: $input) {
                 displayName
             }
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }
 
 export function deleteCategory() {
-    const mutation = `
+  const mutation = `
         mutation DeleteCategory($deleteCategoryId: ID!) {
             deleteCategory(id: $deleteCategoryId)
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }
 
 //.........................COLLECTION.........................//
 export function createCollection() {
-    const mutation = `
+  const mutation = `
         mutation CreateCollection($input: CreateCollectionInput!) {
             createCollection(input: $input) {
                 displayName
             }
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }
 
 export function updateCollection() {
-    const mutation = `
+  const mutation = `
         mutation UpdateCollection($updateCollectionId: ID!, $input: UpdateCollectionInput!) {
             updateCollection(id: $updateCollectionId, input: $input) {
                 displayName
             }
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }
 
 export function deleteCollection() {
-    const mutation = `
+  const mutation = `
         mutation DeleteCollection($deleteCollectionId: ID!) {
             deleteCollection(id: $deleteCollectionId)
         }
-    `
-    return mutation
+    `;
+  return mutation;
 }

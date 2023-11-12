@@ -1,32 +1,38 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { toast } from '@siberiana/ui';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getPaginationRowModel, 
-  getSortedRowModel, 
-  getFilteredRowModel
-} from '@tanstack/react-table'
-import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+} from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import type { ArtifactForTable } from "@siberiana/schemas";
 import { ArtifactsForm } from "@siberiana/schemas";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { toast } from "@siberiana/ui";
+
+import DataTable from "~/components/tables/DataTable";
 import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import DataTable from "~/components/tables/DataTable";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[],
-  moderatorsColumns: ColumnDef<TData, TValue>[],
-  data: ArtifactForTable[] & TData[],
-  userRoles?: string[],
+  columns: ColumnDef<TData, TValue>[];
+  moderatorsColumns: ColumnDef<TData, TValue>[];
+  data: ArtifactForTable[] & TData[];
+  userRoles?: string[];
 }
 
 export default function UpdateTable<TData, TValue>({
@@ -35,23 +41,28 @@ export default function UpdateTable<TData, TValue>({
   data,
   userRoles,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [loading, setLoading] = React.useState(false)
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
-  const [isPendingGoToCreate, startTransitionGoToCreate] = React.useTransition()
-  const [isPendingRefresh, startTransitionRefresh] = React.useTransition()
+  const [isPendingGoToCreate, startTransitionGoToCreate] =
+    React.useTransition();
+  const [isPendingRefresh, startTransitionRefresh] = React.useTransition();
 
-  const router = useRouter()
-  const session = useSession()
+  const router = useRouter();
+  const session = useSession();
 
-  const deleteMutation = useDeleteArtifact(session.data?.access_token)
-  const updateMutation = useUpdateArtifact(session.data?.access_token)
+  const deleteMutation = useDeleteArtifact(session.data?.access_token);
+  const updateMutation = useUpdateArtifact(session.data?.access_token);
 
-  const isModerator = userRoles?.includes("moderator")
+  const isModerator = userRoles?.includes("moderator");
 
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator ? moderatorsColumns : columns
+  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator
+    ? moderatorsColumns
+    : columns;
 
   const table = useReactTable({
     data: data,
@@ -69,138 +80,148 @@ export default function UpdateTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-  }) 
+  });
 
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      artifacts: data
-    }
+      artifacts: data,
+    },
   });
 
-  const handleGoToCreate = React.useCallback(
-    () => {
-      const params = new URLSearchParams(window.location.search);
-      params.set("mode", "add");
-      startTransitionGoToCreate(() => {
-        router.push(`artifacts?${params.toString()}`);
-      });
-    },
-    [router],
-  );
+  const handleGoToCreate = React.useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("mode", "add");
+    startTransitionGoToCreate(() => {
+      router.push(`artifacts?${params.toString()}`);
+    });
+  }, [router]);
 
   async function handleDelete() {
-    setLoading(true)
+    setLoading(true);
 
-    const selectedRows = table.getFilteredSelectedRowModel().rows
-    const dataToDelete = form.getValues().artifacts.filter(
-      item => selectedRows.some(row => row.getValue("id") === item.id)
-    ) as ArtifactForTable[] & TData[]
-    const idsToDelete = dataToDelete.map(item => item.id)
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
+    const dataToDelete = form
+      .getValues()
+      .artifacts.filter((item) =>
+        selectedRows.some((row) => row.getValue("id") === item.id),
+      ) as ArtifactForTable[] & TData[];
+    const idsToDelete = dataToDelete.map((item) => item.id);
 
-    const mutationsArray = idsToDelete.map(id => deleteMutation.mutateAsync(id))
+    const mutationsArray = idsToDelete.map((id) =>
+      deleteMutation.mutateAsync(id),
+    );
 
-    const results = await Promise.allSettled(mutationsArray)
+    const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+    const rejected = results.find(
+      (elem) => elem.status === "rejected",
+    ) as PromiseRejectedResult;
 
     if (rejected) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
-        description: <p>{getShortDescription(rejected.reason as string)}</p>,
-        className: "font-Inter"
-      })
-      console.log(rejected.reason)
-      setLoading(false)
+        description: getShortDescription((rejected.reason as Error).message),
+        className: "font-Inter",
+      });
+      console.log(rejected.reason);
+      setLoading(false);
     } else {
       toast({
         title: "Успешно!",
         description: "Артефакты удалены",
-        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
-      })
-      console.log("results: ", results)
-      table.toggleAllPageRowsSelected(false)
+        className:
+          "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      });
+      console.log("results: ", results);
+      table.toggleAllPageRowsSelected(false);
       startTransitionRefresh(() => {
-        router.refresh()
-      })
-      setLoading(false)
+        router.refresh();
+      });
+      setLoading(false);
     }
   }
 
   async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
-    setLoading(true)
+    setLoading(true);
 
-    const noLines = dataForm.artifacts.map(artifact => {
+    const noLines = dataForm.artifacts.map((artifact) => {
       const {
         displayName,
         description,
         typology,
         chemicalComposition,
         ...rest
-      } = artifact
+      } = artifact;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
         description: description?.replace(/\n/g, " "),
         typology: typology?.replace(/\n/g, " "),
         chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
-        ...rest
-      }
-    })
+        ...rest,
+      };
+    });
 
-    const dirtyFields = form.formState.dirtyFields.artifacts
+    const dirtyFields = form.formState.dirtyFields.artifacts;
 
-    const dirtyFieldsArray = noLines.map((item, index) => {
-      if (!!dirtyFields && (typeof dirtyFields[index] !== 'undefined')) {
-        return { new: item, old: data[index] }
-      }
-    }).filter((item) => item !== undefined) as {
-      new: ArtifactForTable, 
-      old: ArtifactForTable
-    }[]
+    const dirtyFieldsArray = noLines
+      .map((item, index) => {
+        if (!!dirtyFields && typeof dirtyFields[index] !== "undefined") {
+          return { new: item, old: data[index] };
+        }
+      })
+      .filter((item) => item !== undefined) as {
+      new: ArtifactForTable;
+      old: ArtifactForTable;
+    }[];
 
-    const mutationsArray = dirtyFieldsArray.map(
-      item => updateMutation.mutateAsync({
+    const mutationsArray = dirtyFieldsArray.map((item) =>
+      updateMutation.mutateAsync({
         id: item.new.id,
         newValue: item.new,
-        oldValue: item.old
-      })
-    )
+        oldValue: item.old,
+      }),
+    );
 
-    const results = await Promise.allSettled(mutationsArray)
+    const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+    const rejected = results.find(
+      (elem) => elem.status === "rejected",
+    ) as PromiseRejectedResult;
 
     if (rejected) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
-        description: rejected.reason as string,
-        className: "font-Inter"
-      })
-      console.log(rejected.reason)
-      setLoading(false)
+        description: getShortDescription((rejected.reason as Error).message),
+        className: "font-Inter",
+      });
+      console.log(rejected.reason);
+      setLoading(false);
     } else {
       toast({
         title: "Успешно!",
         description: "Артефакты изменены",
-        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
-      })
-      console.log("results: ", results)
-      table.toggleAllPageRowsSelected(false)
+        className:
+          "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      });
+      console.log("results: ", results);
+      table.toggleAllPageRowsSelected(false);
       startTransitionRefresh(() => {
-        router.refresh()
-      })
-      setLoading(false)
+        router.refresh();
+      });
+      setLoading(false);
     }
   }
 
-  if (loading || isPendingRefresh) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
+  if (loading || isPendingRefresh)
+    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
 
   return (
-    <DataTable 
+    <DataTable
       table={table}
       columnsLength={allowСolumns.length}
       form={form}
@@ -214,5 +235,5 @@ export default function UpdateTable<TData, TValue>({
       isHasAdd={false}
       isChangeModeAvailable
     />
-  )
+  );
 }

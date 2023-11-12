@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 export function getCulturesQuery() {
-    const query = `
+  const query = `
       query Cultures() {
         cultures(
           orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
@@ -15,8 +15,8 @@ export function getCulturesQuery() {
           }
         }
       }
-    `
-    return query
+    `;
+  return query;
 }
 
 export function getSetsQuery() {
@@ -34,8 +34,8 @@ export function getSetsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getMonumentsQuery() {
@@ -53,8 +53,8 @@ export function getMonumentsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getMaterialsQuery() {
@@ -72,8 +72,8 @@ export function getMaterialsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getTechniquesQuery() {
@@ -91,8 +91,8 @@ export function getTechniquesQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }
 
 export function getModelsQuery() {
@@ -110,6 +110,6 @@ export function getModelsQuery() {
         }
       }
     }
-  `
-  return query
+  `;
+  return query;
 }

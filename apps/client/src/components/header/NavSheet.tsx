@@ -3,15 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
+import { signIn } from "next-auth/react";
 
-import type {
-  AuthDict,
-  MenuDict,
-} from "@siberiana/schemas";
-import {
-  GroupLink,
-  SingleLink,
-} from "@siberiana/schemas";
+import type { AuthDict, MenuDict } from "@siberiana/schemas";
+import { GroupLink, SingleLink } from "@siberiana/schemas";
 import {
   buttonVariants,
   NavigationMenu,
@@ -28,20 +23,19 @@ import {
   SheetTrigger,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
+
 import LogoSvg from "../LogoSvg";
 import NavListItem from "./NavListItem";
-import { signIn } from "next-auth/react";
 
 export default function NavSheet({
   menuDict,
   authDict,
-  session
+  session,
 }: {
   menuDict: MenuDict;
   authDict: AuthDict;
-  session: boolean
+  session: boolean;
 }) {
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -66,7 +60,7 @@ export default function NavSheet({
               <SheetClose
                 className={cn(
                   buttonVariants(),
-                  "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 uppercase font-normal",
+                  "hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-4 rounded-3xl px-10 py-6 font-normal uppercase",
                 )}
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => signIn("keycloak")}
@@ -78,18 +72,17 @@ export default function NavSheet({
         </SheetHeader>
 
         <NavigationMenu orientation="vertical" className="block w-full">
-          <NavigationMenuList className="flex flex-col w-full">
+          <NavigationMenuList className="flex w-full flex-col">
             <ScrollArea
               className="font-Inter mt-[2vh] w-full p-1"
-              classNameViewport={cn(!!session ? "max-h-[80vh]" : "max-h-[72vh]")}
+              classNameViewport={cn(
+                !!session ? "max-h-[80vh]" : "max-h-[72vh]",
+              )}
             >
               {menuDict.map((menuItem, index) => (
-                <SheetMenuItem
-                  key={index}
-                  menuItem={menuItem}
-                />
+                <SheetMenuItem key={index} menuItem={menuItem} />
               ))}
-              <div className="h-20"/>
+              <div className="h-20" />
             </ScrollArea>
           </NavigationMenuList>
         </NavigationMenu>
@@ -98,11 +91,7 @@ export default function NavSheet({
   );
 }
 
-function SheetMenuItem({
-  menuItem,
-}: {
-  menuItem: SingleLink | GroupLink;
-}) {
+function SheetMenuItem({ menuItem }: { menuItem: SingleLink | GroupLink }) {
   const pathName = usePathname();
 
   // Remove query parameters
@@ -120,12 +109,15 @@ function SheetMenuItem({
 
     return (
       <div className="mb-1 mt-6 flex w-full gap-1 py-2">
-        <ul className="flex flex-col justify-center w-full">
+        <ul className="flex w-full flex-col justify-center">
           <NavListItem
             key={menuItemResult.id}
             title={menuItemResult.name}
             href={`${menuItemResult.url}`}
-            active={pathCurrentPage === `${menuItemResult.url.replace('?type=artifacts','')}`}
+            active={
+              pathCurrentPage ===
+              `${menuItemResult.url.replace("?type=artifacts", "")}`
+            }
             className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
             sheet
           />
@@ -144,13 +136,16 @@ function SheetMenuItem({
         <Separator className="h-[2px]" />
 
         <div className="flex w-full gap-1 py-2">
-          <ul className="flex flex-col justify-around gap-1 w-11/12">
+          <ul className="flex w-11/12 flex-col justify-around gap-1">
             {menuItemResult.list.map((item) => (
               <NavListItem
                 key={item.id}
                 title={item.name}
                 href={`${item.url}`}
-                active={pathCurrentPage === `${item.url.replace('?type=artifacts','')}`}
+                active={
+                  pathCurrentPage ===
+                  `${item.url.replace("?type=artifacts", "")}`
+                }
                 className="data-[state=open]:bg-accent/50 data-[active]:bg-accent/50"
                 sheet
               />

@@ -3,8 +3,15 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-import { TooltipProvider, Tooltip, TooltipTrigger, Button, TooltipContent } from "@siberiana/ui";
 
 type Props = {
   title: string;
@@ -14,28 +21,28 @@ type Props = {
   width?: number;
   height?: number;
   className?: string;
-} & (TrueShowIconProps | FalseShowIconProps)
+} & (TrueShowIconProps | FalseShowIconProps);
 
 type TrueShowIconProps = {
   showIcon?: true;
-  children: React.ReactNode
+  children: React.ReactNode;
   tooltip: string;
-}
+};
 
 type FalseShowIconProps = {
   showIcon?: false;
-}
+};
 
 export default function ImgTextOn(props: Props) {
   const [image, setImage] = React.useState("/images/image-placeholder.png");
 
   React.useEffect(() => {
     if (props.src) {
-      setImage(props.src)
+      setImage(props.src);
     } else {
-      setImage("/images/image-placeholder.png")
+      setImage("/images/image-placeholder.png");
     }
-  }, [props.src])
+  }, [props.src]);
 
   return (
     <Link
@@ -59,18 +66,24 @@ export default function ImgTextOn(props: Props) {
           <TooltipProvider>
             <Tooltip delayDuration={300}>
               <TooltipTrigger asChild>
-                <Button variant="ghost" className="absolute z-10 lg:top-6 lg:right-6 top-3 right-3 lg:w-[52px] lg:h-[52px] w-[44px] h-[44px] p-3 bg-accent text-foreground rounded-full cursor-help">
+                <Button
+                  variant="ghost"
+                  className="bg-accent text-foreground absolute right-3 top-3 z-10 h-[44px] w-[44px] cursor-help rounded-full p-3 lg:right-6 lg:top-6 lg:h-[52px] lg:w-[52px]"
+                >
                   {props.children}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="left" className="bg-accent text-foreground font-OpenSans cursor-help">
+              <TooltipContent
+                side="left"
+                className="bg-accent text-foreground font-OpenSans cursor-help"
+              >
                 <p>{props.tooltip}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         ) : null}
         <div className="absolute bottom-0 h-full w-full bg-black bg-opacity-25" />
-        <h2 className="absolute bottom-0 z-10 2xl:mb-4 2xl:ml-4 lg:mb-4 lg:ml-4 mb-2 ml-2 lg:p-4 p-1 w-[85%] font-bold uppercase text-white xl:text-xl lg:text-base md:text-xs text-base">
+        <h2 className="absolute bottom-0 z-10 mb-2 ml-2 w-[85%] p-1 text-base font-bold uppercase text-white md:text-xs lg:mb-4 lg:ml-4 lg:p-4 lg:text-base xl:text-xl 2xl:mb-4 2xl:ml-4">
           {props.title}
         </h2>
       </div>

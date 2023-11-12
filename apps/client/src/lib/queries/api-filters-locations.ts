@@ -1,56 +1,58 @@
 import "server-only";
 
-import { artifacts } from "./api-filters-artifacts";
-import getMultiFilter from "../utils/getMultiFilter";
-import { ArtiFilters, BooksFilters, PAPFilters } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
-import { protectedAreaPictures } from "./api-filters-pap";
-import { books } from "./api-filters-books";
 
-type Entitys = "countries" | "regions" | "districts" | "settlements"
+import { ArtiFilters, BooksFilters, PAPFilters } from "@siberiana/schemas";
+
+import getMultiFilter from "../utils/getMultiFilter";
+import { artifacts } from "./api-filters-artifacts";
+import { books } from "./api-filters-books";
+import { protectedAreaPictures } from "./api-filters-pap";
+
+type Entitys = "countries" | "regions" | "districts" | "settlements";
 
 type LocationArtiQueryType = {
-  entity?: Entitys,
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  licenseIds?: string,
-  cultureIds?: string,
-  setIds?: string,
-  monumentIds?: string,
-  techniqueIds?: string,
-}
+  entity?: Entitys;
+  search?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  licenseIds?: string;
+  cultureIds?: string;
+  setIds?: string;
+  monumentIds?: string;
+  techniqueIds?: string;
+};
 type LocationBooksQueryType = {
-  entity?: Entitys
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  bookGenreIds?: string,
-  licenseIds?: string,
-}
+  entity?: Entitys;
+  search?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  bookGenreIds?: string;
+  licenseIds?: string;
+};
 type LocationPAPQueryType = {
-  entity?: Entitys
-  search?: string,
-  categories?: string,
-  collections?: string,
-  countryIds?: string,
-  regionIds?: string,
-  districtIds?: string,
-  settlementIds?: string,
-  protectedAreaIds?: string,
-  protectedAreaCategoryIds?: string,
-  licenseIds?: string,
-}
+  entity?: Entitys;
+  search?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  protectedAreaIds?: string;
+  protectedAreaCategoryIds?: string;
+  licenseIds?: string;
+};
 
-function LocationArtiQuery({ 
+function LocationArtiQuery({
   entity,
   search = "",
   categories,
@@ -71,22 +73,52 @@ function LocationArtiQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasLocationsWith: [{
-            hasCountryWith: [ ${!!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ''} ],
-            hasRegionWith: [ ${!!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ''} ],
-            hasDistrictWith: [ ${!!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ''} ],
-            hasSettlementWith: [ ${!!settlementIds ? `{idIn: [${getMultiFilter(settlementIds)}]}` : ''} ],
+            hasCountryWith: [ ${
+              !!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ""
+            } ],
+            hasRegionWith: [ ${
+              !!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ""
+            } ],
+            hasDistrictWith: [ ${
+              !!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ""
+            } ],
+            hasSettlementWith: [ ${
+              !!settlementIds
+                ? `{idIn: [${getMultiFilter(settlementIds)}]}`
+                : ""
+            } ],
             hasArtifactsWith: [{
               hasCollectionWith: [
-                ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-                ${!!categories ? `{
+                ${
+                  !!collections
+                    ? `{slugIn: [${getMultiFilter(collections)}]},`
+                    : ""
+                }
+                ${
+                  !!categories
+                    ? `{
                   hasCategoryWith: [ {slugIn: [${getMultiFilter(categories)}]} ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
-              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
-              hasCulturalAffiliationWith: [ ${!!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ''} ],
-              hasSetWith: [ ${!!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ''} ],
-              hasMonumentWith: [ ${!!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ''} ],
-              hasTechniquesWith : [ ${!!techniqueIds ? `{idIn: [${getMultiFilter(techniqueIds)}]}` : ''} ],
+              hasLicenseWith: [ ${
+                !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+              } ],
+              hasCulturalAffiliationWith: [ ${
+                !!cultureIds ? `{idIn: [${getMultiFilter(cultureIds)}]}` : ""
+              } ],
+              hasSetWith: [ ${
+                !!setIds ? `{idIn: [${getMultiFilter(setIds)}]}` : ""
+              } ],
+              hasMonumentWith: [ ${
+                !!monumentIds ? `{idIn: [${getMultiFilter(monumentIds)}]}` : ""
+              } ],
+              hasTechniquesWith : [ ${
+                !!techniqueIds
+                  ? `{idIn: [${getMultiFilter(techniqueIds)}]}`
+                  : ""
+              } ],
               or: [ 
                 {displayNameContainsFold: "${search}"}, 
                 {hasCollectionWith: [
@@ -117,10 +149,10 @@ function LocationArtiQuery({
       }
     }
   `;
-  return queryString
+  return queryString;
 }
 
-function LocationBooksQuery({ 
+function LocationBooksQuery({
   entity,
   search = "",
   categories,
@@ -138,21 +170,45 @@ function LocationBooksQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasLocationsWith: [{
-            hasCountryWith: [ ${!!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ''} ],
-            hasRegionWith: [ ${!!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ''} ],
-            hasDistrictWith: [ ${!!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ''} ],
-            hasSettlementWith: [ ${!!settlementIds ? `{idIn: [${getMultiFilter(settlementIds)}]}` : ''} ],
+            hasCountryWith: [ ${
+              !!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ""
+            } ],
+            hasRegionWith: [ ${
+              !!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ""
+            } ],
+            hasDistrictWith: [ ${
+              !!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ""
+            } ],
+            hasSettlementWith: [ ${
+              !!settlementIds
+                ? `{idIn: [${getMultiFilter(settlementIds)}]}`
+                : ""
+            } ],
             hasBooksWith: [{
               hasCollectionWith: [
-                ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-                ${!!categories ? `{
+                ${
+                  !!collections
+                    ? `{slugIn: [${getMultiFilter(collections)}]},`
+                    : ""
+                }
+                ${
+                  !!categories
+                    ? `{
                   hasCategoryWith: [
                     {slugIn: [${getMultiFilter(categories)}]}
                   ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
-              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
-              hasBookGenresWith: [ ${!!bookGenreIds ? `{idIn: [${getMultiFilter(bookGenreIds)}]}` : ''} ],
+              hasLicenseWith: [ ${
+                !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+              } ],
+              hasBookGenresWith: [ ${
+                !!bookGenreIds
+                  ? `{idIn: [${getMultiFilter(bookGenreIds)}]}`
+                  : ""
+              } ],
               or: [ 
                 {displayNameContainsFold: "${search}"}
               ]
@@ -175,10 +231,10 @@ function LocationBooksQuery({
       }
     }
   `;
-  return queryString
+  return queryString;
 }
 
-function LocationPAPQuery({ 
+function LocationPAPQuery({
   entity,
   search = "",
   categories,
@@ -197,27 +253,55 @@ function LocationPAPQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasLocationsWith: [{
-            hasCountryWith: [ ${!!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ''} ],
-            hasRegionWith: [ ${!!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ''} ],
-            hasDistrictWith: [ ${!!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ''} ],
-            hasSettlementWith: [ ${!!settlementIds ? `{idIn: [${getMultiFilter(settlementIds)}]}` : ''} ],
+            hasCountryWith: [ ${
+              !!countryIds ? `{idIn: [${getMultiFilter(countryIds)}]}` : ""
+            } ],
+            hasRegionWith: [ ${
+              !!regionIds ? `{idIn: [${getMultiFilter(regionIds)}]}` : ""
+            } ],
+            hasDistrictWith: [ ${
+              !!districtIds ? `{idIn: [${getMultiFilter(districtIds)}]}` : ""
+            } ],
+            hasSettlementWith: [ ${
+              !!settlementIds
+                ? `{idIn: [${getMultiFilter(settlementIds)}]}`
+                : ""
+            } ],
             hasProtectedAreaPicturesWith: [{
               hasCollectionWith: [
-                ${!!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ''}
-                ${!!categories ? `{
+                ${
+                  !!collections
+                    ? `{slugIn: [${getMultiFilter(collections)}]},`
+                    : ""
+                }
+                ${
+                  !!categories
+                    ? `{
                   hasCategoryWith: [
                     {slugIn: [${getMultiFilter(categories)}]}
                   ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
-              hasLicenseWith: [ ${!!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ''} ],
+              hasLicenseWith: [ ${
+                !!licenseIds ? `{idIn: [${getMultiFilter(licenseIds)}]}` : ""
+              } ],
               hasProtectedAreaWith: [ 
-                ${!!protectedAreaIds ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},` : ''} 
-                ${!!protectedAreaCategoryIds ? `{
+                ${
+                  !!protectedAreaIds
+                    ? `{idIn: [${getMultiFilter(protectedAreaIds)}]},`
+                    : ""
+                } 
+                ${
+                  !!protectedAreaCategoryIds
+                    ? `{
                   hasProtectedAreaCategoryWith: [
                     {idIn: [${getMultiFilter(protectedAreaCategoryIds)}]}
                   ]
-                },` : ''}
+                },`
+                    : ""
+                }
               ],
               or: [ 
                 {displayNameContainsFold: "${search}"}
@@ -241,26 +325,31 @@ function LocationPAPQuery({
       }
     }
   `;
-  return queryString
+  return queryString;
 }
 
 // Oh my God... What I did, this this needs to be wrapped in one abstraction
 
 //..................................................COUNTRIES..................................................//
-export const getArtiCountriesFilter = async (args: LocationArtiQueryType): Promise<ArtiFilters> => {
+export const getArtiCountriesFilter = async (
+  args: LocationArtiQueryType,
+): Promise<ArtiFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationArtiQuery({ 
+  const query = LocationArtiQuery({
     entity: "countries",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -268,28 +357,33 @@ export const getArtiCountriesFilter = async (args: LocationArtiQueryType): Promi
     // Throw an error
     throw new Error("Failed to fetch data 'Countries Artifacts Filter'");
   }
-  const json = await res.json() as { data: { countries: ArtiFilters } };
+  const json = (await res.json()) as { data: { countries: ArtiFilters } };
   if (json.data.countries.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  const countries = ArtiFilters.parse(json.data.countries); 
+  const countries = ArtiFilters.parse(json.data.countries);
   return countries;
 };
 
-export const getBooksCountriesFilter = async (args: LocationBooksQueryType): Promise<BooksFilters> => {
+export const getBooksCountriesFilter = async (
+  args: LocationBooksQueryType,
+): Promise<BooksFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationBooksQuery({ 
+  const query = LocationBooksQuery({
     entity: "countries",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -297,28 +391,33 @@ export const getBooksCountriesFilter = async (args: LocationBooksQueryType): Pro
     // Throw an error
     throw new Error("Failed to fetch data 'Countries Books Filter'");
   }
-  const json = await res.json() as { data: { countries: BooksFilters } };
+  const json = (await res.json()) as { data: { countries: BooksFilters } };
   if (json.data.countries.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  const countries = BooksFilters.parse(json.data.countries); 
+  const countries = BooksFilters.parse(json.data.countries);
   return countries;
 };
 
-export const getPAPCountriesFilter = async (args: LocationPAPQueryType): Promise<PAPFilters> => {
+export const getPAPCountriesFilter = async (
+  args: LocationPAPQueryType,
+): Promise<PAPFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationPAPQuery({ 
+  const query = LocationPAPQuery({
     entity: "countries",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -326,30 +425,34 @@ export const getPAPCountriesFilter = async (args: LocationPAPQueryType): Promise
     // Throw an error
     throw new Error("Failed to fetch data 'Countries PAP Filter'");
   }
-  const json = await res.json() as { data: { countries: PAPFilters } };
+  const json = (await res.json()) as { data: { countries: PAPFilters } };
   if (json.data.countries.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  const countries = PAPFilters.parse(json.data.countries); 
+  const countries = PAPFilters.parse(json.data.countries);
   return countries;
 };
-  
 
 //..................................................REGION..................................................//
-export const getArtiRegionsFilter = async (args: LocationArtiQueryType): Promise<ArtiFilters> => {
+export const getArtiRegionsFilter = async (
+  args: LocationArtiQueryType,
+): Promise<ArtiFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationArtiQuery({ 
+  const query = LocationArtiQuery({
     entity: "regions",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -357,28 +460,33 @@ export const getArtiRegionsFilter = async (args: LocationArtiQueryType): Promise
     // Throw an error
     throw new Error("Failed to fetch data 'Regions Artifacts Filter'");
   }
-  const json = await res.json() as { data: { regions: ArtiFilters } };
+  const json = (await res.json()) as { data: { regions: ArtiFilters } };
   if (json.data.regions.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const regions = ArtiFilters.parse(json.data.regions);
   return regions;
 };
 
-export const getBooksRegionsFilter = async (args: LocationBooksQueryType): Promise<BooksFilters> => {
+export const getBooksRegionsFilter = async (
+  args: LocationBooksQueryType,
+): Promise<BooksFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationBooksQuery({ 
+  const query = LocationBooksQuery({
     entity: "regions",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -386,28 +494,33 @@ export const getBooksRegionsFilter = async (args: LocationBooksQueryType): Promi
     // Throw an error
     throw new Error("Failed to fetch data 'Regions Books Filter'");
   }
-  const json = await res.json() as { data: { regions: BooksFilters } };
+  const json = (await res.json()) as { data: { regions: BooksFilters } };
   if (json.data.regions.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const regions = BooksFilters.parse(json.data.regions);
   return regions;
 };
 
-export const getPAPRegionsFilter = async (args: LocationPAPQueryType): Promise<PAPFilters> => {
+export const getPAPRegionsFilter = async (
+  args: LocationPAPQueryType,
+): Promise<PAPFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationPAPQuery({ 
+  const query = LocationPAPQuery({
     entity: "regions",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -415,30 +528,34 @@ export const getPAPRegionsFilter = async (args: LocationPAPQueryType): Promise<P
     // Throw an error
     throw new Error("Failed to fetch data 'Regions PAP Filter'");
   }
-  const json = await res.json() as { data: { regions: PAPFilters } };
+  const json = (await res.json()) as { data: { regions: PAPFilters } };
   if (json.data.regions.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const regions = PAPFilters.parse(json.data.regions);
   return regions;
 };
 
-
 //..................................................DISTRICT..................................................//
-export const getArtiDistrictsFilter = async (args: LocationArtiQueryType): Promise<ArtiFilters> => {
+export const getArtiDistrictsFilter = async (
+  args: LocationArtiQueryType,
+): Promise<ArtiFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationArtiQuery({ 
+  const query = LocationArtiQuery({
     entity: "districts",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -446,28 +563,33 @@ export const getArtiDistrictsFilter = async (args: LocationArtiQueryType): Promi
     // Throw an error
     throw new Error("Failed to fetch data 'Districts Artifacts Filter'");
   }
-  const json = await res.json() as { data: { districts: ArtiFilters } }; 
+  const json = (await res.json()) as { data: { districts: ArtiFilters } };
   if (json.data.districts.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  const districts = ArtiFilters.parse(json.data.districts); 
+  const districts = ArtiFilters.parse(json.data.districts);
   return districts;
 };
 
-export const getBooksDistrictsFilter = async (args: LocationBooksQueryType): Promise<BooksFilters> => {
+export const getBooksDistrictsFilter = async (
+  args: LocationBooksQueryType,
+): Promise<BooksFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationBooksQuery({ 
+  const query = LocationBooksQuery({
     entity: "districts",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -475,28 +597,33 @@ export const getBooksDistrictsFilter = async (args: LocationBooksQueryType): Pro
     // Throw an error
     throw new Error("Failed to fetch data 'Districts Books Filter'");
   }
-  const json = await res.json() as { data: { districts: BooksFilters } };
+  const json = (await res.json()) as { data: { districts: BooksFilters } };
   if (json.data.districts.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const districts = BooksFilters.parse(json.data.districts);
   return districts;
 };
 
-export const getPAPDistrictsFilter = async (args: LocationPAPQueryType): Promise<PAPFilters> => {
+export const getPAPDistrictsFilter = async (
+  args: LocationPAPQueryType,
+): Promise<PAPFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationPAPQuery({ 
+  const query = LocationPAPQuery({
     entity: "districts",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -504,29 +631,34 @@ export const getPAPDistrictsFilter = async (args: LocationPAPQueryType): Promise
     // Throw an error
     throw new Error("Failed to fetch data 'Districts PAP Filter'");
   }
-  const json = await res.json() as { data: { districts: PAPFilters } };
+  const json = (await res.json()) as { data: { districts: PAPFilters } };
   if (json.data.districts.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const districts = PAPFilters.parse(json.data.districts);
   return districts;
 };
 
 //..................................................SETTLEMENTS..................................................//
-export const getArtiSettlementsFilter = async (args: LocationArtiQueryType): Promise<ArtiFilters> => {
+export const getArtiSettlementsFilter = async (
+  args: LocationArtiQueryType,
+): Promise<ArtiFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationArtiQuery({ 
+  const query = LocationArtiQuery({
     entity: "settlements",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -534,28 +666,33 @@ export const getArtiSettlementsFilter = async (args: LocationArtiQueryType): Pro
     // Throw an error
     throw new Error("Failed to fetch data 'Settlements Artifacts Filter'");
   }
-  const json = await res.json() as { data: { settlements: ArtiFilters } }; 
+  const json = (await res.json()) as { data: { settlements: ArtiFilters } };
   if (json.data.settlements.totalCount === 0) {
-    notFound()
+    notFound();
   }
-  const settlements = ArtiFilters.parse(json.data.settlements); 
+  const settlements = ArtiFilters.parse(json.data.settlements);
   return settlements;
 };
 
-export const getBooksSettlementsFilter = async (args: LocationBooksQueryType): Promise<BooksFilters> => {
+export const getBooksSettlementsFilter = async (
+  args: LocationBooksQueryType,
+): Promise<BooksFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationBooksQuery({ 
+  const query = LocationBooksQuery({
     entity: "settlements",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -563,28 +700,33 @@ export const getBooksSettlementsFilter = async (args: LocationBooksQueryType): P
     // Throw an error
     throw new Error("Failed to fetch data 'Settlements Books Filter'");
   }
-  const json = await res.json() as { data: { settlements: BooksFilters } };
+  const json = (await res.json()) as { data: { settlements: BooksFilters } };
   if (json.data.settlements.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const settlements = BooksFilters.parse(json.data.settlements);
   return settlements;
 };
 
-export const getPAPSettlementsFilter = async (args: LocationPAPQueryType): Promise<PAPFilters> => {
+export const getPAPSettlementsFilter = async (
+  args: LocationPAPQueryType,
+): Promise<PAPFilters> => {
   const headers = { "Content-Type": "application/json" };
-  const query = LocationPAPQuery({ 
+  const query = LocationPAPQuery({
     entity: "settlements",
-    ...args
-  })
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`, {
-    headers,
-    method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
-    cache: 'no-store',
+    ...args,
   });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
   if (!res.ok) {
     // Log the error to an error reporting service
     const err = await res.text();
@@ -592,9 +734,9 @@ export const getPAPSettlementsFilter = async (args: LocationPAPQueryType): Promi
     // Throw an error
     throw new Error("Failed to fetch data 'Settlements PAP Filter'");
   }
-  const json = await res.json() as { data: { settlements: PAPFilters } };
+  const json = (await res.json()) as { data: { settlements: PAPFilters } };
   if (json.data.settlements.totalCount === 0) {
-    notFound()
+    notFound();
   }
   const settlements = PAPFilters.parse(json.data.settlements);
   return settlements;

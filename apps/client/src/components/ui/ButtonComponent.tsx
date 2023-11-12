@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
 import type { PropsWithChildren } from "react";
 import React from "react";
+
 import { Button } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -29,7 +30,7 @@ export default function ButtonComponent(
     <Button
       variant={props.variant}
       className={cn(
-        "font-Inter uppercase font-normal px-10 py-6 hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl",
+        "font-Inter hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight rounded-3xl px-10 py-6 font-normal uppercase",
         props.className,
       )}
       size={props.size}

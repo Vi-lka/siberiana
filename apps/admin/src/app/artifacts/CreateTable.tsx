@@ -1,28 +1,43 @@
-"use client"
+"use client";
 
-import type { ArtifactForTable} from '@siberiana/schemas';
-import { ArtifactsForm } from '@siberiana/schemas'
-import { toast } from '@siberiana/ui'
-import type { ColumnDef, ColumnFiltersState, SortingState} from '@tanstack/react-table';
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
-import { Loader2 } from 'lucide-react'
-import React from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
-import type { z } from 'zod'
+import React from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import getStatusName from '~/lib/utils/getStatusName'
-import { useRouter } from 'next/navigation';
-import { useCreateArtifact } from '~/lib/mutations/objects';
-import { useSession } from 'next-auth/react';
-import getShortDescription from '~/lib/utils/getShortDescription';
-import DataTable from '~/components/tables/DataTable';
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+} from "@tanstack/react-table";
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useFieldArray, useForm } from "react-hook-form";
+import type { z } from "zod";
+
+import type { ArtifactForTable } from "@siberiana/schemas";
+import { ArtifactsForm } from "@siberiana/schemas";
+import { toast } from "@siberiana/ui";
+
+import DataTable from "~/components/tables/DataTable";
+import { useCreateArtifact } from "~/lib/mutations/objects";
+import getShortDescription from "~/lib/utils/getShortDescription";
+import getStatusName from "~/lib/utils/getStatusName";
+import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
+
+const FORM_DATA_KEY = "artifactsCreate";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[],
-  moderatorsColumns: ColumnDef<TData, TValue>[],
-  data: ArtifactForTable[] & TData[],
-  userRoles?: string[],
-  hasObjectsToUpdate?: boolean
+  columns: ColumnDef<TData, TValue>[];
+  moderatorsColumns: ColumnDef<TData, TValue>[];
+  data: ArtifactForTable[] & TData[];
+  userRoles?: string[];
+  hasObjectsToUpdate?: boolean;
 }
 
 export default function CreateTable<TData, TValue>({
@@ -32,25 +47,37 @@ export default function CreateTable<TData, TValue>({
   userRoles,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const [dataState, setDataState] = React.useState<ArtifactForTable[] & TData[]>(data)
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [loading, setLoading] = React.useState(false)
-  
-  const [isPendingTable, startTransitionTable] = React.useTransition()
-  const [isPendingForm, startTransitionForm] = React.useTransition()
-  const [isPendingGoToUpdate, startTransitionGoToUpdate] = React.useTransition()
-  const [isPendingRouter, startTransitionRouter] = React.useTransition()
+  const savedResult = getSavedData<ArtifactForTable, TData>({
+    data,
+    key: FORM_DATA_KEY,
+  });
 
-  const router = useRouter()
-  const session = useSession()
+  const [dataState, setDataState] = React.useState<
+    ArtifactForTable[] & TData[]
+  >(savedResult.data);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
-  const mutation = useCreateArtifact(session.data?.access_token)
+  const [isPendingTable, startTransitionTable] = React.useTransition();
+  const [isPendingForm, startTransitionForm] = React.useTransition();
+  const [isPendingGoToUpdate, startTransitionGoToUpdate] =
+    React.useTransition();
+  const [isPendingRouter, startTransitionRouter] = React.useTransition();
 
-  const isModerator = userRoles?.includes("moderator")
+  const router = useRouter();
+  const session = useSession();
 
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator ? moderatorsColumns : columns
+  const mutation = useCreateArtifact(session.data?.access_token);
+
+  const isModerator = userRoles?.includes("moderator");
+
+  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator
+    ? moderatorsColumns
+    : columns;
 
   const table = useReactTable({
     data: dataState,
@@ -68,34 +95,60 @@ export default function CreateTable<TData, TValue>({
       columnFilters,
       rowSelection,
     },
-  })
+  });
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
-    mode: 'onChange',
+    mode: "all",
     defaultValues: {
-      artifacts: dataState
-    }
+      artifacts: dataState,
+    },
   });
-  const control = form.control
+  const control = form.control;
   const { append, remove } = useFieldArray({
     control,
     name: "artifacts",
   });
 
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("artifacts");
+    };
+    triggerValidation().catch(console.error);
+  }, [form]);
+
+  const dataPersistNoImage = form.getValues().artifacts.map((elem) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { primaryImage, ...rest } = elem;
+    const nullImage = {
+      file: undefined,
+      url: "",
+    };
+    return { primaryImage: nullImage, ...rest };
+  });
+
+  usePersistForm<ArtifactForTable[]>({
+    value: { data: dataPersistNoImage },
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter,
+  });
+
   const statusForModerator = {
     id: "listed",
-    displayName: getStatusName("listed")
-  }
+    displayName: getStatusName("listed"),
+  };
   const statusForAdmin = {
     id: "draft",
-    displayName: getStatusName("draft")
-  }
+    displayName: getStatusName("draft"),
+  };
   const defaultAdd = {
     id: "random" + Math.random().toString(),
     status: isModerator ? statusForModerator : statusForAdmin,
     displayName: "",
     description: "",
-    primaryImageURL: "",
+    primaryImage: {
+      file: undefined,
+      url: "",
+    },
     chemicalComposition: "",
     inventoryNumber: "",
     kpNumber: "",
@@ -103,6 +156,7 @@ export default function CreateTable<TData, TValue>({
     externalLink: "",
     typology: "",
     weight: "",
+    admissionDate: undefined,
     sizes: {
       width: 0,
       height: 0,
@@ -110,6 +164,7 @@ export default function CreateTable<TData, TValue>({
       depth: 0,
       diameter: 0,
     },
+    dating: "",
     datingRow: {
       datingStart: 0,
       datingEnd: 0,
@@ -127,126 +182,134 @@ export default function CreateTable<TData, TValue>({
     publications: [],
     projects: [],
     collection: dataState[0].collection,
-  } as ArtifactForTable & TData
+  } as ArtifactForTable & TData;
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data);
+    });
+    form.reset(
+      { artifacts: data },
+      { keepValues: false, keepDirtyValues: false },
+    );
+    localStorage.removeItem(FORM_DATA_KEY);
+  };
 
   const handleAdd = () => {
     startTransitionTable(() => {
-      setDataState((prev) => [
-        ...prev,
-        defaultAdd,
-      ])
-    })
+      setDataState((prev) => [...prev, defaultAdd]);
+    });
     startTransitionForm(() => {
-      append(defaultAdd) // only append, prepend doesn't work correctly with table
-    })
-    form.reset({}, { keepValues: true, keepDirtyValues: false }) // dosn't need default dirty because all new data is dirty
-  }
+      append(defaultAdd); // only append, prepend doesn't work correctly with table
+    });
+    form.reset({}, { keepValues: true, keepDirtyValues: false }); // dosn't need default dirty because all new data is dirty
+  };
 
   const handleDelete = () => {
-    const selectedRows = table.getFilteredSelectedRowModel().rows
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
 
-    const filteredData = form.getValues().artifacts.filter(
-      item => !selectedRows.some(row => row.getValue("id") === item.id)
-    ) as ArtifactForTable[] & TData[]
+    const filteredData = form
+      .getValues()
+      .artifacts.filter(
+        (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
+      ) as ArtifactForTable[] & TData[];
 
     if (filteredData.length === 0) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
         description: <p>А есть смысл оставлять таблицу пустой?</p>,
-        className: "font-Inter"
-      })
-      return
+        className: "font-Inter",
+      });
+      return;
     }
 
     startTransitionTable(() => {
-      setDataState(filteredData)
-    })
+      setDataState(filteredData);
+    });
     startTransitionForm(() => {
-      let i = 0
+      let i = 0;
       for (const row of selectedRows) {
-        remove(row.index - i)
-        i++
+        remove(row.index - i);
+        i++;
       }
-      // form.reset({artifacts: filteredData}, { keepValues: false, keepDirtyValues: false, keepIsValid: true })
-    })
+    });
+    form.reset({}, { keepValues: true, keepDirtyValues: false });
 
-    table.toggleAllPageRowsSelected(false)
-  }
+    table.toggleAllPageRowsSelected(false);
+  };
 
-  const handleGoToUpdate = React.useCallback(
-    () => {
-      const params = new URLSearchParams(window.location.search);
-      params.delete("mode")
-      startTransitionGoToUpdate(() => {
-        router.push(`artifacts?${params.toString()}`);
-      });
-    },
-    [router],
-  );
-
-  // console.log("DATA_STATE: ", dataState)
-  // console.log("TABLE: ", table.getRowModel().rows[0].original)
-  // console.log("FORM: ", form.getValues().artifacts)
+  const handleGoToUpdate = React.useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.delete("mode");
+    startTransitionGoToUpdate(() => {
+      router.push(`artifacts?${params.toString()}`);
+    });
+  }, [router]);
 
   async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
-    setLoading(true)
+    setLoading(true);
 
-    const noLines = dataForm.artifacts.map(artifact => {
+    const noLines = dataForm.artifacts.map((artifact) => {
       const {
         displayName,
         description,
         typology,
         chemicalComposition,
         ...rest
-      } = artifact
+      } = artifact;
 
       return {
-        displayName: displayName.replace(/\n/g, " "), 
-        description: description?.replace(/\n/g, " "), 
+        displayName: displayName.replace(/\n/g, " "),
+        description: description?.replace(/\n/g, " "),
         typology: typology?.replace(/\n/g, " "),
         chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest,
-      }
-    })
+      };
+    });
 
-    const mutationsArray = noLines.map(item => mutation.mutateAsync(item))
+    const mutationsArray = noLines.map((item) => mutation.mutateAsync(item));
 
-    const results = await Promise.allSettled(mutationsArray)
+    const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(elem => elem.status === "rejected") as PromiseRejectedResult;
+    const rejected = results.find(
+      (elem) => elem.status === "rejected",
+    ) as PromiseRejectedResult;
 
     if (rejected) {
       toast({
         variant: "destructive",
         title: "Oшибка!",
-        description: <p>{getShortDescription(rejected.reason as string)}</p>,
-        className: "font-Inter"
-      })
-      console.log(rejected.reason)
-      setLoading(false)
+        description: getShortDescription((rejected.reason as Error).message),
+        className: "font-Inter",
+      });
+      console.log(rejected.reason);
+      setLoading(false);
     } else {
       toast({
         title: "Успешно!",
         description: "Артефакты добавлены",
-        className: "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
-      })
-      console.log("results: ", results)
+        className:
+          "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
+      });
+      console.log("results: ", results);
 
       const params = new URLSearchParams(window.location.search);
-      params.delete("mode")
+      params.delete("mode");
       startTransitionRouter(() => {
-        router.refresh()
-        router.push(`artifacts?${params.toString()}`)
-      })
-      setLoading(false)
+        router.refresh();
+        router.push(`artifacts?${params.toString()}`);
+      });
+      setLoading(false);
+      localStorage.removeItem(FORM_DATA_KEY);
     }
   }
 
-  if (loading || isPendingRouter) return  <Loader2 className="animate-spin w-12 h-12 mx-auto mt-12"/>
+  if (loading || isPendingRouter)
+    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
 
   return (
-    <DataTable 
+    <DataTable
       table={table}
       columnsLength={allowСolumns.length}
       form={form}
@@ -259,7 +322,8 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
-  )
+  );
 }

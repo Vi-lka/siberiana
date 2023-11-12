@@ -2,9 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import type { AuthDict } from "@siberiana/schemas";
 import {
   Form,
@@ -15,21 +19,17 @@ import {
   Input,
   useToast,
 } from "@siberiana/ui";
+
 import ButtonComponent from "../ui/ButtonComponent";
-import { signIn } from "next-auth/react";
-import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function LogInForm({ dict }: { dict: AuthDict }) {
-
-  const router = useRouter()
+  const router = useRouter();
   const { toast } = useToast();
 
   const LogInFormSchema = z.object({
-    username: z
-      .string({
-        required_error: dict.errors.required,
-      }),
+    username: z.string({
+      required_error: dict.errors.required,
+    }),
     password: z
       .string({
         required_error: dict.errors.required,
@@ -41,7 +41,7 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
 
   const form = useForm<z.infer<typeof LogInFormSchema>>({
     resolver: zodResolver(LogInFormSchema),
-    mode: 'onChange',
+    mode: "onChange",
   });
 
   const handleLogIn = async (data: z.infer<typeof LogInFormSchema>) => {
@@ -50,12 +50,12 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
         redirect: false,
         username: data.username,
         password: data.password,
-      })
+      });
       if (!res?.error) {
-        router.refresh() // apply in header
-        router.push('/account')
+        router.refresh(); // apply in header
+        router.push("/account");
       } else {
-        throw new Error(res.error ? res.error : "Error")
+        throw new Error(res.error ? res.error : "Error");
       }
     } catch (error) {
       toast({
@@ -122,10 +122,11 @@ export default function LogInForm({ dict }: { dict: AuthDict }) {
               type="submit"
               className="mb-6 px-10 py-6 text-sm uppercase sm:mb-0"
             >
-              {form.formState.isSubmitting
-                ? <Loader2 className='animate-spin w-8 h-8 mx-auto' />
-                : dict.signIn
-              }
+              {form.formState.isSubmitting ? (
+                <Loader2 className="mx-auto h-8 w-8 animate-spin" />
+              ) : (
+                dict.signIn
+              )}
             </ButtonComponent>
           </div>
         </form>

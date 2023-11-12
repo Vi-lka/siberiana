@@ -1,26 +1,31 @@
-import { Skeleton } from "@siberiana/ui";
 import React from "react";
+
+import { Skeleton } from "@siberiana/ui";
+
 import BreadcrumbsSkeleton from "~/components/skeletons/BreadcrumbsSkeleton";
 
 export default function LoadingProjects() {
   return (
     <>
-      <BreadcrumbsSkeleton/>
+      <BreadcrumbsSkeleton />
 
-      <div className="mt-10 mb-24">
-        <div className="mt-10 mb-4 flex gap-4 md:flex-row flex-col md:items-center justify-between">
+      <div className="mb-24 mt-10">
+        <div className="mb-4 mt-10 flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <Skeleton className="h-full w-[65%] py-5 md:w-[40%]" />
         </div>
 
-        <Skeleton className="w-full h-10" />
+        <Skeleton className="h-10 w-full" />
 
-        <div className="flex gap-6 items-center justify-end mt-3">
-          <Skeleton className="h-full md:w-[20%] w-4/5 py-5" />
+        <div className="mt-3 flex items-center justify-end gap-6">
+          <Skeleton className="h-full w-4/5 py-5 md:w-[20%]" />
         </div>
 
-        <div className="md:w-full w-[85%] mt-3 mb-12 mx-auto grid min-[2000px]:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-6">
+        <div className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3">
           {[Array(12)].map((_, i) => (
-            <Skeleton key={i} className="md:aspect-[2/1] aspect-square w-full px-8 py-6" />
+            <Skeleton
+              key={i}
+              className="aspect-square w-full px-8 py-6 md:aspect-[2/1]"
+            />
           ))}
         </div>
       </div>

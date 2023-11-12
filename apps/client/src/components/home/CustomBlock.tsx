@@ -1,21 +1,22 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+
 import { getCustomBlock } from "~/lib/queries/strapi-server";
 import getLinkDir from "~/lib/utils/getLinkDir";
-import ImgTextOn from "../thumbnails/ImgTextOn";
 import ErrorHandler from "../errors/ErrorHandler";
+import ImgTextOn from "../thumbnails/ImgTextOn";
 
 export default async function CustomBlock() {
-
-  const [ dataResult ] = await Promise.allSettled([ getCustomBlock() ])
-  if  (dataResult.status === 'rejected') return (
-    <ErrorHandler 
-      error={dataResult.reason as unknown} 
-      place="Custom Block" 
-      notFound={false}
-    />
-  )
+  const [dataResult] = await Promise.allSettled([getCustomBlock()]);
+  if (dataResult.status === "rejected")
+    return (
+      <ErrorHandler
+        error={dataResult.reason as unknown}
+        place="Custom Block"
+        notFound={false}
+      />
+    );
 
   return (
     <div className="mb-24">
@@ -33,7 +34,7 @@ export default async function CustomBlock() {
         </Link>
       </div>
 
-      <div className="md:w-full w-[85%] mx-auto grid grid-cols-1 gap-6 md:grid-cols-4">
+      <div className="mx-auto grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-4">
         {dataResult.value.list.map((elem, index) => (
           <ImgTextOn
             key={index}

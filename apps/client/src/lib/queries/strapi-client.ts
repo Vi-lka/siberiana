@@ -2,6 +2,7 @@
 
 import request from "graphql-request";
 import useSWR from "swr";
+
 import type { Questions } from "@siberiana/schemas";
 
 const fetcher = (query: string): Promise<Questions> =>

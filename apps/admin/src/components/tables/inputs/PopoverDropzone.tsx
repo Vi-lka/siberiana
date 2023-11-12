@@ -1,39 +1,61 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@siberiana/ui'
-import Image from "next/image"
-import React from 'react'
-import Dropzone from './Dropzone'
-import { useFormContext } from 'react-hook-form'
+import React from "react";
+import Image from "next/image";
+import { ErrorMessage } from "@hookform/error-message";
+import { useFormContext } from "react-hook-form";
+
+import type { ImageFile } from "@siberiana/schemas";
+import { Popover, PopoverContent, PopoverTrigger } from "@siberiana/ui";
+
+import Dropzone from "./Dropzone";
 
 export default function PopoverDropzone({
-    formValueName,
-    bucket,
-    className,
+  formValueName,
+  className,
 }: {
-    formValueName: string,
-    bucket?: string,
-    className?: string
+  formValueName: string;
+  className?: string;
 }) {
-
   const form = useFormContext();
 
-  const image = form.getValues(formValueName) as string | undefined
+  const image = form.getValues(formValueName) as {
+    file: ImageFile | null | undefined;
+    url: string;
+  };
+
+  const imageURL =
+    image.url.length > 0
+      ? image.url
+      : image.file
+      ? URL.createObjectURL(image.file)
+      : "/images/image-placeholder.png";
+
+  const imageAlt =
+    image.url.length > 0 ? image.url : image.file ? image.file.name : "No File";
 
   return (
-    <Popover>
-        <PopoverTrigger className='rounded-[6px] overflow-hidden'>
-          <Image 
-            src={image ? image : "/images/image-placeholder.png"} 
-            alt={image ? image : "/images/image-placeholder.png"} 
-            width={80}
-            height={80}
-          />
+    <>
+      <Popover>
+        <PopoverTrigger className="overflow-hidden rounded-[6px]">
+          <Image src={imageURL} alt={imageAlt} width={80} height={80} />
         </PopoverTrigger>
         <PopoverContent className="font-Inter">
           <div className="mb-6">
-            <p className='mb-2 font-medium'>Фото</p>
-            <Dropzone formValueName={formValueName} defaultValue={image} bucket={bucket} className={className} />
+            <p className="mb-2 font-medium">Фото</p>
+            <Dropzone
+              formValueName={formValueName}
+              defaultValue={image}
+              className={className}
+            />
           </div>
         </PopoverContent>
-    </Popover>
-  )
+      </Popover>
+      <ErrorMessage
+        errors={form.formState.errors}
+        name={formValueName}
+        render={({ message }) => (
+          <p className="text-destructive text-sm font-medium">{message}</p>
+        )}
+      />
+    </>
+  );
 }
