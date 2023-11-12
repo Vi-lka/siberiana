@@ -217,7 +217,7 @@ export function FormSelect({
       </PopoverForModal>
       {form.getFieldState(formValueName).isDirty || customDirty ? (
         <RotateCcw
-          className="text-muted-foreground hover:text-foreground absolute right-1 top-1 z-50 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
+          className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
           onClick={() =>
             form.setValue(formValueName, defaultValue, {
               shouldDirty: true,

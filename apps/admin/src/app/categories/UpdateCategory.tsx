@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { CategoryNode } from "@siberiana/schemas";
+import { CategoryForm } from "@siberiana/schemas";
 import {
   Button,
   Dialog,
@@ -27,22 +27,23 @@ import {
 
 import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
-import Dropzone from "~/components/tables/inputs/Dropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import InputDropzone from "~/components/tables/inputs/InputDropzone";
+import { putObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCategory from "./DeleteCategory";
 
-export default function UpdateCategory(props: CategoryNode) {
+export default function UpdateCategory(props: CategoryForm) {
   const [loading, setLoading] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const session = useSession();
 
-  const form = useForm<z.infer<typeof CategoryNode>>({
-    resolver: zodResolver(CategoryNode),
+  const form = useForm<z.infer<typeof CategoryForm>>({
+    resolver: zodResolver(CategoryForm),
     mode: "onChange",
     defaultValues: props,
   });
@@ -54,8 +55,19 @@ export default function UpdateCategory(props: CategoryNode) {
 
   const mutation = useMutation({
     mutationKey: ["updateCategory", requestHeaders],
-    mutationFn: (values: CategoryNode) =>
-      request(
+    mutationFn: async (values: CategoryForm) => {
+      const resUpload =
+        values.primaryImage.url !== props.primaryImage.url &&
+        values.primaryImage.file
+          ? await putObjects({ files: [values.primaryImage.file] })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         updateCategory(),
         {
@@ -65,11 +77,13 @@ export default function UpdateCategory(props: CategoryNode) {
             description: values.description,
             slug: values.slug,
             abbreviation: values.abbreviation,
-            primaryImageURL: values.primaryImageURL,
+            primaryImageURL:
+              resUpload !== null ? resUpload.urls[0] : values.primaryImage.url,
           },
         },
         requestHeaders,
-      ),
+      );
+    },
     onMutate: () => setLoading(true),
     onError: (err) => {
       setLoading(false);
@@ -95,7 +109,7 @@ export default function UpdateCategory(props: CategoryNode) {
     },
   });
 
-  function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+  function handleSave(dataForm: z.infer<typeof CategoryForm>) {
     const {
       description,
       ...rest // assigns remaining
@@ -116,7 +130,7 @@ export default function UpdateCategory(props: CategoryNode) {
         className="flex h-fit flex-col justify-start gap-2"
       >
         <ImageComp
-          src={props.primaryImageURL}
+          src={props.primaryImage.url}
           title={props.displayName}
           className={"aspect-[1.5/1] max-h-[220px] min-h-[215px]"}
           classNameImage="w-full object-cover h-full"
@@ -172,6 +186,7 @@ export default function UpdateCategory(props: CategoryNode) {
                   <FormInputText
                     name="displayName"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={props.displayName}
                   />
                 </div>
 
@@ -182,15 +197,13 @@ export default function UpdateCategory(props: CategoryNode) {
                   <FormInputText
                     name="slug"
                     className="border-border w-full max-w-lg text-sm"
+                    defaultValue={props.slug}
                   />
                 </div>
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <Dropzone
-                    formValueName="primaryImageURL"
-                    defaultValue={props.primaryImageURL}
-                  />
+                  <InputDropzone formValueName="primaryImage" />
                 </div>
 
                 <div className="mb-6">
@@ -198,6 +211,7 @@ export default function UpdateCategory(props: CategoryNode) {
                   <FormInputText
                     name="abbreviation"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={props.abbreviation}
                   />
                 </div>
 

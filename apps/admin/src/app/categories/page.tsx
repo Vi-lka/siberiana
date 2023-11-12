@@ -1,5 +1,7 @@
 import React from "react";
 
+import type { CategoryForm } from "@siberiana/schemas";
+
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { getCategories } from "~/lib/queries/collections";
 import AddCategory from "./AddCategory";
@@ -31,13 +33,29 @@ export default async function CategoriesPage({
     );
   }
 
+  const dataForUpdate = result.value.edges.map((data) => {
+    const node = data.node;
+    const {
+      primaryImageURL,
+      ...rest // assigns remaining
+    } = node;
+
+    return {
+      primaryImage: {
+        file: null,
+        url: primaryImageURL,
+      },
+      ...rest,
+    } as CategoryForm;
+  });
+
   return (
     <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
       <AddCategory className="ml-auto mr-6" />
       <div className="mt-6 flex flex-wrap justify-center gap-10">
-        {result.value.edges.map((edge) => (
-          <div key={edge.node.id} className="">
-            <UpdateCategory {...edge.node} />
+        {dataForUpdate.map((item) => (
+          <div key={item.id} className="">
+            <UpdateCategory {...item} />
           </div>
         ))}
       </div>

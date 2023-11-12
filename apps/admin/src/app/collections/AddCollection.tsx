@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { CollectionNode } from "@siberiana/schemas";
+import { CollectionForm } from "@siberiana/schemas";
 import {
   Button,
   Dialog,
@@ -27,9 +27,10 @@ import {
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import Categories from "~/components/tables/global-fields/Categories";
-import Dropzone from "~/components/tables/inputs/Dropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import InputDropzone from "~/components/tables/inputs/InputDropzone";
+import { putObjects } from "~/lib/auth/siberiana";
 import { createCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import TypeSelect from "./TypeSelect";
@@ -39,13 +40,16 @@ const DEFAULT_VALUES = {
   slug: "",
   displayName: "",
   abbreviation: "",
-  primaryImageURL: "",
+  primaryImage: {
+    file: undefined,
+    url: "",
+  },
   description: "",
   createdBy: "",
   createdAt: new Date(),
   updatedBy: "",
   updatedAt: new Date(),
-} as CollectionNode;
+} as CollectionForm;
 
 export default function AddCollection({ className }: { className?: string }) {
   const [loading, setLoading] = React.useState(false);
@@ -54,8 +58,8 @@ export default function AddCollection({ className }: { className?: string }) {
   const router = useRouter();
   const session = useSession();
 
-  const form = useForm<z.infer<typeof CollectionNode>>({
-    resolver: zodResolver(CollectionNode),
+  const form = useForm<z.infer<typeof CollectionForm>>({
+    resolver: zodResolver(CollectionForm),
     mode: "onChange",
     defaultValues: DEFAULT_VALUES,
   });
@@ -67,8 +71,17 @@ export default function AddCollection({ className }: { className?: string }) {
 
   const mutation = useMutation({
     mutationKey: ["createCollection", requestHeaders],
-    mutationFn: (values: CollectionNode) =>
-      request(
+    mutationFn: async (values: CollectionForm) => {
+      const resUpload = values.primaryImage.file
+        ? await putObjects({ files: [values.primaryImage.file] })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         createCollection(),
         {
@@ -77,13 +90,14 @@ export default function AddCollection({ className }: { className?: string }) {
             description: values.description,
             abbreviation: values.abbreviation,
             categoryID: values.category.id,
-            primaryImageURL: values.primaryImageURL,
+            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
             slug: values.slug,
             type: values.type,
           },
         },
         requestHeaders,
-      ),
+      );
+    },
     onMutate: () => setLoading(true),
     onError: (err) => {
       setLoading(false);
@@ -109,7 +123,7 @@ export default function AddCollection({ className }: { className?: string }) {
     },
   });
 
-  function handleSave(dataForm: z.infer<typeof CollectionNode>) {
+  function handleSave(dataForm: z.infer<typeof CollectionForm>) {
     const {
       description,
       ...rest // assigns remaining
@@ -163,6 +177,7 @@ export default function AddCollection({ className }: { className?: string }) {
                   <FormInputText
                     name="displayName"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={DEFAULT_VALUES.displayName}
                   />
                 </div>
 
@@ -173,6 +188,7 @@ export default function AddCollection({ className }: { className?: string }) {
                   <FormInputText
                     name="slug"
                     className="border-border w-full max-w-lg text-sm"
+                    defaultValue={DEFAULT_VALUES.slug}
                   />
                 </div>
 
@@ -197,7 +213,7 @@ export default function AddCollection({ className }: { className?: string }) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <Dropzone formValueName="primaryImageURL" />
+                  <InputDropzone formValueName="primaryImage" />
                 </div>
 
                 <div className="mb-6">
@@ -205,6 +221,7 @@ export default function AddCollection({ className }: { className?: string }) {
                   <FormInputText
                     name="abbreviation"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={DEFAULT_VALUES.abbreviation}
                   />
                 </div>
 
@@ -213,7 +230,7 @@ export default function AddCollection({ className }: { className?: string }) {
                   <FormTextArea
                     name="description"
                     className="border-border w-full max-w-lg text-sm"
-                    defaultValue=""
+                    defaultValue={DEFAULT_VALUES.description}
                   />
                 </div>
               </ScrollArea>

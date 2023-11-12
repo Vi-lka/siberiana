@@ -5,6 +5,7 @@ import request from "graphql-request";
 
 import type { ArtifactForTable } from "@siberiana/schemas";
 
+import { putObjects } from "../auth/siberiana";
 import {
   clearDate,
   clearLocation,
@@ -30,7 +31,19 @@ export function useCreateArtifact(access_token?: string) {
     "Content-Type": "application/json",
   };
   const mutation = useMutation({
-    mutationFn: (value: ArtifactForTable) => {
+    mutationFn: async (value: ArtifactForTable) => {
+      const resUpload = value.primaryImage.file
+        ? await putObjects({
+            bucket: "artifacts",
+            files: [value.primaryImage.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -40,7 +53,7 @@ export function useCreateArtifact(access_token?: string) {
             collectionID: value.collection.id,
             displayName: value.displayName,
             description: value.description,
-            primaryImageURL: value.primaryImageURL,
+            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
             weight: value.weight,
             width: value.sizes.width,
             height: value.sizes.height,
@@ -119,7 +132,7 @@ export function useUpdateArtifact(access_token?: string) {
     "Content-Type": "application/json",
   };
   const mutation = useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       id,
       newValue,
       oldValue,
@@ -139,6 +152,21 @@ export function useUpdateArtifact(access_token?: string) {
         newValue.techniques,
         oldValue.techniques,
       );
+
+      const resUpload =
+        newValue.primaryImage.url !== oldValue.primaryImage.url &&
+        newValue.primaryImage.file
+          ? await putObjects({
+              bucket: "artifacts",
+              files: [newValue.primaryImage.file],
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -147,7 +175,12 @@ export function useUpdateArtifact(access_token?: string) {
           input: {
             status: newValue.status.id,
             displayName: newValue.displayName,
-            primaryImageURL: newValue.primaryImageURL,
+            primaryImageURL:
+              resUpload !== null
+                ? resUpload.urls[0]
+                : newValue.primaryImage.url.length === 0
+                ? newValue.primaryImage.url
+                : oldValue.primaryImage.url,
             description: newValue.description,
             weight: newValue.weight,
             width: newValue.sizes.width,

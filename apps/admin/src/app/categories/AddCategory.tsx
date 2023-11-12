@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { CategoryNode } from "@siberiana/schemas";
+import { CategoryForm } from "@siberiana/schemas";
 import {
   Button,
   Dialog,
@@ -26,9 +26,10 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-import Dropzone from "~/components/tables/inputs/Dropzone";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import InputDropzone from "~/components/tables/inputs/InputDropzone";
+import { putObjects } from "~/lib/auth/siberiana";
 import { createCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 
@@ -37,14 +38,17 @@ const DEFAULT_VALUES = {
   slug: "",
   displayName: "",
   abbreviation: "",
-  primaryImageURL: "",
+  primaryImage: {
+    file: undefined,
+    url: "",
+  },
   description: "",
   collections: [],
   createdBy: "",
   createdAt: new Date(),
   updatedBy: "",
   updatedAt: new Date(),
-} as CategoryNode;
+} as CategoryForm;
 
 export default function AddCategory({ className }: { className?: string }) {
   const [loading, setLoading] = React.useState(false);
@@ -62,8 +66,8 @@ export default function AddCategory({ className }: { className?: string }) {
     return ids;
   }
 
-  const form = useForm<z.infer<typeof CategoryNode>>({
-    resolver: zodResolver(CategoryNode),
+  const form = useForm<z.infer<typeof CategoryForm>>({
+    resolver: zodResolver(CategoryForm),
     mode: "onChange",
     defaultValues: DEFAULT_VALUES,
   });
@@ -75,8 +79,17 @@ export default function AddCategory({ className }: { className?: string }) {
 
   const mutation = useMutation({
     mutationKey: ["createCategory", requestHeaders],
-    mutationFn: (values: CategoryNode) =>
-      request(
+    mutationFn: async (values: CategoryForm) => {
+      const resUpload = values.primaryImage.file
+        ? await putObjects({ files: [values.primaryImage.file] })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         createCategory(),
         {
@@ -85,12 +98,13 @@ export default function AddCategory({ className }: { className?: string }) {
             description: values.description,
             abbreviation: values.abbreviation,
             collectionIDs: getCollectionsIds(values.collections),
-            primaryImageURL: values.primaryImageURL,
+            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
             slug: values.slug,
           },
         },
         requestHeaders,
-      ),
+      );
+    },
     onMutate: () => setLoading(true),
     onError: (err) => {
       setLoading(false);
@@ -116,7 +130,7 @@ export default function AddCategory({ className }: { className?: string }) {
     },
   });
 
-  function handleSave(dataForm: z.infer<typeof CategoryNode>) {
+  function handleSave(dataForm: z.infer<typeof CategoryForm>) {
     const {
       description,
       ...rest // assigns remaining
@@ -170,6 +184,7 @@ export default function AddCategory({ className }: { className?: string }) {
                   <FormInputText
                     name="displayName"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={DEFAULT_VALUES.displayName}
                   />
                 </div>
 
@@ -180,12 +195,13 @@ export default function AddCategory({ className }: { className?: string }) {
                   <FormInputText
                     name="slug"
                     className="border-border w-full max-w-lg text-sm"
+                    defaultValue={DEFAULT_VALUES.slug}
                   />
                 </div>
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <Dropzone formValueName="primaryImageURL" />
+                  <InputDropzone formValueName="primaryImage" />
                 </div>
 
                 <div className="mb-6">
@@ -193,6 +209,7 @@ export default function AddCategory({ className }: { className?: string }) {
                   <FormInputText
                     name="abbreviation"
                     className="border-border w-full max-w-lg text-base"
+                    defaultValue={DEFAULT_VALUES.abbreviation}
                   />
                 </div>
 
@@ -201,7 +218,7 @@ export default function AddCategory({ className }: { className?: string }) {
                   <FormTextArea
                     name="description"
                     className="border-border w-full max-w-lg text-sm"
-                    defaultValue={""}
+                    defaultValue={DEFAULT_VALUES.description}
                   />
                 </div>
               </ScrollArea>

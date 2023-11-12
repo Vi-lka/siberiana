@@ -6,6 +6,8 @@ import {
   ArtifactsArray,
   CulturesArray,
   MaterialsArray,
+  MonumentsArray,
+  SetsArray,
   TechniquesArray,
 } from "@siberiana/schemas";
 
@@ -431,4 +433,162 @@ export const getTechniques = async ({
   const techniques = TechniquesArray.parse(json.data.techniques);
 
   return techniques;
+};
+
+//.........................SETS.........................//
+export const getSets = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+}): Promise<SetsArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+  query GetSets {
+    sets(
+      first: ${first}, 
+      offset: ${offset}, 
+      orderBy: [{
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
+      }],
+      where: {
+        displayNameContainsFold: "${search}"
+      }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          displayName
+          description
+          externalLink
+          artifacts {
+            id
+          }
+          monuments {
+            id
+            displayName
+          }
+          createdBy
+          createdAt
+          updatedBy
+          updatedAt
+        }
+      }
+    }
+  }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Sets'`);
+  }
+
+  const json = (await res.json()) as { data: { sets: SetsArray } };
+  if (json.data.sets.totalCount === 0) {
+    notFound();
+  }
+
+  const sets = SetsArray.parse(json.data.sets);
+
+  return sets;
+};
+
+//.........................MONUMENTS.........................//
+export const getMonuments = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+}): Promise<MonumentsArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+  query GetMonuments {
+    monuments(
+      first: ${first}, 
+      offset: ${offset}, 
+      orderBy: [{
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
+      }],
+      where: {
+        displayNameContainsFold: "${search}"
+      }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          displayName
+          description
+          externalLink
+          artifacts {
+            id
+          }
+          sets {
+            id
+            displayName
+          }
+          createdBy
+          createdAt
+          updatedBy
+          updatedAt
+        }
+      }
+    }
+  }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Monuments'`);
+  }
+
+  const json = (await res.json()) as { data: { monuments: MonumentsArray } };
+  if (json.data.monuments.totalCount === 0) {
+    notFound();
+  }
+
+  const monuments = MonumentsArray.parse(json.data.monuments);
+
+  return monuments;
 };

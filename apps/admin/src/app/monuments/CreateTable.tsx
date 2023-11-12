@@ -20,20 +20,20 @@ import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { CultureForTable } from "@siberiana/schemas";
-import { CulturesForm } from "@siberiana/schemas";
+import type { MonumentForTable } from "@siberiana/schemas";
+import { MonumentsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import DataTable from "~/components/tables/DataTable";
-import { useCreateCulture } from "~/lib/mutations/additionals";
+import { useCreateMonument } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 
-const FORM_DATA_KEY = "culturesCreate";
+const FORM_DATA_KEY = "monumentsCreate";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: CultureForTable[] & TData[];
+  data: MonumentForTable[] & TData[];
   hasObjectsToUpdate?: boolean;
 }
 
@@ -42,14 +42,14 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const savedResult = getSavedData<CultureForTable, TData>({
+  const savedResult = getSavedData<MonumentForTable, TData>({
     data,
     key: FORM_DATA_KEY,
   });
 
-  const [dataState, setDataState] = React.useState<CultureForTable[] & TData[]>(
-    savedResult.data,
-  );
+  const [dataState, setDataState] = React.useState<
+    MonumentForTable[] & TData[]
+  >(savedResult.data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -66,7 +66,7 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const mutation = useCreateCulture(session.data?.access_token);
+  const mutation = useCreateMonument(session.data?.access_token);
 
   const table = useReactTable({
     data: dataState,
@@ -85,28 +85,28 @@ export default function CreateTable<TData, TValue>({
       rowSelection,
     },
   });
-  const form = useForm<z.infer<typeof CulturesForm>>({
-    resolver: zodResolver(CulturesForm),
+  const form = useForm<z.infer<typeof MonumentsForm>>({
+    resolver: zodResolver(MonumentsForm),
     mode: "all",
     defaultValues: {
-      cultures: dataState,
+      monuments: dataState,
     },
   });
   const control = form.control;
   const { append, remove } = useFieldArray({
     control,
-    name: "cultures",
+    name: "monuments",
   });
 
   React.useEffect(() => {
     const triggerValidation = async () => {
-      await form.trigger("cultures");
+      await form.trigger("monuments");
     };
     triggerValidation().catch(console.error);
   }, [form]);
 
-  usePersistForm<CultureForTable[]>({
-    value: { data: form.getValues().cultures },
+  usePersistForm<MonumentForTable[]>({
+    value: { data: form.getValues().monuments },
     localStorageKey: FORM_DATA_KEY,
     isLoading: loading || isPendingRouter,
   });
@@ -116,7 +116,8 @@ export default function CreateTable<TData, TValue>({
     displayName: "",
     description: "",
     externalLink: "",
-  } as CultureForTable & TData;
+    sets: [],
+  } as MonumentForTable & TData;
 
   const handleDeleteSaved = () => {
     startTransitionTable(() => {
@@ -124,7 +125,7 @@ export default function CreateTable<TData, TValue>({
     });
     startTransitionForm(() => {
       form.reset(
-        { cultures: data },
+        { monuments: data },
         { keepValues: false, keepDirtyValues: false },
       );
     });
@@ -146,9 +147,9 @@ export default function CreateTable<TData, TValue>({
 
     const filteredData = form
       .getValues()
-      .cultures.filter(
+      .monuments.filter(
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as CultureForTable[] & TData[];
+      ) as MonumentForTable[] & TData[];
 
     if (filteredData.length === 0) {
       toast({
@@ -179,15 +180,15 @@ export default function CreateTable<TData, TValue>({
     const params = new URLSearchParams(window.location.search);
     params.delete("mode");
     startTransitionGoToUpdate(() => {
-      router.push(`cultures?${params.toString()}`);
+      router.push(`monuments?${params.toString()}`);
     });
   }, [router]);
 
-  async function handleSave(dataForm: z.infer<typeof CulturesForm>) {
+  async function handleSave(dataForm: z.infer<typeof MonumentsForm>) {
     setLoading(true);
 
-    const noLines = dataForm.cultures.map((culture) => {
-      const { displayName, description, ...rest } = culture;
+    const noLines = dataForm.monuments.map((monument) => {
+      const { displayName, description, ...rest } = monument;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
@@ -216,7 +217,7 @@ export default function CreateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Культуры добавлены",
+        description: "Памятники добавлены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -226,7 +227,7 @@ export default function CreateTable<TData, TValue>({
       params.delete("mode");
       startTransitionRouter(() => {
         router.refresh();
-        router.push(`cultures?${params.toString()}`);
+        router.push(`monuments?${params.toString()}`);
       });
       setLoading(false);
       localStorage.removeItem(FORM_DATA_KEY);

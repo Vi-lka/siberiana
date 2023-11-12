@@ -20,20 +20,17 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { TechniqueForTable } from "@siberiana/schemas";
-import { TechniquesForm } from "@siberiana/schemas";
+import type { SetForTable } from "@siberiana/schemas";
+import { SetsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import DataTable from "~/components/tables/DataTable";
-import {
-  useDeleteTechnique,
-  useUpdateTechnique,
-} from "~/lib/mutations/additionals";
+import { useDeleteSet, useUpdateSet } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TechniqueForTable[] & TData[];
+  data: SetForTable[] & TData[];
 }
 
 export default function UpdateTable<TData, TValue>({
@@ -54,8 +51,8 @@ export default function UpdateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const deleteMutation = useDeleteTechnique(session.data?.access_token);
-  const updateMutation = useUpdateTechnique(session.data?.access_token);
+  const deleteMutation = useDeleteSet(session.data?.access_token);
+  const updateMutation = useUpdateSet(session.data?.access_token);
 
   const table = useReactTable({
     data: data,
@@ -75,11 +72,11 @@ export default function UpdateTable<TData, TValue>({
     },
   });
 
-  const form = useForm<z.infer<typeof TechniquesForm>>({
-    resolver: zodResolver(TechniquesForm),
+  const form = useForm<z.infer<typeof SetsForm>>({
+    resolver: zodResolver(SetsForm),
     mode: "onChange",
     defaultValues: {
-      techniques: data,
+      sets: data,
     },
   });
 
@@ -87,7 +84,7 @@ export default function UpdateTable<TData, TValue>({
     const params = new URLSearchParams(window.location.search);
     params.set("mode", "add");
     startTransitionGoToCreate(() => {
-      router.push(`techniques?${params.toString()}`);
+      router.push(`sets?${params.toString()}`);
     });
   }, [router]);
 
@@ -97,9 +94,9 @@ export default function UpdateTable<TData, TValue>({
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const dataToDelete = form
       .getValues()
-      .techniques.filter((item) =>
+      .sets.filter((item) =>
         selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as TechniqueForTable[] & TData[];
+      ) as SetForTable[] & TData[];
     const idsToDelete = dataToDelete.map((item) => item.id);
 
     const mutationsArray = idsToDelete.map((id) =>
@@ -124,7 +121,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Техники удалены",
+        description: "Комплексы удалены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -137,11 +134,11 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  async function handleUpdate(dataForm: z.infer<typeof TechniquesForm>) {
+  async function handleUpdate(dataForm: z.infer<typeof SetsForm>) {
     setLoading(true);
 
-    const noLines = dataForm.techniques.map((technique) => {
-      const { displayName, description, ...rest } = technique;
+    const noLines = dataForm.sets.map((set) => {
+      const { displayName, description, ...rest } = set;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
@@ -150,22 +147,24 @@ export default function UpdateTable<TData, TValue>({
       };
     });
 
-    const dirtyFields = form.formState.dirtyFields.techniques;
+    const dirtyFields = form.formState.dirtyFields.sets;
 
     const dirtyFieldsArray = noLines
       .map((item, index) => {
         if (!!dirtyFields && typeof dirtyFields[index] !== "undefined") {
-          return { new: item };
+          return { new: item, old: data[index] };
         }
       })
       .filter((item) => item !== undefined) as {
-      new: TechniqueForTable;
+      new: SetForTable;
+      old: SetForTable;
     }[];
 
     const mutationsArray = dirtyFieldsArray.map((item) =>
       updateMutation.mutateAsync({
         id: item.new.id,
         newValue: item.new,
+        oldValue: item.old,
       }),
     );
 
@@ -187,7 +186,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Техники изменены",
+        description: "Комплексы изменены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });

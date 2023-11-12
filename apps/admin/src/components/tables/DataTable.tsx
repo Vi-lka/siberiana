@@ -3,6 +3,7 @@ import type { Table as TableTanstack } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
 import {
   CornerRightUp,
+  ListRestart,
   Loader2,
   MoreHorizontal,
   Plus,
@@ -28,6 +29,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from "@siberiana/ui";
 
 import { DataTablePagination } from "./DataTablePagination";
@@ -49,6 +54,7 @@ type HasAdd = {
   isHasAdd: true;
   handleAdd: () => void;
   handleDelete: () => void;
+  handleDeleteSaved: () => void;
 };
 type NoHasAdd = {
   isHasAdd: false;
@@ -59,6 +65,12 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
   props: DataTableProps<TData, TFieldValues> & (HasAdd | NoHasAdd),
 ) {
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
+
+  const submitButtonDisabled = props.isHasAdd
+    ? !props.form.formState.isValid || props.isLoading
+    : !props.form.formState.isValid ||
+      !props.form.formState.isDirty ||
+      props.isLoading;
 
   return (
     <div className="font-OpenSans flex flex-col gap-3">
@@ -124,6 +136,31 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {props.isHasAdd ? (
+                <TooltipProvider>
+                  <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        disabled={props.isLoading}
+                        className="data-[state=open]:bg-muted flex h-10 w-10 p-0"
+                        onClick={props.handleDeleteSaved}
+                      >
+                        {props.isLoading ? (
+                          <Loader2 className="mx-8 h-6 w-6 animate-spin" />
+                        ) : (
+                          <ListRestart className="h-6 w-6" />
+                        )}
+                        <span className="sr-only">Delete saved data</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>Очистить историю изменений</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3 lg:justify-end lg:gap-6">
@@ -167,11 +204,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
               ) : null}
 
               <Button
-                disabled={
-                  !(
-                    props.form.formState.isDirty && props.form.formState.isValid
-                  ) || props.isLoading
-                }
+                disabled={submitButtonDisabled}
                 type="submit"
                 className="ml-auto mr-0 px-6 text-sm uppercase"
               >

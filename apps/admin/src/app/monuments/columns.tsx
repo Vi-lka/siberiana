@@ -4,13 +4,14 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
-import type { MaterialForTable } from "@siberiana/schemas";
+import type { MonumentForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
+import Sets from "~/components/tables/artifacts/Sets";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 
-export const columns: ColumnDef<MaterialForTable>[] = [
+export const columns: ColumnDef<MonumentForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -60,7 +61,7 @@ export const columns: ColumnDef<MaterialForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`materials[${row.index}].displayName`}
+          name={`monuments[${row.index}].displayName`}
           defaultValue={row.original.displayName}
         />
       );
@@ -72,8 +73,20 @@ export const columns: ColumnDef<MaterialForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`materials[${row.index}].description`}
+          name={`monuments[${row.index}].description`}
           defaultValue={row.original.description}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "sets",
+    header: () => <div className="text-center">Комплексы</div>,
+    cell: ({ row }) => {
+      return (
+        <Sets
+          formValueName={`monuments[${row.index}].sets`}
+          defaultSets={row.original.sets}
         />
       );
     },
@@ -84,7 +97,7 @@ export const columns: ColumnDef<MaterialForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`materials[${row.index}].externalLink`}
+          name={`monuments[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );
@@ -92,7 +105,7 @@ export const columns: ColumnDef<MaterialForTable>[] = [
   },
 ];
 
-export const updateColumns: ColumnDef<MaterialForTable>[] = [
+export const updateColumns: ColumnDef<MonumentForTable>[] = [
   ...columns,
   {
     accessorKey: "artifacts",

@@ -132,7 +132,7 @@ export const updateColumns: ColumnDef<TechniqueForTable>[] = [
     header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
     cell: ({ row }) => {
       const createdAt = row.original.createdAt
-        ? format(row.original.createdAt, "PPpp", { locale: ru })
+        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
         : "";
       return <div className="break-words text-center">{createdAt}</div>;
     },
@@ -152,7 +152,7 @@ export const updateColumns: ColumnDef<TechniqueForTable>[] = [
     cell: ({ row }) => {
       const updatedAt =
         row.original.updatedAt && row.original.updatedBy
-          ? format(row.original.updatedAt, "PPpp", { locale: ru })
+          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
           : "";
       return <div className="break-words text-center">{updatedAt}</div>;
     },

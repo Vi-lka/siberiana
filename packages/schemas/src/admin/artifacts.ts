@@ -1,15 +1,7 @@
 import { z } from "zod";
 
 import { ArtifactById, StatusEnum } from "../objects-schema";
-
-export const LocationEnum = z.enum([
-  "location",
-  "country",
-  "region",
-  "district",
-  "settlement",
-]);
-export type LocationEnum = z.infer<typeof LocationEnum>;
+import { ImageFile, LocationEnum } from "./global";
 
 export const Sizes = z.object({
   width: z.number(),
@@ -44,7 +36,10 @@ export const ArtifactForTable = z.object({
     displayName: z.string(),
   }),
   displayName: z.string().min(1),
-  primaryImageURL: z.string(),
+  primaryImage: z.object({
+    file: ImageFile.nullable().optional(),
+    url: z.string(),
+  }),
   description: z.string().optional(),
   chemicalComposition: z.string().optional(),
   typology: z.string().optional(),
@@ -57,7 +52,10 @@ export const ArtifactForTable = z.object({
   kpNumber: z.string().optional(),
   goskatalogNumber: z.string().optional(),
   externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
-  admissionDate: z.date().nullable().optional(),
+  admissionDate: z
+    .union([z.date(), z.string().datetime()])
+    .nullable()
+    .optional(),
   collection: z.object({
     id: z.string(),
     displayName: z.string(),
@@ -229,6 +227,64 @@ export const SetsList = z.object({
 });
 export type SetsList = z.infer<typeof SetsList>;
 
+export const SetsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        monuments: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type SetsArray = z.infer<typeof SetsArray>;
+
+export const SetForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  artifacts: z.number().optional(),
+  monuments: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type SetForTable = z.infer<typeof SetForTable>;
+
+export const SetsForm = z.object({
+  sets: SetForTable.array(),
+});
+export type SetsForm = z.infer<typeof SetsForm>;
+
 //.........................MONUMENTS.........................//
 export const MonumentsList = z.object({
   monuments: z.object({
@@ -243,6 +299,64 @@ export const MonumentsList = z.object({
   }),
 });
 export type MonumentsList = z.infer<typeof MonumentsList>;
+
+export const MonumentsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        sets: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type MonumentsArray = z.infer<typeof MonumentsArray>;
+
+export const MonumentForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  artifacts: z.number().optional(),
+  sets: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type MonumentForTable = z.infer<typeof MonumentForTable>;
+
+export const MonumentsForm = z.object({
+  monuments: MonumentForTable.array(),
+});
+export type MonumentsForm = z.infer<typeof MonumentsForm>;
 
 //.........................MATERIALS.........................//
 export const MaterialsList = z.object({

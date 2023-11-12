@@ -1,25 +1,25 @@
 "use client";
 
-import { divIcon } from "leaflet";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
+import { divIcon } from "leaflet";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { parse } from "wellknown";
 
 import type { PAPById } from "@siberiana/schemas";
 import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
 
-import { useProtectedAreaPoints } from "~/lib/queries/strapi-client";
-
 import "leaflet/dist/leaflet.css";
 
 import Image from "next/image";
+
+import { useProtectedAreaPoints } from "~/lib/queries/api-client";
 
 export default function ShowOnMap({ data }: { data: PAPById }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="font-Inter hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-10 w-full rounded-3xl px-10 px-3 py-5 py-6 text-xs font-normal uppercase md:w-auto md:px-10 md:py-6 xl:text-sm">
+        <Button className="font-Inter hover:bg-beaver hover:text-beaverLight dark:bg-accent dark:text-beaverLight dark:hover:text-darkBlue dark:hover:bg-beaverLight mt-10 w-full rounded-3xl px-3 py-6 text-xs font-normal uppercase md:w-auto md:px-10 md:py-6 xl:text-sm">
           Показать на карте
         </Button>
       </DialogTrigger>

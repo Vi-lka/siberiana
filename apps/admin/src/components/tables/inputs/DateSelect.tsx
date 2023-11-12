@@ -28,7 +28,7 @@ export default function DateSelect({
   name: string;
   placeholder: string;
   fromYear?: number;
-  defaultValue?: Date | null;
+  defaultValue?: Date | string | null;
 }) {
   const [open, setOpenChange] = React.useState(false);
 
@@ -102,7 +102,7 @@ export default function DateSelect({
           </Popover>
           {form.getFieldState(name).isDirty ? (
             <RotateCcw
-              className="text-muted-foreground hover:text-foreground absolute -top-1 right-1 z-50 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
+              className="text-muted-foreground hover:text-foreground absolute -top-1 right-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
               onClick={() => {
                 setOpenChange(false);
                 form.setValue(name, defaultValue, {

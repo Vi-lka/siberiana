@@ -68,7 +68,10 @@ export default async function TablesArtifacts({
       status: isModerator ? statusForModerator : statusForAdmin,
       displayName: "",
       description: "",
-      primaryImageURL: "",
+      primaryImage: {
+        file: undefined,
+        url: "",
+      },
       chemicalComposition: "",
       inventoryNumber: "",
       kpNumber: "",
@@ -76,6 +79,7 @@ export default async function TablesArtifacts({
       externalLink: "",
       typology: "",
       weight: "",
+      admissionDate: undefined,
       sizes: {
         width: 0,
         height: 0,
@@ -142,6 +146,7 @@ export default async function TablesArtifacts({
     const node = data.node;
     const {
       status,
+      primaryImageURL,
       collection,
       location,
       country,
@@ -174,6 +179,10 @@ export default async function TablesArtifacts({
       status: {
         id: status,
         displayName: getStatusName(status),
+      },
+      primaryImage: {
+        file: null,
+        url: primaryImageURL,
       },
       collection: {
         id: collection.id,

@@ -53,7 +53,7 @@ export default function FormTextArea({
           </FormControl>
           {form.getFieldState(name).isDirty || field.value !== defaultValue ? (
             <RotateCcw
-              className="text-muted-foreground hover:text-foreground absolute -top-1 right-1 z-50 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
+              className="text-muted-foreground hover:text-foreground absolute -top-1 right-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
               onClick={() =>
                 form.setValue(name, defaultValue, {
                   shouldDirty: true,

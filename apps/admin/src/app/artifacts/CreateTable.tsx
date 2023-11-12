@@ -28,6 +28,9 @@ import DataTable from "~/components/tables/DataTable";
 import { useCreateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import getStatusName from "~/lib/utils/getStatusName";
+import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
+
+const FORM_DATA_KEY = "artifactsCreate";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,9 +47,14 @@ export default function CreateTable<TData, TValue>({
   userRoles,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
+  const savedResult = getSavedData<ArtifactForTable, TData>({
+    data,
+    key: FORM_DATA_KEY,
+  });
+
   const [dataState, setDataState] = React.useState<
     ArtifactForTable[] & TData[]
-  >(data);
+  >(savedResult.data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -90,7 +98,7 @@ export default function CreateTable<TData, TValue>({
   });
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
-    mode: "onChange",
+    mode: "all",
     defaultValues: {
       artifacts: dataState,
     },
@@ -99,6 +107,29 @@ export default function CreateTable<TData, TValue>({
   const { append, remove } = useFieldArray({
     control,
     name: "artifacts",
+  });
+
+  React.useEffect(() => {
+    const triggerValidation = async () => {
+      await form.trigger("artifacts");
+    };
+    triggerValidation().catch(console.error);
+  }, [form]);
+
+  const dataPersistNoImage = form.getValues().artifacts.map((elem) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { primaryImage, ...rest } = elem;
+    const nullImage = {
+      file: undefined,
+      url: "",
+    };
+    return { primaryImage: nullImage, ...rest };
+  });
+
+  usePersistForm<ArtifactForTable[]>({
+    value: { data: dataPersistNoImage },
+    localStorageKey: FORM_DATA_KEY,
+    isLoading: loading || isPendingRouter,
   });
 
   const statusForModerator = {
@@ -114,7 +145,10 @@ export default function CreateTable<TData, TValue>({
     status: isModerator ? statusForModerator : statusForAdmin,
     displayName: "",
     description: "",
-    primaryImageURL: "",
+    primaryImage: {
+      file: undefined,
+      url: "",
+    },
     chemicalComposition: "",
     inventoryNumber: "",
     kpNumber: "",
@@ -122,6 +156,7 @@ export default function CreateTable<TData, TValue>({
     externalLink: "",
     typology: "",
     weight: "",
+    admissionDate: undefined,
     sizes: {
       width: 0,
       height: 0,
@@ -147,6 +182,17 @@ export default function CreateTable<TData, TValue>({
     projects: [],
     collection: dataState[0].collection,
   } as ArtifactForTable & TData;
+
+  const handleDeleteSaved = () => {
+    startTransitionTable(() => {
+      setDataState(data);
+    });
+    form.reset(
+      { artifacts: data },
+      { keepValues: false, keepDirtyValues: false },
+    );
+    localStorage.removeItem(FORM_DATA_KEY);
+  };
 
   const handleAdd = () => {
     startTransitionTable(() => {
@@ -186,8 +232,8 @@ export default function CreateTable<TData, TValue>({
         remove(row.index - i);
         i++;
       }
-      // form.reset({artifacts: filteredData}, { keepValues: false, keepDirtyValues: false, keepIsValid: true })
     });
+    form.reset({}, { keepValues: true, keepDirtyValues: false });
 
     table.toggleAllPageRowsSelected(false);
   };
@@ -199,10 +245,6 @@ export default function CreateTable<TData, TValue>({
       router.push(`artifacts?${params.toString()}`);
     });
   }, [router]);
-
-  // console.log("DATA_STATE: ", dataState)
-  // console.log("TABLE: ", table.getRowModel().rows[0].original)
-  // console.log("FORM: ", form.getValues().artifacts)
 
   async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
     setLoading(true);
@@ -237,7 +279,7 @@ export default function CreateTable<TData, TValue>({
       toast({
         variant: "destructive",
         title: "Oшибка!",
-        description: <p>{getShortDescription(rejected.reason as string)}</p>,
+        description: getShortDescription((rejected.reason as Error).message),
         className: "font-Inter",
       });
       console.log(rejected.reason);
@@ -258,6 +300,7 @@ export default function CreateTable<TData, TValue>({
         router.push(`artifacts?${params.toString()}`);
       });
       setLoading(false);
+      localStorage.removeItem(FORM_DATA_KEY);
     }
   }
 
@@ -278,6 +321,7 @@ export default function CreateTable<TData, TValue>({
       handleChangeMode={handleGoToUpdate}
       isHasAdd
       handleAdd={handleAdd}
+      handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}
     />
   );

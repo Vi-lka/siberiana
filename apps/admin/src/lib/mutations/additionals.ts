@@ -4,8 +4,12 @@ import request from "graphql-request";
 import type {
   CultureForTable,
   MaterialForTable,
+  MonumentForTable,
+  SetForTable,
   TechniqueForTable,
 } from "@siberiana/schemas";
+
+import { getIds, handleArrays } from "../utils/mutations-utils";
 
 //.........................CULTURE.........................//
 export function useCreateCulture(access_token?: string) {
@@ -280,6 +284,206 @@ export function useUpdateTechnique(access_token?: string) {
             displayName: newValue.displayName,
             description: newValue.description,
             externalLink: newValue.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................SET.........................//
+export function useCreateSet(access_token?: string) {
+  const mutationString = `
+        mutation CreateSet($input: CreateSetInput!) {
+            createSet(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: SetForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            description: value.description,
+            externalLink: value.externalLink,
+            monumentIDs: getIds(value.monuments),
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteSet(access_token?: string) {
+  const mutationString = `
+        mutation DeleteSet($deleteSetId: ID!) {
+            deleteSet(id: $deleteSetId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteSetId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateSet(access_token?: string) {
+  const mutationString = `
+        mutation UpdateSet($updateSetId: ID!, $input: UpdateSetInput!) {
+            updateSet(id: $updateSetId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+      oldValue,
+    }: {
+      id: string;
+      newValue: SetForTable;
+      oldValue: SetForTable;
+    }) => {
+      const monumentIDs = handleArrays(newValue.monuments, oldValue.monuments);
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateSetId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+            addMonumentIDs: monumentIDs.addValues,
+            removeMonumentIDs: monumentIDs.removeValues,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................MONUMENT.........................//
+export function useCreateMonument(access_token?: string) {
+  const mutationString = `
+        mutation CreateMonument($input: CreateMonumentInput!) {
+            createMonument(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: MonumentForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            description: value.description,
+            externalLink: value.externalLink,
+            setIDs: getIds(value.sets),
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteMonument(access_token?: string) {
+  const mutationString = `
+        mutation DeleteMonument($deleteMonumentId: ID!) {
+            deleteMonument(id: $deleteMonumentId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteMonumentId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateMonument(access_token?: string) {
+  const mutationString = `
+        mutation UpdateMonument($updateMonumentId: ID!, $input: UpdateMonumentInput!) {
+            updateMonument(id: $updateMonumentId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+      oldValue,
+    }: {
+      id: string;
+      newValue: MonumentForTable;
+      oldValue: MonumentForTable;
+    }) => {
+      const setIDs = handleArrays(newValue.sets, oldValue.sets);
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateMonumentId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+            addSetIDs: setIDs.addValues,
+            removeSetIDs: setIDs.removeValues,
           },
         },
         requestHeaders,
