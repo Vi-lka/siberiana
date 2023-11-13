@@ -20,18 +20,21 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
-import { ArtifactsForm } from "@siberiana/schemas";
+import type { ModelForTable } from "@siberiana/schemas";
+import { ModelsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import DataTable from "~/components/tables/DataTable";
-import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
+import {
+  useDeleteModel,
+  useUpdateModel,
+} from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   moderatorsColumns: ColumnDef<TData, TValue>[];
-  data: ArtifactForTable[] & TData[];
+  data: ModelForTable[] & TData[];
 }
 
 export default function UpdateTable<TData, TValue>({
@@ -53,8 +56,8 @@ export default function UpdateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const deleteMutation = useDeleteArtifact(session.data?.access_token);
-  const updateMutation = useUpdateArtifact(session.data?.access_token);
+  const deleteMutation = useDeleteModel(session.data?.access_token);
+  const updateMutation = useUpdateModel(session.data?.access_token);
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -80,11 +83,11 @@ export default function UpdateTable<TData, TValue>({
     },
   });
 
-  const form = useForm<z.infer<typeof ArtifactsForm>>({
-    resolver: zodResolver(ArtifactsForm),
+  const form = useForm<z.infer<typeof ModelsForm>>({
+    resolver: zodResolver(ModelsForm),
     mode: "onChange",
     defaultValues: {
-      artifacts: data,
+      models: data,
     },
   });
 
@@ -92,7 +95,7 @@ export default function UpdateTable<TData, TValue>({
     const params = new URLSearchParams(window.location.search);
     params.set("mode", "add");
     startTransitionGoToCreate(() => {
-      router.push(`artifacts?${params.toString()}`);
+      router.push(`models?${params.toString()}`);
     });
   }, [router]);
 
@@ -102,9 +105,9 @@ export default function UpdateTable<TData, TValue>({
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const dataToDelete = form
       .getValues()
-      .artifacts.filter((item) =>
+      .models.filter((item) =>
         selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as ArtifactForTable[] & TData[];
+      ) as ModelForTable[] & TData[];
     const idsToDelete = dataToDelete.map((item) => item.id);
 
     const mutationsArray = idsToDelete.map((id) =>
@@ -129,7 +132,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты удалены",
+        description: "Модели удалены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -142,28 +145,20 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  async function handleUpdate(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleUpdate(dataForm: z.infer<typeof ModelsForm>) {
     setLoading(true);
 
-    const noLines = dataForm.artifacts.map((artifact) => {
-      const {
-        displayName,
-        description,
-        typology,
-        chemicalComposition,
-        ...rest
-      } = artifact;
+    const noLines = dataForm.models.map((model) => {
+      const { displayName, description, ...rest } = model;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
         description: description?.replace(/\n/g, " "),
-        typology: typology?.replace(/\n/g, " "),
-        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest,
       };
     });
 
-    const dirtyFields = form.formState.dirtyFields.artifacts;
+    const dirtyFields = form.formState.dirtyFields.models;
 
     const dirtyFieldsArray = noLines
       .map((item, index) => {
@@ -172,8 +167,8 @@ export default function UpdateTable<TData, TValue>({
         }
       })
       .filter((item) => item !== undefined) as {
-      new: ArtifactForTable;
-      old: ArtifactForTable;
+      new: ModelForTable;
+      old: ModelForTable;
     }[];
 
     const mutationsArray = dirtyFieldsArray.map((item) =>
@@ -202,7 +197,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты изменены",
+        description: "Модели изменены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });

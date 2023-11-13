@@ -20,22 +20,22 @@ import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
-import { ArtifactsForm } from "@siberiana/schemas";
+import type { ModelForTable } from "@siberiana/schemas";
+import { ModelsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import DataTable from "~/components/tables/DataTable";
-import { useCreateArtifact } from "~/lib/mutations/objects";
+import { useCreateModel } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import getStatusName from "~/lib/utils/getStatusName";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
+import getStatusName from "~/lib/utils/getStatusName";
 
-const FORM_DATA_KEY = "artifactsCreate";
+const FORM_DATA_KEY = "modelsCreate";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   moderatorsColumns: ColumnDef<TData, TValue>[];
-  data: ArtifactForTable[] & TData[];
+  data: ModelForTable[] & TData[];
   hasObjectsToUpdate?: boolean;
 }
 
@@ -45,14 +45,14 @@ export default function CreateTable<TData, TValue>({
   data,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const savedResult = getSavedData<ArtifactForTable, TData>({
+  const savedResult = getSavedData<ModelForTable, TData>({
     data,
     key: FORM_DATA_KEY,
   });
 
-  const [dataState, setDataState] = React.useState<
-    ArtifactForTable[] & TData[]
-  >(savedResult.data);
+  const [dataState, setDataState] = React.useState<ModelForTable[] & TData[]>(
+    savedResult.data,
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -69,7 +69,7 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const mutation = useCreateArtifact(session.data?.access_token);
+  const mutation = useCreateModel(session.data?.access_token);
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -94,38 +94,28 @@ export default function CreateTable<TData, TValue>({
       rowSelection,
     },
   });
-  const form = useForm<z.infer<typeof ArtifactsForm>>({
-    resolver: zodResolver(ArtifactsForm),
+  const form = useForm<z.infer<typeof ModelsForm>>({
+    resolver: zodResolver(ModelsForm),
     mode: "all",
     defaultValues: {
-      artifacts: dataState,
+      models: dataState,
     },
   });
   const control = form.control;
   const { append, remove } = useFieldArray({
     control,
-    name: "artifacts",
+    name: "models",
   });
 
   React.useEffect(() => {
     const triggerValidation = async () => {
-      await form.trigger("artifacts");
+      await form.trigger("models");
     };
     triggerValidation().catch(console.error);
   }, [form]);
 
-  const dataPersistNoImage = dataState.map((elem) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { primaryImage, ...rest } = elem;
-    const nullImage = {
-      file: undefined,
-      url: "",
-    };
-    return { primaryImage: nullImage, ...rest };
-  });
-
-  usePersistForm<ArtifactForTable[]>({
-    value: { data: dataPersistNoImage },
+  usePersistForm<ModelForTable[]>({
+    value: { data: form.getValues().models },
     localStorageKey: FORM_DATA_KEY,
     isLoading: loading || isPendingRouter,
   });
@@ -142,54 +132,26 @@ export default function CreateTable<TData, TValue>({
     id: "random" + Math.random().toString(),
     status: isModerator ? statusForModerator : statusForAdmin,
     displayName: "",
-    description: "",
-    primaryImage: {
-      file: undefined,
+    file: {
+      file: null,
       url: "",
     },
-    chemicalComposition: "",
-    inventoryNumber: "",
-    kpNumber: "",
-    goskatalogNumber: "",
+    description: "",
     externalLink: "",
-    typology: "",
-    weight: "",
-    admissionDate: undefined,
-    sizes: {
-      width: 0,
-      height: 0,
-      length: 0,
-      depth: 0,
-      diameter: 0,
-    },
-    dating: "",
-    datingRow: {
-      datingStart: 0,
-      datingEnd: 0,
-    },
-    donor: null,
-    model: null,
-    license: null,
-    culturalAffiliation: null,
-    set: null,
-    monument: null,
-    location: null,
-    mediums: [],
-    techniques: [],
-    authors: [],
-    publications: [],
-    projects: [],
-    collection: dataState[0].collection,
-  } as ArtifactForTable & TData;
+    artifacts: [],
+    petroglyphs: []
+  } as ModelForTable & TData;
 
   const handleDeleteSaved = () => {
     startTransitionTable(() => {
       setDataState(data);
     });
-    form.reset(
-      { artifacts: data },
-      { keepValues: false, keepDirtyValues: false },
-    );
+    startTransitionForm(() => {
+      form.reset(
+        { models: data },
+        { keepValues: false, keepDirtyValues: false },
+      );
+    });
     localStorage.removeItem(FORM_DATA_KEY);
   };
 
@@ -208,9 +170,9 @@ export default function CreateTable<TData, TValue>({
 
     const filteredData = form
       .getValues()
-      .artifacts.filter(
+      .models.filter(
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as ArtifactForTable[] & TData[];
+      ) as ModelForTable[] & TData[];
 
     if (filteredData.length === 0) {
       toast({
@@ -232,7 +194,7 @@ export default function CreateTable<TData, TValue>({
         i++;
       }
     });
-    form.reset({}, { keepValues: true, keepDirtyValues: false });
+    form.reset({}, { keepValues: true, keepDirtyValues: false }); // dosn't need default dirty because all new data is dirty
 
     table.toggleAllPageRowsSelected(false);
   };
@@ -241,27 +203,19 @@ export default function CreateTable<TData, TValue>({
     const params = new URLSearchParams(window.location.search);
     params.delete("mode");
     startTransitionGoToUpdate(() => {
-      router.push(`artifacts?${params.toString()}`);
+      router.push(`models?${params.toString()}`);
     });
   }, [router]);
 
-  async function handleSave(dataForm: z.infer<typeof ArtifactsForm>) {
+  async function handleSave(dataForm: z.infer<typeof ModelsForm>) {
     setLoading(true);
 
-    const noLines = dataForm.artifacts.map((artifact) => {
-      const {
-        displayName,
-        description,
-        typology,
-        chemicalComposition,
-        ...rest
-      } = artifact;
+    const noLines = dataForm.models.map((model) => {
+      const { displayName, description, ...rest } = model;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
         description: description?.replace(/\n/g, " "),
-        typology: typology?.replace(/\n/g, " "),
-        chemicalComposition: chemicalComposition?.replace(/\n/g, " "),
         ...rest,
       };
     });
@@ -286,7 +240,7 @@ export default function CreateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты добавлены",
+        description: "Модели добавлены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -296,7 +250,7 @@ export default function CreateTable<TData, TValue>({
       params.delete("mode");
       startTransitionRouter(() => {
         router.refresh();
-        router.push(`artifacts?${params.toString()}`);
+        router.push(`models?${params.toString()}`);
       });
       setLoading(false);
       localStorage.removeItem(FORM_DATA_KEY);

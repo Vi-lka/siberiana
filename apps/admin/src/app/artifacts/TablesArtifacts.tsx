@@ -10,7 +10,7 @@ import { getArtifacts } from "~/lib/queries/artifacts";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { columns, moderatorsColumns } from "./columns";
+import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
 
@@ -127,7 +127,6 @@ export default async function TablesArtifacts({
               columns={columns}
               moderatorsColumns={moderatorsColumns}
               data={dataForCreate}
-              userRoles={roles}
             />
           </ClientHydration>
         </div>
@@ -220,7 +219,6 @@ export default async function TablesArtifacts({
             columns={columns}
             moderatorsColumns={moderatorsColumns}
             data={dataForCreate}
-            userRoles={roles}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -236,10 +234,9 @@ export default async function TablesArtifacts({
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
         <UpdateTable
-          columns={columns}
-          moderatorsColumns={moderatorsColumns}
+          columns={updateColumns}
+          moderatorsColumns={moderatorsUpdateColumns}
           data={dataForUpdate}
-          userRoles={roles}
         />
       </ClientHydration>
     </div>

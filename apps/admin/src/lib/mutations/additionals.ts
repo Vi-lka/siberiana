@@ -4,12 +4,14 @@ import request from "graphql-request";
 import type {
   CultureForTable,
   MaterialForTable,
+  ModelForTable,
   MonumentForTable,
   SetForTable,
   TechniqueForTable,
 } from "@siberiana/schemas";
 
 import { getIds, handleArrays } from "../utils/mutations-utils";
+import { putObjects } from "../auth/siberiana";
 
 //.........................CULTURE.........................//
 export function useCreateCulture(access_token?: string) {
@@ -484,6 +486,144 @@ export function useUpdateMonument(access_token?: string) {
             externalLink: newValue.externalLink,
             addSetIDs: setIDs.addValues,
             removeSetIDs: setIDs.removeValues,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................MODEL.........................//
+export function useCreateModel(access_token?: string) {
+  const mutationString = `
+        mutation CreateModel($input: CreateModelInput!) {
+            createModel(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: async (value: ModelForTable) => {
+      const resUpload = value.file.file
+        ? await putObjects({
+            bucket: "models",
+            files: [value.file.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            status: value.status.id,
+            displayName: value.displayName,
+            description: value.description,
+            externalLink: value.externalLink,
+            fileURL: resUpload !== null ? resUpload.urls[0] : "",
+            artifactIDs: getIds(value.artifacts),
+            petroglyphIDs: getIds(value.petroglyphs),
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteModel(access_token?: string) {
+  const mutationString = `
+        mutation DeleteModel($deleteModelId: ID!) {
+            deleteModel(id: $deleteModelId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteModelId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateModel(access_token?: string) {
+  const mutationString = `
+        mutation UpdateModel($updateModelId: ID!, $input: UpdateModelInput!) {
+            updateModel(id: $updateModelId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: async ({
+      id,
+      newValue,
+      oldValue,
+    }: {
+      id: string;
+      newValue: ModelForTable;
+      oldValue: ModelForTable;
+    }) => {
+      const artifactIDs = handleArrays(newValue.artifacts, oldValue.artifacts);
+      const petroglyphIDs = handleArrays(newValue.petroglyphs, oldValue.petroglyphs);
+      const resUpload =
+        newValue.file.url !== oldValue.file.url &&
+        newValue.file.file
+          ? await putObjects({
+              bucket: "models",
+              files: [newValue.file.file],
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateModelId: id,
+          input: {
+            status: newValue.status.id,
+            displayName: newValue.displayName,
+            fileURL: resUpload !== null
+              ? resUpload.urls[0]
+              : newValue.file.url.length === 0
+              ? newValue.file.url
+              : oldValue.file.url,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+            addArtifactIDs: artifactIDs.addValues,
+            removeArtifactIDs: artifactIDs.removeValues,
+            addPetroglyphIDs: petroglyphIDs.addValues,
+            removePetroglyphIDs: petroglyphIDs.removeValues,
           },
         },
         requestHeaders,
