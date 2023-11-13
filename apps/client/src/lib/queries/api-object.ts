@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { ArtifactById, BookById, PAPById } from "@siberiana/schemas";
+import { ArtById, ArtifactById, BookById, PAPById } from "@siberiana/schemas";
 
 //.........................ARTIFACT.........................//
 export const getArtifactById = async (id: string): Promise<ArtifactById> => {
@@ -386,4 +386,87 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
   );
 
   return protectedAreaPicture;
+};
+
+//.........................ART.........................//
+export const getArtById = async (id: string): Promise<ArtById> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query ArtById {
+        arts(where: { id: "${id}" }) {
+            totalCount
+            edges {
+                node {
+                  id
+                  displayName
+                  description
+                  primaryImageURL
+                  additionalImagesUrls
+                  collection {
+                    id
+                    slug
+                    displayName
+                    category {
+                        slug
+                        displayName
+                    }
+                  }
+                  number
+                  dating
+                  dimensions
+                  artGenre {
+                    displayName
+                  }
+                  artStyle {
+                    displayName
+                  }
+                  techniques {
+                    displayName
+                  }
+                  author {
+                    displayName
+                  }
+                }
+            }
+        }
+    }
+    `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Art ${id}'`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      arts: {
+        totalCount: number;
+        edges: {
+          node: ArtById;
+        }[];
+      };
+    };
+  };
+
+  if (json.data.arts.totalCount === 0 || json.data.arts.edges.length === 0) {
+    notFound();
+  }
+
+  const art = ArtById.parse(json.data?.arts.edges[0].node);
+
+  return art;
 };

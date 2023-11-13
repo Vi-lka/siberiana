@@ -86,7 +86,7 @@ export const Collections = z.object({
 export type Collections = z.infer<typeof Collections>;
 
 //.........................OBJECTS.........................//
-export const ObjectsEnum = z.enum(["Artifact", "Book", "ProtectedAreaPicture"]);
+export const ObjectsEnum = z.enum(["Artifact", "Book", "ProtectedAreaPicture", "Art"]);
 export type ObjectsEnum = z.infer<typeof ObjectsEnum>;
 
 export const ObjectNode = z.object({
