@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import type { ImageFile } from "@siberiana/schemas";
 import { Popover, PopoverContent, PopoverTrigger } from "@siberiana/ui";
 
-import Dropzone from "./Dropzone";
+import DropzoneImage from "./DropzoneImage";
 
 export default function PopoverDropzone({
   formValueName,
@@ -41,7 +41,7 @@ export default function PopoverDropzone({
         <PopoverContent className="font-Inter">
           <div className="mb-6">
             <p className="mb-2 font-medium">Фото</p>
-            <Dropzone
+            <DropzoneImage
               formValueName={formValueName}
               defaultValue={image}
               className={className}

@@ -125,6 +125,7 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                     model {
                         id
                         displayName
+                        fileURL
                     }
                 }
             }

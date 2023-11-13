@@ -533,8 +533,6 @@ export function useCreateModel(access_token?: string) {
             description: value.description,
             externalLink: value.externalLink,
             fileURL: resUpload !== null ? resUpload.urls[0] : "",
-            artifactIDs: getIds(value.artifacts),
-            petroglyphIDs: getIds(value.petroglyphs),
           },
         },
         requestHeaders,
@@ -589,8 +587,6 @@ export function useUpdateModel(access_token?: string) {
       newValue: ModelForTable;
       oldValue: ModelForTable;
     }) => {
-      const artifactIDs = handleArrays(newValue.artifacts, oldValue.artifacts);
-      const petroglyphIDs = handleArrays(newValue.petroglyphs, oldValue.petroglyphs);
       const resUpload =
         newValue.file.url !== oldValue.file.url &&
         newValue.file.file
@@ -620,10 +616,6 @@ export function useUpdateModel(access_token?: string) {
               : oldValue.file.url,
             description: newValue.description,
             externalLink: newValue.externalLink,
-            addArtifactIDs: artifactIDs.addValues,
-            removeArtifactIDs: artifactIDs.removeValues,
-            addPetroglyphIDs: petroglyphIDs.addValues,
-            removePetroglyphIDs: petroglyphIDs.removeValues,
           },
         },
         requestHeaders,

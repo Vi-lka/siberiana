@@ -1,28 +1,30 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Image from "next/image";
 import { AlertOctagon, MousePointerClick, UploadCloud, X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
-import type { ImageFile } from "@siberiana/schemas";
+import type { CustomFile } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export default function Dropzone({
+export default function DropzoneFile({
   defaultValue,
   formValueName,
   className,
 }: {
   formValueName: string;
   defaultValue: {
-    file: ImageFile | null | undefined;
+    file: CustomFile | null | undefined;
     url: string;
   };
   className?: string;
 }) {
-  const [imageFile, setFile] = useState<ImageFile>();
-  const [imageURL, setURL] = useState<string>();
+
+  console.log(defaultValue)
+
+  const [valueFile, setFile] = useState<CustomFile>();
+  const [valueURL, setURL] = useState<string>();
   const [error] = useState(false);
 
   const form = useFormContext();
@@ -46,46 +48,16 @@ export default function Dropzone({
         { file: acceptedFiles[0], url: newFileUrl },
         { shouldDirty: true, shouldValidate: true, shouldTouch: true },
       );
-      // handleSubmit(acceptedFiles)
-      //     .then((res) => {
-      //         res.urls.forEach((url) => {
-      //             handleAddToForm(url)
-      //         })
-      //         toast({
-      //             title: "Успешно!",
-      //             description: <p>Фотография загружена</p>,
-      //             className: "font-Inter",
-      //         })
-      //         console.log(form.getValues())
-      //     })
-      //     .catch(err => {
-      //         setError(true)
-      //         toast({
-      //             variant: "destructive",
-      //             title: "Error",
-      //             description: <p>{getShortDescription(err as string)}</p>,
-      //             className: "font-Inter",
-      //         })
-      //     })
     },
     [form, formValueName],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "image/*": [".jpeg", ".jpg", ".png", ".webp"] },
-    maxSize: 1024 * 1024 * 100, // 100Mb
+    accept: { "model/gltf-binary": [".glb"] },
+    maxSize: 1024 * 1024 * 1024, // 1Gb
     multiple: false,
   });
-
-  // const handleSubmit = async (files: File[]) => {
-  //     const res = await upload({ bucket, files }).then((res) => res.data);
-  //     return res
-  // };
-
-  // const handleAddToForm = (newValue: ImageFile) => {
-  //     form.setValue(formValueName, newValue, {shouldDirty: true, shouldValidate: true, shouldTouch: true})
-  // }
 
   const handleDelete = () => {
     setFile(undefined);
@@ -116,7 +88,7 @@ export default function Dropzone({
       </div>
     );
 
-  if (imageFile && imageURL)
+  if (valueFile && valueURL)
     return (
       <>
         <span
@@ -134,21 +106,14 @@ export default function Dropzone({
           })}
         >
           <input {...getInputProps()} />
-          <Image
-            src={imageURL}
-            width={180}
-            height={180}
-            alt={imageFile.name}
-            className="mx-auto object-cover"
-          />
           <p className="mt-3 break-words text-center text-xs font-light">
-            {imageFile.name}
+            {valueFile.name}
           </p>
         </div>
       </>
     );
 
-  if (!imageFile && imageURL)
+  if (!valueFile && valueURL)
     return (
       <>
         <span
@@ -166,15 +131,8 @@ export default function Dropzone({
           })}
         >
           <input {...getInputProps()} />
-          <Image
-            src={imageURL}
-            width={180}
-            height={180}
-            alt={imageURL}
-            className="mx-auto object-cover"
-          />
           <p className="mt-3 break-words text-center text-xs font-light">
-            {imageURL}
+            {valueURL}
           </p>
         </div>
       </>

@@ -6,7 +6,7 @@ import type { ModelForTable } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getModels } from "~/lib/queries/artifacts";
-import { columns, moderatorsColumns, updateColumns } from "./columns";
+import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
 import { authOptions } from "../api/auth/[...nextauth]/route";
@@ -109,6 +109,8 @@ export default async function TablesModels({
     } as ModelForTable;
   });
 
+  console.log(dataForUpdate)
+
   if (mode === "add")
     return (
       <div className="mx-auto w-full pt-3">
@@ -138,7 +140,7 @@ export default async function TablesModels({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} moderatorsColumns={moderatorsColumns} data={dataForUpdate} />
+        <UpdateTable columns={updateColumns} moderatorsColumns={moderatorsUpdateColumns} data={dataForUpdate} />
       </ClientHydration>
     </div>
   );
