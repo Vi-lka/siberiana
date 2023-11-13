@@ -114,7 +114,9 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [form]);
 
-  const dataPersistNoImage = dataState.map((elem) => {
+  const dataToPersist = form.getValues("artifacts") ?? dataState 
+
+  const dataPersistNoImage = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { primaryImage, ...rest } = elem;
     const nullImage = {

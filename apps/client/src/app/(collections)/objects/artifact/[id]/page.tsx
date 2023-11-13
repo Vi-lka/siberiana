@@ -11,6 +11,7 @@ import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getArtifactById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
+import Open3DModel from "~/components/objects/buttons/Open3DModel";
 
 export const dynamic = "force-dynamic";
 
@@ -87,11 +88,11 @@ export default async function Artifact({
           ) : (
             <PhotoSlider data={images} />
           )}
-          {/* <div className="mt-3 flex flex-wrap gap-3"> 
-                        <AddFavorites session={haveSession} />
-                        <Open3DModel data={dataResult.value.model} />
-                        <UnloadCSV session={haveSession} />
-                    </div> */}
+          <div className="mt-3 flex flex-wrap gap-3"> 
+              {/* <AddFavorites session={haveSession} /> */}
+              <Open3DModel data={dataResult.value.model} />
+              {/* <UnloadCSV session={haveSession} /> */}
+          </div>
         </div>
 
         {/* Mobile Main Info */}

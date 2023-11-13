@@ -171,6 +171,7 @@ export const ArtifactById = z.object({
     .object({
       id: z.string(),
       displayName: z.string(),
+      fileURL: z.string(),
     })
     .nullable(),
   createdBy: z.string().optional(),

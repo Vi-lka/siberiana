@@ -3,6 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import Image from "next/image";
 
 import type { ModelForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
@@ -10,6 +11,7 @@ import { Checkbox } from "@siberiana/ui";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Status from "~/components/tables/global-fields/Status";
+import InputDropzone from "~/components/tables/inputs/InputDropzone";
 
 export const columns: ColumnDef<ModelForTable>[] = [
   {
@@ -68,6 +70,15 @@ export const columns: ColumnDef<ModelForTable>[] = [
     },
   },
   {
+    accessorKey: "file",
+    header: () => <div className="text-center">Файл</div>,
+    cell: ({ row }) => {
+      return (
+        <InputDropzone formValueName={`models[${row.index}].file`} file className="min-w-[11rem]"/>
+      );
+    },
+  },
+  {
     accessorKey: "description",
     header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
@@ -97,18 +108,48 @@ export const updateColumns: ColumnDef<ModelForTable>[] = [
   ...columns,
   {
     accessorKey: "artifacts",
-    header: () => <div className="text-center">Артефактов</div>,
+    header: () => <div className="text-center">Артефакты</div>,
     cell: ({ row }) => {
-      const count = row.original.artifacts.length;
-      return <div className="text-center">{count}</div>;
+      const array = row.original.artifacts
+      return (
+        <div  className="flex flex-col gap-4 min-w-[15rem]">
+          {array.map((item, i) => {
+            const imageURL = item.primaryImageURL.length > 0 ? item.primaryImageURL : "/images/image-placeholder.png"
+            return (
+              <div key={i} className="flex items-center gap-1">
+                <Image src={imageURL} alt={item.displayName} width={60} height={60} />
+                <div>
+                  <p className="text-[10px] mb-1">id: {item.id}</p>
+                  <p>{item.displayName}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )
     },
   },
   {
     accessorKey: "petroglyphs",
-    header: () => <div className="text-center">Петроглифов</div>,
+    header: () => <div className="text-center">Петроглифы</div>,
     cell: ({ row }) => {
-      const count = row.original.petroglyphs.length;
-      return <div className="text-center">{count}</div>;
+      const array = row.original.petroglyphs
+      return (
+        <div  className="flex flex-col gap-4 min-w-[15rem]">
+          {array.map((item, i) => {
+            const imageURL = item.primaryImageURL.length > 0 ? item.primaryImageURL : "/images/image-placeholder.png"
+            return (
+              <div key={i} className="flex items-center gap-1">
+                <Image src={imageURL} alt={item.displayName} width={60} height={60} />
+                <div>
+                  <p className="text-[10px] mb-1">id: {item.id}</p>
+                  <p>{item.displayName}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )
     },
   },
   {
