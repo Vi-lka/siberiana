@@ -10,6 +10,7 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import {
   artifactsCountAtom,
+  artsCountAtom,
   booksCountAtom,
   PAPCountAtom,
   tabObjectsAtom,
@@ -26,6 +27,7 @@ export default function ObjectTabs({
   const artifactsCount = useAtomValue(artifactsCountAtom);
   const booksCount = useAtomValue(booksCountAtom);
   const PAPCount = useAtomValue(PAPCountAtom);
+  const artsCount = useAtomValue(artsCountAtom);
 
   const [tabObject, setTabObject] = useAtom(tabObjectsAtom);
 
@@ -48,6 +50,11 @@ export default function ObjectTabs({
       value: "protected_area_pictures",
       title: dict.objects.protectedAreaPictures,
       count: PAPCount,
+    },
+    {
+      value: "arts",
+      title: dict.objects.arts,
+      count: artsCount,
     },
   ];
 
@@ -74,7 +81,8 @@ export default function ObjectTabs({
     if (artifactsCount > 0) handleChangeTab("artifacts");
     else if (booksCount > 0) handleChangeTab("books");
     else if (PAPCount > 0) handleChangeTab("protected_area_pictures");
-  }, [PAPCount, artifactsCount, booksCount, handleChangeTab]);
+    else if (artsCount > 0) handleChangeTab("arts");
+  }, [PAPCount, artifactsCount, artsCount, booksCount, handleChangeTab]);
 
   React.useEffect(() => {
     switch (type) {
@@ -89,18 +97,16 @@ export default function ObjectTabs({
           ? handleChangeTab("protected_area_pictures")
           : goToFilledTab();
         break;
+      case "arts":
+        artsCount > 0
+          ? handleChangeTab("arts")
+          : goToFilledTab();
+        break;
       default:
         goToFilledTab();
         break;
     }
-  }, [
-    PAPCount,
-    artifactsCount,
-    booksCount,
-    goToFilledTab,
-    handleChangeTab,
-    type,
-  ]);
+  }, [PAPCount, artifactsCount, artsCount, booksCount, goToFilledTab, handleChangeTab, type]);
 
   function isSingleTab() {
     return notEmptyTabs.length === 1 ? true : false;

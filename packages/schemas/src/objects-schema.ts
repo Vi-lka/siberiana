@@ -273,3 +273,29 @@ export const PAPById = z.object({
     .nullable(),
 });
 export type PAPById = z.infer<typeof PAPById>;
+
+//.........................ART.........................//
+export const ArtById = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  description: z.string(),
+  primaryImageURL: z.string(),
+  additionalImagesUrls: z.string().array().nullable(),
+  collection: Collection,
+  number: z.string(),
+  dating: z.string(),
+  dimensions: z.string(),
+  artGenre: z.object({
+    displayName: z.string(),
+  }).array(),
+  artStyle: z.object({
+    displayName: z.string(),
+  }).array(),
+  techniques: z.object({
+    displayName: z.string(),
+  }).array(),
+  author: z.object({
+    displayName: z.string(),
+  }),
+});
+export type ArtById = z.infer<typeof ArtById>;
