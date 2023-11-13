@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { ArtifactById, StatusEnum } from "../objects-schema";
-import { ImageFile, LocationEnum } from "./global";
+import { CustomFile, ImageFile, LocationEnum } from "./global";
 
 export const Sizes = z.object({
   width: z.number(),
@@ -506,3 +506,77 @@ export const ModelsList = z.object({
   }),
 });
 export type ModelsList = z.infer<typeof ModelsList>;
+
+export const ModelsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        status: StatusEnum,
+        displayName: z.string().min(1),
+        fileURL: z.string(),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+            primaryImageURL: z.string(),
+          })
+          .array(),
+        petroglyphs: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+            primaryImageURL: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type ModelsArray = z.infer<typeof ModelsArray>;
+
+export const ModelForTable = z.object({
+  id: z.string(),
+  status: z.object({
+    id: StatusEnum,
+    displayName: z.string(),
+  }),
+  displayName: z.string().min(1),
+  file: z.object({
+    file: CustomFile.nullable(),
+    url: z.string(),
+  }),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  artifacts: z.object({
+    id: z.string(),
+    displayName: z.string(),
+    primaryImageURL: z.string(),
+  }).array(),
+  petroglyphs: z.object({
+    id: z.string(),
+    displayName: z.string(),
+    primaryImageURL: z.string(),
+  }).array(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type ModelForTable = z.infer<typeof ModelForTable>;
+
+export const ModelsForm = z.object({
+  models: ModelForTable.array(),
+});
+export type ModelsForm = z.infer<typeof ModelsForm>;

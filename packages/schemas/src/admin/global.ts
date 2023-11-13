@@ -6,6 +6,9 @@ import { Location } from "../objects-schema";
 // const MAX_FILE_SIZE = 10000000;
 // const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
+export const CustomFile = z.custom<File>();
+export type CustomFile = z.infer<typeof CustomFile>;
+
 export const ImageFile = z.custom<File>();
 export type ImageFile = z.infer<typeof ImageFile>;
 

@@ -127,7 +127,6 @@ export default async function TablesArtifacts({
               columns={columns}
               moderatorsColumns={moderatorsColumns}
               data={dataForCreate}
-              userRoles={roles}
             />
           </ClientHydration>
         </div>
@@ -220,7 +219,6 @@ export default async function TablesArtifacts({
             columns={columns}
             moderatorsColumns={moderatorsColumns}
             data={dataForCreate}
-            userRoles={roles}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -239,7 +237,6 @@ export default async function TablesArtifacts({
           columns={updateColumns}
           moderatorsColumns={moderatorsUpdateColumns}
           data={dataForUpdate}
-          userRoles={roles}
         />
       </ClientHydration>
     </div>
