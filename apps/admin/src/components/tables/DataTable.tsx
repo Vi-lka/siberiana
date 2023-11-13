@@ -89,7 +89,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                   <Search className="stroke-muted-foreground h-5 w-5" />
                 )}
                 <Input
-                  placeholder="Поиск..."
+                  placeholder="Название..."
                   onChange={(event) =>
                     startTransitionSearch(() => {
                       props.table

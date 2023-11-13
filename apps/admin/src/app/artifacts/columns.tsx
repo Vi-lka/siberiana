@@ -414,6 +414,10 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
       );
     },
   },
+];
+
+export const updateColumns: ColumnDef<ArtifactForTable>[] = [
+  ...columns,
   {
     accessorKey: "createdBy",
     header: () => <div className="text-center">Создано by</div>,
@@ -457,6 +461,22 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
 
 export const moderatorsColumns: ColumnDef<ArtifactForTable>[] = [
   ...columns,
+  {
+    accessorKey: "status",
+    header: () => <div className="text-center">Статус</div>,
+    cell: ({ row }) => {
+      return (
+        <Status
+          defaultStatus={row.original.status}
+          formValueName={`artifacts[${row.index}].status`}
+        />
+      );
+    },
+  },
+];
+
+export const moderatorsUpdateColumns: ColumnDef<ArtifactForTable>[] = [
+  ...updateColumns,
   {
     accessorKey: "status",
     header: () => <div className="text-center">Статус</div>,
