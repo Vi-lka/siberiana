@@ -687,6 +687,7 @@ export const getArts = async ({
           direction: ${sort.split(":")[1]}
         }],
         where: {
+          status: listed,
           hasCollectionWith: [
             ${
               !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""
