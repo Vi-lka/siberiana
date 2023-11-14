@@ -25,6 +25,7 @@ type LocationArtiQueryType = {
   setIds?: string;
   monumentIds?: string;
   techniqueIds?: string;
+  model?: boolean;
 };
 type LocationBooksQueryType = {
   entity?: Entitys;
@@ -66,6 +67,7 @@ function LocationArtiQuery({
   setIds,
   monumentIds,
   techniqueIds,
+  model
 }: LocationArtiQueryType) {
   const queryString = /* GraphGL */ `
     query {
@@ -88,6 +90,8 @@ function LocationArtiQuery({
                 : ""
             } ],
             hasArtifactsWith: [{
+              status: listed,
+              ${model ? `hasModel: true,` : '' }
               hasCollectionWith: [
                 ${
                   !!collections
@@ -185,6 +189,7 @@ function LocationBooksQuery({
                 : ""
             } ],
             hasBooksWith: [{
+              status: listed,
               hasCollectionWith: [
                 ${
                   !!collections
@@ -268,6 +273,7 @@ function LocationPAPQuery({
                 : ""
             } ],
             hasProtectedAreaPicturesWith: [{
+              status: listed,
               hasCollectionWith: [
                 ${
                   !!collections

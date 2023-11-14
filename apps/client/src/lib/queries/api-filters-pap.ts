@@ -76,6 +76,7 @@ function PAPQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasProtectedAreaPicturesWith: [{
+            status: listed,
             hasCollectionWith: [
               ${
                 !!collections
@@ -268,6 +269,7 @@ export const getProtectedAreaCategorysFilter = async ({
         where: {
           hasProtectedAreasWith: [{ 
             hasProtectedAreaPicturesWith: [{
+              status: listed,
               hasCollectionWith: [
                 ${
                   !!collections

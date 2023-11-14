@@ -71,6 +71,7 @@ function BooksQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasBooksWith: [{
+            status: listed,
             hasCollectionWith: [
               ${
                 !!collections

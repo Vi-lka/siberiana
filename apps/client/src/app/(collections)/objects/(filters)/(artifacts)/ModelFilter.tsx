@@ -66,6 +66,8 @@ export default async function ModelFilter({
 
   const artifactsCount = result.value.totalCount
 
+  if (artifactsCount === 0) return null
+
   return (
     <div className="flex flex-col gap-1 mb-3">
       <div className="flex items-center gap-0.5 font-Inter">

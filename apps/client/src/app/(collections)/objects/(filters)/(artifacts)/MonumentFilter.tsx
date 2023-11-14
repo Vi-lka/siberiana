@@ -30,6 +30,8 @@ export default async function MonumentFilter({
 
   const licenseIds = searchParams["licenseArtifacts"] as string | undefined;
 
+  const model = searchParams["modelArtifacts"] as string | undefined;
+
   const cultureIds = searchParams["culture"] as string | undefined;
   const setIds = searchParams["set"] as string | undefined;
   const techniqueIds = searchParams["technique"] as string | undefined;
@@ -47,6 +49,7 @@ export default async function MonumentFilter({
       cultureIds,
       setIds,
       techniqueIds,
+      model: Boolean(model)
     }),
   ]);
 

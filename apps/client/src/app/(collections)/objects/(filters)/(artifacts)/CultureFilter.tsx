@@ -30,6 +30,8 @@ export default async function CultureFilter({
 
   const licenseIds = searchParams["licenseArtifacts"] as string | undefined;
 
+  const model = searchParams["modelArtifacts"] as string | undefined;
+
   const setIds = searchParams["set"] as string | undefined;
   const monumentIds = searchParams["monument"] as string | undefined;
   const techniqueIds = searchParams["technique"] as string | undefined;
@@ -47,6 +49,7 @@ export default async function CultureFilter({
       setIds,
       monumentIds,
       techniqueIds,
+      model: Boolean(model)
     }),
   ]);
 
