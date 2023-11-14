@@ -47,7 +47,7 @@ export default function PhotoModal({
       <DialogTrigger>
         <Maximize className="h-6 w-6 cursor-pointer transition-all hover:scale-125" />
       </DialogTrigger>
-      <DialogContent className="bg-accent relative h-[90vh] max-w-[95vw] overflow-hidden p-0 sm:max-w-[95vw]">
+      <DialogContent className="bg-accent h-[90vh] max-w-[95vw] overflow-hidden p-0 sm:max-w-[95vw]">
         <div
           ref={sliderRef}
           className="keen-slider bg-accent h-full w-full cursor-grab rounded-md"
