@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 
 import type { BreadcrumbsDict } from "@siberiana/schemas";
+import GoBackButton from "./GoBackButton";
 
 type Props = {
   dict: BreadcrumbsDict;
@@ -126,7 +127,10 @@ export default function BreadcrumbsCollections(props: Props) {
   );
 
   return (
-    <div className="font-Inter flex flex-wrap items-center">
+    <div className="relative font-Inter flex flex-wrap items-center">
+      <div className="absolute -top-10 left-0 sm:-left-8 sm:top-0 lg:-left-12">
+        <GoBackButton />
+      </div>
       {breadcrumbs.map((crumb, index) => (
         <Crumb
           key={index}
