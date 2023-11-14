@@ -394,7 +394,7 @@ export const getArtById = async (id: string): Promise<ArtById> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
     query ArtById {
-        arts(where: { id: "${id}" }) {
+        arts(where: { id: "${id}", status: listed }) {
             totalCount
             edges {
                 node {
