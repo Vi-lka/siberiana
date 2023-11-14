@@ -560,7 +560,9 @@ export const getAbout = async (): Promise<About> => {
           attributes {
             description 
             title
-            team {
+            team(
+              pagination: { limit: 1000 }
+            ) {
               name
               description
               image {
@@ -624,9 +626,13 @@ export const getFAQ = async (): Promise<FAQ> => {
       faq {
         data {
           attributes {
-            category {
+            category(
+              pagination: { limit: 1000 }
+            ) {
               title
-              item {
+              item(
+                pagination: { limit: 1000 }
+              ) {
                 question
                 answer
               }
