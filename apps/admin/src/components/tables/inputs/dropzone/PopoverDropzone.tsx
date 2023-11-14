@@ -38,7 +38,7 @@ export default function PopoverDropzone({
         <PopoverTrigger className="overflow-hidden rounded-[6px]">
           <Image src={imageURL} alt={imageAlt} width={80} height={80} />
         </PopoverTrigger>
-        <PopoverContent className="font-Inter">
+        <PopoverContent className="font-Inter" side="right">
           <div className="mb-6">
             <p className="mb-2 font-medium">Фото</p>
             <DropzoneImage

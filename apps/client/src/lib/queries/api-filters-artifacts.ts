@@ -22,6 +22,7 @@ type ArtiQueryType = {
   setIds?: string;
   monumentIds?: string;
   techniqueIds?: string;
+  model?: boolean;
 };
 
 export const artifacts = `
@@ -79,6 +80,7 @@ function ArtiQuery({
   setIds,
   monumentIds,
   techniqueIds,
+  model
 }: ArtiQueryType) {
   const queryString = /* GraphGL */ `
     query {
@@ -86,6 +88,8 @@ function ArtiQuery({
         orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
         where: {
           hasArtifactsWith: [{
+            status: listed,
+            ${model ? `hasModel: true,` : '' }
             hasCollectionWith: [
               ${
                 !!collections

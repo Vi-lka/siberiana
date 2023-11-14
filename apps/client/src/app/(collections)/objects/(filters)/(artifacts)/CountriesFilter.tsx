@@ -29,6 +29,8 @@ export default async function CountriesFilter({
 
   const licenseIds = searchParams["licenseArtifacts"] as string | undefined;
 
+  const model = searchParams["modelArtifacts"] as string | undefined;
+
   const cultureIds = searchParams["culture"] as string | undefined;
   const setIds = searchParams["set"] as string | undefined;
   const monumentIds = searchParams["monument"] as string | undefined;
@@ -47,6 +49,7 @@ export default async function CountriesFilter({
       setIds,
       monumentIds,
       techniqueIds,
+      model: Boolean(model)
     }),
   ]);
 

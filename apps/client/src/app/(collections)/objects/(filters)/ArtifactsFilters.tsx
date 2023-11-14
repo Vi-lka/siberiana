@@ -13,6 +13,7 @@ import RegionsFilter from "./(artifacts)/RegionsFilter";
 import SetFilter from "./(artifacts)/SetFilter";
 import SettlementsFilter from "./(artifacts)/SettlementsFilter";
 import TechniqueFilter from "./(artifacts)/TechniqueFilter";
+import ModelFilter from "./(artifacts)/ModelFilter";
 
 export default async function ArtifactsFilters({
   searchParams,
@@ -96,7 +97,7 @@ export default async function ArtifactsFilters({
         <LicensesFilter searchParams={searchParams} />
       </Suspense>
 
-      <Separator className="mb-3 mt-1 h-[2px]" decorative />
+      {/* <Separator className="mb-3 mt-1 h-[2px]" decorative /> */}
 
       {/* Culture */}
       <Suspense
@@ -150,6 +151,19 @@ export default async function ArtifactsFilters({
         }
       >
         <TechniqueFilter searchParams={searchParams} />
+      </Suspense>
+
+      <Separator className="mb-3 mt-1 h-[2px]" decorative />
+
+      {/* 3D model */}
+      <Suspense
+        fallback={
+          <div className="flex flex-col gap-1">
+            <Skeleton className="mb-3 h-10 w-full px-2 py-2" />
+          </div>
+        }
+      >
+        <ModelFilter searchParams={searchParams} />
       </Suspense>
     </div>
   );

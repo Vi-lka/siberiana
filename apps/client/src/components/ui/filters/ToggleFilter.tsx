@@ -18,10 +18,12 @@ export default function ToggleFilter({
   tooltip,
   param,
   children,
+  className,
 }: {
   tooltip: string;
   param: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   const [isPending, startTransition] = React.useTransition();
 
@@ -63,7 +65,7 @@ export default function ToggleFilter({
           onPressedChange={handleToggleParams}
           asChild
         >
-          <TooltipTrigger>{children}</TooltipTrigger>
+          <TooltipTrigger className={className}>{children}</TooltipTrigger>
         </Toggle>
 
         <TooltipContent

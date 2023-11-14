@@ -13,7 +13,7 @@ export default function LoadingFAQ() {
         <Skeleton className="mb-6 h-12 w-4/5" />
         <Skeleton className="mb-12 h-6 w-full" />
 
-        {[Array(5)].map((_, index) => (
+        {[1,2,3,4,5].map((_, index) => (
           <div key={index} className="mb-14">
             <Skeleton className="mb-6 h-9 w-full" />
 

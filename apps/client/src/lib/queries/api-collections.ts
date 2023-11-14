@@ -199,6 +199,7 @@ export const getArtifacts = async ({
   setIds,
   monumentIds,
   techniqueIds,
+  model
 }: {
   first: number | null;
   offset?: number | null;
@@ -215,6 +216,7 @@ export const getArtifacts = async ({
   setIds?: string;
   monumentIds?: string;
   techniqueIds?: string;
+  model?: boolean;
 }): Promise<ObjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
@@ -228,6 +230,7 @@ export const getArtifacts = async ({
         }],
         where: {
           status: listed,
+          ${model ? `hasModel: true,` : '' }
           hasCollectionWith: [
             ${
               !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""

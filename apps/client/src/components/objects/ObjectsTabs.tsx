@@ -71,7 +71,7 @@ export default function ObjectTabs({
       const params = new URLSearchParams(window.location.search);
       params.set("type", value);
       startTransition(() => {
-        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
       });
     },
     [pathname, router, setTabObject],

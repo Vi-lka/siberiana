@@ -3,12 +3,12 @@ import React from "react";
 import { Dictionary } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
-import { Select } from "~/components/ui/filters/Select";
-import { getArtiRegionsFilter } from "~/lib/queries/api-filters-locations";
-import { filterArtifacts } from "~/lib/utils/filters";
 import { getDictionary } from "~/lib/utils/getDictionary";
+import { getArtifacts } from "~/lib/queries/api-collections";
+import ToggleFilter from "~/components/ui/filters/ToggleFilter";
+import { Box } from "lucide-react";
 
-export default async function RegionsFilter({
+export default async function ModelFilter({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -22,6 +22,7 @@ export default async function RegionsFilter({
   const collections = searchParams["collection"] as string | undefined;
 
   const countryIds = searchParams["countryArtifacts"] as string | undefined;
+  const regionIds = searchParams["regionArtifacts"] as string | undefined;
   const districtIds = searchParams["districtArtifacts"] as string | undefined;
   const settlementIds = searchParams["settlementArtifacts"] as
     | string
@@ -29,19 +30,19 @@ export default async function RegionsFilter({
 
   const licenseIds = searchParams["licenseArtifacts"] as string | undefined;
 
-  const model = searchParams["modelArtifacts"] as string | undefined;
-
   const cultureIds = searchParams["culture"] as string | undefined;
   const setIds = searchParams["set"] as string | undefined;
   const monumentIds = searchParams["monument"] as string | undefined;
   const techniqueIds = searchParams["technique"] as string | undefined;
 
-  const [result] = await Promise.allSettled([
-    getArtiRegionsFilter({
+  const [ result ] = await Promise.allSettled([
+    getArtifacts({
+      first: null,
       search,
       categories,
       collections,
       countryIds,
+      regionIds,
       districtIds,
       settlementIds,
       licenseIds,
@@ -49,7 +50,7 @@ export default async function RegionsFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: true
     }),
   ]);
 
@@ -57,26 +58,29 @@ export default async function RegionsFilter({
     return (
       <ErrorHandler
         error={result.reason as unknown}
-        place="Artifacts Regions Filter"
+        place="Artifacts Models Filter"
         notFound={false}
       />
     );
   }
 
-  const resultsFiltered = filterArtifacts(result.value, searchParams);
+  const artifactsCount = result.value.totalCount
+
+  if (artifactsCount === 0) return null
 
   return (
-    <div className="flex flex-col gap-1">
-      <h1 className="font-medium">{dictResult.objects.filters.regions}</h1>
-      <Select
-        isMulti
-        badges
-        side="right"
-        values={resultsFiltered}
-        param="regionArtifacts"
-        placeholder="Выберите регионы"
-        className="w-full max-w-none"
-      />
+    <div className="flex flex-col gap-1 mb-3">
+      <div className="flex items-center gap-0.5 font-Inter">
+        <ToggleFilter
+          tooltip={dictResult.objects.filters.model}
+          param={"modelArtifacts"}
+          className="px-1 py-7"
+        >
+          <Box className="h-7 w-7 mr-1" /> 3D
+        </ToggleFilter>
+
+        <p className="ml-1 text-sm">({artifactsCount})</p>
+      </div>
     </div>
   );
 }

@@ -8,7 +8,6 @@ import Description from "~/components/objects/Description";
 import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
-import GoBackButton from "~/components/ui/GoBackButton";
 import { getArtifactById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Open3DModel from "~/components/objects/buttons/Open3DModel";
@@ -50,10 +49,6 @@ export default async function Artifact({
 
   return (
     <div className="relative">
-      <div className="absolute -top-10 left-0 sm:-left-8 sm:top-0 lg:-left-12">
-        <GoBackButton />
-      </div>
-
       <BreadcrumbsObject
         dict={dictResult.breadcrumbs}
         title={dataResult.value.displayName}
