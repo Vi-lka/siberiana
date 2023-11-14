@@ -28,10 +28,10 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/InputDropzone";
 import { putObjects } from "~/lib/auth/siberiana";
 import { createCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 const DEFAULT_VALUES = {
   id: "",

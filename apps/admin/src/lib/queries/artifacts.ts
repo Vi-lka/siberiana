@@ -162,6 +162,7 @@ export const getArtifacts = async ({
           model {
             id
             displayName
+            fileURL
           }
           createdBy
           createdAt

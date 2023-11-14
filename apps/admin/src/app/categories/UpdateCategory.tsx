@@ -29,11 +29,11 @@ import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/InputDropzone";
 import { putObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCategory from "./DeleteCategory";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export default function UpdateCategory(props: CategoryForm) {
   const [loading, setLoading] = React.useState(false);
