@@ -26,7 +26,7 @@ import Status from "~/components/tables/global-fields/Status";
 import DateSelect from "~/components/tables/inputs/DateSelect";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import PopoverDropzone from "~/components/tables/inputs/PopoverDropzone";
+import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {

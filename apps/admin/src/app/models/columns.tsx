@@ -11,7 +11,7 @@ import { Checkbox } from "@siberiana/ui";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Status from "~/components/tables/global-fields/Status";
-import InputDropzone from "~/components/tables/inputs/InputDropzone";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export const columns: ColumnDef<ModelForTable>[] = [
   {
