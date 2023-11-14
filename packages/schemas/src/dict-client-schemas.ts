@@ -151,6 +151,7 @@ export const FiltersDict = z.object({
   districts: z.string(),
   settlements: z.string(),
   license: z.string(),
+  model: z.string(),
   cultures: z.string(),
   sets: z.string(),
   monuments: z.string(),
