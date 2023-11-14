@@ -45,7 +45,6 @@ export default function HomeSlider({ data }: { data: Slider }) {
             {created ? (
               <Image
                 src={image.attributes.url}
-                fill
                 className={"object-cover"}
                 alt={
                   image.attributes.alternativeText
@@ -53,7 +52,8 @@ export default function HomeSlider({ data }: { data: Slider }) {
                     : ""
                 }
                 priority={true}
-                sizes="(max-width: 500px) 65vw, 35vw"
+                fill
+                sizes="(max-width: 500px) 70vw, 40vw"
               />
             ) : (
               <Skeleton className="h-full w-full" />
