@@ -17,7 +17,7 @@ const inter = Inter({
   variable: "--Inter",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
-  display: "swap",
+  display: "auto",
 });
 
 const openSans = Open_Sans({
@@ -25,7 +25,7 @@ const openSans = Open_Sans({
   variable: "--OpenSans",
   // Fix font load errors: https://github.com/vercel/next.js/issues/45080#issuecomment-1646678980
   preload: false,
-  display: "swap",
+  display: "auto",
 });
 
 export async function generateMetadata(): Promise<Metadata> {
