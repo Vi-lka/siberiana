@@ -114,8 +114,20 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [form]);
 
+  const dataToPersist = form.getValues("models") ?? dataState 
+
+  const dataPersistNoImage = dataToPersist.map((elem) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { file, ...rest } = elem;
+    const nullFile = {
+      file: null,
+      url: "",
+    };
+    return { file: nullFile, ...rest };
+  });
+
   usePersistForm<ModelForTable[]>({
-    value: { data: form.getValues().models },
+    value: { data: dataPersistNoImage },
     localStorageKey: FORM_DATA_KEY,
     isLoading: loading || isPendingRouter,
   });
