@@ -31,12 +31,12 @@ import MetaData from "~/components/lists/MetaData";
 import Categories from "~/components/tables/global-fields/Categories";
 import FormInputText from "~/components/tables/inputs/FormInputText";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/InputDropzone";
 import { putObjects } from "~/lib/auth/siberiana";
 import { updateCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCollection from "./DeleteCollection";
 import { getName } from "./TypeSelect";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export default function UpdateCollection(props: CollectionForm) {
   const [loading, setLoading] = React.useState(false);
