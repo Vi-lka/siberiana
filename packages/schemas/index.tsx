@@ -4,4 +4,5 @@ export * from "./src/collections-schemas";
 export * from "./src/filters-schema";
 export * from "./src/objects-schema";
 export * from "./src/admin/artifacts";
+export * from "./src/admin/books";
 export * from "./src/admin/global";

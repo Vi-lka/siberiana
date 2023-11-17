@@ -2,11 +2,11 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
+import type { BookForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
-import { getArtifacts } from "~/lib/queries/artifacts";
+import { getBooks } from "~/lib/queries/books";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { authOptions } from "../api/auth/[...nextauth]/route";
@@ -14,7 +14,7 @@ import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } fr
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
 
-export default async function TablesArtifacts({
+export default async function TablesBooks({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -30,7 +30,7 @@ export default async function TablesArtifacts({
   const collection = searchParams["collection"] as string | undefined;
 
   const results = await Promise.allSettled([
-    getArtifacts({
+    getBooks({
       first: null,
       category,
       collection,
@@ -46,7 +46,7 @@ export default async function TablesArtifacts({
     return (
       <ErrorHandler
         error={results[1].reason as unknown}
-        place="Artifacts"
+        place="Books"
         notFound
         goBack
       />
@@ -68,48 +68,26 @@ export default async function TablesArtifacts({
       status: isModerator ? statusForModerator : statusForAdmin,
       displayName: "",
       description: "",
+      externalLink: "",
+      year: undefined,
+      files: [],
       primaryImage: {
         file: undefined,
         url: "",
       },
-      chemicalComposition: "",
-      inventoryNumber: "",
-      kpNumber: "",
-      goskatalogNumber: "",
-      externalLink: "",
-      typology: "",
-      weight: "",
-      admissionDate: undefined,
-      sizes: {
-        width: 0,
-        height: 0,
-        length: 0,
-        depth: 0,
-        diameter: 0,
-      },
-      dating: "",
-      datingRow: {
-        datingStart: 0,
-        datingEnd: 0,
-      },
-      donor: null,
-      model: null,
-      license: null,
-      culturalAffiliation: null,
-      set: null,
-      monument: null,
-      location: null,
-      mediums: [],
-      techniques: [],
+      bookGenres: [],
       authors: [],
-      publications: [],
-      projects: [],
+      periodical: null,
+      publisher: null,
+      license: null,
+      library: null,
+      location: null,
       collection: {
         id: collectionFulfilled.value.edges[0].node.id,
         displayName: collectionFulfilled.value.edges[0].node.displayName,
       },
     },
-  ] as ArtifactForTable[];
+  ] as BookForTable[];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
@@ -135,7 +113,7 @@ export default async function TablesArtifacts({
       return (
         <ErrorHandler
           error={results[0].reason as unknown}
-          place="Artifacts"
+          place="Books"
           notFound
           goBack
         />
@@ -153,13 +131,6 @@ export default async function TablesArtifacts({
       region,
       district,
       settlement,
-      width,
-      height,
-      length,
-      depth,
-      diameter,
-      datingStart,
-      datingEnd,
       ...rest // assigns remaining
     } = node;
 
@@ -189,22 +160,9 @@ export default async function TablesArtifacts({
         displayName: collection.displayName,
       },
       location: locationForTabel,
-      sizes: {
-        width,
-        height,
-        length,
-        depth,
-        diameter,
-      },
-      datingRow: {
-        datingStart,
-        datingEnd,
-      },
       ...rest,
-    } as ArtifactForTable;
+    } as BookForTable;
   });
-
-  console.log(dataForUpdate[0].admissionDate)
 
   if (mode === "add")
     return (

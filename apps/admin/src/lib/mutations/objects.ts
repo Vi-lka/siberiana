@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
+import type { ArtifactForTable, BookForTable } from "@siberiana/schemas";
 
 import { putObjects } from "../auth/siberiana";
 import {
@@ -43,6 +43,9 @@ export function useCreateArtifact(access_token?: string) {
               return null;
             })
         : null;
+
+      const date = new Date(value.admissionDate as string);
+      const isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -86,7 +89,7 @@ export function useCreateArtifact(access_token?: string) {
             authorIDs: getIds(value.authors),
             publicationIDs: getIds(value.publications),
             projectIDs: getIds(value.projects),
-            admissionDate: value.admissionDate,
+            admissionDate: isoDate,
           },
         },
         requestHeaders,
@@ -167,6 +170,9 @@ export function useUpdateArtifact(access_token?: string) {
               })
           : null;
 
+      const date = new Date(newValue.admissionDate as string);
+      const isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -193,7 +199,7 @@ export function useUpdateArtifact(access_token?: string) {
             datingStart: newValue.datingRow.datingStart,
             datingEnd: newValue.datingRow.datingEnd,
             typology: newValue.typology,
-            admissionDate: newValue.admissionDate,
+            admissionDate: !!newValue.admissionDate ? isoDate : newValue.admissionDate,
             chemicalComposition: newValue.chemicalComposition,
             inventoryNumber: newValue.inventoryNumber,
             kpNumber: newValue.kpNumber,
@@ -232,6 +238,176 @@ export function useUpdateArtifact(access_token?: string) {
             removeProjectIDs: projectIDs.removeValues,
             removeTechniqueIDs: techniqueIDs.removeValues,
             removePublicationIDs: publicationIDs.removeValues,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................BOOKS.........................//
+export function useCreateBook(access_token?: string) {
+  const mutationString = `
+        mutation CreateBook($input: CreateBookInput!) {
+            createBook(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: async (value: BookForTable) => {
+      const resUpload = value.primaryImage.file
+        ? await putObjects({
+            bucket: "books",
+            files: [value.primaryImage.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            status: value.status.id,
+            collectionID: value.collection.id,
+            displayName: value.displayName,
+            description: value.description,
+            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
+            externalLink: value.externalLink,
+            year: value.year,
+            bookGenreIDs: getIds(value.bookGenres),
+            authorIDs: getIds(value.authors),
+            periodicalID: value.periodical?.id,
+            publisherID: value.publisher?.id,
+            licenseID: value.license?.id,
+            libraryID: value.library?.id,
+            countryID: getLocation(value.location, "country"),
+            regionID: getLocation(value.location, "region"),
+            districtID: getLocation(value.location, "district"),
+            settlementID: getLocation(value.location, "settlement"),
+            locationID: getLocation(value.location, "location"),
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteBook(access_token?: string) {
+  const mutationString = `
+        mutation DeleteBook($deleteBookId: ID!) {
+            deleteBook(id: $deleteBookId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteBookId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateBook(access_token?: string) {
+  const mutationString = `
+        mutation UpdateBook($updateBookId: ID!, $input: UpdateBookInput!) {
+            updateBook(id: $updateBookId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: async ({
+      id,
+      newValue,
+      oldValue,
+    }: {
+      id: string;
+      newValue: BookForTable;
+      oldValue: BookForTable;
+    }) => {
+      const bookGenreIDs = handleArrays(newValue.bookGenres, oldValue.bookGenres)
+      const authorsIds = handleArrays(newValue.authors, oldValue.authors);
+
+      const resUpload =
+        newValue.primaryImage.url !== oldValue.primaryImage.url &&
+        newValue.primaryImage.file
+          ? await putObjects({
+              bucket: "books",
+              files: [newValue.primaryImage.file],
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateBookId: id,
+          input: {
+            status: newValue.status.id,
+            displayName: newValue.displayName,
+            primaryImageURL:
+              resUpload !== null
+                ? resUpload.urls[0]
+                : newValue.primaryImage.url.length === 0
+                ? newValue.primaryImage.url
+                : oldValue.primaryImage.url,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+            year: newValue.year,
+            libraryID: newValue.library?.id,
+            periodicalID: newValue.periodical?.id,
+            publisherID: newValue.publisher?.id,
+            licenseID: newValue.license?.id,
+            countryID: getLocation(newValue.location, "country"),
+            regionID: getLocation(newValue.location, "region"),
+            districtID: getLocation(newValue.location, "district"),
+            settlementID: getLocation(newValue.location, "settlement"),
+            locationID: getLocation(newValue.location, "location"),
+            addAuthorIDs: authorsIds.addValues,
+            addBookGenreIDs: bookGenreIDs.addValues,
+            clearLibrary: clearObject(newValue.library),
+            clearPeriodical: clearObject(newValue.periodical),
+            clearPublisher: clearObject(newValue.publisher),
+            clearLicense: clearObject(newValue.license),
+            clearCountry: clearLocation(newValue.location, "country"),
+            clearRegion: clearLocation(newValue.location, "region"),
+            clearDistrict: clearLocation(newValue.location, "district"),
+            clearSettlement: clearLocation(newValue.location, "settlement"),
+            clearLocation: clearLocation(newValue.location, "location"),
+            removeAuthorIDs: authorsIds.removeValues,
+            removeBookGenreIDs: bookGenreIDs.removeValues,
           },
         },
         requestHeaders,

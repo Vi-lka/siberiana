@@ -191,48 +191,76 @@ export const getBookById = async (id: string): Promise<BookById> => {
                     primaryImageURL
                     additionalImagesUrls
                     year
+                    files
                     collection {
-                        id
+                      id
+                      slug
+                      displayName
+                      category {
                         slug
                         displayName
-                        category {
-                            slug
-                            displayName
-                        }
-                    }
-                    location {
-                        id
-                        displayName
-                        country {
-                            id
-                            displayName
-                        }
-                        region {
-                            id
-                            displayName
-                        }
-                        district {
-                            id
-                            displayName
-                        }
-                        settlement {
-                            id
-                            displayName
-                        }
+                      }
                     }
                     bookGenres {
-                        displayName
+                      id
+                      displayName
                     }
                     authors {
-                        displayName
+                      id
+                      displayName
                     }
-                    license {
-                        displayName  
+                    periodical {
+                      id
+                      displayName
                     }
                     publisher {
-                        displayName
+                      id
+                      displayName
                     }
-                    files
+                    license {
+                      id
+                      displayName
+                    }
+                    library {
+                      id
+                      displayName
+                    }
+                    location {
+                      id
+                      displayName
+                      country {
+                        id
+                        displayName
+                      }
+                      region {
+                        id
+                        displayName
+                      }
+                      district {
+                        id
+                        displayName
+                      }
+                      settlement {
+                        id
+                        displayName
+                      }
+                    }
+                    country {
+                      id
+                      displayName
+                    }
+                    region {
+                      id
+                      displayName
+                    }
+                    district {
+                      id
+                      displayName
+                    }
+                    settlement {
+                      id
+                      displayName
+                    }
                 }
             }
         }
