@@ -13,6 +13,7 @@ import {
   getIds,
   getLocation,
   handleArrays,
+  handleFiles,
 } from "../utils/mutations-utils";
 import { getLable } from "../utils/sizes-utils";
 
@@ -266,10 +267,23 @@ export function useCreateBook(access_token?: string) {
   };
   const mutation = useMutation({
     mutationFn: async (value: BookForTable) => {
-      const resUpload = value.primaryImage.file
+      const primaryImageUpload = value.primaryImage.file
         ? await putObjects({
             bucket: "books",
             files: [value.primaryImage.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      const additionalImagesFiles =  value.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
+      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
+        ? await putObjects({
+            bucket: "books",
+            files: additionalImagesFiles,
           })
             .then((res) => res.data)
             .catch((err) => {
@@ -287,9 +301,10 @@ export function useCreateBook(access_token?: string) {
             collectionID: value.collection.id,
             displayName: value.displayName,
             description: value.description,
-            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
+            primaryImageURL: primaryImageUpload?.urls[0],
+            additionalImagesUrls: additionalImagesUpload?.urls,
             externalLink: value.externalLink,
-            year: Number(value.year).toFixed(),
+            year: Number(Number(value.year).toFixed()),
             bookGenreIDs: getIds(value.bookGenres),
             authorIDs: getIds(value.authors),
             periodicalID: value.periodical?.id,
@@ -372,6 +387,19 @@ export function useUpdateBook(access_token?: string) {
               })
           : null;
 
+      const additionalImagesFiles =  newValue.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
+      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
+        ? await putObjects({
+            bucket: "books",
+            files: additionalImagesFiles,
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -386,9 +414,10 @@ export function useUpdateBook(access_token?: string) {
                 : newValue.primaryImage.url.length === 0
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
+            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
             description: newValue.description,
             externalLink: newValue.externalLink,
-            year: Number(newValue.year).toFixed(),
+            year: Number(Number(newValue.year).toFixed()),
             libraryID: newValue.library?.id,
             periodicalID: newValue.periodical?.id,
             publisherID: newValue.publisher?.id,

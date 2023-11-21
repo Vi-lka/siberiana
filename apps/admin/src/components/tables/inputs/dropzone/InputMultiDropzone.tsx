@@ -37,11 +37,11 @@ export default function InputMultiDropzone(props: InputProps) {
         return { file, url };
       })
 
-      !!values ? setValues([...newValues, ...values]) : setValues(newValues);
+      !!values ? setValues([...values, ...newValues]) : setValues(newValues);
       
       form.setValue(
         props.formValueName,
-        newValues,
+        !!values ? [...values, ...newValues] : newValues,
         { shouldDirty: true, shouldValidate: true, shouldTouch: true },
       );
     },
@@ -59,6 +59,17 @@ export default function InputMultiDropzone(props: InputProps) {
     form.setValue(
       props.formValueName,
       null,
+      { shouldDirty: true, shouldValidate: true, shouldTouch: true },
+    );
+  };
+
+  const handleDeleteSingle = (i: number) => {
+    const filteredValues = values ? values.filter((_, index) => index !== i) : null;
+    const newValues = (filteredValues && filteredValues.length > 0) ? filteredValues : null;
+    setValues(newValues)
+    form.setValue(
+      props.formValueName,
+      newValues,
       { shouldDirty: true, shouldValidate: true, shouldTouch: true },
     );
   };
@@ -108,6 +119,16 @@ export default function InputMultiDropzone(props: InputProps) {
                 {values.map((value, index) => {
                   if (!props.files && value.url.length > 0) return (
                     <figure key={index} className='p-1 border-[1px] border-muted rounded-md overflow-hidden bg-background'>
+                      <span
+                        className="text-muted-foreground hover:text-foreground mx-auto my-1 flex w-fit cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDeleteSingle(index);
+                        }}
+                      >
+                        <X className="h-5 w-5" />
+                      </span>
                       <Image
                         src={value.url}
                         width={100}

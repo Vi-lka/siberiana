@@ -200,7 +200,7 @@ export const BookById = z.object({
   primaryImageURL: z.string(),
   additionalImagesUrls: z.string().array().nullable(),
   year: z.number(),
-  files: z.string().array(),
+  files: z.string().array().nullable(),
   collection: Collection,
   bookGenres: z.object({
     id: z.string(),

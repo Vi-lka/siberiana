@@ -11,6 +11,7 @@ import GoBackButton from "~/components/ui/GoBackButton";
 import { getBookById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
+import PhotoSlider from "~/components/objects/PhotoSlider";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,17 @@ export default async function Book({
         goBack
       />
     );
+
+  const firstImage = {
+    src: dataResult.value.primaryImageURL,
+    alt: dataResult.value.displayName,
+  };
+  const additionalImages = dataResult.value.additionalImagesUrls?.map((url) => {
+    return { src: url, alt: dataResult.value.displayName };
+  });
+  const images = !!additionalImages
+    ? [firstImage, ...additionalImages]
+    : [firstImage];
 
   return (
     <div className="relative">
@@ -68,10 +80,14 @@ export default async function Book({
         </div>
 
         <div className="w-full md:w-1/2">
-          <PhotoZoom
-            src={dataResult.value.primaryImageURL}
-            alt={dataResult.value.displayName}
-          />
+          {images.length === 1 ? (
+            <PhotoZoom
+              src={dataResult.value.primaryImageURL}
+              alt={dataResult.value.displayName}
+            />
+          ) : (
+            <PhotoSlider data={images} />
+          )}
           <div className="mt-3 flex flex-wrap gap-3">
             {/* <AddFavorites session={haveSession} /> */}
             <ReadPDF files={dataResult.value.files} />
