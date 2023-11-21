@@ -174,6 +174,12 @@ export const ArtifactById = z.object({
       fileURL: z.string(),
     })
     .nullable(),
+  organization: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
   createdBy: z.string().optional(),
   createdAt: z
     .preprocess((val) => new Date(val as string), z.date())

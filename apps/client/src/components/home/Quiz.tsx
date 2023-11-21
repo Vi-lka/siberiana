@@ -83,7 +83,7 @@ export default function Quiz({
       <h1 className="font-OpenSans mb-0 text-xl font-bold uppercase md:hidden lg:text-2xl">
         {question.attributes.title}
       </h1>
-      <div className="relative mx-auto h-[300px] w-[85%] max-w-[800px] overflow-hidden rounded-md md:w-full 2xl:h-[350px]">
+      <div className="relative mx-auto h-[350px] w-[85%] max-w-[1000px] overflow-hidden rounded-md md:w-full 2xl:h-[400px]">
         <Image
           src={
             question.attributes.image.data
@@ -92,7 +92,7 @@ export default function Quiz({
           }
           fill
           className={"object-cover"}
-          sizes="(max-width: 1280px) 45vw, 35vw"
+          sizes="(max-width: 1280px) 90vw, 50vw"
           alt={question.attributes.title}
           priority={true}
         />

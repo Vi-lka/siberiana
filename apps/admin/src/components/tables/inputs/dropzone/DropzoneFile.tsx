@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertOctagon, MousePointerClick, UploadCloud, X } from "lucide-react";
+import { MousePointerClick, UploadCloud, X } from "lucide-react";
+import type { Accept} from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
@@ -11,6 +12,8 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 export default function DropzoneFile({
   defaultValue,
   formValueName,
+  accept,
+  maxSize,
   className,
 }: {
   formValueName: string;
@@ -18,6 +21,8 @@ export default function DropzoneFile({
     file: CustomFile | null | undefined;
     url: string;
   };
+  accept: Accept;
+  maxSize: number;
   className?: string;
 }) {
 
@@ -25,7 +30,6 @@ export default function DropzoneFile({
 
   const [valueFile, setFile] = useState<CustomFile>();
   const [valueURL, setURL] = useState<string>();
-  const [error] = useState(false);
 
   const form = useFormContext();
 
@@ -54,8 +58,8 @@ export default function DropzoneFile({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "model/gltf-binary": [".glb"] },
-    maxSize: 1024 * 1024 * 1024, // 1Gb
+    accept,
+    maxSize,
     multiple: false,
   });
 
@@ -68,100 +72,64 @@ export default function DropzoneFile({
       { shouldDirty: true, shouldValidate: true, shouldTouch: true },
     );
   };
-
-  if (error)
-    return (
+  
+  if (!!valueURL && valueURL.length > 0) return (
+    <>
+      <span
+        className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+        onClick={handleDelete}
+      >
+        <X className="h-5 w-5" /> Удалить
+      </span>
       <div
         {...getRootProps({
           className: cn(
-            "p-12 border border-solid border-border rounded-md cursor-pointer bg-muted",
+            "lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md cursor-pointer bg-muted",
             className,
+            form.getFieldState(formValueName).invalid
+            ? "border-red-500"
+            : form.getFieldState(formValueName).isDirty
+            ? "border-green-400"
+            : "",
           ),
         })}
       >
         <input {...getInputProps()} />
-        <AlertOctagon className="mx-auto text-red-500" />
-        <p className="text-center text-xs text-red-500">Ошибка!</p>
-        <p className="text-muted-foreground text-center text-xs">
-          Что-то пошло не так
+        <p className="mt-3 break-words text-center text-xs font-light">
+          {!!valueFile ? valueFile.name : valueURL}
         </p>
       </div>
-    );
-
-  if (valueFile && valueURL)
-    return (
-      <>
-        <span
-          className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-          onClick={handleDelete}
-        >
-          <X className="h-5 w-5" /> Удалить
-        </span>
-        <div
-          {...getRootProps({
-            className: cn(
-              "lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md cursor-pointer bg-muted",
-              className,
-            ),
-          })}
-        >
-          <input {...getInputProps()} />
-          <p className="mt-3 break-words text-center text-xs font-light">
-            {valueFile.name}
-          </p>
-        </div>
-      </>
-    );
-
-  if (!valueFile && valueURL)
-    return (
-      <>
-        <span
-          className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-          onClick={handleDelete}
-        >
-          <X className="h-5 w-5" /> Удалить
-        </span>
-        <div
-          {...getRootProps({
-            className: cn(
-              "lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md cursor-pointer bg-muted",
-              className,
-            ),
-          })}
-        >
-          <input {...getInputProps()} />
-          <p className="mt-3 break-words text-center text-xs font-light">
-            {valueURL}
-          </p>
-        </div>
-      </>
-    );
-  else
-    return (
-      <div
-        {...getRootProps({
-          className: cn(
-            "p-12 border border-solid border-border rounded-md cursor-pointer bg-muted",
-            className,
-          ),
-        })}
-      >
-        <input {...getInputProps()} />
-        <UploadCloud className="text-muted-foreground mx-auto" />
-        {isDragActive ? (
-          <p className="text-muted-foreground text-center text-xs">
-            Drop the files here ...
-          </p>
-        ) : (
-          <p className="text-muted-foreground text-center text-xs">
-            <span className="underline-offset-3 underline">Drag & drop</span> or{" "}
-            <span className="underline underline-offset-2">
-              <MousePointerClick className="inline h-3 w-3" />
-              Click
-            </span>
-          </p>
-        )}
-      </div>
-    );
+    </>
+  );
+  else return (
+    <div
+      {...getRootProps({
+        className: cn(
+          "p-12 border border-solid border-border rounded-md cursor-pointer bg-muted",
+          className,
+          form.getFieldState(formValueName).invalid
+          ? "border-red-500"
+          : form.getFieldState(formValueName).isDirty
+          ? "border-green-400"
+          : "",
+        ),
+      })}
+    >
+      <input {...getInputProps()} />
+      <UploadCloud className="text-muted-foreground mx-auto" />
+      {isDragActive ? (
+        <p className="text-muted-foreground text-center text-xs">
+          Drop the files here ...
+        </p>
+      ) : (
+        <p className="text-muted-foreground text-center text-xs">
+          <span className="underline-offset-3 underline">Drag & drop</span> or{" "}
+          <span className="underline underline-offset-2">
+            <MousePointerClick className="inline h-3 w-3" />
+            Click
+          </span>
+        </p>
+      )}
+    </div>
+  );
 }

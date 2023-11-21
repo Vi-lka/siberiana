@@ -69,12 +69,13 @@ export default async function TablesBooks({
       displayName: "",
       description: "",
       externalLink: "",
-      year: undefined,
+      year: "",
       files: [],
       primaryImage: {
         file: undefined,
         url: "",
       },
+      additionalImages: null,
       bookGenres: [],
       authors: [],
       periodical: null,
@@ -125,6 +126,8 @@ export default async function TablesBooks({
     const {
       status,
       primaryImageURL,
+      additionalImagesUrls,
+      year,
       collection,
       location,
       country,
@@ -133,6 +136,13 @@ export default async function TablesBooks({
       settlement,
       ...rest // assigns remaining
     } = node;
+
+    const additionalImages = additionalImagesUrls 
+      ? additionalImagesUrls.map((url) => {
+        const file = null
+        return {file, url}
+      })
+      : null
 
     const locationForTabel = location
       ? { ...location, type: "location" }
@@ -155,11 +165,13 @@ export default async function TablesBooks({
         file: null,
         url: primaryImageURL,
       },
+      additionalImages,
       collection: {
         id: collection.id,
         displayName: collection.displayName,
       },
       location: locationForTabel,
+      year: year === 0 ? undefined : year.toString(),
       ...rest,
     } as BookForTable;
   });

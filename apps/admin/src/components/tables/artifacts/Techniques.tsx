@@ -10,13 +10,13 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 
 export default function Techniques({
   defaultTechniques,
-  rowIndex,
+  formValueName,
 }: {
   defaultTechniques: {
     id: string;
     displayName: string;
   }[];
-  rowIndex: number;
+  formValueName: string;
 }) {
   const defaultItems =
     defaultTechniques.length > 0
@@ -67,7 +67,7 @@ export default function Techniques({
       <FormSelectMulti
         itemsData={itemsData}
         defaultValues={defaultTechniques}
-        formValueName={`artifacts[${rowIndex}].techniques`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick}
       />

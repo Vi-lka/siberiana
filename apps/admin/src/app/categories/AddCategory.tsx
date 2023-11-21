@@ -26,7 +26,7 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-import FormInputText from "~/components/tables/inputs/FormInputText";
+import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { putObjects } from "~/lib/auth/siberiana";
 import { createCategory } from "~/lib/mutations/collections";
@@ -181,7 +181,7 @@ export default function AddCategory({ className }: { className?: string }) {
               >
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Название</p>
-                  <FormInputText
+                  <FormInput
                     name="displayName"
                     className="border-border w-full max-w-lg text-base"
                     defaultValue={DEFAULT_VALUES.displayName}
@@ -192,7 +192,7 @@ export default function AddCategory({ className }: { className?: string }) {
                   <p className="mb-2 font-medium">
                     Slug <span className="text-sm font-light">(URL имя)</span>
                   </p>
-                  <FormInputText
+                  <FormInput
                     name="slug"
                     className="border-border w-full max-w-lg text-sm"
                     defaultValue={DEFAULT_VALUES.slug}
@@ -206,7 +206,7 @@ export default function AddCategory({ className }: { className?: string }) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Аббревиатура</p>
-                  <FormInputText
+                  <FormInput
                     name="abbreviation"
                     className="border-border w-full max-w-lg text-base"
                     defaultValue={DEFAULT_VALUES.abbreviation}

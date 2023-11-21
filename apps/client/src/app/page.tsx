@@ -43,7 +43,7 @@ export default async function Home() {
       </div>
 
       {/* CATEGORIES */}
-      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[2000px]">
         <Suspense
           fallback={
             <>
@@ -60,12 +60,12 @@ export default async function Home() {
       </div>
 
       {/* QUIZ */}
-      <div className="mx-auto w-[85%] max-w-[1600px]">
+      <div className="mx-auto w-[85%] max-w-[2000px]">
         <Quiz qiuzDict={dictResult.quiz} errorDict={dictResult.errors} />
       </div>
 
       {/* CUSTOM */}
-      <div className="font-OpenSans mx-auto w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto w-[85%] max-w-[2000px]">
         <Suspense
           fallback={
             <div className="mb-24">
@@ -82,7 +82,7 @@ export default async function Home() {
       </div>
 
       {/* ORGANIZATIONS */}
-      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[2000px]">
         <Suspense
           fallback={
             <>
@@ -99,7 +99,7 @@ export default async function Home() {
       </div>
 
       {/* PROJECTS */}
-      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[1600px]">
+      <div className="font-OpenSans mx-auto mb-24 w-[85%] max-w-[2000px]">
         <Suspense
           fallback={
             <>

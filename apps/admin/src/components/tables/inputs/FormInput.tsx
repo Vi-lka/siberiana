@@ -13,14 +13,16 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export default function FormInputText({
+export default function FormInput({
   name,
   defaultValue,
+  type,
   className,
   placeholder,
 }: {
   name: string;
   defaultValue?: string;
+  type?: React.HTMLInputTypeAttribute,
   className?: string;
   placeholder?: string;
 }) {
@@ -34,6 +36,7 @@ export default function FormInputText({
         <FormItem className="relative h-full">
           <FormControl>
             <Input
+              type={type}
               className={cn(
                 "m-0 w-auto max-w-[8rem] overflow-visible truncate border-solid border-transparent px-2 py-6 text-xs",
                 className,

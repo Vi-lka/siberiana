@@ -12,13 +12,13 @@ import { FormSelect } from "../inputs/FormSelect";
 
 export default function Set({
   defaultSet,
-  rowIndex,
+  formValueName,
 }: {
   defaultSet: {
     id: string;
     displayName: string;
   } | null;
-  rowIndex: number;
+  formValueName: string;
 }) {
   const defaultLable = !!defaultSet ? defaultSet.displayName : "__";
 
@@ -62,7 +62,7 @@ export default function Set({
       <FormSelect
         defaultValue={defaultSet}
         itemsData={itemsData}
-        formValueName={`artifacts[${rowIndex}].set`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick}
       />

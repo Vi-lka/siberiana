@@ -84,7 +84,7 @@ export function MenuBarGroup({
   }
 
   return (
-    <HoverCard openDelay={320} closeDelay={300}>
+    <HoverCard openDelay={250} closeDelay={240}>
       <HoverCardTrigger asChild>
         <NavigationMenuItem className="ml-1 flex w-full">
           <Link href={href} legacyBehavior passHref>

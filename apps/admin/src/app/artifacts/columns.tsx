@@ -24,9 +24,10 @@ import Publications from "~/components/tables/global-fields/Publications";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
 import Status from "~/components/tables/global-fields/Status";
 import DateSelect from "~/components/tables/inputs/DateSelect";
-import FormInputText from "~/components/tables/inputs/FormInputText";
+import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
+import Organization from "~/components/tables/global-fields/Organization";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -77,7 +78,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormInputText
+        <FormInput
           name={`artifacts[${row.index}].inventoryNumber`}
           defaultValue={row.original.inventoryNumber}
           className="border-background bg-transparent text-center"
@@ -99,7 +100,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormInputText
+        <FormInput
           name={`artifacts[${row.index}].kpNumber`}
           defaultValue={row.original.kpNumber}
           className="border-background bg-transparent text-center"
@@ -121,7 +122,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormInputText
+        <FormInput
           name={`artifacts[${row.index}].goskatalogNumber`}
           defaultValue={row.original.goskatalogNumber}
           className="border-background bg-transparent text-center"
@@ -181,7 +182,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
       return (
         <Culture
           defaultCulture={row.original.culturalAffiliation}
-          rowIndex={row.index}
+          formValueName={`artifacts[${row.index}].culturalAffiliation`}
         />
       );
     },
@@ -190,7 +191,12 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     accessorKey: "set",
     header: () => <div className="text-center">Комплекс</div>,
     cell: ({ row }) => {
-      return <Set defaultSet={row.original.set} rowIndex={row.index} />;
+      return (
+        <Set 
+          defaultSet={row.original.set}
+          formValueName={`artifacts[${row.index}].set`}
+        />
+      );
     },
   },
   {
@@ -200,7 +206,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
       return (
         <Monument
           defaultMonument={row.original.monument}
-          rowIndex={row.index}
+          formValueName={`artifacts[${row.index}].monument`}
         />
       );
     },
@@ -274,7 +280,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
       return (
         <Materials
           defaultMaterials={row.original.mediums}
-          rowIndex={row.index}
+          formValueName={`artifacts[${row.index}].mediums`}
         />
       );
     },
@@ -286,7 +292,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
       return (
         <Techniques
           defaultTechniques={row.original.techniques}
-          rowIndex={row.index}
+          formValueName={`artifacts[${row.index}].techniques`}
         />
       );
     },
@@ -308,7 +314,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Вес</div>,
     cell: ({ row }) => {
       return (
-        <FormInputText
+        <FormInput
           name={`artifacts[${row.index}].weight`}
           defaultValue={row.original.weight}
           className="border-background bg-transparent text-center"
@@ -374,6 +380,18 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <PersonSingle
           formValueName={`artifacts[${row.index}].donor`}
           defaultPerson={row.original.donor}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "organization",
+    header: () => <div className="text-center">Организация</div>,
+    cell: ({ row }) => {
+      return (
+        <Organization
+          formValueName={`artifacts[${row.index}].organization`}
+          defaultOrganization={row.original.organization}
         />
       );
     },

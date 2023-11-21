@@ -175,6 +175,7 @@ export default function CreateTable<TData, TValue>({
     culturalAffiliation: null,
     set: null,
     monument: null,
+    organization: null,
     location: null,
     mediums: [],
     techniques: [],

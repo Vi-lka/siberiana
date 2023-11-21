@@ -27,7 +27,7 @@ import {
 
 import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
-import FormInputText from "~/components/tables/inputs/FormInputText";
+import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { putObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
@@ -183,7 +183,7 @@ export default function UpdateCategory(props: CategoryForm) {
               >
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Название</p>
-                  <FormInputText
+                  <FormInput
                     name="displayName"
                     className="border-border w-full max-w-lg text-base"
                     defaultValue={props.displayName}
@@ -194,7 +194,7 @@ export default function UpdateCategory(props: CategoryForm) {
                   <p className="mb-2 font-medium">
                     Slug <span className="text-sm font-light">(URL имя)</span>
                   </p>
-                  <FormInputText
+                  <FormInput
                     name="slug"
                     className="border-border w-full max-w-lg text-sm"
                     defaultValue={props.slug}
@@ -208,7 +208,7 @@ export default function UpdateCategory(props: CategoryForm) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Аббревиатура</p>
-                  <FormInputText
+                  <FormInput
                     name="abbreviation"
                     className="border-border w-full max-w-lg text-base"
                     defaultValue={props.abbreviation}

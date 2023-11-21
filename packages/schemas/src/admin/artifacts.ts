@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { ArtifactById, StatusEnum } from "../objects-schema";
-import { CustomFile, ImageFile, LocationEnum } from "./global";
+import { CustomFile, LocationEnum } from "./global";
 
 export const Sizes = z.object({
   width: z.number(),
@@ -37,7 +37,7 @@ export const ArtifactForTable = z.object({
   }),
   displayName: z.string().min(1),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
   description: z.string().optional(),
@@ -98,6 +98,12 @@ export const ArtifactForTable = z.object({
     })
     .nullable(),
   model: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  organization: z
     .object({
       id: z.string(),
       displayName: z.string(),

@@ -98,6 +98,7 @@ export default async function TablesArtifacts({
       culturalAffiliation: null,
       set: null,
       monument: null,
+      organization: null,
       location: null,
       mediums: [],
       techniques: [],

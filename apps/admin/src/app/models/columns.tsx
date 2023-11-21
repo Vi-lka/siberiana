@@ -74,7 +74,13 @@ export const columns: ColumnDef<ModelForTable>[] = [
     header: () => <div className="text-center">Файл</div>,
     cell: ({ row }) => {
       return (
-        <InputDropzone formValueName={`models[${row.index}].file`} file className="min-w-[11rem]"/>
+        <InputDropzone 
+          formValueName={`models[${row.index}].file`} 
+          file 
+          accept={{ "model/gltf-binary": [".glb"] }}
+          maxSize={1024 * 1024 * 1024} // 1Gb
+          className="min-w-[11rem]"
+        />
       );
     },
   },

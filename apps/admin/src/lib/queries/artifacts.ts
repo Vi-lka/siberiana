@@ -159,6 +159,10 @@ export const getArtifacts = async ({
             id
             displayName
           }
+          organization {
+            id
+            displayName
+          }
           model {
             id
             displayName

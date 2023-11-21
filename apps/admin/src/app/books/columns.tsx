@@ -14,6 +14,12 @@ import Persons from "~/components/tables/global-fields/Persons";
 import Status from "~/components/tables/global-fields/Status";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
+import BookGenres from "~/components/tables/books/BookGenres";
+import FormInput from "~/components/tables/inputs/FormInput";
+import Organization from "~/components/tables/global-fields/Organization";
+import Periodical from "~/components/tables/books/Periodical";
+import Publisher from "~/components/tables/books/Publisher";
+import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 
 export const columns: ColumnDef<BookForTable>[] = [
   {
@@ -84,6 +90,22 @@ export const columns: ColumnDef<BookForTable>[] = [
     },
   },
   {
+    accessorKey: "additionalImages",
+    header: () => <div className="min-w-[80px] text-center">Доп. Фото</div>,
+    cell: ({ row }) => {
+      return (
+        <InputMultiDropzone
+          formValueName={`books[${row.index}].additionalImages`}
+          defaultValues={row.original.additionalImages}
+          files={false}
+          accept={{ "image/*": [".jpeg", ".jpg", ".png", ".webp"] }}
+          maxSize={1024 * 1024 * 100} // 100Mb
+          className="min-w-[11rem]"
+        />
+      );
+    },
+  },
+  {
     accessorKey: "description",
     header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
@@ -96,13 +118,28 @@ export const columns: ColumnDef<BookForTable>[] = [
     },
   },
   {
-    accessorKey: "location",
-    header: () => <div className="text-center">Место находки</div>,
+    accessorKey: "year",
+    header: () => <div className="text-center">Год</div>,
     cell: ({ row }) => {
       return (
-        <Locations
-          defaultLocation={row.original.location}
-          formValueName={`books[${row.index}].location`}
+        <FormInput
+          name={`books[${row.index}].year`}
+          defaultValue={row.original.year}
+          type="number"
+          className="border-background bg-transparent text-center"
+          placeholder="__"
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "bookGenres",
+    header: () => <div className="text-center">Раздел/Жанр</div>,
+    cell: ({ row }) => {
+      return (
+        <BookGenres
+          formValueName={`books[${row.index}].bookGenres`}
+          defaultBookGenres={row.original.bookGenres}
         />
       );
     },
@@ -115,6 +152,54 @@ export const columns: ColumnDef<BookForTable>[] = [
         <Persons
           formValueName={`books[${row.index}].authors`}
           defaultPersons={row.original.authors}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "periodical",
+    header: () => <div className="text-center">Издание</div>,
+    cell: ({ row }) => {
+      return (
+        <Periodical
+          formValueName={`books[${row.index}].periodical`}
+          defaultPeriodical={row.original.periodical}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "publisher",
+    header: () => <div className="text-center">Издатель</div>,
+    cell: ({ row }) => {
+      return (
+        <Publisher
+          formValueName={`books[${row.index}].publisher`}
+          defaultPublisher={row.original.publisher}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "library",
+    header: () => <div className="min-w-[12rem] text-center">Библиотека/Организация</div>,
+    cell: ({ row }) => {
+      return (
+        <Organization
+          formValueName={`books[${row.index}].library`}
+          defaultOrganization={row.original.library}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "location",
+    header: () => <div className="text-center">Расположение</div>,
+    cell: ({ row }) => {
+      return (
+        <Locations
+          defaultLocation={row.original.location}
+          formValueName={`books[${row.index}].location`}
         />
       );
     },

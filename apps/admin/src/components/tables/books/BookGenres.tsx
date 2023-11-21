@@ -1,36 +1,37 @@
-"use client";
-
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { CulturesList } from "@siberiana/schemas";
+import type { BookGenresList } from "@siberiana/schemas";
 
 import ErrorToast from "~/components/errors/ErrorToast";
-import { getCulturesQuery } from "~/lib/queries/client/artifacts";
-import { FormSelect } from "../inputs/FormSelect";
+import { getBookGenresQuery } from "~/lib/queries/client/books";
+import { FormSelectMulti } from "../inputs/FormSelectMulti";
 
-export default function Culture({
-  defaultCulture,
+export default function BookGenres({
+  defaultBookGenres,
   formValueName,
 }: {
-  defaultCulture: {
+  defaultBookGenres: {
     id: string;
     displayName: string;
-  } | null;
+  }[];
   formValueName: string;
 }) {
-  const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__";
+  const defaultItems =
+    defaultBookGenres.length > 0
+      ? defaultBookGenres
+      : [{ id: "", displayName: "__" }];
 
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<
-    CulturesList,
+    BookGenresList,
     Error
   >({
-    queryKey: ["cultures"],
+    queryKey: ["bookGenres"],
     queryFn: async () =>
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getCulturesQuery(),
+        getBookGenresQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false, // disable this query from automatically running
@@ -39,14 +40,18 @@ export default function Culture({
   if (isError && !!error) {
     return (
       <>
-        {defaultLable}
-        <ErrorToast error={error.message} place="Культуры" />
+        {defaultItems.map((item, index) => (
+          <p key={index} className="">
+            {item.displayName}
+          </p>
+        ))}
+        <ErrorToast error={error.message} place="Разделы/Жанры книг" />
       </>
     );
   }
 
   const itemsData = data
-    ? data.cultures.edges.map(({ node }) => {
+    ? data.bookGenres.edges.map(({ node }) => {
         const id = node.id;
         const displayName = node.displayName;
         return { id, displayName };
@@ -59,9 +64,9 @@ export default function Culture({
 
   return (
     <div className="h-full w-full">
-      <FormSelect
-        defaultValue={defaultCulture}
+      <FormSelectMulti
         itemsData={itemsData}
+        defaultValues={defaultBookGenres}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick}

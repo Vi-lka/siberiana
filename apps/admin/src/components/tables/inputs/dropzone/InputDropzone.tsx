@@ -2,54 +2,59 @@ import React from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import { useFormContext } from "react-hook-form";
 
-import type { CustomFile, ImageFile } from "@siberiana/schemas";
+import type { CustomFile } from "@siberiana/schemas";
 
 import DropzoneImage from "./DropzoneImage";
 import DropzoneFile from "./DropzoneFile";
+import type { Accept } from "react-dropzone";
 
-export default function InputDropzone({
-  formValueName,
-  file,
-  className,
-}: {
+type InputDropzone = {
   formValueName: string;
-  file?: boolean,
   className?: string;
-}) {
+} & (InputFile | InputImage)
+
+type InputFile = {
+  file: true,
+  accept: Accept;
+  maxSize: number;
+}
+
+type InputImage = {
+  file: false,
+}
+
+export default function InputDropzone(props: InputDropzone) {
   const form = useFormContext();
 
-  const value = file 
-    ? form.getValues(formValueName) as {
-        file: CustomFile | null | undefined;
-        url: string;
-      }
-    : form.getValues(formValueName) as {
-        file: ImageFile | null | undefined;
-        url: string;
-      }  
-
+  const value = form.getValues(props.formValueName) as {
+    file: CustomFile | null | undefined;
+    url: string;
+  }
+  
   return (
     <>
-      {file 
+      {props.file 
         ? (
           <DropzoneFile
-            formValueName={formValueName}
+            formValueName={props.formValueName}
             defaultValue={value}
-            className={className}
+            accept={props.accept}
+            maxSize={props.maxSize}
+            className={props.className}
           />
         )
         : (
           <DropzoneImage
-            formValueName={formValueName}
+            formValueName={props.formValueName}
             defaultValue={value}
-            className={className}
+            className={props.className}
           />
         )
       }
 
       <ErrorMessage
         errors={form.formState.errors}
-        name={formValueName}
+        name={props.formValueName}
         render={({ message }) => (
           <p className="text-destructive text-sm font-medium">{message}</p>
         )}

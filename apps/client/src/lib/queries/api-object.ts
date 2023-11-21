@@ -122,6 +122,10 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         id
                         displayName
                     }
+                    organization {
+                      id
+                      displayName
+                    }
                     model {
                         id
                         displayName

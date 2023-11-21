@@ -43,7 +43,7 @@ export default async function ServicesContent({
     <>
       <div
         key={Math.random()}
-        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3"
+        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3 min-[3000px]:grid-cols-4 min-[4000px]:grid-cols-5"
       >
         {dataResult.value.data.map((service, index) => (
           <ImgTextBelow

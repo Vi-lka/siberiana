@@ -53,7 +53,7 @@ export default function HomeSlider({ data }: { data: Slider }) {
                 }
                 priority={true}
                 fill
-                sizes="(max-width: 500px) 70vw, 40vw"
+                sizes="(max-width: 500px) 80vw, 90vw"
               />
             ) : (
               <Skeleton className="h-full w-full" />

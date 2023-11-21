@@ -51,8 +51,8 @@ export default async function ProjectsBlock() {
             src={proj.attributes.image.data?.attributes.url}
             href={getLinkDir(proj.attributes.url)}
             target="_blank"
-            width={700}
-            height={300}
+            width={800}
+            height={400}
           >
             <div className="flex flex-col gap-3">
               <p className="text-base font-bold uppercase lg:text-xl">

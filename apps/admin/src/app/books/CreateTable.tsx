@@ -116,18 +116,22 @@ export default function CreateTable<TData, TValue>({
 
   const dataToPersist = form.getValues("books") ?? dataState 
 
-  const dataPersistNoImage = dataToPersist.map((elem) => {
+  const dataPersistNoFiles = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { primaryImage, ...rest } = elem;
+    const { primaryImage, additionalImages, ...rest } = elem;
     const nullImage = {
       file: undefined,
       url: "",
     };
-    return { primaryImage: nullImage, ...rest };
+    return { 
+      primaryImage: nullImage, 
+      additionalImages: null, 
+      ...rest 
+    };
   });
 
   usePersistForm<BookForTable[]>({
-    value: { data: dataPersistNoImage },
+    value: { data: dataPersistNoFiles },
     localStorageKey: FORM_DATA_KEY,
     isLoading: loading || isPendingRouter,
   });
@@ -146,12 +150,13 @@ export default function CreateTable<TData, TValue>({
     displayName: "",
     description: "",
     externalLink: "",
-    year: undefined,
+    year: "",
     files: [],
     primaryImage: {
       file: undefined,
       url: "",
     },
+    additionalImages: null,
     bookGenres: [],
     authors: [],
     periodical: null,

@@ -1,36 +1,38 @@
-"use client";
-
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { CulturesList } from "@siberiana/schemas";
+import type { OrganizationList } from "@siberiana/schemas";
 
 import ErrorToast from "~/components/errors/ErrorToast";
-import { getCulturesQuery } from "~/lib/queries/client/artifacts";
 import { FormSelect } from "../inputs/FormSelect";
+import { getOrganizationsQuery } from "~/lib/queries/client/global";
 
-export default function Culture({
-  defaultCulture,
+export default function Organization({
+  defaultOrganization,
   formValueName,
+  className,
 }: {
-  defaultCulture: {
+  defaultOrganization: {
     id: string;
     displayName: string;
   } | null;
   formValueName: string;
+  className?: string;
 }) {
-  const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__";
+  const defaultItem = defaultOrganization
+    ? defaultOrganization
+    : { id: "", displayName: "__" };
 
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<
-    CulturesList,
+    OrganizationList,
     Error
   >({
-    queryKey: ["cultures"],
+    queryKey: ["organizations"],
     queryFn: async () =>
       request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        getCulturesQuery(),
+        getOrganizationsQuery(),
       ),
     refetchOnWindowFocus: false,
     enabled: false, // disable this query from automatically running
@@ -39,14 +41,14 @@ export default function Culture({
   if (isError && !!error) {
     return (
       <>
-        {defaultLable}
-        <ErrorToast error={error.message} place="Культуры" />
+        <p className="">{defaultItem.displayName}</p>
+        <ErrorToast error={error.message} place="Organizations" />
       </>
     );
   }
 
   const itemsData = data
-    ? data.cultures.edges.map(({ node }) => {
+    ? data.organizations.edges.map(({ node }) => {
         const id = node.id;
         const displayName = node.displayName;
         return { id, displayName };
@@ -60,11 +62,12 @@ export default function Culture({
   return (
     <div className="h-full w-full">
       <FormSelect
-        defaultValue={defaultCulture}
+        defaultValue={defaultOrganization}
         itemsData={itemsData}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
         onClick={handleClick}
+        className={className}
       />
     </div>
   );

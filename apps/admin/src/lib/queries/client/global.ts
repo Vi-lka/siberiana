@@ -220,3 +220,22 @@ export function getProjectsQuery() {
   `;
   return query;
 }
+
+export function getOrganizationsQuery() {
+  const query = `
+      query Organizations() {
+        organizations(
+          orderBy: {field: DISPLAY_NAME, direction: ASC},
+        ) {
+          totalCount
+          edges {
+            node {
+              id
+              displayName
+            }
+          }
+        }
+      }
+    `;
+  return query;
+}

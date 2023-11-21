@@ -58,7 +58,7 @@ export default async function CollectionsContent({
     <>
       <div
         key={Math.random()}
-        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3"
+        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3 min-[3000px]:grid-cols-4 min-[4000px]:grid-cols-5"
       >
         {dataResult.value.edges.map((collection, index) => (
           <ImgTextBelow
@@ -71,8 +71,8 @@ export default async function CollectionsContent({
               collection.node.category?.slug,
               collection.node.slug,
             )}
-            width={810}
-            height={300}
+            width={800}
+            height={400}
           >
             <div className="flex flex-col gap-3">
               <p className="text-base font-bold uppercase lg:text-xl">

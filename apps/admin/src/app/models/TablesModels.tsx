@@ -109,8 +109,6 @@ export default async function TablesModels({
     } as ModelForTable;
   });
 
-  console.log(dataForUpdate)
-
   if (mode === "add")
     return (
       <div className="mx-auto w-full pt-3">

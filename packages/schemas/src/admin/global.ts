@@ -9,9 +9,6 @@ import { Location } from "../objects-schema";
 export const CustomFile = z.custom<File>();
 export type CustomFile = z.infer<typeof CustomFile>;
 
-export const ImageFile = z.custom<File>();
-export type ImageFile = z.infer<typeof ImageFile>;
-
 export const LocationEnum = z.enum([
   "location",
   "country",
@@ -43,7 +40,7 @@ export const CategoryForm = z.object({
   displayName: z.string().min(1),
   abbreviation: z.string(),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
   description: z.string(),
@@ -88,7 +85,7 @@ export const CollectionForm = z.object({
   displayName: z.string().min(1),
   abbreviation: z.string(),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
   description: z.string(),
@@ -179,3 +176,18 @@ export const ProjectsList = z.object({
   }),
 });
 export type ProjectsList = z.infer<typeof ProjectsList>;
+
+//.........................ORGANIZATION.........................//
+export const OrganizationList = z.object({
+  organizations: z.object({
+    edges: z
+      .object({
+        node: z.object({
+          id: z.string(),
+          displayName: z.string(),
+        }),
+      })
+      .array(),
+  }),
+});
+export type OrganizationList = z.infer<typeof OrganizationList>;
