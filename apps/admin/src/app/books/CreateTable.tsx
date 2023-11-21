@@ -197,27 +197,31 @@ export default function CreateTable<TData, TValue>({
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
       ) as BookForTable[] & TData[];
 
-    if (filteredData.length === 0) {
-      toast({
-        variant: "destructive",
-        title: "Oшибка!",
-        description: <p>А есть смысл оставлять таблицу пустой?</p>,
-        className: "font-Inter",
-      });
-      return;
-    }
+    const deleteAll = filteredData.length === 0
 
-    startTransitionTable(() => {
-      setDataState(filteredData);
-    });
-    startTransitionForm(() => {
-      let i = 0;
-      for (const row of selectedRows) {
-        remove(row.index - i);
-        i++;
-      }
-    });
-    form.reset({}, { keepValues: true, keepDirtyValues: false });
+    if (deleteAll) {
+      startTransitionTable(() => {
+        setDataState(deleteAll ? data : filteredData);
+      });
+      startTransitionForm(() => {
+        form.reset(
+          { books: data },
+          { keepValues: false, keepDirtyValues: false },
+        );
+      });
+    } else {
+      startTransitionTable(() => {
+        setDataState(filteredData);
+      });
+      startTransitionForm(() => {
+        let i = 0;
+        for (const row of selectedRows) {
+          remove(row.index - i);
+          i++;
+        }
+        form.reset({}, { keepValues: true, keepDirtyValues: false }); // dosn't need default dirty because all new data is dirty
+      });
+    }
 
     table.toggleAllPageRowsSelected(false);
   };

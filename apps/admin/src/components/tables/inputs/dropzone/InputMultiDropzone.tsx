@@ -36,14 +36,16 @@ export default function InputMultiDropzone(props: InputProps) {
         const url = URL.createObjectURL(file)
         return { file, url };
       })
-      setValues(newValues)
+
+      !!values ? setValues([...newValues, ...values]) : setValues(newValues);
+      
       form.setValue(
         props.formValueName,
         newValues,
         { shouldDirty: true, shouldValidate: true, shouldTouch: true },
       );
     },
-    [form, props.formValueName],
+    [form, props.formValueName, values],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -66,7 +68,7 @@ export default function InputMultiDropzone(props: InputProps) {
     form.setValue(
       props.formValueName,
       props.defaultValues,
-      { shouldDirty: false, shouldValidate: true, shouldTouch: true },
+      { shouldDirty: true, shouldValidate: true, shouldTouch: true },
     );
   };
 
