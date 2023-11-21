@@ -15,7 +15,6 @@ import type {
   ColumnFiltersState,
   SortingState,
 } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -27,6 +26,7 @@ import { toast } from "@siberiana/ui";
 import DataTable from "~/components/tables/DataTable";
 import { useDeleteBook, useUpdateBook } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import LoadingMutation from "~/components/LoadingMutation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,17 +54,17 @@ export default function UpdateTable<TData, TValue>({
   const session = useSession();
 
   const deleteMutation = useDeleteBook(session.data?.access_token);
-  const updateMutation = useUpdateBook(session.data?.access_token);
+  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateBook(session.data?.access_token);
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator
+  const allowColumns: ColumnDef<TData, TValue>[] = isModerator
     ? moderatorsColumns
     : columns;
 
   const table = useReactTable({
     data: data,
-    columns: allowСolumns,
+    columns: allowColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -211,13 +211,12 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRefresh)
-    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
+  if (loading || isPendingRefresh) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
 
   return (
     <DataTable
       table={table}
-      columnsLength={allowСolumns.length}
+      columnsLength={allowColumns.length}
       form={form}
       isLoading={loading}
       isPendingChangeMode={isPendingGoToCreate}

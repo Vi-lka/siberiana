@@ -5,7 +5,7 @@ import request from "graphql-request";
 
 import type { ArtifactForTable, BookForTable } from "@siberiana/schemas";
 
-import { putObjects } from "../auth/siberiana";
+import { usePutObjects } from "../auth/siberiana";
 import {
   clearDate,
   clearLocation,
@@ -31,10 +31,13 @@ export function useCreateArtifact(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async (value: ArtifactForTable) => {
       const resUpload = value.primaryImage.file
-        ? await putObjects({
+        ? await upload({
             bucket: "artifacts",
             files: [value.primaryImage.file],
           })
@@ -98,7 +101,7 @@ export function useCreateArtifact(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
 export function useDeleteArtifact(access_token?: string) {
@@ -136,6 +139,9 @@ export function useUpdateArtifact(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async ({
       id,
@@ -161,7 +167,7 @@ export function useUpdateArtifact(access_token?: string) {
       const resUpload =
         newValue.primaryImage.url !== oldValue.primaryImage.url &&
         newValue.primaryImage.file
-          ? await putObjects({
+          ? await upload({
               bucket: "artifacts",
               files: [newValue.primaryImage.file],
             })
@@ -248,7 +254,7 @@ export function useUpdateArtifact(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
 //.........................BOOKS.........................//
@@ -265,10 +271,13 @@ export function useCreateBook(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async (value: BookForTable) => {
       const primaryImageUpload = value.primaryImage.file
-        ? await putObjects({
+        ? await upload({
             bucket: "books",
             files: [value.primaryImage.file],
           })
@@ -281,7 +290,7 @@ export function useCreateBook(access_token?: string) {
 
       const additionalImagesFiles =  value.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
       const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await putObjects({
+        ? await upload({
             bucket: "books",
             files: additionalImagesFiles,
           })
@@ -322,7 +331,7 @@ export function useCreateBook(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
 export function useDeleteBook(access_token?: string) {
@@ -360,6 +369,9 @@ export function useUpdateBook(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async ({
       id,
@@ -376,7 +388,7 @@ export function useUpdateBook(access_token?: string) {
       const resUpload =
         newValue.primaryImage.url !== oldValue.primaryImage.url &&
         newValue.primaryImage.file
-          ? await putObjects({
+          ? await upload({
               bucket: "books",
               files: [newValue.primaryImage.file],
             })
@@ -389,7 +401,7 @@ export function useUpdateBook(access_token?: string) {
 
       const additionalImagesFiles =  newValue.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
       const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await putObjects({
+        ? await upload({
             bucket: "books",
             files: additionalImagesFiles,
           })
@@ -446,5 +458,5 @@ export function useUpdateBook(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }

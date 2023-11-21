@@ -11,7 +11,7 @@ import type {
 } from "@siberiana/schemas";
 
 import { getIds, handleArrays } from "../utils/mutations-utils";
-import { putObjects } from "../auth/siberiana";
+import { usePutObjects } from "../auth/siberiana";
 
 //.........................CULTURE.........................//
 export function useCreateCulture(access_token?: string) {
@@ -509,10 +509,13 @@ export function useCreateModel(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async (value: ModelForTable) => {
       const resUpload = value.file.file
-        ? await putObjects({
+        ? await upload({
             bucket: "models",
             files: [value.file.file],
           })
@@ -539,7 +542,7 @@ export function useCreateModel(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
 export function useDeleteModel(access_token?: string) {
@@ -577,6 +580,9 @@ export function useUpdateModel(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationFn: async ({
       id,
@@ -590,7 +596,7 @@ export function useUpdateModel(access_token?: string) {
       const resUpload =
         newValue.file.url !== oldValue.file.url &&
         newValue.file.file
-          ? await putObjects({
+          ? await upload({
               bucket: "models",
               files: [newValue.file.file],
             })
@@ -622,5 +628,5 @@ export function useUpdateModel(access_token?: string) {
       );
     },
   });
-  return mutation;
+  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }

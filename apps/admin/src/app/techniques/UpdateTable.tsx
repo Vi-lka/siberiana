@@ -15,7 +15,6 @@ import type {
   ColumnFiltersState,
   SortingState,
 } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -30,6 +29,7 @@ import {
   useUpdateTechnique,
 } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import LoadingMutation from "~/components/LoadingMutation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -201,7 +201,7 @@ export default function UpdateTable<TData, TValue>({
   }
 
   if (loading || isPendingRefresh)
-    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
+    return <LoadingMutation isLoading={false} className="mt-12" />
 
   return (
     <DataTable

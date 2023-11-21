@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
-import { Loader2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -28,10 +28,11 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import { putObjects } from "~/lib/auth/siberiana";
+import { usePutObjects } from "~/lib/auth/siberiana";
 import { createCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
+import LoadingMutation from "~/components/LoadingMutation";
 
 const DEFAULT_VALUES = {
   id: "",
@@ -77,11 +78,13 @@ export default function AddCategory({ className }: { className?: string }) {
     "Content-Type": "application/json",
   };
 
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationKey: ["createCategory", requestHeaders],
     mutationFn: async (values: CategoryForm) => {
       const resUpload = values.primaryImage.file
-        ? await putObjects({ files: [values.primaryImage.file] })
+        ? await upload({ files: [values.primaryImage.file] })
             .then((res) => res.data)
             .catch((err) => {
               console.error(err);
@@ -159,9 +162,9 @@ export default function AddCategory({ className }: { className?: string }) {
           <DialogTitle>Создать</DialogTitle>
           <DialogDescription>Категорию</DialogDescription>
         </DialogHeader>
-        {loading ? (
-          <Loader2 className="mx-auto mt-3 h-12 w-12 animate-spin" />
-        ) : (
+        {loading 
+          ? <LoadingMutation isLoading={isLoading} progress={progress} /> 
+          : (
           <Form {...form}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -201,7 +204,7 @@ export default function AddCategory({ className }: { className?: string }) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" />
+                  <InputDropzone formValueName="primaryImage" file={false} />
                 </div>
 
                 <div className="mb-6">

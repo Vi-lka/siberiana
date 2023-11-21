@@ -15,7 +15,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -28,6 +27,7 @@ import DataTable from "~/components/tables/DataTable";
 import { useCreateMonument } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
+import LoadingMutation from "~/components/LoadingMutation";
 
 const FORM_DATA_KEY = "monumentsCreate";
 
@@ -239,7 +239,7 @@ export default function CreateTable<TData, TValue>({
   }
 
   if (loading || isPendingRouter)
-    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
+    return <LoadingMutation isLoading={false} className="mt-12" />
 
   return (
     <DataTable

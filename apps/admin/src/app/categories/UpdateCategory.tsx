@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -29,11 +28,12 @@ import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import { putObjects } from "~/lib/auth/siberiana";
+import { usePutObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCategory from "./DeleteCategory";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
+import LoadingMutation from "~/components/LoadingMutation";
 
 export default function UpdateCategory(props: CategoryForm) {
   const [loading, setLoading] = React.useState(false);
@@ -53,13 +53,15 @@ export default function UpdateCategory(props: CategoryForm) {
     "Content-Type": "application/json",
   };
 
+  const { upload, progress, isLoading } = usePutObjects()
+
   const mutation = useMutation({
     mutationKey: ["updateCategory", requestHeaders],
     mutationFn: async (values: CategoryForm) => {
       const resUpload =
         values.primaryImage.url !== props.primaryImage.url &&
         values.primaryImage.file
-          ? await putObjects({ files: [values.primaryImage.file] })
+          ? await upload({ files: [values.primaryImage.file] })
               .then((res) => res.data)
               .catch((err) => {
                 console.error(err);
@@ -161,9 +163,9 @@ export default function UpdateCategory(props: CategoryForm) {
             className="ml-auto mr-4 mt-0"
           />
         </DialogHeader>
-        {loading ? (
-          <Loader2 className="mx-auto mt-3 h-12 w-12 animate-spin" />
-        ) : (
+        {loading 
+          ? <LoadingMutation isLoading={isLoading} progress={progress} /> 
+          : (
           <Form {...form}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -203,7 +205,7 @@ export default function UpdateCategory(props: CategoryForm) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" />
+                  <InputDropzone formValueName="primaryImage" file={false} />
                 </div>
 
                 <div className="mb-6">

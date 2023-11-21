@@ -15,7 +15,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -29,6 +28,7 @@ import { useCreateBook } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import getStatusName from "~/lib/utils/getStatusName";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
+import LoadingMutation from "~/components/LoadingMutation";
 
 const FORM_DATA_KEY = "booksCreate";
 
@@ -69,17 +69,17 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const mutation = useCreateBook(session.data?.access_token);
+  const { mutation, progressFiles, isLoadingFiles } = useCreateBook(session.data?.access_token);
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
-  const allowСolumns: ColumnDef<TData, TValue>[] = isModerator
+  const allowColumns: ColumnDef<TData, TValue>[] = isModerator
     ? moderatorsColumns
     : columns;
 
   const table = useReactTable({
     data: dataState,
-    columns: allowСolumns,
+    columns: allowColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -133,7 +133,7 @@ export default function CreateTable<TData, TValue>({
   usePersistForm<BookForTable[]>({
     value: { data: dataPersistNoFiles },
     localStorageKey: FORM_DATA_KEY,
-    isLoading: loading || isPendingRouter,
+    isLoading: loading || isPendingRouter || isLoadingFiles,
   });
 
   const statusForModerator = {
@@ -288,13 +288,12 @@ export default function CreateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRouter)
-    return <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />;
+  if (loading || isPendingRouter) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
 
   return (
     <DataTable
       table={table}
-      columnsLength={allowСolumns.length}
+      columnsLength={allowColumns.length}
       form={form}
       isLoading={isPendingTable || isPendingForm}
       isPendingChangeMode={isPendingGoToUpdate}
