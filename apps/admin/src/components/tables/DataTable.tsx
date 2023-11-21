@@ -144,7 +144,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                       <Button
                         variant="ghost"
                         disabled={props.isLoading}
-                        className="data-[state=open]:bg-muted flex h-10 w-10 p-0"
+                        className="flex h-10 w-10 p-0"
                         onClick={props.handleDeleteSaved}
                       >
                         {props.isLoading ? (
