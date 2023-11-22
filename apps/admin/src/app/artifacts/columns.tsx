@@ -27,12 +27,18 @@ import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
 import Organization from "~/components/tables/global-fields/Organization";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
-import { CheckSquare } from "lucide-react";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
     id: "select",
-    header: () => <CheckSquare className="h-5 w-5 rounded-[6px]" />,
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        className="h-5 w-5 rounded-[6px]"
+        aria-label="Select all"
+      />
+    ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}

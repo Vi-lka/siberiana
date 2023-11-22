@@ -1,10 +1,15 @@
 import { z } from "zod";
 
-import { CollectionTypeEnum } from "../collections-schemas";
 import { Location } from "../objects-schema";
+import { CollectionTypeEnum } from "../collections-schemas";
 
-// const MAX_FILE_SIZE = 10000000;
-// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+export const EntityEnum = z.enum([
+  "art",
+  "artifacts",
+  "books",
+  "protected_area_pictures",
+]);
+export type EntityEnum = z.infer<typeof EntityEnum>;
 
 export const CustomFile = z.custom<File>();
 export type CustomFile = z.infer<typeof CustomFile>;

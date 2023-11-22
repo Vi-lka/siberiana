@@ -36,8 +36,8 @@ import {
 } from "@siberiana/ui";
 
 import { DataTablePagination } from "./DataTablePagination";
-import type { CollectionTypeEnum } from "@siberiana/schemas";
-import DialogForm from "./inputs/DialogForm";
+import type { EntityEnum } from "@siberiana/schemas";
+import DialogForm from "../forms/DialogForm";
 
 interface DataTableProps<TData, TFieldValues extends FieldValues> {
   table: TableTanstack<TData>;
@@ -65,7 +65,7 @@ type NoHasAdd = {
 
 type DialogForm = {
   dialog: true,
-  dialogType: CollectionTypeEnum
+  dialogType: EntityEnum
 };
 type TableForm = {
   dialog?: false,
