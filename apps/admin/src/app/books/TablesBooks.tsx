@@ -70,12 +70,12 @@ export default async function TablesBooks({
       description: "",
       externalLink: "",
       year: "",
-      files: [],
       primaryImage: {
         file: undefined,
         url: "",
       },
       additionalImages: null,
+      files: null,
       bookGenres: [],
       authors: [],
       periodical: null,
@@ -127,6 +127,7 @@ export default async function TablesBooks({
       status,
       primaryImageURL,
       additionalImagesUrls,
+      files,
       year,
       collection,
       location,
@@ -139,6 +140,13 @@ export default async function TablesBooks({
 
     const additionalImages = additionalImagesUrls 
       ? additionalImagesUrls.map((url) => {
+        const file = null
+        return {file, url}
+      })
+      : null
+
+    const filesForTable = files 
+      ? files.map((url) => {
         const file = null
         return {file, url}
       })
@@ -172,6 +180,7 @@ export default async function TablesBooks({
       },
       location: locationForTabel,
       year: year === 0 ? undefined : year.toString(),
+      files: filesForTable,
       ...rest,
     } as BookForTable;
   });

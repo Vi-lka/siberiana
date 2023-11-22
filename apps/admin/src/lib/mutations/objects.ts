@@ -18,6 +18,7 @@ import {
 import { getLable } from "../utils/sizes-utils";
 
 //.........................ARTIFACT.........................//
+//..........CREATE..........//
 export function useCreateArtifact(access_token?: string) {
   const mutationString = `
         mutation CreateArtifact($input: CreateArtifactInput!) {
@@ -36,10 +37,23 @@ export function useCreateArtifact(access_token?: string) {
 
   const mutation = useMutation({
     mutationFn: async (value: ArtifactForTable) => {
-      const resUpload = value.primaryImage.file
+      const primaryImageUpload = value.primaryImage.file
         ? await upload({
             bucket: "artifacts",
             files: [value.primaryImage.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      const additionalImagesFiles =  value.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
+      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
+        ? await upload({
+            bucket: "artifacts",
+            files: additionalImagesFiles,
           })
             .then((res) => res.data)
             .catch((err) => {
@@ -60,7 +74,8 @@ export function useCreateArtifact(access_token?: string) {
             collectionID: value.collection.id,
             displayName: value.displayName,
             description: value.description,
-            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
+            primaryImageURL: primaryImageUpload?.urls[0],
+            additionalImagesUrls: additionalImagesUpload?.urls,
             weight: value.weight,
             width: value.sizes.width,
             height: value.sizes.height,
@@ -104,6 +119,7 @@ export function useCreateArtifact(access_token?: string) {
   return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
+//..........DELETE..........//
 export function useDeleteArtifact(access_token?: string) {
   const mutationString = `
         mutation DeleteArtifact($deleteArtifactId: ID!) {
@@ -126,6 +142,7 @@ export function useDeleteArtifact(access_token?: string) {
   return mutation;
 }
 
+//..........UPDATE..........//
 export function useUpdateArtifact(access_token?: string) {
   const mutationString = `
         mutation UpdateArtifact($updateArtifactId: ID!, $input: UpdateArtifactInput!) {
@@ -164,7 +181,7 @@ export function useUpdateArtifact(access_token?: string) {
         oldValue.techniques,
       );
 
-      const resUpload =
+      const primaryImageUpload =
         newValue.primaryImage.url !== oldValue.primaryImage.url &&
         newValue.primaryImage.file
           ? await upload({
@@ -178,6 +195,19 @@ export function useUpdateArtifact(access_token?: string) {
               })
           : null;
 
+      const additionalImagesFiles =  newValue.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
+      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
+        ? await upload({
+            bucket: "artifacts",
+            files: additionalImagesFiles,
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
       const date = new Date(newValue.admissionDate as string);
       const isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
 
@@ -190,11 +220,12 @@ export function useUpdateArtifact(access_token?: string) {
             status: newValue.status.id,
             displayName: newValue.displayName,
             primaryImageURL:
-              resUpload !== null
-                ? resUpload.urls[0]
+              primaryImageUpload !== null
+                ? primaryImageUpload.urls[0]
                 : newValue.primaryImage.url.length === 0
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
+            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
             description: newValue.description,
             weight: newValue.weight,
             width: newValue.sizes.width,
@@ -258,6 +289,7 @@ export function useUpdateArtifact(access_token?: string) {
 }
 
 //.........................BOOKS.........................//
+//..........CREATE..........//
 export function useCreateBook(access_token?: string) {
   const mutationString = `
         mutation CreateBook($input: CreateBookInput!) {
@@ -301,6 +333,19 @@ export function useCreateBook(access_token?: string) {
             })
         : null;
 
+      const files =  value.files?.map(image => image.file).filter((item): item is File => !!item)
+      const filesUpload = files && files.length > 0
+        ? await upload({
+            bucket: "books",
+            files: files,
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -312,8 +357,9 @@ export function useCreateBook(access_token?: string) {
             description: value.description,
             primaryImageURL: primaryImageUpload?.urls[0],
             additionalImagesUrls: additionalImagesUpload?.urls,
-            externalLink: value.externalLink,
+            files: filesUpload?.urls,
             year: Number(Number(value.year).toFixed()),
+            externalLink: value.externalLink,
             bookGenreIDs: getIds(value.bookGenres),
             authorIDs: getIds(value.authors),
             periodicalID: value.periodical?.id,
@@ -334,6 +380,7 @@ export function useCreateBook(access_token?: string) {
   return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
+//..........DELETE..........//
 export function useDeleteBook(access_token?: string) {
   const mutationString = `
         mutation DeleteBook($deleteBookId: ID!) {
@@ -356,6 +403,7 @@ export function useDeleteBook(access_token?: string) {
   return mutation;
 }
 
+//..........UPDATE..........//
 export function useUpdateBook(access_token?: string) {
   const mutationString = `
         mutation UpdateBook($updateBookId: ID!, $input: UpdateBookInput!) {
@@ -385,7 +433,7 @@ export function useUpdateBook(access_token?: string) {
       const bookGenreIDs = handleArrays(newValue.bookGenres, oldValue.bookGenres)
       const authorsIds = handleArrays(newValue.authors, oldValue.authors);
 
-      const resUpload =
+      const primaryImageUpload =
         newValue.primaryImage.url !== oldValue.primaryImage.url &&
         newValue.primaryImage.file
           ? await upload({
@@ -412,6 +460,20 @@ export function useUpdateBook(access_token?: string) {
             })
         : null;
 
+      const files =  newValue.files?.map(image => image.file).filter((item): item is File => !!item)
+      const filesUpload = files && files.length > 0
+        ? await upload({
+            bucket: "books",
+            files: files,
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+  
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -421,15 +483,16 @@ export function useUpdateBook(access_token?: string) {
             status: newValue.status.id,
             displayName: newValue.displayName,
             primaryImageURL:
-              resUpload !== null
-                ? resUpload.urls[0]
+              primaryImageUpload !== null
+                ? primaryImageUpload.urls[0]
                 : newValue.primaryImage.url.length === 0
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
-            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
             description: newValue.description,
-            externalLink: newValue.externalLink,
+            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
+            files: handleFiles(newValue.files, oldValue.files, filesUpload?.urls),
             year: Number(Number(newValue.year).toFixed()),
+            externalLink: newValue.externalLink,
             libraryID: newValue.library?.id,
             periodicalID: newValue.periodical?.id,
             publisherID: newValue.publisher?.id,

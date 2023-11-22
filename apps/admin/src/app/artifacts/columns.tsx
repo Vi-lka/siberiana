@@ -1,8 +1,6 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 
 import type { ArtifactForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
@@ -28,22 +26,18 @@ import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
 import Organization from "~/components/tables/global-fields/Organization";
+import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
+import { CheckSquare } from "lucide-react";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        className="h-5 w-5 rounded-[6px]"
-        aria-label="Select all"
-      />
-    ),
+    header: () => <CheckSquare className="h-5 w-5 rounded-[6px]" />,
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onClick={(e) => e.stopPropagation()}
         className="h-5 w-5 rounded-[6px]"
         aria-label="Select row"
       />
@@ -160,6 +154,22 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
           formValueName={`artifacts[${row.index}].primaryImage`}
           className="px-6 py-6"
         /> // change later on "artifacts"
+      );
+    },
+  },
+  {
+    accessorKey: "additionalImages",
+    header: () => <div className="min-w-[80px] text-center">Доп. Фото</div>,
+    cell: ({ row }) => {
+      return (
+        <InputMultiDropzone
+          formValueName={`artifacts[${row.index}].additionalImages`}
+          defaultValues={row.original.additionalImages}
+          files={false}
+          accept={{ "image/*": [".jpeg", ".jpg", ".png", ".webp"] }}
+          maxSize={1024 * 1024 * 100} // 100Mb
+          className="min-w-[11rem]"
+        />
       );
     },
   },
@@ -434,67 +444,8 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
 ];
 
-export const updateColumns: ColumnDef<ArtifactForTable>[] = [
-  ...columns,
-  {
-    accessorKey: "createdBy",
-    header: () => <div className="text-center">Создано by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.createdBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
-    cell: ({ row }) => {
-      const createdAt = row.original.createdAt
-        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
-        : "";
-      return <div className="break-words text-center">{createdAt}</div>;
-    },
-  },
-  {
-    accessorKey: "updatedBy",
-    header: () => <div className="text-center">Обновлено by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.updatedBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: () => <div className="min-w-[6rem] text-center">Обновлено at</div>,
-    cell: ({ row }) => {
-      const updatedAt =
-        row.original.updatedAt && row.original.updatedBy
-          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
-          : "";
-      return <div className="break-words text-center">{updatedAt}</div>;
-    },
-  },
-];
-
 export const moderatorsColumns: ColumnDef<ArtifactForTable>[] = [
   ...columns,
-  {
-    accessorKey: "status",
-    header: () => <div className="text-center">Статус</div>,
-    cell: ({ row }) => {
-      return (
-        <Status
-          defaultStatus={row.original.status}
-          formValueName={`artifacts[${row.index}].status`}
-        />
-      );
-    },
-  },
-];
-
-export const moderatorsUpdateColumns: ColumnDef<ArtifactForTable>[] = [
-  ...updateColumns,
   {
     accessorKey: "status",
     header: () => <div className="text-center">Статус</div>,

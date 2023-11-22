@@ -40,6 +40,10 @@ export const ArtifactForTable = z.object({
     file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
+  additionalImages: z.object({
+    file: CustomFile.nullable().optional(),
+    url: z.string(),
+  }).array().nullable(),
   description: z.string().optional(),
   chemicalComposition: z.string().optional(),
   typology: z.string().optional(),

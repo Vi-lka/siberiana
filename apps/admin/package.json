@@ -17,6 +17,7 @@
     "@siberiana/ui": "*",
     "@tanstack/react-query": "^5.0.5",
     "@tanstack/react-table": "^8.10.7",
+    "@tanstack/react-virtual": "3.0.0-beta.68",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "client-only": "^0.0.1",

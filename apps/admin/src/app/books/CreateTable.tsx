@@ -118,14 +118,15 @@ export default function CreateTable<TData, TValue>({
 
   const dataPersistNoFiles = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { primaryImage, additionalImages, ...rest } = elem;
+    const { primaryImage, additionalImages, files, ...rest } = elem;
     const nullImage = {
       file: undefined,
       url: "",
     };
     return { 
-      primaryImage: nullImage, 
-      additionalImages: null, 
+      primaryImage: nullImage,
+      additionalImages: null,
+      files: null,
       ...rest 
     };
   });
@@ -151,12 +152,12 @@ export default function CreateTable<TData, TValue>({
     description: "",
     externalLink: "",
     year: "",
-    files: [],
     primaryImage: {
       file: undefined,
       url: "",
     },
     additionalImages: null,
+    files: null,
     bookGenres: [],
     authors: [],
     periodical: null,

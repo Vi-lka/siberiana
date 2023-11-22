@@ -21,12 +21,17 @@ import {
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  columnsLength: number,
 }
 
 export function DataTablePagination<TData>({
   table,
+  columnsLength,
 }: DataTablePaginationProps<TData>) {
   const [isPending, startTransition] = useTransition();
+
+  const per = [10, 20, 30, 40, 50]
+
   return (
     <div className="flex flex-col items-center justify-between gap-0.5 px-2 md:flex-row md:gap-0">
       <div className="text-muted-foreground flex-1 self-start text-xs md:text-sm">
@@ -34,42 +39,47 @@ export function DataTablePagination<TData>({
         {table.getFilteredRowModel().rows.length} строк выбрано.
       </div>
       <div className="flex flex-col items-center space-x-6 space-y-3 md:flex-row lg:space-x-8">
-        <div className="flex items-center space-x-2">
-          <p className="text-xs font-medium md:text-sm">На страницу</p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              startTransition(() => {
-                table.setPageSize(Number(value));
-              });
-            }}
-          >
-            <SelectTrigger disabled={isPending} className="h-8 w-[70px]">
-              {isPending ? (
-                <Loader2 className="mx-auto h-6 w-6 animate-spin" />
-              ) : (
-                <SelectValue
-                  placeholder={table.getState().pagination.pageSize}
-                />
-              )}
-            </SelectTrigger>
-            <SelectContent side="top">
-              {isPending ? (
-                <Loader2 className="mx-auto h-4 w-4 animate-spin" />
-              ) : (
-                [10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem
-                    key={pageSize}
-                    value={`${pageSize}`}
-                    className=" font-Inter cursor-pointer"
-                  >
-                    {pageSize}
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
-        </div>
+        {columnsLength < 40
+          ? (
+            <div className="flex items-center space-x-2">
+              <p className="text-xs font-medium md:text-sm">На страницу</p>
+              <Select
+                value={`${table.getState().pagination.pageSize}`}
+                onValueChange={(value) => {
+                  startTransition(() => {
+                    table.setPageSize(Number(value));
+                  });
+                }}
+              >
+                <SelectTrigger disabled={isPending} className="h-8 w-[70px]">
+                  {isPending ? (
+                    <Loader2 className="mx-auto h-6 w-6 animate-spin" />
+                  ) : (
+                    <SelectValue
+                      placeholder={table.getState().pagination.pageSize}
+                    />
+                  )}
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {isPending ? (
+                    <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+                  ) : (
+                    per.map((pageSize) => (
+                      <SelectItem
+                        key={pageSize}
+                        value={`${pageSize}`}
+                        className=" font-Inter cursor-pointer"
+                      >
+                        {pageSize}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          )
+          : null
+        }
         <div className="flex w-[100px] items-center justify-center text-xs font-medium md:text-sm">
           Стр {table.getState().pagination.pageIndex + 1} из{" "}
           {table.getPageCount()}

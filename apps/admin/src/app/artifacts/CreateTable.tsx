@@ -118,12 +118,16 @@ export default function CreateTable<TData, TValue>({
 
   const dataPersistNoImage = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { primaryImage, ...rest } = elem;
+    const { primaryImage, additionalImages, ...rest } = elem;
     const nullImage = {
       file: undefined,
       url: "",
     };
-    return { primaryImage: nullImage, ...rest };
+    return { 
+      primaryImage: nullImage,
+      additionalImages: null,
+      ...rest 
+    };
   });
 
   usePersistForm<ArtifactForTable[]>({
@@ -149,6 +153,7 @@ export default function CreateTable<TData, TValue>({
       file: undefined,
       url: "",
     },
+    additionalImages: null,
     chemicalComposition: "",
     inventoryNumber: "",
     kpNumber: "",

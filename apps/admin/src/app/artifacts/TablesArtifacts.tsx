@@ -10,9 +10,10 @@ import { getArtifacts } from "~/lib/queries/artifacts";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } from "./columns";
+import { columns, moderatorsColumns } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
+import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
 
 export default async function TablesArtifacts({
   searchParams,
@@ -72,6 +73,7 @@ export default async function TablesArtifacts({
         file: undefined,
         url: "",
       },
+      additionalImages: null,
       chemicalComposition: "",
       inventoryNumber: "",
       kpNumber: "",
@@ -148,6 +150,7 @@ export default async function TablesArtifacts({
     const {
       status,
       primaryImageURL,
+      additionalImagesUrls,
       collection,
       location,
       country,
@@ -163,6 +166,13 @@ export default async function TablesArtifacts({
       datingEnd,
       ...rest // assigns remaining
     } = node;
+
+    const additionalImages = additionalImagesUrls 
+      ? additionalImagesUrls.map((url) => {
+        const file = null
+        return {file, url}
+      })
+      : null
 
     const locationForTabel = location
       ? { ...location, type: "location" }
@@ -185,6 +195,7 @@ export default async function TablesArtifacts({
         file: null,
         url: primaryImageURL,
       },
+      additionalImages,
       collection: {
         id: collection.id,
         displayName: collection.displayName,
@@ -204,8 +215,6 @@ export default async function TablesArtifacts({
       ...rest,
     } as ArtifactForTable;
   });
-
-  console.log(dataForUpdate[0].admissionDate)
 
   if (mode === "add")
     return (

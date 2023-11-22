@@ -31,7 +31,10 @@ export const BookForTable = z.object({
   description: z.string().optional(),
   externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
   year: z.string().optional(),
-  files: z.string().array().nullable(),
+  files: z.object({
+    file: CustomFile.nullable().optional(),
+    url: z.string(),
+  }).array().nullable(),
   collection: z.object({
     id: z.string(),
     displayName: z.string(),

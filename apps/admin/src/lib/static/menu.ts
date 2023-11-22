@@ -3,32 +3,32 @@ export const artifactsMenuItems = {
   name: "Артефакты",
   list: [
     {
-      id: 2,
+      id: 1,
       name: "Культуры",
       url: "/cultures",
     },
     {
-      id: 3,
+      id: 2,
       name: "Материалы",
       url: "/materials",
     },
     {
-      id: 4,
+      id: 3,
       name: "Техники",
       url: "/techniques",
     },
     {
-      id: 5,
+      id: 4,
       name: "Комплексы",
       url: "/sets",
     },
     {
-      id: 6,
+      id: 5,
       name: "Памятники",
       url: "/monuments",
     },
     {
-      id: 7,
+      id: 6,
       name: "3D модели",
       url: "/models",
     },
@@ -40,9 +40,14 @@ export const booksMenuItems = {
   name: "Книги",
   list: [
     {
-      id: 2,
+      id: 1,
       name: "Жанры",
       url: "/books-genres",
+    },
+    {
+      id: 2,
+      name: "Издания",
+      url: "/periodical",
     },
     {
       id: 3,
@@ -79,12 +84,12 @@ export const artsMenuItems = {
   name: "Избр.Искусство",
   list: [
     {
-      id: 2,
+      id: 1,
       name: "Жанры",
       url: "/arts-genres",
     },
     {
-      id: 3,
+      id: 2,
       name: "Стили",
       url: "/arts-styles",
     },

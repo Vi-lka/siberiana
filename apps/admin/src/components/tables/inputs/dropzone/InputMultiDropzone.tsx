@@ -93,7 +93,10 @@ export default function InputMultiDropzone(props: InputProps) {
     return (
       <>
         <span
-          className="text-muted-foreground hover:text-foreground mx-auto my-1 flex w-fit cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+          className={cn(
+            "text-muted-foreground hover:text-foreground mx-auto my-1 w-fit cursor-pointer items-center justify-center text-xs transition-all hover:scale-110",
+            values.length > 1 ? "flex" : "hidden"
+          )}
           onClick={handleDeleteAll}
         >
           <X className="h-5 w-5" /> Удалить все
@@ -144,7 +147,17 @@ export default function InputMultiDropzone(props: InputProps) {
                   ) 
                   else return (
                     <div key={index} className='p-1 border-[1px] border-muted rounded-md overflow-hidden bg-background'>
-                      <p className="mt-3 break-words text-center text-[10px] font-light">
+                      <span
+                        className="text-muted-foreground hover:text-foreground mx-auto my-1 flex w-fit cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDeleteSingle(index);
+                        }}
+                      >
+                        <X className="h-5 w-5" />
+                      </span>
+                      <p className="mt-3 break-words text-center text-xs font-light">
                         {value.file ? value.file.name : value.url}
                       </p>
                     </div> 

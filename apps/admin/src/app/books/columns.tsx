@@ -118,6 +118,22 @@ export const columns: ColumnDef<BookForTable>[] = [
     },
   },
   {
+    accessorKey: "files",
+    header: () => <div className="min-w-[80px] text-center">Файлы (PDF)</div>,
+    cell: ({ row }) => {
+      return (
+        <InputMultiDropzone
+          formValueName={`books[${row.index}].files`}
+          defaultValues={row.original.files}
+          files
+          accept={{ "application/pdf": [".pdf"] }}
+          maxSize={1024 * 1024 * 1024} // 1Gb
+          className="min-w-[11rem]"
+        />
+      );
+    },
+  },
+  {
     accessorKey: "year",
     header: () => <div className="text-center">Год</div>,
     cell: ({ row }) => {

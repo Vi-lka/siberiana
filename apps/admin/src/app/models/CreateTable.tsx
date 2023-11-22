@@ -116,7 +116,7 @@ export default function CreateTable<TData, TValue>({
 
   const dataToPersist = form.getValues("models") ?? dataState 
 
-  const dataPersistNoImage = dataToPersist.map((elem) => {
+  const dataPersistNoFile = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { file, ...rest } = elem;
     const nullFile = {
@@ -127,7 +127,7 @@ export default function CreateTable<TData, TValue>({
   });
 
   usePersistForm<ModelForTable[]>({
-    value: { data: dataPersistNoImage },
+    value: { data: dataPersistNoFile },
     localStorageKey: FORM_DATA_KEY,
     isLoading: loading || isPendingRouter || isLoadingFiles,
   });

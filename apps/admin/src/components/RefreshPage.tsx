@@ -42,7 +42,7 @@ export default function RefreshPage({
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side={side}>
-                    <p className='font-OpenSans'>Перезагрузить страницу</p>
+                    <p className='font-OpenSans'>Перезагрузить</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
