@@ -5,13 +5,13 @@ import { Dictionary } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import ReadPDF from "~/components/objects/buttons/ReadPDF";
 import Description from "~/components/objects/Description";
+import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getBookById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
-import PhotoSlider from "~/components/objects/PhotoSlider";
 
 export const dynamic = "force-dynamic";
 

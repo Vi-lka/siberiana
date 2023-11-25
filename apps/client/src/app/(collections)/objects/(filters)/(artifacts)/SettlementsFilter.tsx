@@ -47,7 +47,7 @@ export default async function SettlementsFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
 

@@ -10,7 +10,12 @@ import { getBooks } from "~/lib/queries/books";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } from "./columns";
+import {
+  columns,
+  moderatorsColumns,
+  moderatorsUpdateColumns,
+  updateColumns,
+} from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
 
@@ -138,19 +143,19 @@ export default async function TablesBooks({
       ...rest // assigns remaining
     } = node;
 
-    const additionalImages = additionalImagesUrls 
+    const additionalImages = additionalImagesUrls
       ? additionalImagesUrls.map((url) => {
-        const file = null
-        return {file, url}
-      })
-      : null
+          const file = null;
+          return { file, url };
+        })
+      : null;
 
-    const filesForTable = files 
+    const filesForTable = files
       ? files.map((url) => {
-        const file = null
-        return {file, url}
-      })
-      : null
+          const file = null;
+          return { file, url };
+        })
+      : null;
 
     const locationForTabel = location
       ? { ...location, type: "location" }

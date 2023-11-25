@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
-import TablesMonuments from "./TablesMonuments";
 import RefreshPage from "~/components/RefreshPage";
+import TablesMonuments from "./TablesMonuments";
 
 export const dynamic = "force-dynamic";
 

@@ -29,7 +29,10 @@ export default function Century(props: {
   prefix: Prefix | undefined;
   century: string;
   onSelectPrefix: (prefix: Prefix | undefined, type: DatingType) => void;
-  onChangeCentury: (e: React.ChangeEvent<HTMLInputElement>, type: DatingType) => void
+  onChangeCentury: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: DatingType,
+  ) => void;
 }) {
   const [open, setOpen] = React.useState(false);
 

@@ -202,51 +202,75 @@ export const BookById = z.object({
   year: z.number(),
   files: z.string().array().nullable(),
   collection: Collection,
-  bookGenres: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).array(),
-  authors: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).array(),
-  periodical: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  publisher: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  license: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  library: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
+  bookGenres: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  authors: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  periodical: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  publisher: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  license: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  library: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
   location: Location.nullable(),
-  country: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  region: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  district: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  settlement: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
+  country: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  region: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  district: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  settlement: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
   createdBy: z.string().optional(),
-  createdAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+  createdAt: z
+    .preprocess((val) => new Date(val as string), z.date())
+    .optional(),
   updatedBy: z.string().optional(),
-  updatedAt: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+  updatedAt: z
+    .preprocess((val) => new Date(val as string), z.date())
+    .optional(),
 });
 export type BookById = z.infer<typeof BookById>;
 
@@ -316,15 +340,21 @@ export const ArtById = z.object({
   number: z.string(),
   dating: z.string(),
   dimensions: z.string(),
-  artGenre: z.object({
-    displayName: z.string(),
-  }).array(),
-  artStyle: z.object({
-    displayName: z.string(),
-  }).array(),
-  techniques: z.object({
-    displayName: z.string(),
-  }).array(),
+  artGenre: z
+    .object({
+      displayName: z.string(),
+    })
+    .array(),
+  artStyle: z
+    .object({
+      displayName: z.string(),
+    })
+    .array(),
+  techniques: z
+    .object({
+      displayName: z.string(),
+    })
+    .array(),
   author: z.object({
     displayName: z.string(),
   }),

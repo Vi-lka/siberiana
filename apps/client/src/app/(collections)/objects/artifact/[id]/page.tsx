@@ -4,13 +4,13 @@ import { Dictionary } from "@siberiana/schemas";
 
 import MainInfoBlock from "~/app/(collections)/objects/artifact/[id]/MainInfoBlock";
 import ErrorHandler from "~/components/errors/ErrorHandler";
+import Open3DModel from "~/components/objects/buttons/Open3DModel";
 import Description from "~/components/objects/Description";
 import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import { getArtifactById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import Open3DModel from "~/components/objects/buttons/Open3DModel";
 
 export const dynamic = "force-dynamic";
 
@@ -83,10 +83,10 @@ export default async function Artifact({
           ) : (
             <PhotoSlider data={images} />
           )}
-          <div className="mt-3 flex flex-wrap gap-3"> 
-              {/* <AddFavorites session={haveSession} /> */}
-              <Open3DModel data={dataResult.value.model} />
-              {/* <UnloadCSV session={haveSession} /> */}
+          <div className="mt-3 flex flex-wrap gap-3">
+            {/* <AddFavorites session={haveSession} /> */}
+            <Open3DModel data={dataResult.value.model} />
+            {/* <UnloadCSV session={haveSession} /> */}
           </div>
         </div>
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { BookById, StatusEnum } from "../objects-schema";
 import { CustomFile, LocationEnum } from "./global";
 
@@ -24,50 +25,70 @@ export const BookForTable = z.object({
     file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
-  additionalImages: z.object({
-    file: CustomFile.nullable().optional(),
-    url: z.string(),
-  }).array().nullable(),
+  additionalImages: z
+    .object({
+      file: CustomFile.nullable().optional(),
+      url: z.string(),
+    })
+    .array()
+    .nullable(),
   description: z.string().optional(),
   externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
   year: z.string().optional(),
-  files: z.object({
-    file: CustomFile.nullable().optional(),
-    url: z.string(),
-  }).array().nullable(),
+  files: z
+    .object({
+      file: CustomFile.nullable().optional(),
+      url: z.string(),
+    })
+    .array()
+    .nullable(),
   collection: z.object({
     id: z.string(),
     displayName: z.string(),
   }),
-  bookGenres: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).array(),
-  authors: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).array(),
-  periodical: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  publisher: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  license: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  library: z.object({
-    id: z.string(),
-    displayName: z.string(),
-  }).nullable(),
-  location: z.object({
-    id: z.string(),
-    displayName: z.string(),
-    type: LocationEnum,
-  }).nullable(),
+  bookGenres: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  authors: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  periodical: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  publisher: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  license: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  library: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  location: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+      type: LocationEnum,
+    })
+    .nullable(),
   createdBy: z.string().optional(),
   createdAt: z.date().optional(),
   updatedBy: z.string().optional(),
@@ -124,4 +145,3 @@ export const PublishersList = z.object({
   }),
 });
 export type PublishersList = z.infer<typeof PublishersList>;
-

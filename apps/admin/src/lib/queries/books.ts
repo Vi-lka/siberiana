@@ -1,24 +1,25 @@
-import { BooksArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
+
+import { BooksArray } from "@siberiana/schemas";
 
 //.........................BOOKS.........................//
 export const getBooks = async ({
-    first,
-    offset = 0,
-    search = "",
-    sort = "CREATED_AT:DESC",
-    category,
-    collection,
-  }: {
-    first: number | null;
-    offset?: number | null;
-    search?: string;
-    sort?: string;
-    category?: string;
-    collection?: string;
-  }): Promise<BooksArray> => {
-    const headers = { "Content-Type": "application/json" };
-    const query = /* GraphGL */ `
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+  category,
+  collection,
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  category?: string;
+  collection?: string;
+}): Promise<BooksArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
     query GetBooks {
       books(
         first: ${first}, 
@@ -127,32 +128,32 @@ export const getBooks = async ({
       }
     }
     `;
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-      {
-        headers,
-        method: "POST",
-        body: JSON.stringify({
-          query,
-        }),
-        cache: "no-store",
-      },
-    );
-  
-    if (!res.ok) {
-      // Log the error to an error reporting service
-      const err = await res.text();
-      console.log(err);
-      // Throw an error
-      throw new Error(`Failed to fetch data 'Books'`);
-    }
-  
-    const json = (await res.json()) as { data: { books: BooksArray } };
-    if (json.data.books.totalCount === 0) {
-      notFound();
-    }
-  
-    const books = BooksArray.parse(json.data.books);
-  
-    return books;
-  };
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Books'`);
+  }
+
+  const json = (await res.json()) as { data: { books: BooksArray } };
+  if (json.data.books.totalCount === 0) {
+    notFound();
+  }
+
+  const books = BooksArray.parse(json.data.books);
+
+  return books;
+};

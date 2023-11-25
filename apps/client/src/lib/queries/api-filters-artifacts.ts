@@ -80,7 +80,7 @@ function ArtiQuery({
   setIds,
   monumentIds,
   techniqueIds,
-  model
+  model,
 }: ArtiQueryType) {
   const queryString = /* GraphGL */ `
     query {
@@ -89,7 +89,7 @@ function ArtiQuery({
         where: {
           hasArtifactsWith: [{
             status: listed,
-            ${model ? `hasModel: true,` : '' }
+            ${model ? `hasModel: true,` : ""}
             hasCollectionWith: [
               ${
                 !!collections

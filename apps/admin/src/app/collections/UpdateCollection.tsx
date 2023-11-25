@@ -28,7 +28,9 @@ import {
 
 import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
+import LoadingMutation from "~/components/LoadingMutation";
 import Categories from "~/components/tables/global-fields/Categories";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
@@ -36,8 +38,6 @@ import { updateCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCollection from "./DeleteCollection";
 import { getName } from "./TypeSelect";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
-import LoadingMutation from "~/components/LoadingMutation";
 
 export default function UpdateCollection(props: CollectionForm) {
   const [loading, setLoading] = React.useState(false);
@@ -57,7 +57,7 @@ export default function UpdateCollection(props: CollectionForm) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationKey: ["updateCollection", requestHeaders],
@@ -169,9 +169,9 @@ export default function UpdateCollection(props: CollectionForm) {
             className="ml-auto mr-4 mt-0"
           />
         </DialogHeader>
-        {loading 
-          ? <LoadingMutation isLoading={isLoading} progress={progress} />  
-          : (
+        {loading ? (
+          <LoadingMutation isLoading={isLoading} progress={progress} />
+        ) : (
           <Form {...form}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises

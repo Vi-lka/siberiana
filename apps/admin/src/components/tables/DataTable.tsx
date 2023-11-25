@@ -12,6 +12,7 @@ import {
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { FormProvider } from "react-hook-form";
 
+import type { EntityEnum } from "@siberiana/schemas";
 import {
   Button,
   DropdownMenu,
@@ -35,9 +36,8 @@ import {
   TooltipTrigger,
 } from "@siberiana/ui";
 
-import { DataTablePagination } from "./DataTablePagination";
-import type { EntityEnum } from "@siberiana/schemas";
 import DialogForm from "../forms/DialogForm";
+import { DataTablePagination } from "./DataTablePagination";
 
 interface DataTableProps<TData, TFieldValues extends FieldValues> {
   table: TableTanstack<TData>;
@@ -65,17 +65,17 @@ type NoHasAdd = {
 };
 
 type DialogForm = {
-  dialog: true,
-  dialogType: EntityEnum
+  dialog: true;
+  dialogType: EntityEnum;
 };
 type TableForm = {
-  dialog?: false,
+  dialog?: false;
 };
 
 export default function DataTable<TData, TFieldValues extends FieldValues>(
-  props: 
-    DataTableProps<TData, TFieldValues> 
-    & (HasAdd | NoHasAdd) & (DialogForm | TableForm),
+  props: DataTableProps<TData, TFieldValues> &
+    (HasAdd | NoHasAdd) &
+    (DialogForm | TableForm),
 ) {
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 
@@ -253,25 +253,30 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                 </TableHeader>
                 <TableBody className="font-Inter text-xs">
                   {props.table.getRowModel().rows?.length ? (
-                    props.table.getRowModel().rows.map((row) => (
-                      props.dialog 
-                        ? <DialogForm key={row.id} table={props.table} row={row} dialogType={props.dialogType} />
-                        : (
-                          <TableRow
-                            key={row.id}
-                            data-state={row.getIsSelected() && "selected"}
-                          >
-                            {row.getVisibleCells().map((cell) => (
-                              <TableCell key={cell.id} className="px-2 py-1">
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext(),
-                                )}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        )
-                    ))
+                    props.table.getRowModel().rows.map((row) =>
+                      props.dialog ? (
+                        <DialogForm
+                          key={row.id}
+                          table={props.table}
+                          row={row}
+                          dialogType={props.dialogType}
+                        />
+                      ) : (
+                        <TableRow
+                          key={row.id}
+                          data-state={row.getIsSelected() && "selected"}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id} className="px-2 py-1">
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ),
+                    )
                   ) : (
                     <TableRow>
                       <TableCell
@@ -288,7 +293,10 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
           </div>
         </form>
       </FormProvider>
-      <DataTablePagination table={props.table} columnsLength={props.columnsLength} />
+      <DataTablePagination
+        table={props.table}
+        columnsLength={props.columnsLength}
+      />
     </div>
   );
 }

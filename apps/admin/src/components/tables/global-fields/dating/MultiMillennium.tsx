@@ -34,8 +34,12 @@ export default function MultiMillennium(props: {
     first: string;
     second: string;
   };
-  onSelectPrefix: (prefix: Prefix | undefined, isFirst: boolean, type: DatingType,) => void;
-  onChangeCentury: (value: number, isFirst: boolean, type: DatingType,) => void;
+  onSelectPrefix: (
+    prefix: Prefix | undefined,
+    isFirst: boolean,
+    type: DatingType,
+  ) => void;
+  onChangeCentury: (value: number, isFirst: boolean, type: DatingType) => void;
 }) {
   const [openFirst, setOpenFirst] = React.useState(false);
   const [openSecond, setOpenSecond] = React.useState(false);
@@ -72,7 +76,9 @@ export default function MultiMillennium(props: {
                     {props.prefix.first ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, true, "millennium")}
+                        onClick={() =>
+                          props.onSelectPrefix(undefined, true, "millennium")
+                        }
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>
@@ -118,13 +124,15 @@ export default function MultiMillennium(props: {
               // placeholder={"1"}
               className="m-0 max-h-8 w-auto max-w-[4rem] overflow-visible truncate border-solid px-2 py-6 text-sm"
               onChange={(e) =>
-                props.onChangeCentury(Number(e.target.value), true, "millennium")
+                props.onChangeCentury(
+                  Number(e.target.value),
+                  true,
+                  "millennium",
+                )
               }
             />
           </div>
-          <span className="whitespace-nowrap">
-            тыс.
-          </span>
+          <span className="whitespace-nowrap">тыс.</span>
 
           <span className="whitespace-nowrap">
             {Number(props.century.first) >= 0 ? "н.э." : "до н.э."}
@@ -157,7 +165,9 @@ export default function MultiMillennium(props: {
                     {props.prefix.second ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, false, "millennium")}
+                        onClick={() =>
+                          props.onSelectPrefix(undefined, false, "millennium")
+                        }
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>
@@ -203,13 +213,15 @@ export default function MultiMillennium(props: {
               // placeholder={"1"}
               className="m-0 max-h-8 w-auto max-w-[4rem] overflow-visible truncate border-solid px-2 py-6 text-sm"
               onChange={(e) =>
-                props.onChangeCentury(Number(e.target.value), false, "millennium")
+                props.onChangeCentury(
+                  Number(e.target.value),
+                  false,
+                  "millennium",
+                )
               }
             />
           </div>
-          <span className="whitespace-nowrap">
-            тыс.
-          </span>
+          <span className="whitespace-nowrap">тыс.</span>
 
           <span className="whitespace-nowrap">
             {Number(props.century.second) >= 0 ? "н.э." : "до н.э."}

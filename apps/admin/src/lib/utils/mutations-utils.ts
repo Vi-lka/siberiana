@@ -128,19 +128,22 @@ export function handleArrays(
 }
 
 export function handleFiles(
-  newValues: {
-    url: string;
-    file?: File | null | undefined;
-  }[] | null,
-  oldValues: {
-    url: string;
-    file?: File | null | undefined;
-  }[] | null,
+  newValues:
+    | {
+        url: string;
+        file?: File | null | undefined;
+      }[]
+    | null,
+  oldValues:
+    | {
+        url: string;
+        file?: File | null | undefined;
+      }[]
+    | null,
   uploadValues: string[] | undefined,
 ) {
-
   // if (!newValues || newValues.length === 0) return null
-  if (!oldValues || oldValues.length === 0) return uploadValues
+  if (!oldValues || oldValues.length === 0) return uploadValues;
 
   const remainURLs = oldValues
     .map((item) => {
@@ -154,10 +157,12 @@ export function handleFiles(
       }
     });
 
-  if (!uploadValues) return remainURLs
+  if (!uploadValues) return remainURLs;
 
-  const concatedArray = remainURLs.concat(uploadValues)
-  const uniqueArray = concatedArray.filter((item, index) => concatedArray.indexOf(item) === index)
+  const concatedArray = remainURLs.concat(uploadValues);
+  const uniqueArray = concatedArray.filter(
+    (item, index) => concatedArray.indexOf(item) === index,
+  );
 
-  return uniqueArray
+  return uniqueArray;
 }

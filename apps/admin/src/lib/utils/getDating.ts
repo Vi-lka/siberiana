@@ -8,10 +8,10 @@ export type Prefix = {
 export type DatingType = "year" | "century" | "millennium";
 
 export type Era = {
-  start: number,
-  end: number,
-  label: string,
-}
+  start: number;
+  end: number;
+  label: string;
+};
 
 export const ERA = [
   { start: -2500000, end: -9001, label: "Палеолит" },
@@ -95,12 +95,13 @@ export const romanize = (original: number): string => {
 export function getEra(start: number, end: number): string | false {
   const result = ERA.find((item) => item.start === start && item.end === end);
   if (!!result) {
-    return result.label
+    return result.label;
   } else {
     const firstResult = ERA.find((item) => item.start === start);
     const secondResult = ERA.find((item) => item.end === end);
-    
-    if (firstResult && secondResult) return `${firstResult.label} - ${secondResult.label}`
+
+    if (firstResult && secondResult)
+      return `${firstResult.label} - ${secondResult.label}`;
     else return false;
   }
 }
@@ -151,11 +152,15 @@ export function getPrefix(start: number, end: number) {
   return null;
 }
 
-export function getMultiPrefixData(start: number, end: number, type: DatingType) {
+export function getMultiPrefixData(
+  start: number,
+  end: number,
+  type: DatingType,
+) {
   const startAbs = Math.abs(start);
   const endAbs = Math.abs(end);
 
-  const isMillennium = type === "millennium"
+  const isMillennium = type === "millennium";
 
   // const startStarting = startAbs.toString().slice(0, 2)
   let startEnding = startAbs.toString().slice(-2);
@@ -164,42 +169,43 @@ export function getMultiPrefixData(start: number, end: number, type: DatingType)
   let endEnding = endAbs.toString().slice(-2);
   if (endEnding.length < 2) endEnding = "0" + endEnding;
 
-  const startPrefix = PREFIXES.find((item) => 
-    start < 0 ? item.startBC === startEnding : item.start === startEnding
+  const startPrefix = PREFIXES.find((item) =>
+    start < 0 ? item.startBC === startEnding : item.start === startEnding,
   );
-  const endPrefix = PREFIXES.find((item) => 
-    end < 0 ? item.startBC === endEnding : item.start === endEnding
+  const endPrefix = PREFIXES.find((item) =>
+    end < 0 ? item.startBC === endEnding : item.start === endEnding,
   );
 
   const startCentury = romanize(centurize(Math.abs(start)));
   const endCentury = romanize(centurize(Math.abs(end)));
 
   const startString = startPrefix
-    ? isMillennium 
-      ? `${startPrefix.label} ${startCentury} тыс. ${start >= 0 ? "" : "до н.э."}`
-      : `${startPrefix.label} ${startCentury} века ${start >= 0 ? "" : "до н.э."}`
-       
-    : isMillennium 
-      ? `${startCentury} тыс. ${start >= 0 ? "" : "до н.э."}`
-      : `${startCentury} век ${start >= 0 ? "" : "до н.э."}`;
+    ? isMillennium
+      ? `${startPrefix.label} ${startCentury} тыс. ${
+          start >= 0 ? "" : "до н.э."
+        }`
+      : `${startPrefix.label} ${startCentury} века ${
+          start >= 0 ? "" : "до н.э."
+        }`
+    : isMillennium
+    ? `${startCentury} тыс. ${start >= 0 ? "" : "до н.э."}`
+    : `${startCentury} век ${start >= 0 ? "" : "до н.э."}`;
 
   const endString = endPrefix
     ? isMillennium
       ? `${endPrefix.label} ${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
       : `${endPrefix.label} ${endCentury} века ${end >= 0 ? "" : "до н.э."}`
-
-    : isMillennium 
-      ? `${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
-      : `${endCentury} век ${end >= 0 ? "" : "до н.э."}`;
+    : isMillennium
+    ? `${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
+    : `${endCentury} век ${end >= 0 ? "" : "до н.э."}`;
 
   return `${startString} - ${endString}`;
 }
 
 export function getMillennium(start: number, end: number) {
-  const usableStart = start/10
-  const usableEnd = end/10
+  const usableStart = start / 10;
+  const usableEnd = end / 10;
   const difference = Math.abs(Math.abs(start) - Math.abs(end));
-
 
   const prefix = getPrefix(usableStart, usableEnd);
 
@@ -211,7 +217,7 @@ export function getMillennium(start: number, end: number) {
   } else if (difference === 990) {
     if (start > 0) return `${romanize(centurize(Math.abs(usableStart)))} тыс.`;
     else return `${romanize(centurize(Math.abs(usableEnd)))} тыс. до н.э.`;
-  } else return getMultiPrefixData(usableStart, usableEnd, "millennium")
+  } else return getMultiPrefixData(usableStart, usableEnd, "millennium");
 }
 
 // OOOOO MYYYY GOOOOOOD, THIS IS SHIT
@@ -245,14 +251,19 @@ export function getDating(
       return era;
     } else {
       if (start % 10 === 0 && end - start === 9) return `${start}-е годы`;
-      if (start % 10 === 0 && end - start > 9 && (end - start) % 10 === 9 && (end - start) < 190)
+      if (
+        start % 10 === 0 &&
+        end - start > 9 &&
+        (end - start) % 10 === 9 &&
+        end - start < 190
+      )
         return `${start}-${end - 9}-е годы`;
       else {
         if (end !== 0) {
-          if (type === "century") { 
-            return getMultiPrefixData(start, end, "century")
+          if (type === "century") {
+            return getMultiPrefixData(start, end, "century");
           } else if (type === "millennium") {
-            return getMillennium(start, end)
+            return getMillennium(start, end);
           } else return `${start}-${end} гг.`;
         } else return `${start} г.`;
       }

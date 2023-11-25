@@ -23,11 +23,11 @@ import type { MonumentForTable } from "@siberiana/schemas";
 import { MonumentsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useCreateMonument } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
-import LoadingMutation from "~/components/LoadingMutation";
 
 const FORM_DATA_KEY = "monumentsCreate";
 
@@ -151,7 +151,7 @@ export default function CreateTable<TData, TValue>({
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
       ) as MonumentForTable[] & TData[];
 
-    const deleteAll = filteredData.length === 0
+    const deleteAll = filteredData.length === 0;
 
     if (deleteAll) {
       startTransitionTable(() => {
@@ -239,7 +239,7 @@ export default function CreateTable<TData, TValue>({
   }
 
   if (loading || isPendingRouter)
-    return <LoadingMutation isLoading={false} className="mt-12" />
+    return <LoadingMutation isLoading={false} className="mt-12" />;
 
   return (
     <DataTable

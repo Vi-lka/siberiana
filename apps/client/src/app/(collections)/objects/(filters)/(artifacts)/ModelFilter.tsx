@@ -1,12 +1,12 @@
 import React from "react";
+import { Box } from "lucide-react";
 
 import { Dictionary } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
-import { getDictionary } from "~/lib/utils/getDictionary";
-import { getArtifacts } from "~/lib/queries/api-collections";
 import ToggleFilter from "~/components/ui/filters/ToggleFilter";
-import { Box } from "lucide-react";
+import { getArtifacts } from "~/lib/queries/api-collections";
+import { getDictionary } from "~/lib/utils/getDictionary";
 
 export default async function ModelFilter({
   searchParams,
@@ -35,7 +35,7 @@ export default async function ModelFilter({
   const monumentIds = searchParams["monument"] as string | undefined;
   const techniqueIds = searchParams["technique"] as string | undefined;
 
-  const [ result ] = await Promise.allSettled([
+  const [result] = await Promise.allSettled([
     getArtifacts({
       first: null,
       search,
@@ -50,7 +50,7 @@ export default async function ModelFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: true
+      model: true,
     }),
   ]);
 
@@ -64,19 +64,19 @@ export default async function ModelFilter({
     );
   }
 
-  const artifactsCount = result.value.totalCount
+  const artifactsCount = result.value.totalCount;
 
-  if (artifactsCount === 0) return null
+  if (artifactsCount === 0) return null;
 
   return (
-    <div className="flex flex-col gap-1 mb-3">
-      <div className="flex items-center gap-0.5 font-Inter">
+    <div className="mb-3 flex flex-col gap-1">
+      <div className="font-Inter flex items-center gap-0.5">
         <ToggleFilter
           tooltip={dictResult.objects.filters.model}
           param={"modelArtifacts"}
           className="px-1 py-7"
         >
-          <Box className="h-7 w-7 mr-1" /> 3D
+          <Box className="mr-1 h-7 w-7" /> 3D
         </ToggleFilter>
 
         <p className="ml-1 text-sm">({artifactsCount})</p>

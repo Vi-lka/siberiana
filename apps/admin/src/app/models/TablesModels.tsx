@@ -1,24 +1,28 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
+import { getServerSession } from "next-auth";
 
 import type { ModelForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getModels } from "~/lib/queries/artifacts";
-import { columns, moderatorsColumns, moderatorsUpdateColumns, updateColumns } from "./columns";
+import getStatusName from "~/lib/utils/getStatusName";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import {
+  columns,
+  moderatorsColumns,
+  moderatorsUpdateColumns,
+  updateColumns,
+} from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-import getStatusName from "~/lib/utils/getStatusName";
 
 export default async function TablesModels({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-
   const session = await getServerSession(authOptions);
 
   const roles = session?.user.roles;
@@ -53,7 +57,7 @@ export default async function TablesModels({
       description: "",
       externalLink: "",
       artifacts: [],
-      petroglyphs: []
+      petroglyphs: [],
     },
   ] as ModelForTable[];
 
@@ -69,10 +73,10 @@ export default async function TablesModels({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable 
-              columns={columns} 
+            <CreateTable
+              columns={columns}
               moderatorsColumns={moderatorsColumns}
-              data={dataForCreate} 
+              data={dataForCreate}
             />
           </ClientHydration>
         </div>
@@ -138,7 +142,11 @@ export default async function TablesModels({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} moderatorsColumns={moderatorsUpdateColumns} data={dataForUpdate} />
+        <UpdateTable
+          columns={updateColumns}
+          moderatorsColumns={moderatorsUpdateColumns}
+          data={dataForUpdate}
+        />
       </ClientHydration>
     </div>
   );

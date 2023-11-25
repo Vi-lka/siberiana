@@ -48,7 +48,7 @@ export default async function LicensesFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
 

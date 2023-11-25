@@ -48,7 +48,7 @@ export default async function Projects({
       <Suspense
         fallback={
           <div className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3">
-            {[1,2,3,4,5,6,7,8,9,10,11,12].map((_, i) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, i) => (
               <Skeleton
                 key={i}
                 className="aspect-square w-full px-8 py-6 md:aspect-[2/1]"

@@ -7,19 +7,19 @@ import { ru } from "date-fns/locale";
 import type { BookForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
+import BookGenres from "~/components/tables/books/BookGenres";
+import Periodical from "~/components/tables/books/Periodical";
+import Publisher from "~/components/tables/books/Publisher";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import License from "~/components/tables/global-fields/License";
 import Locations from "~/components/tables/global-fields/Locations";
+import Organization from "~/components/tables/global-fields/Organization";
 import Persons from "~/components/tables/global-fields/Persons";
 import Status from "~/components/tables/global-fields/Status";
-import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
-import BookGenres from "~/components/tables/books/BookGenres";
-import FormInput from "~/components/tables/inputs/FormInput";
-import Organization from "~/components/tables/global-fields/Organization";
-import Periodical from "~/components/tables/books/Periodical";
-import Publisher from "~/components/tables/books/Publisher";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
+import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
+import FormInput from "~/components/tables/inputs/FormInput";
+import FormTextArea from "~/components/tables/inputs/FormTextArea";
 
 export const columns: ColumnDef<BookForTable>[] = [
   {
@@ -198,7 +198,9 @@ export const columns: ColumnDef<BookForTable>[] = [
   },
   {
     accessorKey: "library",
-    header: () => <div className="min-w-[12rem] text-center">Библиотека/Организация</div>,
+    header: () => (
+      <div className="min-w-[12rem] text-center">Библиотека/Организация</div>
+    ),
     cell: ({ row }) => {
       return (
         <Organization

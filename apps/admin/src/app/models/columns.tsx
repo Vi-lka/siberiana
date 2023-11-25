@@ -1,17 +1,17 @@
 "use client";
 
+import Image from "next/image";
 import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import Image from "next/image";
 
 import type { ModelForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Status from "~/components/tables/global-fields/Status";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
+import FormTextArea from "~/components/tables/inputs/FormTextArea";
 
 export const columns: ColumnDef<ModelForTable>[] = [
   {
@@ -74,9 +74,9 @@ export const columns: ColumnDef<ModelForTable>[] = [
     header: () => <div className="text-center">Файл</div>,
     cell: ({ row }) => {
       return (
-        <InputDropzone 
-          formValueName={`models[${row.index}].file`} 
-          file 
+        <InputDropzone
+          formValueName={`models[${row.index}].file`}
+          file
           accept={{ "model/gltf-binary": [".glb"] }}
           maxSize={1024 * 1024 * 1024} // 1Gb
           className="min-w-[11rem]"
@@ -116,46 +116,62 @@ export const updateColumns: ColumnDef<ModelForTable>[] = [
     accessorKey: "artifacts",
     header: () => <div className="text-center">Артефакты</div>,
     cell: ({ row }) => {
-      const array = row.original.artifacts
+      const array = row.original.artifacts;
       return (
-        <div  className="flex flex-col gap-4 min-w-[15rem]">
+        <div className="flex min-w-[15rem] flex-col gap-4">
           {array.map((item, i) => {
-            const imageURL = item.primaryImageURL.length > 0 ? item.primaryImageURL : "/images/image-placeholder.png"
+            const imageURL =
+              item.primaryImageURL.length > 0
+                ? item.primaryImageURL
+                : "/images/image-placeholder.png";
             return (
               <div key={i} className="flex items-center gap-1">
-                <Image src={imageURL} alt={item.displayName} width={60} height={60} />
+                <Image
+                  src={imageURL}
+                  alt={item.displayName}
+                  width={60}
+                  height={60}
+                />
                 <div>
-                  <p className="text-[10px] mb-1">id: {item.id}</p>
+                  <p className="mb-1 text-[10px]">id: {item.id}</p>
                   <p>{item.displayName}</p>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
-      )
+      );
     },
   },
   {
     accessorKey: "petroglyphs",
     header: () => <div className="text-center">Петроглифы</div>,
     cell: ({ row }) => {
-      const array = row.original.petroglyphs
+      const array = row.original.petroglyphs;
       return (
-        <div  className="flex flex-col gap-4 min-w-[15rem]">
+        <div className="flex min-w-[15rem] flex-col gap-4">
           {array.map((item, i) => {
-            const imageURL = item.primaryImageURL.length > 0 ? item.primaryImageURL : "/images/image-placeholder.png"
+            const imageURL =
+              item.primaryImageURL.length > 0
+                ? item.primaryImageURL
+                : "/images/image-placeholder.png";
             return (
               <div key={i} className="flex items-center gap-1">
-                <Image src={imageURL} alt={item.displayName} width={60} height={60} />
+                <Image
+                  src={imageURL}
+                  alt={item.displayName}
+                  width={60}
+                  height={60}
+                />
                 <div>
-                  <p className="text-[10px] mb-1">id: {item.id}</p>
+                  <p className="mb-1 text-[10px]">id: {item.id}</p>
                   <p>{item.displayName}</p>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
-      )
+      );
     },
   },
   {
@@ -198,7 +214,6 @@ export const updateColumns: ColumnDef<ModelForTable>[] = [
     },
   },
 ];
-
 
 export const moderatorsColumns: ColumnDef<ModelForTable>[] = [
   ...columns,

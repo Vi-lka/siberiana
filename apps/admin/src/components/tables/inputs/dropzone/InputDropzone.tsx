@@ -1,27 +1,27 @@
 import React from "react";
 import { ErrorMessage } from "@hookform/error-message";
+import type { Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
 import type { CustomFile } from "@siberiana/schemas";
 
-import DropzoneImage from "./DropzoneImage";
 import DropzoneFile from "./DropzoneFile";
-import type { Accept } from "react-dropzone";
+import DropzoneImage from "./DropzoneImage";
 
 type InputDropzone = {
   formValueName: string;
   className?: string;
-} & (InputFile | InputImage)
+} & (InputFile | InputImage);
 
 type InputFile = {
-  file: true,
+  file: true;
   accept: Accept;
   maxSize: number;
-}
+};
 
 type InputImage = {
-  file: false,
-}
+  file: false;
+};
 
 export default function InputDropzone(props: InputDropzone) {
   const form = useFormContext();
@@ -29,28 +29,25 @@ export default function InputDropzone(props: InputDropzone) {
   const value = form.getValues(props.formValueName) as {
     file: CustomFile | null | undefined;
     url: string;
-  }
-  
+  };
+
   return (
     <>
-      {props.file 
-        ? (
-          <DropzoneFile
-            formValueName={props.formValueName}
-            defaultValue={value}
-            accept={props.accept}
-            maxSize={props.maxSize}
-            className={props.className}
-          />
-        )
-        : (
-          <DropzoneImage
-            formValueName={props.formValueName}
-            defaultValue={value}
-            className={props.className}
-          />
-        )
-      }
+      {props.file ? (
+        <DropzoneFile
+          formValueName={props.formValueName}
+          defaultValue={value}
+          accept={props.accept}
+          maxSize={props.maxSize}
+          className={props.className}
+        />
+      ) : (
+        <DropzoneImage
+          formValueName={props.formValueName}
+          defaultValue={value}
+          className={props.className}
+        />
+      )}
 
       <ErrorMessage
         errors={form.formState.errors}

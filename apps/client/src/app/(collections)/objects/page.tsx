@@ -15,9 +15,9 @@ import { getCategories, getCollections } from "~/lib/queries/api-collections";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import Filters from "./(filters)/Filters";
 import Artifacts from "./(grids)/Artifacts";
+import Arts from "./(grids)/Arts";
 import Books from "./(grids)/Books";
 import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
-import Arts from "./(grids)/Arts";
 
 export const dynamic = "force-dynamic";
 

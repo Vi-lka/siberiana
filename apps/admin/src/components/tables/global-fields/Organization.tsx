@@ -5,8 +5,8 @@ import request from "graphql-request";
 import type { OrganizationList } from "@siberiana/schemas";
 
 import ErrorToast from "~/components/errors/ErrorToast";
-import { FormSelect } from "../inputs/FormSelect";
 import { getOrganizationsQuery } from "~/lib/queries/client/global";
+import { FormSelect } from "../inputs/FormSelect";
 
 export default function Organization({
   defaultOrganization,

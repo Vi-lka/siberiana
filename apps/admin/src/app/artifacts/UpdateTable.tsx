@@ -23,10 +23,10 @@ import type { ArtifactForTable } from "@siberiana/schemas";
 import { ArtifactsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useDeleteArtifact, useUpdateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import LoadingMutation from "~/components/LoadingMutation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,7 +54,9 @@ export default function UpdateTable<TData, TValue>({
   const session = useSession();
 
   const deleteMutation = useDeleteArtifact(session.data?.access_token);
-  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateArtifact(session.data?.access_token);
+  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateArtifact(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -215,7 +217,14 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRefresh) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
+  if (loading || isPendingRefresh)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

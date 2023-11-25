@@ -23,12 +23,12 @@ import type { ArtifactForTable } from "@siberiana/schemas";
 import { ArtifactsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useCreateArtifact } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import getStatusName from "~/lib/utils/getStatusName";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
-import LoadingMutation from "~/components/LoadingMutation";
 
 const FORM_DATA_KEY = "artifactsCreate";
 
@@ -69,7 +69,9 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const { mutation, progressFiles, isLoadingFiles } = useCreateArtifact(session.data?.access_token);
+  const { mutation, progressFiles, isLoadingFiles } = useCreateArtifact(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -95,8 +97,8 @@ export default function CreateTable<TData, TValue>({
     },
   });
 
-  const rowsLength = table.getCoreRowModel().rows.length
-  const maxRowsLength = 50
+  const rowsLength = table.getCoreRowModel().rows.length;
+  const maxRowsLength = 50;
 
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
@@ -118,7 +120,7 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [form]);
 
-  const dataToPersist = form.getValues("artifacts") ?? dataState 
+  const dataToPersist = form.getValues("artifacts") ?? dataState;
 
   const dataPersistNoImage = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,10 +129,10 @@ export default function CreateTable<TData, TValue>({
       file: undefined,
       url: "",
     };
-    return { 
+    return {
       primaryImage: nullImage,
       additionalImages: null,
-      ...rest 
+      ...rest,
     };
   });
 
@@ -210,8 +212,7 @@ export default function CreateTable<TData, TValue>({
       toast({
         title: "Ограничение!",
         description: `Нельзя добавлять больше ${maxRowsLength} объектов за раз`,
-        className:
-          "font-Inter",
+        className: "font-Inter",
       });
     }
     startTransitionTable(() => {
@@ -232,7 +233,7 @@ export default function CreateTable<TData, TValue>({
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
       ) as ArtifactForTable[] & TData[];
 
-    const deleteAll = filteredData.length === 0
+    const deleteAll = filteredData.length === 0;
 
     if (deleteAll) {
       startTransitionTable(() => {
@@ -327,8 +328,15 @@ export default function CreateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRouter) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
-  
+  if (loading || isPendingRouter)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
+
   return (
     <DataTable
       table={table}

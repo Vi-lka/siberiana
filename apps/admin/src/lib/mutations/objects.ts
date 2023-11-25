@@ -33,7 +33,7 @@ export function useCreateArtifact(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async (value: ArtifactForTable) => {
@@ -49,21 +49,30 @@ export function useCreateArtifact(access_token?: string) {
             })
         : null;
 
-      const additionalImagesFiles =  value.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
-      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await upload({
-            bucket: "artifacts",
-            files: additionalImagesFiles,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const additionalImagesFiles = value.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "artifacts",
+              files: additionalImagesFiles,
             })
-        : null;
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
-      const date = value.admissionDate ? new Date(value.admissionDate) : undefined;
-      const isoDate = date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString() : undefined;
+      const date = value.admissionDate
+        ? new Date(value.admissionDate)
+        : undefined;
+      const isoDate = date
+        ? new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000,
+          ).toISOString()
+        : undefined;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -157,7 +166,7 @@ export function useUpdateArtifact(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async ({
@@ -195,21 +204,30 @@ export function useUpdateArtifact(access_token?: string) {
               })
           : null;
 
-      const additionalImagesFiles =  newValue.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
-      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await upload({
-            bucket: "artifacts",
-            files: additionalImagesFiles,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const additionalImagesFiles = newValue.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "artifacts",
+              files: additionalImagesFiles,
             })
-        : null;
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
-        const date = newValue.admissionDate ? new Date(newValue.admissionDate) : undefined;
-        const isoDate = date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString() : undefined;
+      const date = newValue.admissionDate
+        ? new Date(newValue.admissionDate)
+        : undefined;
+      const isoDate = date
+        ? new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000,
+          ).toISOString()
+        : undefined;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -225,7 +243,11 @@ export function useUpdateArtifact(access_token?: string) {
                 : newValue.primaryImage.url.length === 0
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
-            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
+            additionalImagesUrls: handleFiles(
+              newValue.additionalImages,
+              oldValue.additionalImages,
+              additionalImagesUpload?.urls,
+            ),
             description: newValue.description,
             weight: newValue.weight,
             width: newValue.sizes.width,
@@ -238,7 +260,9 @@ export function useUpdateArtifact(access_token?: string) {
             datingStart: newValue.datingRow.datingStart,
             datingEnd: newValue.datingRow.datingEnd,
             typology: newValue.typology,
-            admissionDate: !!newValue.admissionDate ? isoDate : newValue.admissionDate,
+            admissionDate: !!newValue.admissionDate
+              ? isoDate
+              : newValue.admissionDate,
             chemicalComposition: newValue.chemicalComposition,
             inventoryNumber: newValue.inventoryNumber,
             kpNumber: newValue.kpNumber,
@@ -285,7 +309,11 @@ export function useUpdateArtifact(access_token?: string) {
       );
     },
   });
-  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
+  return {
+    updateMutation: mutation,
+    progressFiles: progress,
+    isLoadingFiles: isLoading,
+  };
 }
 
 //.........................BOOKS.........................//
@@ -304,7 +332,7 @@ export function useCreateBook(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async (value: BookForTable) => {
@@ -320,31 +348,37 @@ export function useCreateBook(access_token?: string) {
             })
         : null;
 
-      const additionalImagesFiles =  value.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
-      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await upload({
-            bucket: "books",
-            files: additionalImagesFiles,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const additionalImagesFiles = value.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "books",
+              files: additionalImagesFiles,
             })
-        : null;
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
-      const files =  value.files?.map(image => image.file).filter((item): item is File => !!item)
-      const filesUpload = files && files.length > 0
-        ? await upload({
-            bucket: "books",
-            files: files,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const files = value.files
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const filesUpload =
+        files && files.length > 0
+          ? await upload({
+              bucket: "books",
+              files: files,
             })
-        : null;
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -418,7 +452,7 @@ export function useUpdateBook(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async ({
@@ -430,7 +464,10 @@ export function useUpdateBook(access_token?: string) {
       newValue: BookForTable;
       oldValue: BookForTable;
     }) => {
-      const bookGenreIDs = handleArrays(newValue.bookGenres, oldValue.bookGenres)
+      const bookGenreIDs = handleArrays(
+        newValue.bookGenres,
+        oldValue.bookGenres,
+      );
       const authorsIds = handleArrays(newValue.authors, oldValue.authors);
 
       const primaryImageUpload =
@@ -447,32 +484,37 @@ export function useUpdateBook(access_token?: string) {
               })
           : null;
 
-      const additionalImagesFiles =  newValue.additionalImages?.map(image => image.file).filter((item): item is File => !!item)
-      const additionalImagesUpload = additionalImagesFiles && additionalImagesFiles.length > 0
-        ? await upload({
-            bucket: "books",
-            files: additionalImagesFiles,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const additionalImagesFiles = newValue.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "books",
+              files: additionalImagesFiles,
             })
-        : null;
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
-      const files =  newValue.files?.map(image => image.file).filter((item): item is File => !!item)
-      const filesUpload = files && files.length > 0
-        ? await upload({
-            bucket: "books",
-            files: files,
-          })
-            .then((res) => res.data)
-            .catch((err) => {
-              console.error(err);
-              return null;
+      const files = newValue.files
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const filesUpload =
+        files && files.length > 0
+          ? await upload({
+              bucket: "books",
+              files: files,
             })
-        : null;
-  
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -489,8 +531,16 @@ export function useUpdateBook(access_token?: string) {
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
             description: newValue.description,
-            additionalImagesUrls: handleFiles(newValue.additionalImages, oldValue.additionalImages, additionalImagesUpload?.urls),
-            files: handleFiles(newValue.files, oldValue.files, filesUpload?.urls),
+            additionalImagesUrls: handleFiles(
+              newValue.additionalImages,
+              oldValue.additionalImages,
+              additionalImagesUpload?.urls,
+            ),
+            files: handleFiles(
+              newValue.files,
+              oldValue.files,
+              filesUpload?.urls,
+            ),
             year: Number(Number(newValue.year).toFixed()),
             externalLink: newValue.externalLink,
             libraryID: newValue.library?.id,
@@ -521,5 +571,9 @@ export function useUpdateBook(access_token?: string) {
       );
     },
   });
-  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
+  return {
+    updateMutation: mutation,
+    progressFiles: progress,
+    isLoadingFiles: isLoading,
+  };
 }

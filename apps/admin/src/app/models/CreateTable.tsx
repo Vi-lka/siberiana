@@ -23,12 +23,12 @@ import type { ModelForTable } from "@siberiana/schemas";
 import { ModelsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useCreateModel } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 import getStatusName from "~/lib/utils/getStatusName";
-import LoadingMutation from "~/components/LoadingMutation";
+import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 
 const FORM_DATA_KEY = "modelsCreate";
 
@@ -69,7 +69,9 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const { mutation, progressFiles, isLoadingFiles } = useCreateModel(session.data?.access_token);
+  const { mutation, progressFiles, isLoadingFiles } = useCreateModel(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -114,7 +116,7 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [form]);
 
-  const dataToPersist = form.getValues("models") ?? dataState 
+  const dataToPersist = form.getValues("models") ?? dataState;
 
   const dataPersistNoFile = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -151,7 +153,7 @@ export default function CreateTable<TData, TValue>({
     description: "",
     externalLink: "",
     artifacts: [],
-    petroglyphs: []
+    petroglyphs: [],
   } as ModelForTable & TData;
 
   const handleDeleteSaved = () => {
@@ -186,7 +188,7 @@ export default function CreateTable<TData, TValue>({
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
       ) as ModelForTable[] & TData[];
 
-    const deleteAll = filteredData.length === 0
+    const deleteAll = filteredData.length === 0;
 
     if (deleteAll) {
       startTransitionTable(() => {
@@ -273,7 +275,14 @@ export default function CreateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRouter) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
+  if (loading || isPendingRouter)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

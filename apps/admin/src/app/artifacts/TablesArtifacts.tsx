@@ -12,8 +12,8 @@ import getStatusName from "~/lib/utils/getStatusName";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { columns, moderatorsColumns } from "./columns";
 import CreateTable from "./CreateTable";
-import UpdateTable from "./UpdateTable";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
+import UpdateTable from "./UpdateTable";
 
 export default async function TablesArtifacts({
   searchParams,
@@ -167,12 +167,12 @@ export default async function TablesArtifacts({
       ...rest // assigns remaining
     } = node;
 
-    const additionalImages = additionalImagesUrls 
+    const additionalImages = additionalImagesUrls
       ? additionalImagesUrls.map((url) => {
-        const file = null
-        return {file, url}
-      })
-      : null
+          const file = null;
+          return { file, url };
+        })
+      : null;
 
     const locationForTabel = location
       ? { ...location, type: "location" }

@@ -3,8 +3,8 @@ import { ArrowBigUp, Loader2 } from "lucide-react";
 
 import CategoryFilter from "~/components/filters/CategoryFilter";
 import CollectionFilter from "~/components/filters/CollectionFilter";
-import TablesArtifacts from "./TablesArtifacts";
 import RefreshPage from "~/components/RefreshPage";
+import TablesArtifacts from "./TablesArtifacts";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export default function ArtifactsPage({
   return (
     <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
       <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-col gap-2 text-sm md:flex-row flex-1">
+        <div className="flex flex-1 flex-col gap-2 text-sm md:flex-row">
           <div className="">
             <CategoryFilter artifactsType />
             {!(!!category || !!collection) ? (
@@ -49,7 +49,6 @@ export default function ArtifactsPage({
 
         <RefreshPage />
       </div>
-      
 
       {!!collection ? (
         <Suspense

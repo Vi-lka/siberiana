@@ -3,6 +3,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { ChevronsUpDown, CircleDot, Loader2, SearchX, X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
+import type { Item } from "@siberiana/schemas";
 import {
   Button,
   Command,
@@ -17,7 +18,6 @@ import {
   ScrollArea,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-import type { Item } from '@siberiana/schemas';
 
 const items = [
   { id: "art", displayName: "Изобразительное искусство" },

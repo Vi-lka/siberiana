@@ -26,15 +26,15 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import Categories from "~/components/tables/global-fields/Categories";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
 import { createCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import TypeSelect from "./TypeSelect";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
-import LoadingMutation from "~/components/LoadingMutation";
 
 const DEFAULT_VALUES = {
   id: "",
@@ -70,7 +70,7 @@ export default function AddCollection({ className }: { className?: string }) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationKey: ["createCollection", requestHeaders],
@@ -155,9 +155,9 @@ export default function AddCollection({ className }: { className?: string }) {
           <DialogTitle>Создать</DialogTitle>
           <DialogDescription>Коллекцию</DialogDescription>
         </DialogHeader>
-        {loading 
-          ? <LoadingMutation isLoading={isLoading} progress={progress} />  
-          : (
+        {loading ? (
+          <LoadingMutation isLoading={isLoading} progress={progress} />
+        ) : (
           <Form {...form}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises

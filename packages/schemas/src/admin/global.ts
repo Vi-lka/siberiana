@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { Location } from "../objects-schema";
 import { CollectionTypeEnum } from "../collections-schemas";
+import { Location } from "../objects-schema";
 
 export const Item = z.object({
   id: z.string(),

@@ -10,8 +10,8 @@ import type {
   TechniqueForTable,
 } from "@siberiana/schemas";
 
-import { getIds, handleArrays } from "../utils/mutations-utils";
 import { usePutObjects } from "../auth/siberiana";
+import { getIds, handleArrays } from "../utils/mutations-utils";
 
 //.........................CULTURE.........................//
 export function useCreateCulture(access_token?: string) {
@@ -510,7 +510,7 @@ export function useCreateModel(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async (value: ModelForTable) => {
@@ -581,7 +581,7 @@ export function useUpdateModel(access_token?: string) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationFn: async ({
@@ -594,8 +594,7 @@ export function useUpdateModel(access_token?: string) {
       oldValue: ModelForTable;
     }) => {
       const resUpload =
-        newValue.file.url !== oldValue.file.url &&
-        newValue.file.file
+        newValue.file.url !== oldValue.file.url && newValue.file.file
           ? await upload({
               bucket: "models",
               files: [newValue.file.file],
@@ -615,11 +614,12 @@ export function useUpdateModel(access_token?: string) {
           input: {
             status: newValue.status.id,
             displayName: newValue.displayName,
-            fileURL: resUpload !== null
-              ? resUpload.urls[0]
-              : newValue.file.url.length === 0
-              ? newValue.file.url
-              : oldValue.file.url,
+            fileURL:
+              resUpload !== null
+                ? resUpload.urls[0]
+                : newValue.file.url.length === 0
+                ? newValue.file.url
+                : oldValue.file.url,
             description: newValue.description,
             externalLink: newValue.externalLink,
           },
@@ -628,5 +628,9 @@ export function useUpdateModel(access_token?: string) {
       );
     },
   });
-  return { updateMutation: mutation, progressFiles: progress, isLoadingFiles: isLoading };
+  return {
+    updateMutation: mutation,
+    progressFiles: progress,
+    isLoadingFiles: isLoading,
+  };
 }

@@ -23,13 +23,13 @@ import type { MaterialForTable } from "@siberiana/schemas";
 import { MaterialsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import {
   useDeleteMaterial,
   useUpdateMaterial,
 } from "~/lib/mutations/additionals";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import LoadingMutation from "~/components/LoadingMutation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -200,8 +200,9 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRefresh) return <LoadingMutation isLoading={false} className="mt-12" />
-  
+  if (loading || isPendingRefresh)
+    return <LoadingMutation isLoading={false} className="mt-12" />;
+
   return (
     <DataTable
       table={table}

@@ -23,10 +23,10 @@ import type { BookForTable } from "@siberiana/schemas";
 import { BooksForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useDeleteBook, useUpdateBook } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import LoadingMutation from "~/components/LoadingMutation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -54,7 +54,9 @@ export default function UpdateTable<TData, TValue>({
   const session = useSession();
 
   const deleteMutation = useDeleteBook(session.data?.access_token);
-  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateBook(session.data?.access_token);
+  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateBook(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -146,11 +148,7 @@ export default function UpdateTable<TData, TValue>({
     setLoading(true);
 
     const noLines = dataForm.books.map((book) => {
-      const {
-        displayName,
-        description,
-        ...rest
-      } = book;
+      const { displayName, description, ...rest } = book;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
@@ -211,7 +209,14 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRefresh) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
+  if (loading || isPendingRefresh)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

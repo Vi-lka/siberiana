@@ -15,6 +15,7 @@ import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader
 import DatingSelect from "~/components/tables/global-fields/dating/DatingSelect";
 import License from "~/components/tables/global-fields/License";
 import Locations from "~/components/tables/global-fields/Locations";
+import Organization from "~/components/tables/global-fields/Organization";
 import Persons from "~/components/tables/global-fields/Persons";
 import PersonSingle from "~/components/tables/global-fields/PersonSingle";
 import Projects from "~/components/tables/global-fields/Projects";
@@ -22,11 +23,10 @@ import Publications from "~/components/tables/global-fields/Publications";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
 import Status from "~/components/tables/global-fields/Status";
 import DateSelect from "~/components/tables/inputs/DateSelect";
+import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
+import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
-import Organization from "~/components/tables/global-fields/Organization";
-import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -208,7 +208,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Комплекс</div>,
     cell: ({ row }) => {
       return (
-        <Set 
+        <Set
           defaultSet={row.original.set}
           formValueName={`artifacts[${row.index}].set`}
         />

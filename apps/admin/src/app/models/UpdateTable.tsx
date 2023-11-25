@@ -23,13 +23,10 @@ import type { ModelForTable } from "@siberiana/schemas";
 import { ModelsForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
-import DataTable from "~/components/tables/DataTable";
-import {
-  useDeleteModel,
-  useUpdateModel,
-} from "~/lib/mutations/additionals";
-import getShortDescription from "~/lib/utils/getShortDescription";
 import LoadingMutation from "~/components/LoadingMutation";
+import DataTable from "~/components/tables/DataTable";
+import { useDeleteModel, useUpdateModel } from "~/lib/mutations/additionals";
+import getShortDescription from "~/lib/utils/getShortDescription";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,7 +54,9 @@ export default function UpdateTable<TData, TValue>({
   const session = useSession();
 
   const deleteMutation = useDeleteModel(session.data?.access_token);
-  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateModel(session.data?.access_token);
+  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateModel(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -210,7 +209,14 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRefresh) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
+  if (loading || isPendingRefresh)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

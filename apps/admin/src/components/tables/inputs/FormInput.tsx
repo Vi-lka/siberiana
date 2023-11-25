@@ -22,7 +22,7 @@ export default function FormInput({
 }: {
   name: string;
   defaultValue?: string;
-  type?: React.HTMLInputTypeAttribute,
+  type?: React.HTMLInputTypeAttribute;
   className?: string;
   placeholder?: string;
 }) {

@@ -34,8 +34,12 @@ export default function MultiCentury(props: {
     first: string;
     second: string;
   };
-  onSelectPrefix: (prefix: Prefix | undefined, isFirst: boolean, type: DatingType,) => void;
-  onChangeCentury: (value: number, isFirst: boolean, type: DatingType,) => void;
+  onSelectPrefix: (
+    prefix: Prefix | undefined,
+    isFirst: boolean,
+    type: DatingType,
+  ) => void;
+  onChangeCentury: (value: number, isFirst: boolean, type: DatingType) => void;
 }) {
   const [openFirst, setOpenFirst] = React.useState(false);
   const [openSecond, setOpenSecond] = React.useState(false);
@@ -72,7 +76,9 @@ export default function MultiCentury(props: {
                     {props.prefix.first ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, true, "century")}
+                        onClick={() =>
+                          props.onSelectPrefix(undefined, true, "century")
+                        }
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>
@@ -127,7 +133,7 @@ export default function MultiCentury(props: {
           </span>
 
           <span className="whitespace-nowrap">
-            {Number(props.century.first) >= 0 ? "н.э." : "до н.э."} 
+            {Number(props.century.first) >= 0 ? "н.э." : "до н.э."}
           </span>
         </div>
 
@@ -157,7 +163,9 @@ export default function MultiCentury(props: {
                     {props.prefix.second ? (
                       <span
                         className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                        onClick={() => props.onSelectPrefix(undefined, false, "century")}
+                        onClick={() =>
+                          props.onSelectPrefix(undefined, false, "century")
+                        }
                       >
                         <X className="h-5 w-5" /> Удалить
                       </span>

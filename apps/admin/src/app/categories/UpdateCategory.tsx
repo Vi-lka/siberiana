@@ -26,14 +26,14 @@ import {
 
 import ImageComp from "~/components/lists/ImageComp";
 import MetaData from "~/components/lists/MetaData";
+import LoadingMutation from "~/components/LoadingMutation";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import DeleteCategory from "./DeleteCategory";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
-import LoadingMutation from "~/components/LoadingMutation";
 
 export default function UpdateCategory(props: CategoryForm) {
   const [loading, setLoading] = React.useState(false);
@@ -53,7 +53,7 @@ export default function UpdateCategory(props: CategoryForm) {
     "Content-Type": "application/json",
   };
 
-  const { upload, progress, isLoading } = usePutObjects()
+  const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
     mutationKey: ["updateCategory", requestHeaders],
@@ -163,9 +163,9 @@ export default function UpdateCategory(props: CategoryForm) {
             className="ml-auto mr-4 mt-0"
           />
         </DialogHeader>
-        {loading 
-          ? <LoadingMutation isLoading={isLoading} progress={progress} /> 
-          : (
+        {loading ? (
+          <LoadingMutation isLoading={isLoading} progress={progress} />
+        ) : (
           <Form {...form}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises

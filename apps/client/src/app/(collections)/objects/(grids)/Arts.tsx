@@ -29,13 +29,11 @@ export default async function Arts({
   const countryIds = searchParams["countryArts"] as string | undefined;
   const regionIds = searchParams["regionArts"] as string | undefined;
   const districtIds = searchParams["districtArts"] as string | undefined;
-  const settlementIds = searchParams["settlementArts"] as
-    | string
-    | undefined;
+  const settlementIds = searchParams["settlementArts"] as string | undefined;
 
   const licenseIds = searchParams["licenseArts"] as string | undefined;
 
-//   const techniqueIds = searchParams["technique"] as string | undefined;
+  //   const techniqueIds = searchParams["technique"] as string | undefined;
 
   const sort = searchParams["sort"] as string | undefined;
   const page = searchParams["page_arts"] ?? "1";
@@ -57,7 +55,7 @@ export default async function Arts({
       districtIds,
       settlementIds,
       licenseIds,
-    //   techniqueIds,
+      //   techniqueIds,
     }),
   ]);
   if (dataResult.status === "rejected")

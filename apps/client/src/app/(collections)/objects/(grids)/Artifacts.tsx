@@ -65,7 +65,7 @@ export default async function Artifacts({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
   if (dataResult.status === "rejected")

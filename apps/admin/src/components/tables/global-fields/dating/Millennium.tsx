@@ -29,7 +29,10 @@ export default function Millennium(props: {
   prefix: Prefix | undefined;
   century: string;
   onSelectPrefix: (prefix: Prefix | undefined, type: DatingType) => void;
-  onChangeCentury: (e: React.ChangeEvent<HTMLInputElement>, type: DatingType) => void
+  onChangeCentury: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: DatingType,
+  ) => void;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -62,7 +65,9 @@ export default function Millennium(props: {
                   {props.prefix ? (
                     <span
                       className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-                      onClick={() => props.onSelectPrefix(undefined, "millennium")}
+                      onClick={() =>
+                        props.onSelectPrefix(undefined, "millennium")
+                      }
                     >
                       <X className="h-5 w-5" /> Удалить
                     </span>
@@ -107,12 +112,10 @@ export default function Millennium(props: {
             onChange={(e) => props.onChangeCentury(e, "millennium")}
           />
         </div>
-        <span className="whitespace-nowrap">
-          тыс.
-        </span>
+        <span className="whitespace-nowrap">тыс.</span>
 
         <span className="whitespace-nowrap">
-            {Number(props.century) >= 0 ? "н.э." : "до н.э."}
+          {Number(props.century) >= 0 ? "н.э." : "до н.э."}
         </span>
       </DropdownMenuSubContent>
     </DropdownMenuSub>

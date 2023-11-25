@@ -23,12 +23,12 @@ import type { BookForTable } from "@siberiana/schemas";
 import { BooksForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
+import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
 import { useCreateBook } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import getStatusName from "~/lib/utils/getStatusName";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
-import LoadingMutation from "~/components/LoadingMutation";
 
 const FORM_DATA_KEY = "booksCreate";
 
@@ -50,9 +50,9 @@ export default function CreateTable<TData, TValue>({
     key: FORM_DATA_KEY,
   });
 
-  const [dataState, setDataState] = React.useState<
-    BookForTable[] & TData[]
-  >(savedResult.data);
+  const [dataState, setDataState] = React.useState<BookForTable[] & TData[]>(
+    savedResult.data,
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -69,7 +69,9 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const { mutation, progressFiles, isLoadingFiles } = useCreateBook(session.data?.access_token);
+  const { mutation, progressFiles, isLoadingFiles } = useCreateBook(
+    session.data?.access_token,
+  );
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
@@ -114,7 +116,7 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [form]);
 
-  const dataToPersist = form.getValues("books") ?? dataState 
+  const dataToPersist = form.getValues("books") ?? dataState;
 
   const dataPersistNoFiles = dataToPersist.map((elem) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -123,11 +125,11 @@ export default function CreateTable<TData, TValue>({
       file: undefined,
       url: "",
     };
-    return { 
+    return {
       primaryImage: nullImage,
       additionalImages: null,
       files: null,
-      ...rest 
+      ...rest,
     };
   });
 
@@ -172,10 +174,7 @@ export default function CreateTable<TData, TValue>({
     startTransitionTable(() => {
       setDataState(data);
     });
-    form.reset(
-      { books: data },
-      { keepValues: false, keepDirtyValues: false },
-    );
+    form.reset({ books: data }, { keepValues: false, keepDirtyValues: false });
     localStorage.removeItem(FORM_DATA_KEY);
   };
 
@@ -198,7 +197,7 @@ export default function CreateTable<TData, TValue>({
         (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
       ) as BookForTable[] & TData[];
 
-    const deleteAll = filteredData.length === 0
+    const deleteAll = filteredData.length === 0;
 
     if (deleteAll) {
       startTransitionTable(() => {
@@ -239,11 +238,7 @@ export default function CreateTable<TData, TValue>({
     setLoading(true);
 
     const noLines = dataForm.books.map((book) => {
-      const {
-        displayName,
-        description,
-        ...rest
-      } = book;
+      const { displayName, description, ...rest } = book;
 
       return {
         displayName: displayName.replace(/\n/g, " "),
@@ -289,7 +284,14 @@ export default function CreateTable<TData, TValue>({
     }
   }
 
-  if (loading || isPendingRouter) return <LoadingMutation isLoading={isLoadingFiles} progress={progressFiles} className="mt-12" />
+  if (loading || isPendingRouter)
+    return (
+      <LoadingMutation
+        isLoading={isLoadingFiles}
+        progress={progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

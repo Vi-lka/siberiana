@@ -2,6 +2,7 @@
 
 import React from "react";
 
+import type { Dating } from "@siberiana/schemas";
 import {
   Button,
   Command,
@@ -18,21 +19,21 @@ import {
   PopoverTriggerForModal,
   ScrollArea,
 } from "@siberiana/ui";
+
 import { ERA } from "~/lib/utils/getDating";
-import type { Dating } from "@siberiana/schemas";
 
 export default function MultiEra({
-    selected,
-    handleNewValue,
-  }: {
-    selected: Dating;
-    handleNewValue: (newValue: Dating) => void;
-  }){
+  selected,
+  handleNewValue,
+}: {
+  selected: Dating;
+  handleNewValue: (newValue: Dating) => void;
+}) {
   const [openFirst, setOpenFirst] = React.useState(false);
   const [openSecond, setOpenSecond] = React.useState(false);
 
-  const firstEra = ERA.find(item => item.start === selected.datingStart)
-  const secondEra = ERA.find(item => item.end === selected.datingEnd)
+  const firstEra = ERA.find((item) => item.start === selected.datingStart);
+  const secondEra = ERA.find((item) => item.end === selected.datingEnd);
 
   return (
     <DropdownMenuSub>
@@ -62,24 +63,24 @@ export default function MultiEra({
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup className="max-w-[16.5rem]">
                     <ScrollArea type="always" classNameViewport="max-h-[260px]">
-                        {ERA.map((item, index) => {
-                          return (
-                            <CommandItem
-                              key={index}
-                              value={item.label}
-                              className="h-fit w-full cursor-pointer justify-start px-2 py-3 text-left"
-                              onSelect={() => {
-                                handleNewValue({
-                                  datingStart: item.start,
-                                  datingEnd: selected.datingEnd,
-                                });
-                                setOpenFirst(false)
-                              }}
-                            >
-                              <p className="flex-1">{item.label}</p>
-                            </CommandItem>
-                          );
-                        })}
+                      {ERA.map((item, index) => {
+                        return (
+                          <CommandItem
+                            key={index}
+                            value={item.label}
+                            className="h-fit w-full cursor-pointer justify-start px-2 py-3 text-left"
+                            onSelect={() => {
+                              handleNewValue({
+                                datingStart: item.start,
+                                datingEnd: selected.datingEnd,
+                              });
+                              setOpenFirst(false);
+                            }}
+                          >
+                            <p className="flex-1">{item.label}</p>
+                          </CommandItem>
+                        );
+                      })}
                     </ScrollArea>
                   </CommandGroup>
                 </CommandList>
@@ -112,24 +113,24 @@ export default function MultiEra({
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup className="max-w-[16.5rem]">
                     <ScrollArea type="always" classNameViewport="max-h-[260px]">
-                        {ERA.map((item, index) => {
-                          return (
-                            <CommandItem
-                              key={index}
-                              value={item.label}
-                              className="h-fit w-full cursor-pointer justify-start px-2 py-3 text-left"
-                              onSelect={() => {
-                                handleNewValue({
-                                    datingStart: selected.datingStart,
-                                    datingEnd: item.end,
-                                  });
-                                  setOpenSecond(false)
-                              }}
-                            >
-                              <p className="flex-1">{item.label}</p>
-                            </CommandItem>
-                          );
-                        })}
+                      {ERA.map((item, index) => {
+                        return (
+                          <CommandItem
+                            key={index}
+                            value={item.label}
+                            className="h-fit w-full cursor-pointer justify-start px-2 py-3 text-left"
+                            onSelect={() => {
+                              handleNewValue({
+                                datingStart: selected.datingStart,
+                                datingEnd: item.end,
+                              });
+                              setOpenSecond(false);
+                            }}
+                          >
+                            <p className="flex-1">{item.label}</p>
+                          </CommandItem>
+                        );
+                      })}
                     </ScrollArea>
                   </CommandGroup>
                 </CommandList>

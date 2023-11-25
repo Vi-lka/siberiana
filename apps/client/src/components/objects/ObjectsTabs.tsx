@@ -98,15 +98,21 @@ export default function ObjectTabs({
           : goToFilledTab();
         break;
       case "arts":
-        artsCount > 0
-          ? handleChangeTab("arts")
-          : goToFilledTab();
+        artsCount > 0 ? handleChangeTab("arts") : goToFilledTab();
         break;
       default:
         goToFilledTab();
         break;
     }
-  }, [PAPCount, artifactsCount, artsCount, booksCount, goToFilledTab, handleChangeTab, type]);
+  }, [
+    PAPCount,
+    artifactsCount,
+    artsCount,
+    booksCount,
+    goToFilledTab,
+    handleChangeTab,
+    type,
+  ]);
 
   function isSingleTab() {
     return notEmptyTabs.length === 1 ? true : false;
