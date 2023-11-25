@@ -26,11 +26,7 @@ import {
   ScrollArea,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-
-export type Item = {
-  id: string;
-  displayName: string;
-};
+import type { Item } from '@siberiana/schemas';
 
 export function FormSelect({
   itemsData,

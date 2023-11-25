@@ -62,8 +62,8 @@ export function useCreateArtifact(access_token?: string) {
             })
         : null;
 
-      const date = new Date(value.admissionDate as string);
-      const isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+      const date = value.admissionDate ? new Date(value.admissionDate) : undefined;
+      const isoDate = date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString() : undefined;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
@@ -208,8 +208,8 @@ export function useUpdateArtifact(access_token?: string) {
             })
         : null;
 
-      const date = new Date(newValue.admissionDate as string);
-      const isoDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+        const date = newValue.admissionDate ? new Date(newValue.admissionDate) : undefined;
+        const isoDate = date ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString() : undefined;
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,

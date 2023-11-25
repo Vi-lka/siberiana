@@ -94,6 +94,10 @@ export default function CreateTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  const rowsLength = table.getCoreRowModel().rows.length
+  const maxRowsLength = 50
+
   const form = useForm<z.infer<typeof ArtifactsForm>>({
     resolver: zodResolver(ArtifactsForm),
     mode: "all",
@@ -202,6 +206,14 @@ export default function CreateTable<TData, TValue>({
   };
 
   const handleAdd = () => {
+    if (rowsLength === maxRowsLength - 1) {
+      toast({
+        title: "Ограничение!",
+        description: `Нельзя добавлять больше ${maxRowsLength} объектов за раз`,
+        className:
+          "font-Inter",
+      });
+    }
     startTransitionTable(() => {
       setDataState((prev) => [...prev, defaultAdd]);
     });
@@ -330,6 +342,7 @@ export default function CreateTable<TData, TValue>({
       handleDelete={handleDelete}
       handleChangeMode={handleGoToUpdate}
       isHasAdd
+      isDisabledAdd={rowsLength >= maxRowsLength}
       handleAdd={handleAdd}
       handleDeleteSaved={handleDeleteSaved}
       isChangeModeAvailable={!!hasObjectsToUpdate}

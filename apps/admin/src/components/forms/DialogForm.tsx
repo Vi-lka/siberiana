@@ -1,4 +1,4 @@
-import type { EntityEnum } from '@siberiana/schemas';
+import type { ArtifactForTable, EntityEnum } from '@siberiana/schemas';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, ScrollArea, Separator, TableCell, TableRow, ToastAction, useToast } from '@siberiana/ui'
 import { flexRender  } from '@tanstack/react-table'
 import type {Row} from '@tanstack/react-table';
@@ -6,6 +6,7 @@ import React from 'react'
 import type { Table as TableTanstack } from "@tanstack/react-table";
 import { MousePointerClick } from 'lucide-react';
 import { useDoubleTap } from 'use-double-tap';
+import Artifacts from './edit-content/Artifacts';
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>,
@@ -74,10 +75,10 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
               
         <ScrollArea
           className="pt-3"
-          classNameViewport="lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2"
+          classNameViewport="lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2 pb-2"
         >
           {{ 
-            "artifacts": <div>artifacts</div>,
+            "artifacts": <Artifacts row={props.row as Row<ArtifactForTable>} />,
             "books": <div>books</div>,
             "art": <div>art</div>,
             "protected_area_pictures": <div>protected_area_pictures</div>

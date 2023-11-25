@@ -63,7 +63,7 @@ export default function UpdateTable<TData, TValue>({
     : columns;
 
   const table = useReactTable({
-    data: data,
+    data,
     columns: allowColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

@@ -3,6 +3,12 @@ import { z } from "zod";
 import { Location } from "../objects-schema";
 import { CollectionTypeEnum } from "../collections-schemas";
 
+export const Item = z.object({
+  id: z.string(),
+  displayName: z.string(),
+});
+export type Item = z.infer<typeof Item>;
+
 export const EntityEnum = z.enum([
   "art",
   "artifacts",

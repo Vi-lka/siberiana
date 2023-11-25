@@ -54,6 +54,7 @@ interface DataTableProps<TData, TFieldValues extends FieldValues> {
 
 type HasAdd = {
   isHasAdd: true;
+  isDisabledAdd?: boolean;
   handleAdd: () => void;
   handleDelete: () => void;
   handleDeleteSaved: () => void;
@@ -199,13 +200,13 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
 
               {props.isHasAdd ? (
                 <Button
-                  disabled={props.isLoading}
+                  disabled={props.isLoading || props.isDisabledAdd}
                   type="button"
                   className="ml-auto mr-0 gap-1 p-2 text-sm uppercase"
                   onClick={props.handleAdd}
                 >
                   {props.isLoading ? (
-                    <Loader2 className="mx-8 h-6 w-6 animate-spin" />
+                    <Loader2 className="mx-7 h-6 w-6 animate-spin" />
                   ) : (
                     <>
                       {" "}

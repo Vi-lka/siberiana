@@ -1,22 +1,23 @@
+import type { Item } from '@siberiana/schemas';
 import { cn } from '@siberiana/ui/src/lib/utils';
 import { RotateCcw } from 'lucide-react'
 import React from 'react'
 import { useFormContext } from 'react-hook-form';
 
-export default function TextCell({
+export default function ObjectCell({
     name,
     defaultValue,
     className,
 }: {
     name: string,
-    defaultValue: string | undefined,
+    defaultValue: Item | null,
     className?: string,
 }) {
     const form = useFormContext();
     
-    const value = form.getValues(name) as string | undefined
+    const value = form.getValues(name) as Item | null
 
-    const customDirty = value !== defaultValue
+    const customDirty = value?.id !== defaultValue?.id
 
     return (
         <div 
@@ -30,7 +31,7 @@ export default function TextCell({
                     : "",
             )}
         >
-            <p className="text-center max-w-xs break-words">{value ? value : "__"}</p>
+            <p className="text-center max-w-xs break-words">{value ? value.displayName : "__"}</p>
             {form.getFieldState(name).isDirty || customDirty ? (
                 <RotateCcw
                     className="text-muted-foreground hover:text-foreground absolute top-1 right-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

@@ -11,7 +11,9 @@ import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import MultiFilesCell from "~/components/forms/cells/MultiFilesCell";
 import ListCell from "~/components/forms/cells/ListCell";
-import { getLable } from "~/lib/utils/sizes-utils";
+import ObjectCell from "~/components/forms/cells/ObjectCell";
+import DatingCell from "~/components/forms/cells/DatingCell";
+import SizesCell from "~/components/forms/cells/SizesCell";
 
 export const updateColumns: ColumnDef<ArtifactForTable>[] = [
     {
@@ -64,7 +66,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       },
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.inventoryNumber}/>
+          <TextCell name={`artifacts[${row.index}].inventoryNumber`} defaultValue={row.original.inventoryNumber}/>
         );
       },
     },
@@ -81,7 +83,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       },
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.kpNumber}/>
+          <TextCell name={`artifacts[${row.index}].kpNumber`} defaultValue={row.original.kpNumber}/>
         );
       },
     },
@@ -98,7 +100,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       },
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.goskatalogNumber}/>
+          <TextCell name={`artifacts[${row.index}].goskatalogNumber`} defaultValue={row.original.goskatalogNumber}/>
         );
       },
     },
@@ -115,7 +117,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       },
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.displayName}/>
+          <TextCell name={`artifacts[${row.index}].displayName`} defaultValue={row.original.displayName}/>
         );
       },
     },
@@ -124,7 +126,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="min-w-[80px] text-center">Фото</div>,
       cell: ({ row }) => {
         return (
-          <FileCell value={row.original.primaryImage}/>
+          <FileCell name={`artifacts[${row.index}].primaryImage`} defaultValue={row.original.primaryImage}/>
         );
       },
     },
@@ -133,7 +135,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="min-w-[80px] text-center">Доп. Фото</div>,
       cell: ({ row }) => {
         return (
-          <MultiFilesCell values={row.original.additionalImages} />
+          <MultiFilesCell name={`artifacts[${row.index}].additionalImages`} defaultValues={row.original.additionalImages}/>
         );
       },
     },
@@ -142,7 +144,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Описание</div>,
       cell: ({ row }) => {
         return (
-          <LargeTextCell text={row.original.description}/>
+          <LargeTextCell name={`artifacts[${row.index}].description`} defaultValue={row.original.description}/>
         );
       },
     },
@@ -151,7 +153,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Культура</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.culturalAffiliation?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].culturalAffiliation`} defaultValue={row.original.culturalAffiliation}/>
         );
       },
     },
@@ -160,7 +162,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Комплекс</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.set?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].set`} defaultValue={row.original.set}/>
         );
       },
     },
@@ -169,7 +171,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Памятник</div>,
       cell: ({ row }) => {
         return (
-            <p className="text-center">{row.original.monument?.displayName}</p>
+          <ObjectCell name={`artifacts[${row.index}].monument`} defaultValue={row.original.monument}/>
         );
       },
     },
@@ -178,7 +180,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Место находки</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.location?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].location`} defaultValue={row.original.location}/>
         );
       },
     },
@@ -187,7 +189,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Датировка</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={`${row.original.datingRow.datingStart} - ${row.original.datingRow.datingEnd}`}/>
+          <DatingCell name={`artifacts[${row.index}].datingRow`} defaultValue={row.original.datingRow}/>
         );
       },
     },
@@ -196,7 +198,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">датировка (string)</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.dating}/>
+          <TextCell name={`artifacts[${row.index}].dating`} defaultValue={row.original.dating}/>
         );
       },
     },
@@ -205,7 +207,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Типология</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.typology}/>
+          <TextCell name={`artifacts[${row.index}].typology`} defaultValue={row.original.typology}/>
         );
       },
     },
@@ -214,7 +216,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Химический состав</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.chemicalComposition}/>
+          <TextCell name={`artifacts[${row.index}].chemicalComposition`} defaultValue={row.original.chemicalComposition}/>
         );
       },
     },
@@ -223,7 +225,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Материалы</div>,
       cell: ({ row }) => {
         return (
-          <ListCell values={row.original.mediums} />
+          <ListCell name={`artifacts[${row.index}].mediums`} defaultValues={row.original.mediums} />
         );
       },
     },
@@ -232,7 +234,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Техники</div>,
       cell: ({ row }) => {
         return (
-          <ListCell values={row.original.techniques} />
+          <ListCell name={`artifacts[${row.index}].techniques`} defaultValues={row.original.techniques} />
         );
       },
     },
@@ -240,9 +242,8 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       accessorKey: "sizes",
       header: () => <div className="text-center min-w-[6rem]">Размеры</div>,
       cell: ({ row }) => {
-        const label = getLable(row.original.sizes)
         return (
-          <TextCell text={label}/>
+          <SizesCell name={`artifacts[${row.index}].sizes`} defaultValue={row.original.sizes}/>
         );
       },
     },
@@ -251,7 +252,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Вес</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.weight}/>
+          <TextCell name={`artifacts[${row.index}].weight`} defaultValue={row.original.weight}/>
         );
       },
     },
@@ -271,7 +272,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Авторы работ</div>,
       cell: ({ row }) => {
         return (
-          <ListCell values={row.original.authors} />
+          <ListCell name={`artifacts[${row.index}].authors`} defaultValues={row.original.authors} />
         );
       },
     },
@@ -280,7 +281,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Публикации</div>,
       cell: ({ row }) => {
         return (
-          <ListCell values={row.original.publications} />
+          <ListCell name={`artifacts[${row.index}].publications`} defaultValues={row.original.publications} />
         );
       },
     },
@@ -289,7 +290,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Проекты</div>,
       cell: ({ row }) => {
         return (
-          <ListCell values={row.original.projects} />
+          <ListCell name={`artifacts[${row.index}].projects`} defaultValues={row.original.projects} />
         );
       },
     },
@@ -298,7 +299,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Донор</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.donor?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].donor`} defaultValue={row.original.donor}/>
         );
       },
     },
@@ -307,7 +308,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Организация</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.organization?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].organization`} defaultValue={row.original.organization}/>
         );
       },
     },
@@ -316,7 +317,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Лицензия</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.license?.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].license`} defaultValue={row.original.license}/>
         );
       },
     },
@@ -325,7 +326,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">3D Модель</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.model ? `id: ${row.original.model.id}; name: ${row.original.model.displayName}` : "__"}/>
+          <ObjectCell name={`artifacts[${row.index}].model`} defaultValue={row.original.model}/>
         );
       },
     },
@@ -334,7 +335,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Внешняя ссылка</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.externalLink}/>
+          <TextCell name={`artifacts[${row.index}].externalLink`} defaultValue={row.original.externalLink}/>
         );
       },
       },
@@ -386,7 +387,7 @@ export const moderatorsUpdateColumns: ColumnDef<ArtifactForTable>[] = [
       header: () => <div className="text-center">Статус</div>,
       cell: ({ row }) => {
         return (
-          <TextCell text={row.original.status.displayName}/>
+          <ObjectCell name={`artifacts[${row.index}].status`} defaultValue={row.original.status}/>
         );
       },
     },
