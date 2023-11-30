@@ -24,9 +24,9 @@ import SizesSelect from "~/components/tables/global-fields/SizesSelect";
 import Status from "~/components/tables/global-fields/Status";
 import DateSelect from "~/components/tables/inputs/DateSelect";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
-import PopoverDropzone from "~/components/tables/inputs/dropzone/PopoverDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -147,6 +147,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormTextArea
           name={`artifacts[${row.index}].displayName`}
           defaultValue={row.original.displayName}
+          className="text-sm text-center max-w-md min-w-[15rem]"
         />
       );
     },
@@ -156,10 +157,12 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="min-w-[80px] text-center">Фото</div>,
     cell: ({ row }) => {
       return (
-        <PopoverDropzone
+        <InputDropzone 
           formValueName={`artifacts[${row.index}].primaryImage`}
-          className="px-6 py-6"
-        /> // change later on "artifacts"
+          defaultValue={row.original.primaryImage}
+          className="min-w-[20rem]"
+          file={false}
+        />
       );
     },
   },
@@ -255,7 +258,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "dating",
-    header: () => <div className="text-center">датировка (string)</div>,
+    header: () => <div className="text-center">Датировка (строка)</div>,
     cell: ({ row }) => {
       return (
         <FormTextArea
@@ -432,6 +435,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <Model
           formValueName={`artifacts[${row.index}].model`}
           defaultModel={row.original.model}
+          className="w-max max-w-sm"
         />
       );
     },

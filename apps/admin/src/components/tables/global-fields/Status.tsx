@@ -8,12 +8,14 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Status({
   formValueName,
   defaultStatus,
+  className
 }: {
   formValueName: string;
   defaultStatus: {
     id: string;
     displayName: string;
   } | null;
+  className?: string;
 }) {
   const itemsData = [
     { id: "listed", displayName: getStatusName("listed") },
@@ -28,6 +30,8 @@ export default function Status({
         itemsData={itemsData}
         formValueName={formValueName}
         haveDelete={false}
+        variant="nopadding"
+        className={className}
       />
     </div>
   );

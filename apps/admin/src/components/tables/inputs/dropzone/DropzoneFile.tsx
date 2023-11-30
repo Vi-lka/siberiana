@@ -9,37 +9,33 @@ import { useFormContext } from "react-hook-form";
 import type { CustomFile } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+type Value = {
+  file?: CustomFile | null | undefined;
+  url: string;
+}
+
 export default function DropzoneFile({
-  defaultValue,
   formValueName,
   accept,
   maxSize,
   className,
 }: {
   formValueName: string;
-  defaultValue: {
-    file: CustomFile | null | undefined;
-    url: string;
-  };
   accept: Accept;
   maxSize: number;
   className?: string;
 }) {
-  console.log(defaultValue);
 
-  const [valueFile, setFile] = useState<CustomFile>();
+  const [valueFile, setFile] = useState<CustomFile | null | undefined>();
   const [valueURL, setURL] = useState<string>();
 
   const form = useFormContext();
+  const formValue = form.getValues(formValueName) as Value
 
   useEffect(() => {
-    if (!!defaultValue.file) {
-      setFile(defaultValue.file);
-      setURL(URL.createObjectURL(defaultValue.file));
-    } else if (defaultValue.url.length > 0) {
-      setURL(defaultValue.url);
-    }
-  }, [defaultValue]);
+    setFile(formValue.file);
+    setURL(formValue.url);
+  }, [formValue])
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -76,7 +72,7 @@ export default function DropzoneFile({
     return (
       <>
         <span
-          className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+          className="text-muted-foreground hover:text-foreground mx-auto my-1 w-fit flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
           onClick={handleDelete}
         >
           <X className="h-5 w-5" /> Удалить

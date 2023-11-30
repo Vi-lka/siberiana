@@ -131,7 +131,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
         <TextCell
           name={`artifacts[${row.index}].displayName`}
           defaultValue={row.original.displayName}
-          className="max-w-md w-max"
+          className="max-w-md w-max text-sm mx-auto"
         />
       );
     },
@@ -234,7 +234,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
   },
   {
     accessorKey: "dating",
-    header: () => <div className="text-center">датировка (string)</div>,
+    header: () => <div className="text-center">Датировка (строка)</div>,
     cell: ({ row }) => {
       return (
         <TextCell

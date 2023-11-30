@@ -22,7 +22,7 @@ export default function TextCell({
   return (
     <div
       className={cn(
-        "relative max-w-xs rounded-md border-[1px] border-transparent px-2 py-6",
+        "relative max-w-xs rounded-md border-[1px] border-transparent px-2 py-6 w-max max-w-xs",
         className,
         form.getFieldState(name).invalid
           ? "border-red-500"

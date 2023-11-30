@@ -53,7 +53,6 @@ export default function PopoverDropzone({
             <p className="mb-2 font-medium">Фото</p>
             <DropzoneImage
               formValueName={formValueName}
-              defaultValue={image}
               className={className}
             />
           </div>

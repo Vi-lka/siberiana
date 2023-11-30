@@ -23,7 +23,7 @@ export default function ObjectCell({
   return (
     <div
       className={cn(
-        "relative rounded-md border-[1px] border-transparent px-2 py-6",
+        "relative rounded-md border-[1px] border-transparent px-2 py-6 w-max max-w-xs",
         className,
         form.getFieldState(name).invalid
           ? "border-red-500"
