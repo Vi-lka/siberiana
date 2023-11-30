@@ -322,9 +322,9 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="text-center">Дата приема в фонд</div>,
     cell: ({ row }) => {
       const admissionDate = row.original.admissionDate
-        ? format(new Date(row.original.admissionDate), "PPpp", { locale: ru })
-        : "";
-      return <div className="break-words text-center">{admissionDate}</div>;
+        ? format(new Date(row.original.admissionDate), "PPP", { locale: ru })
+        : "__";
+      return <div className="break-words text-center w-max">{admissionDate}</div>;
     },
   },
   {

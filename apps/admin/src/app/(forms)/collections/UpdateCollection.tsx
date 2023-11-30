@@ -230,7 +230,7 @@ export default function UpdateCollection(props: CollectionForm) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" file={false} />
+                  <InputDropzone formValueName="primaryImage" defaultValue={props.primaryImage} file={false} />
                 </div>
 
                 <div className="mb-6">

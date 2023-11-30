@@ -76,6 +76,7 @@ export const columns: ColumnDef<ModelForTable>[] = [
       return (
         <InputDropzone
           formValueName={`models[${row.index}].file`}
+          defaultValue={row.original.file}
           file
           accept={{ "model/gltf-binary": [".glb"] }}
           maxSize={1024 * 1024 * 1024} // 1Gb
