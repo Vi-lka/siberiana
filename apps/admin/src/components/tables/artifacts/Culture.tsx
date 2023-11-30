@@ -13,12 +13,14 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Culture({
   defaultCulture,
   formValueName,
+  className
 }: {
   defaultCulture: {
     id: string;
     displayName: string;
   } | null;
   formValueName: string;
+  className?: string;
 }) {
   const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__";
 
@@ -64,6 +66,7 @@ export default function Culture({
         itemsData={itemsData}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

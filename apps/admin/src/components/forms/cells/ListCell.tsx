@@ -32,7 +32,7 @@ export default function ListCell({
   return (
     <ul
       className={cn(
-        "relative flex flex-col gap-1 rounded-md border-[1px] border-transparent px-2 py-6",
+        "relative w-max flex flex-col gap-1 rounded-md border-[1px] border-transparent px-2 py-6",
         className,
         form.getFieldState(name).invalid
           ? "border-red-500"
@@ -42,7 +42,7 @@ export default function ListCell({
       )}
     >
       {values.map((value) => (
-        <li key={value.id} className="flex items-center p-2 text-xs">
+        <li key={value.id} className="flex items-center p-1 text-xs">
           <CircleDot className="mr-1.5 h-3 w-3" />
           <p className="flex-1 break-words">{value.displayName}</p>
         </li>

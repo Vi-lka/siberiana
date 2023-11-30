@@ -9,11 +9,11 @@ import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getArtifacts } from "~/lib/queries/artifacts";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { columns, moderatorsColumns } from "./columns";
 import CreateTable from "./CreateTable";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
 import UpdateTable from "./UpdateTable";
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 
 export default async function TablesArtifacts({
   searchParams,

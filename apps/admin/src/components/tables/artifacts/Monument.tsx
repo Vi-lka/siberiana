@@ -13,12 +13,14 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Monument({
   defaultMonument,
   formValueName,
+  className
 }: {
   defaultMonument: {
     id: string;
     displayName: string;
   } | null;
   formValueName: string;
+  className?: string;
 }) {
   const defaultLable = !!defaultMonument ? defaultMonument.displayName : "__";
 
@@ -64,6 +66,7 @@ export default function Monument({
         itemsData={itemsData}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

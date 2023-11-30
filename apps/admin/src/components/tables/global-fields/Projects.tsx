@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Projects({
   defaultProjects,
   formValueName,
+  className
 }: {
   defaultProjects: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultProjects.length > 0
@@ -69,6 +71,7 @@ export default function Projects({
         defaultValues={defaultProjects}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

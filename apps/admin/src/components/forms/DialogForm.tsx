@@ -18,7 +18,7 @@ import {
   useToast,
 } from "@siberiana/ui";
 
-import Artifacts from "./edit-content/Artifacts";
+import Artifacts from "./Artifacts";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;

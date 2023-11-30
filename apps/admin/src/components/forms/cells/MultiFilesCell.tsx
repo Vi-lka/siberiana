@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 import type { CustomFile } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
+import { ScrollArea } from "@siberiana/ui";
 
 export default function MultiFilesCell({
   name,
@@ -95,34 +96,40 @@ export default function MultiFilesCell({
           : "",
       )}
     >
-      <div
-        className="mx-auto grid w-max max-w-[18rem] gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
-        }}
+      <ScrollArea
+        className={values.length > 3 ? "pr-3" : ""}
+        classNameViewport="max-h-40"
+        type={values.length > 3 ? "always" : "scroll"}
       >
-        {values.map((value, index) => (
-          <figure
-            key={index}
-            className="border-border bg-muted cursor-pointer rounded-md border border-solid px-1 py-1"
-          >
-            <Image
-              src={
-                value.url.length > 0
-                  ? value.url
-                  : "/images/image-placeholder.png"
-              }
-              width={100}
-              height={100}
-              alt={!!value.file ? value.file.name : value.url}
-              className="mx-auto rounded-sm object-cover"
-            />
-            <figcaption className="mt-3 break-words text-center text-xs font-light">
-              {!!value.file ? value.file.name : value.url}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+        <div
+          className="mx-auto grid w-max max-w-[18rem] gap-1"
+          style={{
+            gridTemplateColumns: `repeat(${gridColumns}, minmax(0, 1fr))`,
+          }}
+        >
+          {values.map((value, index) => (
+            <figure
+              key={index}
+              className="border-border bg-muted cursor-pointer rounded-md border border-solid px-1 py-1"
+            >
+              <Image
+                src={
+                  value.url.length > 0
+                    ? value.url
+                    : "/images/image-placeholder.png"
+                }
+                width={100}
+                height={100}
+                alt={!!value.file ? value.file.name : value.url}
+                className="mx-auto rounded-sm object-cover"
+              />
+              <figcaption className="mt-3 break-words text-center text-xs font-light">
+                {!!value.file ? value.file.name : value.url}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </ScrollArea>
       {form.getFieldState(name).isDirty ? (
         <RotateCcw
           className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

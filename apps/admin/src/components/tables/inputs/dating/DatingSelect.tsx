@@ -467,7 +467,7 @@ export default function DatingSelect({
   };
 
   return (
-    <div className={cn("relative h-full w-full", className)}>
+    <div className={"relative h-full w-full"}>
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button
@@ -478,6 +478,7 @@ export default function DatingSelect({
             aria-expanded={openCombobox}
             className={cn(
               "text-foreground relative h-fit w-full min-w-[12rem] max-w-[14rem] justify-between px-2 py-8 text-left text-xs font-normal",
+              className,
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"
                 : form.getFieldState(formValueName).isDirty

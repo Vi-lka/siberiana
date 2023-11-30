@@ -12,7 +12,7 @@ import Monument from "~/components/tables/artifacts/Monument";
 import Set from "~/components/tables/artifacts/Set";
 import Techniques from "~/components/tables/artifacts/Techniques";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import DatingSelect from "~/components/tables/global-fields/dating/DatingSelect";
+import DatingSelect from "~/components/tables/inputs/dating/DatingSelect";
 import License from "~/components/tables/global-fields/License";
 import Locations from "~/components/tables/global-fields/Locations";
 import Organization from "~/components/tables/global-fields/Organization";

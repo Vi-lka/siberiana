@@ -79,11 +79,18 @@ export default function SizesSelect({
     if (!open) handleNewValue(values);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" && openCombobox) {
+      setOpenCombobox(false);
+      handleNewValue(values);
+    }
+  };
+
   const customDirty =
     JSON.stringify(selected) !== JSON.stringify(defaultValues);
 
   return (
-    <div className={cn("relative h-full w-full", className)}>
+    <div className="relative h-full w-full">
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button
@@ -95,7 +102,8 @@ export default function SizesSelect({
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "text-foreground relative h-fit w-max justify-between px-2 py-8 text-left text-xs font-normal",
+              "text-foreground relative h-fit w-max justify-between px-2 py-8 text-left min-w-[70px] text-xs font-normal",
+              className,
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"
                 : form.getFieldState(formValueName).isDirty || customDirty
@@ -117,6 +125,7 @@ export default function SizesSelect({
           side="bottom"
           align="start"
           className="font-Inter w-[200px]"
+          onKeyDown={handleKeyDown}
         >
           <DropdownMenuLabel className="flex items-center justify-between">
             Выберите:

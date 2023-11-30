@@ -1,15 +1,17 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
+import { ChevronRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import { CategoryForm } from "@siberiana/schemas";
+import { CollectionForm } from "@siberiana/schemas";
 import {
   Button,
   Dialog,
@@ -24,26 +26,28 @@ import {
   useToast,
 } from "@siberiana/ui";
 
-import ImageComp from "~/components/lists/ImageComp";
-import MetaData from "~/components/lists/MetaData";
 import LoadingMutation from "~/components/LoadingMutation";
+import Categories from "~/components/tables/global-fields/Categories";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
-import { updateCategory } from "~/lib/mutations/collections";
+import { updateCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import DeleteCategory from "./DeleteCategory";
+import DeleteCollection from "./DeleteCollection";
+import { getName } from "./TypeSelect";
+import ImageComp from "../ImageComp";
+import MetaData from "../MetaData";
 
-export default function UpdateCategory(props: CategoryForm) {
+export default function UpdateCollection(props: CollectionForm) {
   const [loading, setLoading] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const session = useSession();
 
-  const form = useForm<z.infer<typeof CategoryForm>>({
-    resolver: zodResolver(CategoryForm),
+  const form = useForm<z.infer<typeof CollectionForm>>({
+    resolver: zodResolver(CollectionForm),
     mode: "onChange",
     defaultValues: props,
   });
@@ -56,8 +60,8 @@ export default function UpdateCategory(props: CategoryForm) {
   const { upload, progress, isLoading } = usePutObjects();
 
   const mutation = useMutation({
-    mutationKey: ["updateCategory", requestHeaders],
-    mutationFn: async (values: CategoryForm) => {
+    mutationKey: ["updateCollection", requestHeaders],
+    mutationFn: async (values: CollectionForm) => {
       const resUpload =
         values.primaryImage.url !== props.primaryImage.url &&
         values.primaryImage.file
@@ -71,9 +75,9 @@ export default function UpdateCategory(props: CategoryForm) {
 
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
-        updateCategory(),
+        updateCollection(),
         {
-          updateCategoryId: props.id,
+          updateCollectionId: props.id,
           input: {
             displayName: values.displayName,
             description: values.description,
@@ -81,6 +85,7 @@ export default function UpdateCategory(props: CategoryForm) {
             abbreviation: values.abbreviation,
             primaryImageURL:
               resUpload !== null ? resUpload.urls[0] : values.primaryImage.url,
+            categoryID: values.category.id,
           },
         },
         requestHeaders,
@@ -103,7 +108,7 @@ export default function UpdateCategory(props: CategoryForm) {
       setOpenDialog(false);
       toast({
         title: "Успешно!",
-        description: "Категория обновлена",
+        description: "Коллекция обновлена",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -111,12 +116,14 @@ export default function UpdateCategory(props: CategoryForm) {
     },
   });
 
-  function handleSave(dataForm: z.infer<typeof CategoryForm>) {
+  function handleSave(dataForm: z.infer<typeof CollectionForm>) {
     const {
       description,
       ...rest // assigns remaining
     } = dataForm;
+
     const descriptionNoLines = description.replace(/\n/g, " ");
+
     const result = {
       description: descriptionNoLines,
       ...rest,
@@ -147,19 +154,18 @@ export default function UpdateCategory(props: CategoryForm) {
       </DialogTrigger>
       <DialogContent className="font-Inter">
         <DialogHeader className="flex flex-row items-center justify-between">
-          <div className="ml-0 mr-auto flex flex-col space-y-1.5 text-left">
+          <div className="flex flex-col space-y-1.5 text-left">
             <DialogTitle>Изменить</DialogTitle>
             <DialogDescription>
-              Категорию:{" "}
+              Коллекцию:{" "}
               <span className="break-all text-xs font-semibold lg:text-base">
                 {props.displayName}
               </span>
             </DialogDescription>
           </div>
-          <DeleteCategory
+          <DeleteCollection
             id={props.id}
             name={props.displayName}
-            collections={props.collections}
             className="ml-auto mr-4 mt-0"
           />
         </DialogHeader>
@@ -204,6 +210,25 @@ export default function UpdateCategory(props: CategoryForm) {
                 </div>
 
                 <div className="mb-6">
+                  <p className="mb-2 font-medium">Тип</p>
+                  <Link
+                    href={`/${props.type}?collection=${props.slug}`}
+                    className="flex items-center underline underline-offset-2"
+                  >
+                    {getName(props.type)} <ChevronRight className="h-5 w-5" />
+                  </Link>
+                </div>
+
+                <div className="mb-6">
+                  <p className="mb-2 font-medium">Категория</p>
+                  <Categories
+                    defaultCategory={form.getValues("category")}
+                    formValueName={`category`}
+                    className="w-full max-w-lg rounded-md border text-base"
+                  />
+                </div>
+
+                <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
                   <InputDropzone formValueName="primaryImage" file={false} />
                 </div>
@@ -224,15 +249,6 @@ export default function UpdateCategory(props: CategoryForm) {
                     className="border-border w-full max-w-lg text-sm"
                     defaultValue={props.description}
                   />
-                </div>
-
-                <div className="mb-6">
-                  <p className="mb-2 font-medium">Коллекции</p>
-                  {props.collections.map((item) => (
-                    <p key={item.id} className="mb-3 text-center">
-                      {item.displayName}
-                    </p>
-                  ))}
                 </div>
               </ScrollArea>
             </form>

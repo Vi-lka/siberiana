@@ -22,7 +22,7 @@ export default function TextCell({
   return (
     <div
       className={cn(
-        "relative rounded-md border-[1px] border-transparent px-2 py-6",
+        "relative max-w-xs rounded-md border-[1px] border-transparent px-2 py-6",
         className,
         form.getFieldState(name).invalid
           ? "border-red-500"
@@ -31,7 +31,7 @@ export default function TextCell({
           : "",
       )}
     >
-      <p className="max-w-xs break-words text-center">{value ? value : "__"}</p>
+      <p className="w-full break-words text-center">{value ? value : "__"}</p>
       {form.getFieldState(name).isDirty || customDirty ? (
         <RotateCcw
           className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

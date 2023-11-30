@@ -13,9 +13,9 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  PopoverForModal,
+  PopoverContentForModal,
+  PopoverTriggerForModal,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -24,11 +24,17 @@ export default function DateSelect({
   placeholder,
   fromYear,
   defaultValue,
+  className,
+  align = "center",
+  side = "bottom"
 }: {
   name: string;
   placeholder: string;
   fromYear?: number;
   defaultValue?: Date | string | null;
+  className?: string;
+  align?: "center" | "end" | "start"
+  side?: "top" | "right" | "bottom" | "left"
 }) {
   const [open, setOpenChange] = React.useState(false);
 
@@ -42,13 +48,14 @@ export default function DateSelect({
       name={name}
       render={({ field }) => (
         <FormItem className="relative flex flex-col">
-          <Popover open={open} onOpenChange={setOpenChange}>
-            <PopoverTrigger asChild>
+          <PopoverForModal open={open} onOpenChange={setOpenChange}>
+            <PopoverTriggerForModal asChild>
               <FormControl>
                 <Button
                   variant={"outline"}
                   className={cn(
                     "w-max max-w-[240px] px-3 py-8 text-left font-normal",
+                    className,
                     !field.value && "text-muted-foreground",
                     form.getFieldState(name).invalid
                       ? "border-red-600"
@@ -67,8 +74,8 @@ export default function DateSelect({
                   <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                 </Button>
               </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="font-Inter w-auto p-0" align="start">
+            </PopoverTriggerForModal>
+            <PopoverContentForModal className="font-Inter w-auto p-0" align={align} side={side}>
               {!!field.value ? (
                 <span
                   className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
@@ -98,8 +105,8 @@ export default function DateSelect({
                 initialFocus
                 className="pt-0.5"
               />
-            </PopoverContent>
-          </Popover>
+            </PopoverContentForModal>
+          </PopoverForModal>
           {form.getFieldState(name).isDirty ? (
             <RotateCcw
               className="text-muted-foreground hover:text-foreground absolute -top-1 right-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

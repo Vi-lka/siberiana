@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Techniques({
   defaultTechniques,
   formValueName,
+  className
 }: {
   defaultTechniques: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultTechniques.length > 0
@@ -69,6 +71,7 @@ export default function Techniques({
         defaultValues={defaultTechniques}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

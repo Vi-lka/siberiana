@@ -9,7 +9,6 @@ import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getBooks } from "~/lib/queries/books";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import {
   columns,
   moderatorsColumns,
@@ -18,6 +17,7 @@ import {
 } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 
 export default async function TablesBooks({
   searchParams,

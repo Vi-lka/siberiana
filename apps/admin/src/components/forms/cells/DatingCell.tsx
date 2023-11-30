@@ -40,7 +40,7 @@ export default function DatingCell({
           : "",
       )}
     >
-      <p className="max-w-xs break-words text-center">{text}</p>
+      <p className="w-max text-center">{text}</p>
       {form.getFieldState(name).isDirty ? (
         <RotateCcw
           className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

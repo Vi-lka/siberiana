@@ -131,6 +131,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
         <TextCell
           name={`artifacts[${row.index}].displayName`}
           defaultValue={row.original.displayName}
+          className="max-w-md w-max"
         />
       );
     },
@@ -239,6 +240,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
         <TextCell
           name={`artifacts[${row.index}].dating`}
           defaultValue={row.original.dating}
+          className="max-w-md w-max"
         />
       );
     },

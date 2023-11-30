@@ -13,12 +13,14 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Set({
   defaultSet,
   formValueName,
+  className
 }: {
   defaultSet: {
     id: string;
     displayName: string;
   } | null;
   formValueName: string;
+  className?: string;
 }) {
   const defaultLable = !!defaultSet ? defaultSet.displayName : "__";
 
@@ -64,6 +66,7 @@ export default function Set({
         itemsData={itemsData}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>
