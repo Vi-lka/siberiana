@@ -17,9 +17,9 @@ import {
   ToastAction,
   useToast,
 } from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 import Artifacts from "./Artifacts";
-import { cn } from "@siberiana/ui/src/lib/utils";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -34,9 +34,9 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
 
   const handleOpen = (open: boolean) => {
     startTransition(() => {
-      setDialogOpen(open)
-    })
-  }
+      setDialogOpen(open);
+    });
+  };
 
   let timer: NodeJS.Timeout;
 
@@ -87,9 +87,7 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
       <TableRow
         key={props.row.id}
         data-state={props.row.getIsSelected() && "selected"}
-        className={cn(
-          isPending ? "cursor-wait bg-muted" : "cursor-pointer"
-        )}
+        className={cn(isPending ? "bg-muted cursor-wait" : "cursor-pointer")}
         {...bind}
       >
         {props.row.getVisibleCells().map((cell) => (
@@ -98,36 +96,39 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
           </TableCell>
         ))}
       </TableRow>
-      {isPending
-        ? <tr className="relative">
-          <td><Loader2 className="absolute h-6 w-6 animate-spin -top-6" /></td>
+      {isPending ? (
+        <tr className="relative">
+          <td>
+            <Loader2 className="absolute -top-6 h-6 w-6 animate-spin" />
+          </td>
         </tr>
-        : (
-          <DialogContent className="font-Inter xl:max-w-6xl lg:max-w-4xl">
-            <DialogHeader className="flex flex-row items-center justify-between">
-              <div className="ml-0 mr-auto flex flex-col space-y-1.5 text-left">
-                <DialogTitle>Изменить</DialogTitle>
-              </div>
-            </DialogHeader>
-              
-            <Separator />
-              
-            <ScrollArea
-              className="pt-3"
-              classNameViewport="lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2 pb-2"
-            >
+      ) : (
+        <DialogContent className="font-Inter lg:max-w-4xl xl:max-w-6xl">
+          <DialogHeader className="flex flex-row items-center justify-between">
+            <div className="ml-0 mr-auto flex flex-col space-y-1.5 text-left">
+              <DialogTitle>Изменить</DialogTitle>
+            </div>
+          </DialogHeader>
+
+          <Separator />
+
+          <ScrollArea
+            className="pt-3"
+            classNameViewport="lg:max-h-[70vh] max-h-[60vh] md:px-4 px-2 pb-2"
+          >
+            {
               {
-                {
-                  artifacts: <Artifacts row={props.row as Row<ArtifactForTable>} />,
-                  books: <div>books</div>,
-                  art: <div>art</div>,
-                  protected_area_pictures: <div>protected_area_pictures</div>,
-                }[props.dialogType]
-              }
-            </ScrollArea>
-          </DialogContent>
-        )
-      }
+                artifacts: (
+                  <Artifacts row={props.row as Row<ArtifactForTable>} />
+                ),
+                books: <div>books</div>,
+                art: <div>art</div>,
+                protected_area_pictures: <div>protected_area_pictures</div>,
+              }[props.dialogType]
+            }
+          </ScrollArea>
+        </DialogContent>
+      )}
     </Dialog>
   );
 }

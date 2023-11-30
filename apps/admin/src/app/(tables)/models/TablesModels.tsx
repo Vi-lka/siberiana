@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 
 import type { ModelForTable } from "@siberiana/schemas";
 
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getModels } from "~/lib/queries/artifacts";
@@ -16,7 +17,6 @@ import {
 } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 
 export default async function TablesModels({
   searchParams,

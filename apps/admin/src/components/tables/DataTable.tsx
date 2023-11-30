@@ -182,7 +182,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                   disabled={props.isPendingChangeMode || props.isLoading}
                   type="button"
                   variant="link"
-                  className="gap-1 p-0 text-sm font-medium uppercase text-foreground"
+                  className="text-foreground gap-1 p-0 text-sm font-medium uppercase"
                   onClick={props.handleChangeMode}
                 >
                   {props.isPendingChangeMode ? (

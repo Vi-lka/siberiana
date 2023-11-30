@@ -131,7 +131,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
         <TextCell
           name={`artifacts[${row.index}].displayName`}
           defaultValue={row.original.displayName}
-          className="max-w-md w-max text-sm mx-auto"
+          className="mx-auto w-max max-w-md text-sm"
         />
       );
     },
@@ -240,7 +240,7 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
         <TextCell
           name={`artifacts[${row.index}].dating`}
           defaultValue={row.original.dating}
-          className="max-w-md w-max"
+          className="w-max max-w-md"
         />
       );
     },
@@ -324,7 +324,9 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
       const admissionDate = row.original.admissionDate
         ? format(new Date(row.original.admissionDate), "PPP", { locale: ru })
         : "__";
-      return <div className="break-words text-center w-max">{admissionDate}</div>;
+      return (
+        <div className="w-max break-words text-center">{admissionDate}</div>
+      );
     },
   },
   {

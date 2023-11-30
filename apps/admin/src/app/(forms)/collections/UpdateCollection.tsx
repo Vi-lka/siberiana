@@ -34,10 +34,10 @@ import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
 import { updateCollection } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import DeleteCollection from "./DeleteCollection";
-import { getName } from "./TypeSelect";
 import ImageComp from "../ImageComp";
 import MetaData from "../MetaData";
+import DeleteCollection from "./DeleteCollection";
+import { getName } from "./TypeSelect";
 
 export default function UpdateCollection(props: CollectionForm) {
   const [loading, setLoading] = React.useState(false);
@@ -230,7 +230,11 @@ export default function UpdateCollection(props: CollectionForm) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" defaultValue={props.primaryImage} file={false} />
+                  <InputDropzone
+                    formValueName="primaryImage"
+                    defaultValue={props.primaryImage}
+                    file={false}
+                  />
                 </div>
 
                 <div className="mb-6">

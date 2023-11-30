@@ -1,5 +1,6 @@
 import React from "react";
 import { ErrorMessage } from "@hookform/error-message";
+import { RotateCcw } from "lucide-react";
 import type { Accept } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
@@ -7,12 +8,11 @@ import type { CustomFile } from "@siberiana/schemas";
 
 import DropzoneFile from "./DropzoneFile";
 import DropzoneImage from "./DropzoneImage";
-import { RotateCcw } from "lucide-react";
 
 type Value = {
   file?: CustomFile | null | undefined;
   url: string;
-}
+};
 
 type InputDropzone = {
   formValueName: string;
@@ -31,10 +31,9 @@ type InputImage = {
 };
 
 export default function InputDropzone(props: InputDropzone) {
-  
   const form = useFormContext();
 
-  const value = form.getValues(props.formValueName) as Value
+  const value = form.getValues(props.formValueName) as Value;
 
   const handleReset = () => {
     form.setValue(props.formValueName, props.defaultValue, {
@@ -44,7 +43,7 @@ export default function InputDropzone(props: InputDropzone) {
     });
   };
 
-  const customDirty = value.url !== props.defaultValue.url
+  const customDirty = value.url !== props.defaultValue.url;
 
   return (
     <>
@@ -64,7 +63,7 @@ export default function InputDropzone(props: InputDropzone) {
         )}
         {form.getFieldState(props.formValueName).isDirty || customDirty ? (
           <RotateCcw
-            className="text-muted-foreground hover:text-foreground absolute top-1 right-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
+            className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"
             onClick={handleReset}
           />
         ) : null}

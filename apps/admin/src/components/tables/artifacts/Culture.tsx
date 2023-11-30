@@ -13,7 +13,7 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Culture({
   defaultCulture,
   formValueName,
-  className
+  className,
 }: {
   defaultCulture: {
     id: string;

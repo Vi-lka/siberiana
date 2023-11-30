@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Projects({
   defaultProjects,
   formValueName,
-  className
+  className,
 }: {
   defaultProjects: {
     id: string;

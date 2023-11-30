@@ -13,7 +13,7 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Set({
   defaultSet,
   formValueName,
-  className
+  className,
 }: {
   defaultSet: {
     id: string;

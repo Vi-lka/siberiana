@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Techniques({
   defaultTechniques,
   formValueName,
-  className
+  className,
 }: {
   defaultTechniques: {
     id: string;

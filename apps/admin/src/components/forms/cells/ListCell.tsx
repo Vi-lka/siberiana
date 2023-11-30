@@ -32,7 +32,7 @@ export default function ListCell({
   return (
     <ul
       className={cn(
-        "relative w-max flex flex-col gap-1 rounded-md border-[1px] border-transparent px-2 py-6",
+        "relative flex w-max flex-col gap-1 rounded-md border-[1px] border-transparent px-2 py-6",
         className,
         form.getFieldState(name).invalid
           ? "border-red-500"

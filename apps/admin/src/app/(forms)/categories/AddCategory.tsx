@@ -204,7 +204,11 @@ export default function AddCategory({ className }: { className?: string }) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" defaultValue={{file: null, url: ""}} file={false} />
+                  <InputDropzone
+                    formValueName="primaryImage"
+                    defaultValue={{ file: null, url: "" }}
+                    file={false}
+                  />
                 </div>
 
                 <div className="mb-6">

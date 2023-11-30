@@ -13,8 +13,8 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  PopoverForModal,
   PopoverContentForModal,
+  PopoverForModal,
   PopoverTriggerForModal,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
@@ -26,15 +26,15 @@ export default function DateSelect({
   defaultValue,
   className,
   align = "center",
-  side = "bottom"
+  side = "bottom",
 }: {
   name: string;
   placeholder: string;
   fromYear?: number;
   defaultValue?: Date | string | null;
   className?: string;
-  align?: "center" | "end" | "start"
-  side?: "top" | "right" | "bottom" | "left"
+  align?: "center" | "end" | "start";
+  side?: "top" | "right" | "bottom" | "left";
 }) {
   const [open, setOpenChange] = React.useState(false);
 
@@ -75,7 +75,11 @@ export default function DateSelect({
                 </Button>
               </FormControl>
             </PopoverTriggerForModal>
-            <PopoverContentForModal className="font-Inter w-auto p-0" align={align} side={side}>
+            <PopoverContentForModal
+              className="font-Inter w-auto p-0"
+              align={align}
+              side={side}
+            >
               {!!field.value ? (
                 <span
                   className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"

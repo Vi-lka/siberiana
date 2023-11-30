@@ -102,7 +102,7 @@ export default function SizesSelect({
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "text-foreground relative h-fit w-max justify-between px-2 py-8 text-left min-w-[70px] text-xs font-normal",
+              "text-foreground relative h-fit w-max min-w-[70px] justify-between px-2 py-8 text-left text-xs font-normal",
               className,
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"

@@ -12,7 +12,6 @@ import Monument from "~/components/tables/artifacts/Monument";
 import Set from "~/components/tables/artifacts/Set";
 import Techniques from "~/components/tables/artifacts/Techniques";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import DatingSelect from "~/components/tables/inputs/dating/DatingSelect";
 import License from "~/components/tables/global-fields/License";
 import Locations from "~/components/tables/global-fields/Locations";
 import Organization from "~/components/tables/global-fields/Organization";
@@ -23,10 +22,11 @@ import Publications from "~/components/tables/global-fields/Publications";
 import SizesSelect from "~/components/tables/global-fields/SizesSelect";
 import Status from "~/components/tables/global-fields/Status";
 import DateSelect from "~/components/tables/inputs/DateSelect";
+import DatingSelect from "~/components/tables/inputs/dating/DatingSelect";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -147,7 +147,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormTextArea
           name={`artifacts[${row.index}].displayName`}
           defaultValue={row.original.displayName}
-          className="text-sm text-center max-w-md min-w-[15rem]"
+          className="min-w-[15rem] max-w-md text-center text-sm"
         />
       );
     },
@@ -157,7 +157,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
     header: () => <div className="min-w-[80px] text-center">Фото</div>,
     cell: ({ row }) => {
       return (
-        <InputDropzone 
+        <InputDropzone
           formValueName={`artifacts[${row.index}].primaryImage`}
           defaultValue={row.original.primaryImage}
           className="min-w-[20rem]"

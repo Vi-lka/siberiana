@@ -13,7 +13,7 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Monument({
   defaultMonument,
   formValueName,
-  className
+  className,
 }: {
   defaultMonument: {
     id: string;

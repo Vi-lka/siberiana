@@ -4,8 +4,8 @@ import { RotateCcw } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 import type { CustomFile } from "@siberiana/schemas";
-import { cn } from "@siberiana/ui/src/lib/utils";
 import { ScrollArea } from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 export default function MultiFilesCell({
   name,

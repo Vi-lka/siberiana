@@ -31,9 +31,9 @@ import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import { usePutObjects } from "~/lib/auth/siberiana";
 import { updateCategory } from "~/lib/mutations/collections";
 import getShortDescription from "~/lib/utils/getShortDescription";
-import DeleteCategory from "./DeleteCategory";
 import ImageComp from "../ImageComp";
 import MetaData from "../MetaData";
+import DeleteCategory from "./DeleteCategory";
 
 export default function UpdateCategory(props: CategoryForm) {
   const [loading, setLoading] = React.useState(false);
@@ -205,7 +205,11 @@ export default function UpdateCategory(props: CategoryForm) {
 
                 <div className="mb-6">
                   <p className="mb-2 font-medium">Фото</p>
-                  <InputDropzone formValueName="primaryImage" defaultValue={props.primaryImage} file={false} />
+                  <InputDropzone
+                    formValueName="primaryImage"
+                    defaultValue={props.primaryImage}
+                    file={false}
+                  />
                 </div>
 
                 <div className="mb-6">

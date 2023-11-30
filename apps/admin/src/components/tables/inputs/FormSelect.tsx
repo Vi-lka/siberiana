@@ -48,7 +48,7 @@ export function FormSelect({
   align?: "end" | "center" | "start";
   isLoading?: boolean;
   haveDelete?: boolean;
-  variant?: "padding" | "nopadding"
+  variant?: "padding" | "nopadding";
   onClick?: () => void;
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -114,7 +114,7 @@ export function FormSelect({
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
-                "text-foreground relative h-fit w-full justify-between text-left text-xs font-normal px-2",
+                "text-foreground relative h-fit w-full justify-between px-2 text-left text-xs font-normal",
                 variant === "padding" ? "py-8" : "py-3",
                 form.getFieldState(formValueName).invalid
                   ? "border-red-600"

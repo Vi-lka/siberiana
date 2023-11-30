@@ -3,6 +3,7 @@ import { RotateCcw } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 import { cn } from "@siberiana/ui/src/lib/utils";
+
 import getShortDescription from "~/lib/utils/getShortDescription";
 
 export default function LargeTextCell({
@@ -32,7 +33,9 @@ export default function LargeTextCell({
           : "",
       )}
     >
-      <p className="w-max max-w-xs">{value ? getShortDescription(value) : "__"}</p>
+      <p className="w-max max-w-xs">
+        {value ? getShortDescription(value) : "__"}
+      </p>
       {form.getFieldState(name).isDirty || customDirty ? (
         <RotateCcw
           className="text-muted-foreground hover:text-foreground absolute right-1 top-1 h-3.5 w-3.5 cursor-pointer transition-all hover:scale-150"

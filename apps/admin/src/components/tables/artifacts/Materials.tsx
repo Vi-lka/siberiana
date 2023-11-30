@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Materials({
   defaultMaterials,
   formValueName,
-  className
+  className,
 }: {
   defaultMaterials: {
     id: string;

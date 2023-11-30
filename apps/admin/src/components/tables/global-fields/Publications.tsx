@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Publications({
   defaultPublications,
   formValueName,
-  className
+  className,
 }: {
   defaultPublications: {
     id: string;

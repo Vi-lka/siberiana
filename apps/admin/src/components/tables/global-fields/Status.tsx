@@ -8,7 +8,7 @@ import { FormSelect } from "../inputs/FormSelect";
 export default function Status({
   formValueName,
   defaultStatus,
-  className
+  className,
 }: {
   formValueName: string;
   defaultStatus: {
