@@ -9,13 +9,10 @@ import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getModels } from "~/lib/queries/artifacts";
 import getStatusName from "~/lib/utils/getStatusName";
-import {
-  columns,
-  moderatorsColumns
-} from "./columns";
+import { columns, moderatorsColumns } from "./columns";
 import CreateTable from "./CreateTable";
-import UpdateTable from "./UpdateTable";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
+import UpdateTable from "./UpdateTable";
 
 export default async function TablesModels({
   searchParams,

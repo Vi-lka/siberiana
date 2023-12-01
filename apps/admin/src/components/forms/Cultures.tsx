@@ -48,11 +48,11 @@ export default function Cultures({ row }: { row: Row<CultureForTable> }) {
 
       <div className="w-full">
         <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-          <FormTextArea
-            name={`cultures[${row.index}].externalLink`}
-            defaultValue={row.original.externalLink}
-            className="border-border w-full max-w-none bg-transparent text-center"
-          />
+        <FormTextArea
+          name={`cultures[${row.index}].externalLink`}
+          defaultValue={row.original.externalLink}
+          className="border-border w-full max-w-none bg-transparent text-center"
+        />
       </div>
     </div>
   );

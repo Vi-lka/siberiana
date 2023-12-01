@@ -53,11 +53,11 @@ export default function Monuments({ row }: { row: Row<MonumentForTable> }) {
 
       <div className="w-full">
         <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-          <FormTextArea
-            name={`monuments[${row.index}].externalLink`}
-            defaultValue={row.original.externalLink}
-            className="border-border w-full max-w-none bg-transparent text-center"
-          />
+        <FormTextArea
+          name={`monuments[${row.index}].externalLink`}
+          defaultValue={row.original.externalLink}
+          className="border-border w-full max-w-none bg-transparent text-center"
+        />
       </div>
     </div>
   );

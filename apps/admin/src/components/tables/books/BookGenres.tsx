@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function BookGenres({
   defaultBookGenres,
   formValueName,
-  className
+  className,
 }: {
   defaultBookGenres: {
     id: string;

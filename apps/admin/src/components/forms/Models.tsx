@@ -1,12 +1,12 @@
 import React from "react";
-import type { Row } from "@tanstack/react-table";
 import Image from "next/image";
+import type { Row } from "@tanstack/react-table";
+import { useSession } from "next-auth/react";
 
 import type { ModelForTable } from "@siberiana/schemas";
 
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Status from "../tables/global-fields/Status";
-import { useSession } from "next-auth/react";
 
 export default function Models({ row }: { row: Row<ModelForTable> }) {
   const session = useSession();
@@ -56,63 +56,63 @@ export default function Models({ row }: { row: Row<ModelForTable> }) {
         <div className="min-w-full flex-1 sm:min-w-[20rem]">
           <p className="mb-2 text-center font-medium">Артефакты</p>
           <div className="flex flex-col items-center gap-4">
-              {artifactsArray.map((item, i) => {
-                const imageURL =
-                  item.primaryImageURL.length > 0
-                    ? item.primaryImageURL
-                    : "/images/image-placeholder.png";
-                return (
-                  <div key={i} className="flex items-center gap-1">
-                    <Image
-                      src={imageURL}
-                      alt={item.displayName}
-                      width={60}
-                      height={60}
-                    />
-                    <div>
-                      <p className="mb-1 text-[10px]">id: {item.id}</p>
-                      <p>{item.displayName}</p>
-                    </div>
+            {artifactsArray.map((item, i) => {
+              const imageURL =
+                item.primaryImageURL.length > 0
+                  ? item.primaryImageURL
+                  : "/images/image-placeholder.png";
+              return (
+                <div key={i} className="flex items-center gap-1">
+                  <Image
+                    src={imageURL}
+                    alt={item.displayName}
+                    width={60}
+                    height={60}
+                  />
+                  <div>
+                    <p className="mb-1 text-[10px]">id: {item.id}</p>
+                    <p>{item.displayName}</p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <div className="min-w-full flex-1 sm:min-w-[20rem]">
           <p className="mb-2 text-center font-medium">Петроглифы</p>
           <div className="flex flex-col items-center gap-4">
-              {petroglyphsArray.map((item, i) => {
-                const imageURL =
-                  item.primaryImageURL.length > 0
-                    ? item.primaryImageURL
-                    : "/images/image-placeholder.png";
-                return (
-                  <div key={i} className="flex items-center gap-1">
-                    <Image
-                      src={imageURL}
-                      alt={item.displayName}
-                      width={60}
-                      height={60}
-                    />
-                    <div>
-                      <p className="mb-1 text-[10px]">id: {item.id}</p>
-                      <p>{item.displayName}</p>
-                    </div>
+            {petroglyphsArray.map((item, i) => {
+              const imageURL =
+                item.primaryImageURL.length > 0
+                  ? item.primaryImageURL
+                  : "/images/image-placeholder.png";
+              return (
+                <div key={i} className="flex items-center gap-1">
+                  <Image
+                    src={imageURL}
+                    alt={item.displayName}
+                    width={60}
+                    height={60}
+                  />
+                  <div>
+                    <p className="mb-1 text-[10px]">id: {item.id}</p>
+                    <p>{item.displayName}</p>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       <div className="w-full">
         <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-          <FormTextArea
-            name={`models[${row.index}].externalLink`}
-            defaultValue={row.original.externalLink}
-            className="border-border w-full max-w-none bg-transparent text-center"
-          />
+        <FormTextArea
+          name={`models[${row.index}].externalLink`}
+          defaultValue={row.original.externalLink}
+          className="border-border w-full max-w-none bg-transparent text-center"
+        />
       </div>
     </div>
   );

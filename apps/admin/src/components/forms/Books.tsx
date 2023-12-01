@@ -2,7 +2,7 @@ import React from "react";
 import type { Row } from "@tanstack/react-table";
 import { useSession } from "next-auth/react";
 
-import type {BookForTable} from "@siberiana/schemas";
+import type { BookForTable } from "@siberiana/schemas";
 
 import Locations from "~/components/tables/global-fields/Locations";
 import Persons from "~/components/tables/global-fields/Persons";
@@ -10,12 +10,12 @@ import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import License from "../tables/global-fields/License";
-import Status from "../tables/global-fields/Status";
 import BookGenres from "../tables/books/BookGenres";
 import Periodical from "../tables/books/Periodical";
 import Publisher from "../tables/books/Publisher";
+import License from "../tables/global-fields/License";
 import Organization from "../tables/global-fields/Organization";
+import Status from "../tables/global-fields/Status";
 
 export default function Books({ row }: { row: Row<BookForTable> }) {
   const session = useSession();

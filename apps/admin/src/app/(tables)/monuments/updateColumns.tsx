@@ -3,12 +3,14 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+
 import type { MonumentForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
+
 import LargeTextCell from "~/components/forms/cells/LargeTextCell";
+import ListCell from "~/components/forms/cells/ListCell";
 import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import ListCell from "~/components/forms/cells/ListCell";
 
 export const updateColumns: ColumnDef<MonumentForTable>[] = [
   {
@@ -93,12 +95,12 @@ export const updateColumns: ColumnDef<MonumentForTable>[] = [
     accessorKey: "sets",
     header: () => <div className="text-center">Комплексы</div>,
     cell: ({ row }) => {
-      return ( 
+      return (
         <ListCell
           name={`monuments[${row.index}].sets`}
           defaultValues={row.original.sets}
         />
-      )
+      );
     },
   },
   {

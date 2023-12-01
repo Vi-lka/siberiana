@@ -53,11 +53,11 @@ export default function Techniques({ row }: { row: Row<TechniqueForTable> }) {
 
       <div className="w-full">
         <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-          <FormTextArea
-            name={`techniques[${row.index}].externalLink`}
-            defaultValue={row.original.externalLink}
-            className="border-border w-full max-w-none bg-transparent text-center"
-          />
+        <FormTextArea
+          name={`techniques[${row.index}].externalLink`}
+          defaultValue={row.original.externalLink}
+          className="border-border w-full max-w-none bg-transparent text-center"
+        />
       </div>
     </div>
   );

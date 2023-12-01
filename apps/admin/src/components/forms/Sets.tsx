@@ -53,11 +53,11 @@ export default function Sets({ row }: { row: Row<SetForTable> }) {
 
       <div className="w-full">
         <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-          <FormTextArea
-            name={`sets[${row.index}].externalLink`}
-            defaultValue={row.original.externalLink}
-            className="border-border w-full max-w-none bg-transparent text-center"
-          />
+        <FormTextArea
+          name={`sets[${row.index}].externalLink`}
+          defaultValue={row.original.externalLink}
+          className="border-border w-full max-w-none bg-transparent text-center"
+        />
       </div>
     </div>
   );

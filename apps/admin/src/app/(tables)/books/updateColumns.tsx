@@ -4,6 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
+import type { BookForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
 import FileCell from "~/components/forms/cells/FileCell";
@@ -13,7 +14,6 @@ import MultiFilesCell from "~/components/forms/cells/MultiFilesCell";
 import ObjectCell from "~/components/forms/cells/ObjectCell";
 import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import type { BookForTable } from "@siberiana/schemas";
 
 export const updateColumns: ColumnDef<BookForTable>[] = [
   {

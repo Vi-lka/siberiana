@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Sets({
   defaultSets,
   formValueName,
-  className
+  className,
 }: {
   defaultSets: {
     id: string;

@@ -1,12 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
 import type { ModelForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
-import Image from "next/image";
 
 import LargeTextCell from "~/components/forms/cells/LargeTextCell";
 import ObjectCell from "~/components/forms/cells/ObjectCell";

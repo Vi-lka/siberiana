@@ -8,8 +8,8 @@ import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getSets } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import CreateTable from "./CreateTable";
-import UpdateTable from "./UpdateTable";
 import { updateColumns } from "./updateColumns";
+import UpdateTable from "./UpdateTable";
 
 export default async function TablesSets({
   searchParams,

@@ -41,12 +41,12 @@ export default function Materials({ row }: { row: Row<MaterialForTable> }) {
         </div>
 
         <div className="min-w-full flex-1 sm:min-w-[20rem]">
-            <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
-            <FormTextArea
-              name={`materials[${row.index}].externalLink`}
-              defaultValue={row.original.externalLink}
-              className="border-border w-full max-w-none bg-transparent text-center"
-            />
+          <p className="mb-2 text-center font-medium">Внешняя ссылка</p>
+          <FormTextArea
+            name={`materials[${row.index}].externalLink`}
+            defaultValue={row.original.externalLink}
+            className="border-border w-full max-w-none bg-transparent text-center"
+          />
         </div>
       </div>
     </div>

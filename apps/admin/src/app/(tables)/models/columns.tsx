@@ -6,9 +6,9 @@ import type { ModelForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
+import Status from "~/components/tables/global-fields/Status";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import Status from "~/components/tables/global-fields/Status";
 
 export const columns: ColumnDef<ModelForTable>[] = [
   {

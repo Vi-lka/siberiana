@@ -1,8 +1,10 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
+
 import type { CultureForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
+
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 

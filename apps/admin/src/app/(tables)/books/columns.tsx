@@ -14,10 +14,10 @@ import Locations from "~/components/tables/global-fields/Locations";
 import Organization from "~/components/tables/global-fields/Organization";
 import Persons from "~/components/tables/global-fields/Persons";
 import Status from "~/components/tables/global-fields/Status";
+import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 
 export const columns: ColumnDef<BookForTable>[] = [
   {

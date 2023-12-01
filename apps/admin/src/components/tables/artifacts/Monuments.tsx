@@ -11,7 +11,7 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Monuments({
   defaultMonuments,
   formValueName,
-  className
+  className,
 }: {
   defaultMonuments: {
     id: string;

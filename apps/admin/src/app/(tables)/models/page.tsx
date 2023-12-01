@@ -12,9 +12,14 @@ export default function ModelsPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   return (
-    <div key={Math.random()} className="font-OpenSans px-2 md:py-10 py-3 md:ml-[14rem]">
+    <div
+      key={Math.random()}
+      className="font-OpenSans px-2 py-3 md:ml-[14rem] md:py-10"
+    >
       <div className="flex items-start justify-between gap-3">
-        <h1 className="font-semibold text-center text-2xl md:w-fit w-full md:mb-0 mb-4">3D Модели</h1>
+        <h1 className="mb-4 w-full text-center text-2xl font-semibold md:mb-0 md:w-fit">
+          3D Модели
+        </h1>
         <RefreshPage />
       </div>
       <Suspense
