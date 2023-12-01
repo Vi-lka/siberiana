@@ -48,8 +48,8 @@ export default function ImgObject(props: Props) {
       <div className="flex w-full flex-col gap-1">
         <Image
           src={image}
-          width={props.width ? props.width : 320}
-          height={props.height ? props.height : 320}
+          width={props.width ? props.width : 450}
+          height={props.height ? props.height : 450}
           onError={() => setImage("/images/image-placeholder.png")}
           className={cn(
             "outline-accent ring-ring ring-offset-background w-full overflow-hidden rounded-md shadow-md outline outline-1 outline-offset-1 transition-all duration-200",

@@ -30,7 +30,7 @@ export default async function About() {
     <div>
       <Breadcrumbs dict={dictResult.breadcrumbs} />
 
-      <div className="mx-auto mb-4 mt-10 flex max-w-[1600px] flex-col gap-10">
+      <div className="mx-auto mb-4 mt-10 flex max-w-[2000px] flex-col gap-10">
         <div className="">
           <ReactMarkdown
             className={"whitespace-pre-wrap"}

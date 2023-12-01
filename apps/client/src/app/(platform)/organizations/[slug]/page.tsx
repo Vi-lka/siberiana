@@ -136,6 +136,8 @@ export default async function Organization({
                   src={elem.img.data?.attributes.url}
                   url={getLinkDir(elem.url)}
                   target="_blank"
+                  width={600}
+                  height={600}
                 />
               ))}
             </div>
@@ -171,6 +173,8 @@ export default async function Organization({
                   src={elem.image.data?.attributes.url}
                   href={getLinkDir(elem.url)}
                   target="_blank"
+                  width={600}
+                  height={600}
                 >
                   <p className="w-full text-xs uppercase xl:text-sm">
                     {elem.name ? (
@@ -224,7 +228,7 @@ export default async function Organization({
                     src={elem.image.data?.attributes.url}
                     href={getLinkDir(elem.url)}
                     target="_blank"
-                    width={450}
+                    width={800}
                     height={450}
                   >
                     <div className="flex flex-col justify-between gap-1 md:flex-row">

@@ -43,7 +43,7 @@ export default async function ProjectsContent({
     <>
       <div
         key={Math.random()}
-        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3"
+        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3 min-[3000px]:grid-cols-4 min-[4000px]:grid-cols-5"
       >
         {dataResult.value.data.map((proj, index) => (
           <ImgTextBelow
@@ -54,8 +54,8 @@ export default async function ProjectsContent({
             src={proj.attributes.image.data?.attributes.url}
             href={getLinkDir(proj.attributes.url)}
             target="_blank"
-            width={700}
-            height={300}
+            width={800}
+            height={450}
           >
             <div className="flex flex-col gap-3">
               <p className="text-base font-bold uppercase lg:text-xl">

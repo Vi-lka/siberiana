@@ -28,7 +28,7 @@ export default function Member({
         <Image
           src={image}
           fill
-          sizes="(max-width: 1280px) 45vw, 35vw"
+          sizes="(max-width: 1280px) 85vw, 40vw"
           onError={() => setImage("/images/image-placeholder.png")}
           priority={true}
           className="aspect-square w-full object-cover"

@@ -9,8 +9,8 @@ import {
 
 import ButtonComponent from "~/components/ui/ButtonComponent";
 
-export default function ReadPDF({ files }: { files: string[] }) {
-  if (files.length === 0) return null;
+export default function ReadPDF({ files }: { files: string[] | null }) {
+  if (!files || files.length === 0) return null;
 
   if (files.length === 1)
     return (

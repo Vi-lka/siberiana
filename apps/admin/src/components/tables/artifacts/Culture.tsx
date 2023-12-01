@@ -12,13 +12,15 @@ import { FormSelect } from "../inputs/FormSelect";
 
 export default function Culture({
   defaultCulture,
-  rowIndex,
+  formValueName,
+  className,
 }: {
   defaultCulture: {
     id: string;
     displayName: string;
   } | null;
-  rowIndex: number;
+  formValueName: string;
+  className?: string;
 }) {
   const defaultLable = !!defaultCulture ? defaultCulture.displayName : "__";
 
@@ -62,8 +64,9 @@ export default function Culture({
       <FormSelect
         defaultValue={defaultCulture}
         itemsData={itemsData}
-        formValueName={`artifacts[${rowIndex}].culturalAffiliation`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

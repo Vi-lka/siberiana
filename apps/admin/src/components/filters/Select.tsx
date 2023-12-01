@@ -33,7 +33,7 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export type Item = {
+type Item = {
   value: string;
   label: string;
   color?: string;

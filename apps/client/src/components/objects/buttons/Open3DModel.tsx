@@ -3,6 +3,7 @@
 import React from "react";
 
 import { Button, Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
+
 import Scene from "../3d-model/Scene";
 
 export default function Open3DModel({
@@ -14,7 +15,6 @@ export default function Open3DModel({
     fileURL: string;
   } | null;
 }) {
-
   if (data === null) return null;
 
   return (
@@ -29,7 +29,7 @@ export default function Open3DModel({
           </p>
         </Button>
       </DialogTrigger>
-      <DialogContent className="md:w-[80vw] h-[80vh] max-w-7xl">
+      <DialogContent className="h-[80vh] max-w-7xl md:w-[80vw]">
         <Scene fileSrc={data.fileURL} environmentPreset="warehouse" />
       </DialogContent>
     </Dialog>

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
+import type { Item } from "@siberiana/schemas";
 import {
   Button,
   Command,
@@ -27,11 +28,6 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
-export type Item = {
-  id: string;
-  displayName: string;
-};
-
 export function FormSelect({
   itemsData,
   defaultValue,
@@ -41,6 +37,7 @@ export function FormSelect({
   align = "start",
   isLoading,
   haveDelete = true,
+  variant = "padding",
   onClick,
 }: {
   itemsData: Array<Item> | null;
@@ -51,6 +48,7 @@ export function FormSelect({
   align?: "end" | "center" | "start";
   isLoading?: boolean;
   haveDelete?: boolean;
+  variant?: "padding" | "nopadding";
   onClick?: () => void;
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -116,7 +114,8 @@ export function FormSelect({
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
-                "text-foreground relative h-fit w-full justify-between px-2 py-8 text-left text-xs font-normal",
+                "text-foreground relative h-fit w-full justify-between px-2 text-left text-xs font-normal",
+                variant === "padding" ? "py-8" : "py-3",
                 form.getFieldState(formValueName).invalid
                   ? "border-red-600"
                   : form.getFieldState(formValueName).isDirty || customDirty

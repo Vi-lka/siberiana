@@ -8,8 +8,8 @@ import { Toaster } from "@siberiana/ui";
 
 import NoSession from "~/components/errors/NoSession";
 import Header from "~/components/header/Header";
+import MenuBar from "~/components/header/MenuBar";
 import LogoSvg from "~/components/LogoSvg";
-import MenuBar from "~/components/menuBar/MenuBar";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import Providers from "~/components/providers/Providers";
 import { authOptions } from "./api/auth/[...nextauth]/route";

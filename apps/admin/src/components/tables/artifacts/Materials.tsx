@@ -10,13 +10,15 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 
 export default function Materials({
   defaultMaterials,
-  rowIndex,
+  formValueName,
+  className,
 }: {
   defaultMaterials: {
     id: string;
     displayName: string;
   }[];
-  rowIndex: number;
+  formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultMaterials.length > 0
@@ -67,8 +69,9 @@ export default function Materials({
       <FormSelectMulti
         itemsData={itemsData}
         defaultValues={defaultMaterials}
-        formValueName={`artifacts[${rowIndex}].mediums`}
+        formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

@@ -47,6 +47,8 @@ export default async function CategoriesBlock() {
             title={category.node.displayName}
             src={category.node.primaryImageURL}
             url={`/collections?category=${category.node.slug}`}
+            width={600}
+            height={600}
           />
         ))}
       </div>

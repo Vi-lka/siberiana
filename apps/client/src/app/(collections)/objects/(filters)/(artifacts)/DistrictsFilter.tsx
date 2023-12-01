@@ -49,7 +49,7 @@ export default async function DistrictsFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
 

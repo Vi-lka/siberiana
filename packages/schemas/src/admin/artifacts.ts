@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { ArtifactById, StatusEnum } from "../objects-schema";
-import { CustomFile, ImageFile, LocationEnum } from "./global";
+import { CustomFile, LocationEnum } from "./global";
 
 export const Sizes = z.object({
   width: z.number(),
@@ -37,9 +37,16 @@ export const ArtifactForTable = z.object({
   }),
   displayName: z.string().min(1),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
+  additionalImages: z
+    .object({
+      file: CustomFile.nullable().optional(),
+      url: z.string(),
+    })
+    .array()
+    .nullable(),
   description: z.string().optional(),
   chemicalComposition: z.string().optional(),
   typology: z.string().optional(),
@@ -98,6 +105,12 @@ export const ArtifactForTable = z.object({
     })
     .nullable(),
   model: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  organization: z
     .object({
       id: z.string(),
       displayName: z.string(),
@@ -559,16 +572,20 @@ export const ModelForTable = z.object({
   }),
   description: z.string().optional(),
   externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
-  artifacts: z.object({
-    id: z.string(),
-    displayName: z.string(),
-    primaryImageURL: z.string(),
-  }).array(),
-  petroglyphs: z.object({
-    id: z.string(),
-    displayName: z.string(),
-    primaryImageURL: z.string(),
-  }).array(),
+  artifacts: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+      primaryImageURL: z.string(),
+    })
+    .array(),
+  petroglyphs: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+      primaryImageURL: z.string(),
+    })
+    .array(),
   createdBy: z.string().optional(),
   createdAt: z.date().optional(),
   updatedBy: z.string().optional(),

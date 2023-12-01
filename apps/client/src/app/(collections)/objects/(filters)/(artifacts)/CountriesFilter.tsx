@@ -49,7 +49,7 @@ export default async function CountriesFilter({
       setIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
 

@@ -3,9 +3,9 @@
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
+import type { ArtifactForTable, BookForTable } from "@siberiana/schemas";
 
-import { putObjects } from "../auth/siberiana";
+import { usePutObjects } from "../auth/siberiana";
 import {
   clearDate,
   clearLocation,
@@ -13,10 +13,12 @@ import {
   getIds,
   getLocation,
   handleArrays,
+  handleFiles,
 } from "../utils/mutations-utils";
 import { getLable } from "../utils/sizes-utils";
 
 //.........................ARTIFACT.........................//
+//..........CREATE..........//
 export function useCreateArtifact(access_token?: string) {
   const mutationString = `
         mutation CreateArtifact($input: CreateArtifactInput!) {
@@ -30,10 +32,13 @@ export function useCreateArtifact(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects();
+
   const mutation = useMutation({
     mutationFn: async (value: ArtifactForTable) => {
-      const resUpload = value.primaryImage.file
-        ? await putObjects({
+      const primaryImageUpload = value.primaryImage.file
+        ? await upload({
             bucket: "artifacts",
             files: [value.primaryImage.file],
           })
@@ -44,6 +49,31 @@ export function useCreateArtifact(access_token?: string) {
             })
         : null;
 
+      const additionalImagesFiles = value.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "artifacts",
+              files: additionalImagesFiles,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      const date = value.admissionDate
+        ? new Date(value.admissionDate)
+        : undefined;
+      const isoDate = date
+        ? new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000,
+          ).toISOString()
+        : undefined;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -53,7 +83,8 @@ export function useCreateArtifact(access_token?: string) {
             collectionID: value.collection.id,
             displayName: value.displayName,
             description: value.description,
-            primaryImageURL: resUpload !== null ? resUpload.urls[0] : "",
+            primaryImageURL: primaryImageUpload?.urls[0],
+            additionalImagesUrls: additionalImagesUpload?.urls,
             weight: value.weight,
             width: value.sizes.width,
             height: value.sizes.height,
@@ -76,6 +107,7 @@ export function useCreateArtifact(access_token?: string) {
             culturalAffiliationID: value.culturalAffiliation?.id,
             setID: value.set?.id,
             monumentID: value.monument?.id,
+            organizationID: value.organization?.id,
             countryID: getLocation(value.location, "country"),
             regionID: getLocation(value.location, "region"),
             districtID: getLocation(value.location, "district"),
@@ -86,16 +118,17 @@ export function useCreateArtifact(access_token?: string) {
             authorIDs: getIds(value.authors),
             publicationIDs: getIds(value.publications),
             projectIDs: getIds(value.projects),
-            admissionDate: value.admissionDate,
+            admissionDate: isoDate,
           },
         },
         requestHeaders,
       );
     },
   });
-  return mutation;
+  return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
 }
 
+//..........DELETE..........//
 export function useDeleteArtifact(access_token?: string) {
   const mutationString = `
         mutation DeleteArtifact($deleteArtifactId: ID!) {
@@ -118,6 +151,7 @@ export function useDeleteArtifact(access_token?: string) {
   return mutation;
 }
 
+//..........UPDATE..........//
 export function useUpdateArtifact(access_token?: string) {
   const mutationString = `
         mutation UpdateArtifact($updateArtifactId: ID!, $input: UpdateArtifactInput!) {
@@ -131,6 +165,9 @@ export function useUpdateArtifact(access_token?: string) {
     Authorization: `Bearer ${access_token}`,
     "Content-Type": "application/json",
   };
+
+  const { upload, progress, isLoading } = usePutObjects();
+
   const mutation = useMutation({
     mutationFn: async ({
       id,
@@ -153,10 +190,10 @@ export function useUpdateArtifact(access_token?: string) {
         oldValue.techniques,
       );
 
-      const resUpload =
+      const primaryImageUpload =
         newValue.primaryImage.url !== oldValue.primaryImage.url &&
         newValue.primaryImage.file
-          ? await putObjects({
+          ? await upload({
               bucket: "artifacts",
               files: [newValue.primaryImage.file],
             })
@@ -167,6 +204,31 @@ export function useUpdateArtifact(access_token?: string) {
               })
           : null;
 
+      const additionalImagesFiles = newValue.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "artifacts",
+              files: additionalImagesFiles,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      const date = newValue.admissionDate
+        ? new Date(newValue.admissionDate)
+        : undefined;
+      const isoDate = date
+        ? new Date(
+            date.getTime() - date.getTimezoneOffset() * 60000,
+          ).toISOString()
+        : undefined;
+
       return request(
         `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
         mutationString,
@@ -176,11 +238,16 @@ export function useUpdateArtifact(access_token?: string) {
             status: newValue.status.id,
             displayName: newValue.displayName,
             primaryImageURL:
-              resUpload !== null
-                ? resUpload.urls[0]
+              primaryImageUpload !== null
+                ? primaryImageUpload.urls[0]
                 : newValue.primaryImage.url.length === 0
                 ? newValue.primaryImage.url
                 : oldValue.primaryImage.url,
+            additionalImagesUrls: handleFiles(
+              newValue.additionalImages,
+              oldValue.additionalImages,
+              additionalImagesUpload?.urls,
+            ),
             description: newValue.description,
             weight: newValue.weight,
             width: newValue.sizes.width,
@@ -193,7 +260,9 @@ export function useUpdateArtifact(access_token?: string) {
             datingStart: newValue.datingRow.datingStart,
             datingEnd: newValue.datingRow.datingEnd,
             typology: newValue.typology,
-            admissionDate: newValue.admissionDate,
+            admissionDate: !!newValue.admissionDate
+              ? isoDate
+              : newValue.admissionDate,
             chemicalComposition: newValue.chemicalComposition,
             inventoryNumber: newValue.inventoryNumber,
             kpNumber: newValue.kpNumber,
@@ -205,6 +274,7 @@ export function useUpdateArtifact(access_token?: string) {
             setID: newValue.set?.id,
             monumentID: newValue.monument?.id,
             culturalAffiliationID: newValue.culturalAffiliation?.id,
+            organizationID: newValue.organization?.id,
             countryID: getLocation(newValue.location, "country"),
             regionID: getLocation(newValue.location, "region"),
             districtID: getLocation(newValue.location, "district"),
@@ -222,6 +292,7 @@ export function useUpdateArtifact(access_token?: string) {
             clearSet: clearObject(newValue.set),
             clearMonument: clearObject(newValue.monument),
             clearCulturalAffiliation: clearObject(newValue.culturalAffiliation),
+            clearOrganization: clearObject(newValue.organization),
             clearCountry: clearLocation(newValue.location, "country"),
             clearRegion: clearLocation(newValue.location, "region"),
             clearDistrict: clearLocation(newValue.location, "district"),
@@ -238,5 +309,271 @@ export function useUpdateArtifact(access_token?: string) {
       );
     },
   });
+  return {
+    updateMutation: mutation,
+    progressFiles: progress,
+    isLoadingFiles: isLoading,
+  };
+}
+
+//.........................BOOKS.........................//
+//..........CREATE..........//
+export function useCreateBook(access_token?: string) {
+  const mutationString = `
+        mutation CreateBook($input: CreateBookInput!) {
+            createBook(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+
+  const { upload, progress, isLoading } = usePutObjects();
+
+  const mutation = useMutation({
+    mutationFn: async (value: BookForTable) => {
+      const primaryImageUpload = value.primaryImage.file
+        ? await upload({
+            bucket: "books",
+            files: [value.primaryImage.file],
+          })
+            .then((res) => res.data)
+            .catch((err) => {
+              console.error(err);
+              return null;
+            })
+        : null;
+
+      const additionalImagesFiles = value.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "books",
+              files: additionalImagesFiles,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      const files = value.files
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const filesUpload =
+        files && files.length > 0
+          ? await upload({
+              bucket: "books",
+              files: files,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            status: value.status.id,
+            collectionID: value.collection.id,
+            displayName: value.displayName,
+            description: value.description,
+            primaryImageURL: primaryImageUpload?.urls[0],
+            additionalImagesUrls: additionalImagesUpload?.urls,
+            files: filesUpload?.urls,
+            year: Number(Number(value.year).toFixed()),
+            externalLink: value.externalLink,
+            bookGenreIDs: getIds(value.bookGenres),
+            authorIDs: getIds(value.authors),
+            periodicalID: value.periodical?.id,
+            publisherID: value.publisher?.id,
+            licenseID: value.license?.id,
+            libraryID: value.library?.id,
+            countryID: getLocation(value.location, "country"),
+            regionID: getLocation(value.location, "region"),
+            districtID: getLocation(value.location, "district"),
+            settlementID: getLocation(value.location, "settlement"),
+            locationID: getLocation(value.location, "location"),
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return { mutation, progressFiles: progress, isLoadingFiles: isLoading };
+}
+
+//..........DELETE..........//
+export function useDeleteBook(access_token?: string) {
+  const mutationString = `
+        mutation DeleteBook($deleteBookId: ID!) {
+            deleteBook(id: $deleteBookId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteBookId: value },
+        requestHeaders,
+      ),
+  });
   return mutation;
+}
+
+//..........UPDATE..........//
+export function useUpdateBook(access_token?: string) {
+  const mutationString = `
+        mutation UpdateBook($updateBookId: ID!, $input: UpdateBookInput!) {
+            updateBook(id: $updateBookId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+
+  const { upload, progress, isLoading } = usePutObjects();
+
+  const mutation = useMutation({
+    mutationFn: async ({
+      id,
+      newValue,
+      oldValue,
+    }: {
+      id: string;
+      newValue: BookForTable;
+      oldValue: BookForTable;
+    }) => {
+      const bookGenreIDs = handleArrays(
+        newValue.bookGenres,
+        oldValue.bookGenres,
+      );
+      const authorsIds = handleArrays(newValue.authors, oldValue.authors);
+
+      const primaryImageUpload =
+        newValue.primaryImage.url !== oldValue.primaryImage.url &&
+        newValue.primaryImage.file
+          ? await upload({
+              bucket: "books",
+              files: [newValue.primaryImage.file],
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      const additionalImagesFiles = newValue.additionalImages
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const additionalImagesUpload =
+        additionalImagesFiles && additionalImagesFiles.length > 0
+          ? await upload({
+              bucket: "books",
+              files: additionalImagesFiles,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      const files = newValue.files
+        ?.map((image) => image.file)
+        .filter((item): item is File => !!item);
+      const filesUpload =
+        files && files.length > 0
+          ? await upload({
+              bucket: "books",
+              files: files,
+            })
+              .then((res) => res.data)
+              .catch((err) => {
+                console.error(err);
+                return null;
+              })
+          : null;
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateBookId: id,
+          input: {
+            status: newValue.status.id,
+            displayName: newValue.displayName,
+            primaryImageURL:
+              primaryImageUpload !== null
+                ? primaryImageUpload.urls[0]
+                : newValue.primaryImage.url.length === 0
+                ? newValue.primaryImage.url
+                : oldValue.primaryImage.url,
+            description: newValue.description,
+            additionalImagesUrls: handleFiles(
+              newValue.additionalImages,
+              oldValue.additionalImages,
+              additionalImagesUpload?.urls,
+            ),
+            files: handleFiles(
+              newValue.files,
+              oldValue.files,
+              filesUpload?.urls,
+            ),
+            year: Number(Number(newValue.year).toFixed()),
+            externalLink: newValue.externalLink,
+            libraryID: newValue.library?.id,
+            periodicalID: newValue.periodical?.id,
+            publisherID: newValue.publisher?.id,
+            licenseID: newValue.license?.id,
+            countryID: getLocation(newValue.location, "country"),
+            regionID: getLocation(newValue.location, "region"),
+            districtID: getLocation(newValue.location, "district"),
+            settlementID: getLocation(newValue.location, "settlement"),
+            locationID: getLocation(newValue.location, "location"),
+            addAuthorIDs: authorsIds.addValues,
+            addBookGenreIDs: bookGenreIDs.addValues,
+            clearLibrary: clearObject(newValue.library),
+            clearPeriodical: clearObject(newValue.periodical),
+            clearPublisher: clearObject(newValue.publisher),
+            clearLicense: clearObject(newValue.license),
+            clearCountry: clearLocation(newValue.location, "country"),
+            clearRegion: clearLocation(newValue.location, "region"),
+            clearDistrict: clearLocation(newValue.location, "district"),
+            clearSettlement: clearLocation(newValue.location, "settlement"),
+            clearLocation: clearLocation(newValue.location, "location"),
+            removeAuthorIDs: authorsIds.removeValues,
+            removeBookGenreIDs: bookGenreIDs.removeValues,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return {
+    updateMutation: mutation,
+    progressFiles: progress,
+    isLoadingFiles: isLoading,
+  };
 }

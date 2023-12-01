@@ -12,6 +12,7 @@ import {
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 import { FormProvider } from "react-hook-form";
 
+import type { EntityEnum } from "@siberiana/schemas";
 import {
   Button,
   DropdownMenu,
@@ -35,6 +36,7 @@ import {
   TooltipTrigger,
 } from "@siberiana/ui";
 
+import DialogForm from "../forms/DialogForm";
 import { DataTablePagination } from "./DataTablePagination";
 
 interface DataTableProps<TData, TFieldValues extends FieldValues> {
@@ -52,6 +54,7 @@ interface DataTableProps<TData, TFieldValues extends FieldValues> {
 
 type HasAdd = {
   isHasAdd: true;
+  isDisabledAdd?: boolean;
   handleAdd: () => void;
   handleDelete: () => void;
   handleDeleteSaved: () => void;
@@ -61,8 +64,18 @@ type NoHasAdd = {
   handleDelete: () => Promise<void>;
 };
 
+type DialogForm = {
+  dialog: true;
+  dialogType: EntityEnum;
+};
+type TableForm = {
+  dialog?: false;
+};
+
 export default function DataTable<TData, TFieldValues extends FieldValues>(
-  props: DataTableProps<TData, TFieldValues> & (HasAdd | NoHasAdd),
+  props: DataTableProps<TData, TFieldValues> &
+    (HasAdd | NoHasAdd) &
+    (DialogForm | TableForm),
 ) {
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 
@@ -144,7 +157,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                       <Button
                         variant="ghost"
                         disabled={props.isLoading}
-                        className="data-[state=open]:bg-muted flex h-10 w-10 p-0"
+                        className="flex h-10 w-10 p-0"
                         onClick={props.handleDeleteSaved}
                       >
                         {props.isLoading ? (
@@ -169,7 +182,7 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                   disabled={props.isPendingChangeMode || props.isLoading}
                   type="button"
                   variant="link"
-                  className="gap-1 p-0 text-sm font-medium uppercase"
+                  className="text-foreground gap-1 p-0 text-sm font-medium uppercase"
                   onClick={props.handleChangeMode}
                 >
                   {props.isPendingChangeMode ? (
@@ -187,13 +200,13 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
 
               {props.isHasAdd ? (
                 <Button
-                  disabled={props.isLoading}
+                  disabled={props.isLoading || props.isDisabledAdd}
                   type="button"
                   className="ml-auto mr-0 gap-1 p-2 text-sm uppercase"
                   onClick={props.handleAdd}
                 >
                   {props.isLoading ? (
-                    <Loader2 className="mx-8 h-6 w-6 animate-spin" />
+                    <Loader2 className="mx-7 h-6 w-6 animate-spin" />
                   ) : (
                     <>
                       {" "}
@@ -240,21 +253,30 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
                 </TableHeader>
                 <TableBody className="font-Inter text-xs">
                   {props.table.getRowModel().rows?.length ? (
-                    props.table.getRowModel().rows.map((row) => (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id} className="px-2 py-1">
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))
+                    props.table.getRowModel().rows.map((row) =>
+                      props.dialog ? (
+                        <DialogForm
+                          key={row.id}
+                          table={props.table}
+                          row={row}
+                          dialogType={props.dialogType}
+                        />
+                      ) : (
+                        <TableRow
+                          key={row.id}
+                          data-state={row.getIsSelected() && "selected"}
+                        >
+                          {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id} className="px-2 py-1">
+                              {flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ),
+                    )
                   ) : (
                     <TableRow>
                       <TableCell
@@ -271,7 +293,10 @@ export default function DataTable<TData, TFieldValues extends FieldValues>(
           </div>
         </form>
       </FormProvider>
-      <DataTablePagination table={props.table} />
+      <DataTablePagination
+        table={props.table}
+        columnsLength={props.columnsLength}
+      />
     </div>
   );
 }

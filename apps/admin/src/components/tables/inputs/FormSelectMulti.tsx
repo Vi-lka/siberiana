@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
+import type { Item } from "@siberiana/schemas";
 import {
   Button,
   Command,
@@ -26,11 +27,6 @@ import {
   ScrollArea,
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
-
-export type Item = {
-  id: string;
-  displayName: string;
-};
 
 export function FormSelectMulti({
   itemsData,

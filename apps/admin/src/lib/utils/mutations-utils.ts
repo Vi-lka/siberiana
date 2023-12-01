@@ -126,3 +126,43 @@ export function handleArrays(
     });
   return { addValues, removeValues };
 }
+
+export function handleFiles(
+  newValues:
+    | {
+        url: string;
+        file?: File | null | undefined;
+      }[]
+    | null,
+  oldValues:
+    | {
+        url: string;
+        file?: File | null | undefined;
+      }[]
+    | null,
+  uploadValues: string[] | undefined,
+) {
+  // if (!newValues || newValues.length === 0) return null
+  if (!oldValues || oldValues.length === 0) return uploadValues;
+
+  const remainURLs = oldValues
+    .map((item) => {
+      return item.url;
+    })
+    .filter((url) => {
+      // includes() doesn't work with object, so we do this:
+      const contains = newValues?.some((newValue) => newValue.url === url);
+      if (contains) {
+        return url;
+      }
+    });
+
+  if (!uploadValues) return remainURLs;
+
+  const concatedArray = remainURLs.concat(uploadValues);
+  const uniqueArray = concatedArray.filter(
+    (item, index) => concatedArray.indexOf(item) === index,
+  );
+
+  return uniqueArray;
+}

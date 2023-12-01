@@ -74,8 +74,8 @@ export default async function OrganizationsBlock() {
             title={org.attributes.title}
             src={org.attributes.image.data?.attributes.url}
             url={`/organizations/${org.attributes.slug}`}
-            width={450}
-            height={450}
+            width={700}
+            height={700}
           >
             <PiHandshakeLight className="h-full w-full" />
           </ImgTextOn>

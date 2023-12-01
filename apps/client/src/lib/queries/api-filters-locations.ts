@@ -67,7 +67,7 @@ function LocationArtiQuery({
   setIds,
   monumentIds,
   techniqueIds,
-  model
+  model,
 }: LocationArtiQueryType) {
   const queryString = /* GraphGL */ `
     query {
@@ -91,7 +91,7 @@ function LocationArtiQuery({
             } ],
             hasArtifactsWith: [{
               status: listed,
-              ${model ? `hasModel: true,` : '' }
+              ${model ? `hasModel: true,` : ""}
               hasCollectionWith: [
                 ${
                   !!collections

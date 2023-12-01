@@ -8,12 +8,12 @@ import CountriesFilter from "./(artifacts)/CountriesFilter";
 import CultureFilter from "./(artifacts)/CultureFilter";
 import DistrictsFilter from "./(artifacts)/DistrictsFilter";
 import LicensesFilter from "./(artifacts)/LicensesFilter";
+import ModelFilter from "./(artifacts)/ModelFilter";
 import MonumentFilter from "./(artifacts)/MonumentFilter";
 import RegionsFilter from "./(artifacts)/RegionsFilter";
 import SetFilter from "./(artifacts)/SetFilter";
 import SettlementsFilter from "./(artifacts)/SettlementsFilter";
 import TechniqueFilter from "./(artifacts)/TechniqueFilter";
-import ModelFilter from "./(artifacts)/ModelFilter";
 
 export default async function ArtifactsFilters({
   searchParams,

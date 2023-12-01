@@ -1,42 +1,40 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertOctagon, MousePointerClick, UploadCloud, X } from "lucide-react";
+import { MousePointerClick, UploadCloud, X } from "lucide-react";
+import type { Accept } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
 import type { CustomFile } from "@siberiana/schemas";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+type Value = {
+  file?: CustomFile | null | undefined;
+  url: string;
+};
+
 export default function DropzoneFile({
-  defaultValue,
   formValueName,
+  accept,
+  maxSize,
   className,
 }: {
   formValueName: string;
-  defaultValue: {
-    file: CustomFile | null | undefined;
-    url: string;
-  };
+  accept: Accept;
+  maxSize: number;
   className?: string;
 }) {
-
-  console.log(defaultValue)
-
-  const [valueFile, setFile] = useState<CustomFile>();
+  const [valueFile, setFile] = useState<CustomFile | null | undefined>();
   const [valueURL, setURL] = useState<string>();
-  const [error] = useState(false);
 
   const form = useFormContext();
+  const formValue = form.getValues(formValueName) as Value;
 
   useEffect(() => {
-    if (!!defaultValue.file) {
-      setFile(defaultValue.file);
-      setURL(URL.createObjectURL(defaultValue.file));
-    } else if (defaultValue.url.length > 0) {
-      setURL(defaultValue.url);
-    }
-  }, [defaultValue]);
+    setFile(formValue.file);
+    setURL(formValue.url);
+  }, [formValue]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -54,8 +52,8 @@ export default function DropzoneFile({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "model/gltf-binary": [".glb"] },
-    maxSize: 1024 * 1024 * 1024, // 1Gb
+    accept,
+    maxSize,
     multiple: false,
   });
 
@@ -69,30 +67,11 @@ export default function DropzoneFile({
     );
   };
 
-  if (error)
-    return (
-      <div
-        {...getRootProps({
-          className: cn(
-            "p-12 border border-solid border-border rounded-md cursor-pointer bg-muted",
-            className,
-          ),
-        })}
-      >
-        <input {...getInputProps()} />
-        <AlertOctagon className="mx-auto text-red-500" />
-        <p className="text-center text-xs text-red-500">Ошибка!</p>
-        <p className="text-muted-foreground text-center text-xs">
-          Что-то пошло не так
-        </p>
-      </div>
-    );
-
-  if (valueFile && valueURL)
+  if (!!valueURL && valueURL.length > 0)
     return (
       <>
         <span
-          className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
+          className="text-muted-foreground hover:text-foreground mx-auto my-1 flex w-fit cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
           onClick={handleDelete}
         >
           <X className="h-5 w-5" /> Удалить
@@ -102,37 +81,17 @@ export default function DropzoneFile({
             className: cn(
               "lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md cursor-pointer bg-muted",
               className,
+              form.getFieldState(formValueName).invalid
+                ? "border-red-500"
+                : form.getFieldState(formValueName).isDirty
+                ? "border-green-400"
+                : "",
             ),
           })}
         >
           <input {...getInputProps()} />
           <p className="mt-3 break-words text-center text-xs font-light">
-            {valueFile.name}
-          </p>
-        </div>
-      </>
-    );
-
-  if (!valueFile && valueURL)
-    return (
-      <>
-        <span
-          className="text-muted-foreground hover:text-foreground my-1 flex cursor-pointer items-center justify-center text-xs transition-all hover:scale-110"
-          onClick={handleDelete}
-        >
-          <X className="h-5 w-5" /> Удалить
-        </span>
-        <div
-          {...getRootProps({
-            className: cn(
-              "lg:px-12 px-0 lg:py-10 py-2 border border-solid border-border rounded-md cursor-pointer bg-muted",
-              className,
-            ),
-          })}
-        >
-          <input {...getInputProps()} />
-          <p className="mt-3 break-words text-center text-xs font-light">
-            {valueURL}
+            {!!valueFile ? valueFile.name : valueURL}
           </p>
         </div>
       </>
@@ -144,6 +103,11 @@ export default function DropzoneFile({
           className: cn(
             "p-12 border border-solid border-border rounded-md cursor-pointer bg-muted",
             className,
+            form.getFieldState(formValueName).invalid
+              ? "border-red-500"
+              : form.getFieldState(formValueName).isDirty
+              ? "border-green-400"
+              : "",
           ),
         })}
       >

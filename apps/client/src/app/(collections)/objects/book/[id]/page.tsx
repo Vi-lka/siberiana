@@ -5,6 +5,7 @@ import { Dictionary } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import ReadPDF from "~/components/objects/buttons/ReadPDF";
 import Description from "~/components/objects/Description";
+import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
@@ -35,6 +36,17 @@ export default async function Book({
         goBack
       />
     );
+
+  const firstImage = {
+    src: dataResult.value.primaryImageURL,
+    alt: dataResult.value.displayName,
+  };
+  const additionalImages = dataResult.value.additionalImagesUrls?.map((url) => {
+    return { src: url, alt: dataResult.value.displayName };
+  });
+  const images = !!additionalImages
+    ? [firstImage, ...additionalImages]
+    : [firstImage];
 
   return (
     <div className="relative">
@@ -68,10 +80,14 @@ export default async function Book({
         </div>
 
         <div className="w-full md:w-1/2">
-          <PhotoZoom
-            src={dataResult.value.primaryImageURL}
-            alt={dataResult.value.displayName}
-          />
+          {images.length === 1 ? (
+            <PhotoZoom
+              src={dataResult.value.primaryImageURL}
+              alt={dataResult.value.displayName}
+            />
+          ) : (
+            <PhotoSlider data={images} />
+          )}
           <div className="mt-3 flex flex-wrap gap-3">
             {/* <AddFavorites session={haveSession} /> */}
             <ReadPDF files={dataResult.value.files} />

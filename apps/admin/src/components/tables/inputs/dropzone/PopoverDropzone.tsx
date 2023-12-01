@@ -3,8 +3,9 @@ import Image from "next/image";
 import { ErrorMessage } from "@hookform/error-message";
 import { useFormContext } from "react-hook-form";
 
-import type { ImageFile } from "@siberiana/schemas";
+import type { CustomFile } from "@siberiana/schemas";
 import { Popover, PopoverContent, PopoverTrigger } from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
 import DropzoneImage from "./DropzoneImage";
 
@@ -18,7 +19,7 @@ export default function PopoverDropzone({
   const form = useFormContext();
 
   const image = form.getValues(formValueName) as {
-    file: ImageFile | null | undefined;
+    file: CustomFile | null | undefined;
     url: string;
   };
 
@@ -35,7 +36,16 @@ export default function PopoverDropzone({
   return (
     <>
       <Popover>
-        <PopoverTrigger className="overflow-hidden rounded-[6px]">
+        <PopoverTrigger
+          className={cn(
+            "overflow-hidden rounded-[6px] border-2 border-transparent",
+            form.getFieldState(formValueName).invalid
+              ? "border-red-500"
+              : form.getFieldState(formValueName).isDirty
+              ? "border-green-400"
+              : "",
+          )}
+        >
           <Image src={imageURL} alt={imageAlt} width={80} height={80} />
         </PopoverTrigger>
         <PopoverContent className="font-Inter" side="right">
@@ -43,7 +53,6 @@ export default function PopoverDropzone({
             <p className="mb-2 font-medium">Фото</p>
             <DropzoneImage
               formValueName={formValueName}
-              defaultValue={image}
               className={className}
             />
           </div>

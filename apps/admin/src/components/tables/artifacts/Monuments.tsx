@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Monuments({
   defaultMonuments,
   formValueName,
+  className,
 }: {
   defaultMonuments: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultMonuments.length > 0
@@ -69,6 +71,7 @@ export default function Monuments({
         defaultValues={defaultMonuments}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

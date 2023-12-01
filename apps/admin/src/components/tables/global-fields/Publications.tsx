@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Publications({
   defaultPublications,
   formValueName,
+  className,
 }: {
   defaultPublications: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultPublications.length > 0
@@ -69,6 +71,7 @@ export default function Publications({
         defaultValues={defaultPublications}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

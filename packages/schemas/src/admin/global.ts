@@ -3,14 +3,28 @@ import { z } from "zod";
 import { CollectionTypeEnum } from "../collections-schemas";
 import { Location } from "../objects-schema";
 
-// const MAX_FILE_SIZE = 10000000;
-// const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+export const Item = z.object({
+  id: z.string(),
+  displayName: z.string(),
+});
+export type Item = z.infer<typeof Item>;
+
+export const EntityEnum = z.enum([
+  "art",
+  "artifacts",
+  "cultures",
+  "materials",
+  "techniques",
+  "sets",
+  "monuments",
+  "models",
+  "books",
+  "protected_area_pictures",
+]);
+export type EntityEnum = z.infer<typeof EntityEnum>;
 
 export const CustomFile = z.custom<File>();
 export type CustomFile = z.infer<typeof CustomFile>;
-
-export const ImageFile = z.custom<File>();
-export type ImageFile = z.infer<typeof ImageFile>;
 
 export const LocationEnum = z.enum([
   "location",
@@ -43,7 +57,7 @@ export const CategoryForm = z.object({
   displayName: z.string().min(1),
   abbreviation: z.string(),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
   description: z.string(),
@@ -88,7 +102,7 @@ export const CollectionForm = z.object({
   displayName: z.string().min(1),
   abbreviation: z.string(),
   primaryImage: z.object({
-    file: ImageFile.nullable().optional(),
+    file: CustomFile.nullable().optional(),
     url: z.string(),
   }),
   description: z.string(),
@@ -179,3 +193,18 @@ export const ProjectsList = z.object({
   }),
 });
 export type ProjectsList = z.infer<typeof ProjectsList>;
+
+//.........................ORGANIZATION.........................//
+export const OrganizationList = z.object({
+  organizations: z.object({
+    edges: z
+      .object({
+        node: z.object({
+          id: z.string(),
+          displayName: z.string(),
+        }),
+      })
+      .array(),
+  }),
+});
+export type OrganizationList = z.infer<typeof OrganizationList>;

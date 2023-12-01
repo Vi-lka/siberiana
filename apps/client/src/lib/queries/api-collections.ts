@@ -199,7 +199,7 @@ export const getArtifacts = async ({
   setIds,
   monumentIds,
   techniqueIds,
-  model
+  model,
 }: {
   first: number | null;
   offset?: number | null;
@@ -230,7 +230,7 @@ export const getArtifacts = async ({
         }],
         where: {
           status: listed,
-          ${model ? `hasModel: true,` : '' }
+          ${model ? `hasModel: true,` : ""}
           hasCollectionWith: [
             ${
               !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""

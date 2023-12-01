@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 import type { BreadcrumbsDict } from "@siberiana/schemas";
+
 import GoBackButton from "./GoBackButton";
 
 type Props = {
@@ -39,7 +40,7 @@ export default function BreadcrumbsObject(props: Props) {
   );
 
   return (
-    <div className="relative font-Inter flex flex-wrap items-center">
+    <div className="font-Inter relative flex flex-wrap items-center">
       <div className="absolute -top-10 left-0 sm:-left-8 sm:top-0 lg:-left-12">
         <GoBackButton />
       </div>

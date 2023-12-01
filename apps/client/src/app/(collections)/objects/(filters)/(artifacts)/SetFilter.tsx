@@ -49,7 +49,7 @@ export default async function SetFilter({
       cultureIds,
       monumentIds,
       techniqueIds,
-      model: Boolean(model)
+      model: Boolean(model),
     }),
   ]);
 

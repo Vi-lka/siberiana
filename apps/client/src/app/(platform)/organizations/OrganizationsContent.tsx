@@ -48,7 +48,7 @@ export default async function OrganizationsContent({
     <>
       <div
         key={Math.random()}
-        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3"
+        className="mx-auto mb-12 mt-3 grid w-[85%] grid-cols-1 gap-6 md:w-full md:grid-cols-2 min-[2000px]:grid-cols-3 min-[3000px]:grid-cols-4 min-[4000px]:grid-cols-5"
       >
         {dataResult.value.data.map((org, index) => (
           <ImgTextOn
@@ -59,8 +59,8 @@ export default async function OrganizationsContent({
             title={org.attributes.title}
             src={org.attributes.image.data?.attributes.url}
             url={`/organizations/${org.attributes.slug}`}
-            width={600}
-            height={400}
+            width={800}
+            height={450}
           >
             <PiHandshakeLight className="h-full w-full" />
           </ImgTextOn>
