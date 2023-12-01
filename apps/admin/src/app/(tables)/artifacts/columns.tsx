@@ -190,6 +190,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormTextArea
           name={`artifacts[${row.index}].description`}
           defaultValue={row.original.description}
+          className="min-w-[20rem]"
         />
       );
     },

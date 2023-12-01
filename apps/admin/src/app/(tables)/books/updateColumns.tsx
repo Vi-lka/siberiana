@@ -1,30 +1,27 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
-import type { BookForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
-import BookGenres from "~/components/tables/books/BookGenres";
-import Periodical from "~/components/tables/books/Periodical";
-import Publisher from "~/components/tables/books/Publisher";
+import FileCell from "~/components/forms/cells/FileCell";
+import LargeTextCell from "~/components/forms/cells/LargeTextCell";
+import ListCell from "~/components/forms/cells/ListCell";
+import MultiFilesCell from "~/components/forms/cells/MultiFilesCell";
+import ObjectCell from "~/components/forms/cells/ObjectCell";
+import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import License from "~/components/tables/global-fields/License";
-import Locations from "~/components/tables/global-fields/Locations";
-import Organization from "~/components/tables/global-fields/Organization";
-import Persons from "~/components/tables/global-fields/Persons";
-import Status from "~/components/tables/global-fields/Status";
-import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
-import FormInput from "~/components/tables/inputs/FormInput";
-import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
+import type { BookForTable } from "@siberiana/schemas";
 
-export const columns: ColumnDef<BookForTable>[] = [
+export const updateColumns: ColumnDef<BookForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
+        onClick={(e) => e.stopPropagation()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         className="h-5 w-5 rounded-[6px]"
         aria-label="Select all"
@@ -34,6 +31,7 @@ export const columns: ColumnDef<BookForTable>[] = [
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onClick={(e) => e.stopPropagation()}
         className="h-5 w-5 rounded-[6px]"
         aria-label="Select row"
       />
@@ -68,9 +66,10 @@ export const columns: ColumnDef<BookForTable>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <TextCell
           name={`books[${row.index}].displayName`}
           defaultValue={row.original.displayName}
+          className="mx-auto w-max max-w-md text-sm"
         />
       );
     },
@@ -80,11 +79,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="min-w-[80px] text-center">Фото</div>,
     cell: ({ row }) => {
       return (
-        <InputDropzone
-          formValueName={`books[${row.index}].primaryImage`}
+        <FileCell
+          name={`books[${row.index}].primaryImage`}
           defaultValue={row.original.primaryImage}
-          className="min-w-[20rem]"
-          file={false}
         />
       );
     },
@@ -94,13 +91,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="min-w-[80px] text-center">Доп. Фото</div>,
     cell: ({ row }) => {
       return (
-        <InputMultiDropzone
-          formValueName={`books[${row.index}].additionalImages`}
+        <MultiFilesCell
+          name={`books[${row.index}].additionalImages`}
           defaultValues={row.original.additionalImages}
-          files={false}
-          accept={{ "image/*": [".jpeg", ".jpg", ".png", ".webp"] }}
-          maxSize={1024 * 1024 * 100} // 100Mb
-          className="min-w-[11rem]"
         />
       );
     },
@@ -110,10 +103,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <LargeTextCell
           name={`books[${row.index}].description`}
           defaultValue={row.original.description}
-          className="min-w-[20rem]"
         />
       );
     },
@@ -123,13 +115,10 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="min-w-[80px] text-center">Файлы (PDF)</div>,
     cell: ({ row }) => {
       return (
-        <InputMultiDropzone
-          formValueName={`books[${row.index}].files`}
+        <MultiFilesCell
+          name={`books[${row.index}].files`}
           defaultValues={row.original.files}
-          files
-          accept={{ "application/pdf": [".pdf"] }}
-          maxSize={1024 * 1024 * 1024} // 1Gb
-          className="min-w-[11rem]"
+          file
         />
       );
     },
@@ -139,12 +128,10 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Год</div>,
     cell: ({ row }) => {
       return (
-        <FormInput
+        <TextCell
           name={`books[${row.index}].year`}
           defaultValue={row.original.year}
-          type="number"
-          className="border-background bg-transparent text-center"
-          placeholder="__"
+          className="mx-auto w-max max-w-md text-sm"
         />
       );
     },
@@ -154,9 +141,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Разделы/Жанры</div>,
     cell: ({ row }) => {
       return (
-        <BookGenres
-          formValueName={`books[${row.index}].bookGenres`}
-          defaultBookGenres={row.original.bookGenres}
+        <ListCell
+          name={`books[${row.index}].bookGenres`}
+          defaultValues={row.original.bookGenres}
         />
       );
     },
@@ -166,9 +153,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Авторы</div>,
     cell: ({ row }) => {
       return (
-        <Persons
-          formValueName={`books[${row.index}].authors`}
-          defaultPersons={row.original.authors}
+        <ListCell
+          name={`books[${row.index}].authors`}
+          defaultValues={row.original.authors}
         />
       );
     },
@@ -178,9 +165,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Издание</div>,
     cell: ({ row }) => {
       return (
-        <Periodical
-          formValueName={`books[${row.index}].periodical`}
-          defaultPeriodical={row.original.periodical}
+        <ObjectCell
+          name={`books[${row.index}].periodical`}
+          defaultValue={row.original.periodical}
         />
       );
     },
@@ -190,23 +177,21 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Издатель</div>,
     cell: ({ row }) => {
       return (
-        <Publisher
-          formValueName={`books[${row.index}].publisher`}
-          defaultPublisher={row.original.publisher}
+        <ObjectCell
+          name={`books[${row.index}].publisher`}
+          defaultValue={row.original.publisher}
         />
       );
     },
   },
   {
     accessorKey: "library",
-    header: () => (
-      <div className="min-w-[12rem] text-center">Библиотека/Организация</div>
-    ),
+    header: () => <div className="text-center">Библиотека/Организация</div>,
     cell: ({ row }) => {
       return (
-        <Organization
-          formValueName={`books[${row.index}].library`}
-          defaultOrganization={row.original.library}
+        <ObjectCell
+          name={`books[${row.index}].library`}
+          defaultValue={row.original.library}
         />
       );
     },
@@ -216,9 +201,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Расположение</div>,
     cell: ({ row }) => {
       return (
-        <Locations
-          defaultLocation={row.original.location}
-          formValueName={`books[${row.index}].location`}
+        <ObjectCell
+          name={`books[${row.index}].location`}
+          defaultValue={row.original.location}
         />
       );
     },
@@ -228,9 +213,9 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Лицензия</div>,
     cell: ({ row }) => {
       return (
-        <License
-          formValueName={`books[${row.index}].license`}
-          defaultLicense={row.original.license}
+        <ObjectCell
+          name={`books[${row.index}].license`}
+          defaultValue={row.original.license}
         />
       );
     },
@@ -240,25 +225,64 @@ export const columns: ColumnDef<BookForTable>[] = [
     header: () => <div className="text-center">Внешняя ссылка</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <TextCell
           name={`books[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );
     },
   },
+  {
+    accessorKey: "createdBy",
+    header: () => <div className="text-center">Создано by</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="break-words text-center">{row.original.createdBy}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt
+        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
+        : "";
+      return <div className="break-words text-center">{createdAt}</div>;
+    },
+  },
+  {
+    accessorKey: "updatedBy",
+    header: () => <div className="text-center">Обновлено by</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="break-words text-center">{row.original.updatedBy}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: () => <div className="min-w-[6rem] text-center">Обновлено at</div>,
+    cell: ({ row }) => {
+      const updatedAt =
+        row.original.updatedAt && row.original.updatedBy
+          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
+          : "";
+      return <div className="break-words text-center">{updatedAt}</div>;
+    },
+  },
 ];
 
-export const moderatorsColumns: ColumnDef<BookForTable>[] = [
-  ...columns,
+export const moderatorsUpdateColumns: ColumnDef<BookForTable>[] = [
+  ...updateColumns,
   {
     accessorKey: "status",
     header: () => <div className="text-center">Статус</div>,
     cell: ({ row }) => {
       return (
-        <Status
-          defaultStatus={row.original.status}
-          formValueName={`books[${row.index}].status`}
+        <ObjectCell
+          name={`books[${row.index}].status`}
+          defaultValue={row.original.status}
         />
       );
     },

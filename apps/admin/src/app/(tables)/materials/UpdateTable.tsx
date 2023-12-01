@@ -217,6 +217,8 @@ export default function UpdateTable<TData, TValue>({
       handleChangeMode={handleGoToCreate}
       isHasAdd={false}
       isChangeModeAvailable
+      dialog
+      dialogType="materials"
     />
   );
 }

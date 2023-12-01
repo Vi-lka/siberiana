@@ -12,12 +12,11 @@ import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import {
   columns,
-  moderatorsColumns,
-  moderatorsUpdateColumns,
-  updateColumns,
+  moderatorsColumns
 } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
+import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
 
 export default async function TablesBooks({
   searchParams,

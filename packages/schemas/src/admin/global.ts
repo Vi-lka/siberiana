@@ -12,6 +12,12 @@ export type Item = z.infer<typeof Item>;
 export const EntityEnum = z.enum([
   "art",
   "artifacts",
+  "cultures",
+  "materials",
+  "techniques",
+  "sets",
+  "monuments",
+  "models",
   "books",
   "protected_area_pictures",
 ]);

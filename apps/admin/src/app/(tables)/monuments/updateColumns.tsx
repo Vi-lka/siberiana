@@ -1,20 +1,22 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 import type { MonumentForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
-
-import Sets from "~/components/tables/artifacts/Sets";
+import LargeTextCell from "~/components/forms/cells/LargeTextCell";
+import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import ListCell from "~/components/forms/cells/ListCell";
 
-export const columns: ColumnDef<MonumentForTable>[] = [
+export const updateColumns: ColumnDef<MonumentForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
+        onClick={(e) => e.stopPropagation()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         className="h-5 w-5 rounded-[6px]"
         aria-label="Select all"
@@ -24,6 +26,7 @@ export const columns: ColumnDef<MonumentForTable>[] = [
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onClick={(e) => e.stopPropagation()}
         className="h-5 w-5 rounded-[6px]"
         aria-label="Select row"
       />
@@ -58,9 +61,10 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     },
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <TextCell
           name={`monuments[${row.index}].displayName`}
           defaultValue={row.original.displayName}
+          className="mx-auto w-max max-w-md text-sm"
         />
       );
     },
@@ -70,7 +74,7 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     header: () => <div className="text-center">Описание</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <LargeTextCell
           name={`monuments[${row.index}].description`}
           defaultValue={row.original.description}
         />
@@ -78,15 +82,23 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     },
   },
   {
+    accessorKey: "artifacts",
+    header: () => <div className="text-center">Артефактов</div>,
+    cell: ({ row }) => {
+      const count = row.original.artifacts;
+      return <div className="text-center">{count}</div>;
+    },
+  },
+  {
     accessorKey: "sets",
     header: () => <div className="text-center">Комплексы</div>,
     cell: ({ row }) => {
-      return (
-        <Sets
-          formValueName={`monuments[${row.index}].sets`}
-          defaultSets={row.original.sets}
+      return ( 
+        <ListCell
+          name={`monuments[${row.index}].sets`}
+          defaultValues={row.original.sets}
         />
-      );
+      )
     },
   },
   {
@@ -94,11 +106,50 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     header: () => <div className="text-center">Внешняя ссылка</div>,
     cell: ({ row }) => {
       return (
-        <FormTextArea
+        <TextCell
           name={`monuments[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );
+    },
+  },
+  {
+    accessorKey: "createdBy",
+    header: () => <div className="text-center">Создано by</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="break-words text-center">{row.original.createdBy}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
+    cell: ({ row }) => {
+      const createdAt = row.original.createdAt
+        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
+        : "";
+      return <div className="break-words text-center">{createdAt}</div>;
+    },
+  },
+  {
+    accessorKey: "updatedBy",
+    header: () => <div className="text-center">Обновлено by</div>,
+    cell: ({ row }) => {
+      return (
+        <div className="break-words text-center">{row.original.updatedBy}</div>
+      );
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: () => <div className="min-w-[6rem] text-center">Обновлено at</div>,
+    cell: ({ row }) => {
+      const updatedAt =
+        row.original.updatedAt && row.original.updatedBy
+          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
+          : "";
+      return <div className="break-words text-center">{updatedAt}</div>;
     },
   },
 ];

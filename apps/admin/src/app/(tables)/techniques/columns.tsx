@@ -1,8 +1,6 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 
 import type { TechniqueForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
@@ -88,73 +86,6 @@ export const columns: ColumnDef<TechniqueForTable>[] = [
           defaultValue={row.original.externalLink}
         />
       );
-    },
-  },
-];
-
-export const updateColumns: ColumnDef<TechniqueForTable>[] = [
-  ...columns,
-  {
-    accessorKey: "artifacts",
-    header: () => <div className="text-center">Артефактов</div>,
-    cell: ({ row }) => {
-      const count = row.original.artifacts;
-      return <div className="text-center">{count}</div>;
-    },
-  },
-  {
-    accessorKey: "art",
-    header: () => <div className="text-center">Изоб. искусства</div>,
-    cell: ({ row }) => {
-      const count = row.original.art;
-      return <div className="text-center">{count}</div>;
-    },
-  },
-  {
-    accessorKey: "petroglyphs",
-    header: () => <div className="text-center">Петроглифов</div>,
-    cell: ({ row }) => {
-      const count = row.original.petroglyphs;
-      return <div className="text-center">{count}</div>;
-    },
-  },
-  {
-    accessorKey: "createdBy",
-    header: () => <div className="text-center">Создано by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.createdBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
-    cell: ({ row }) => {
-      const createdAt = row.original.createdAt
-        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
-        : "";
-      return <div className="break-words text-center">{createdAt}</div>;
-    },
-  },
-  {
-    accessorKey: "updatedBy",
-    header: () => <div className="text-center">Обновлено by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.updatedBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: () => <div className="min-w-[6rem] text-center">Обновлено at</div>,
-    cell: ({ row }) => {
-      const updatedAt =
-        row.original.updatedAt && row.original.updatedBy
-          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
-          : "";
-      return <div className="break-words text-center">{updatedAt}</div>;
     },
   },
 ];

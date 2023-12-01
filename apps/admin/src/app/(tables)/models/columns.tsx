@@ -1,17 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import type { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
 
 import type { ModelForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
-import Status from "~/components/tables/global-fields/Status";
 import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import Status from "~/components/tables/global-fields/Status";
 
 export const columns: ColumnDef<ModelForTable>[] = [
   {
@@ -111,129 +108,8 @@ export const columns: ColumnDef<ModelForTable>[] = [
   },
 ];
 
-export const updateColumns: ColumnDef<ModelForTable>[] = [
-  ...columns,
-  {
-    accessorKey: "artifacts",
-    header: () => <div className="text-center">Артефакты</div>,
-    cell: ({ row }) => {
-      const array = row.original.artifacts;
-      return (
-        <div className="flex min-w-[15rem] flex-col gap-4">
-          {array.map((item, i) => {
-            const imageURL =
-              item.primaryImageURL.length > 0
-                ? item.primaryImageURL
-                : "/images/image-placeholder.png";
-            return (
-              <div key={i} className="flex items-center gap-1">
-                <Image
-                  src={imageURL}
-                  alt={item.displayName}
-                  width={60}
-                  height={60}
-                />
-                <div>
-                  <p className="mb-1 text-[10px]">id: {item.id}</p>
-                  <p>{item.displayName}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "petroglyphs",
-    header: () => <div className="text-center">Петроглифы</div>,
-    cell: ({ row }) => {
-      const array = row.original.petroglyphs;
-      return (
-        <div className="flex min-w-[15rem] flex-col gap-4">
-          {array.map((item, i) => {
-            const imageURL =
-              item.primaryImageURL.length > 0
-                ? item.primaryImageURL
-                : "/images/image-placeholder.png";
-            return (
-              <div key={i} className="flex items-center gap-1">
-                <Image
-                  src={imageURL}
-                  alt={item.displayName}
-                  width={60}
-                  height={60}
-                />
-                <div>
-                  <p className="mb-1 text-[10px]">id: {item.id}</p>
-                  <p>{item.displayName}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "createdBy",
-    header: () => <div className="text-center">Создано by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.createdBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "createdAt",
-    header: () => <div className="min-w-[6rem] text-center">Создано at</div>,
-    cell: ({ row }) => {
-      const createdAt = row.original.createdAt
-        ? format(new Date(row.original.createdAt), "PPpp", { locale: ru })
-        : "";
-      return <div className="break-words text-center">{createdAt}</div>;
-    },
-  },
-  {
-    accessorKey: "updatedBy",
-    header: () => <div className="text-center">Обновлено by</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="break-words text-center">{row.original.updatedBy}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: () => <div className="min-w-[6rem] text-center">Обновлено at</div>,
-    cell: ({ row }) => {
-      const updatedAt =
-        row.original.updatedAt && row.original.updatedBy
-          ? format(new Date(row.original.updatedAt), "PPpp", { locale: ru })
-          : "";
-      return <div className="break-words text-center">{updatedAt}</div>;
-    },
-  },
-];
-
 export const moderatorsColumns: ColumnDef<ModelForTable>[] = [
   ...columns,
-  {
-    accessorKey: "status",
-    header: () => <div className="text-center">Статус</div>,
-    cell: ({ row }) => {
-      return (
-        <Status
-          defaultStatus={row.original.status}
-          formValueName={`models[${row.index}].status`}
-        />
-      );
-    },
-  },
-];
-
-export const moderatorsUpdateColumns: ColumnDef<ModelForTable>[] = [
-  ...updateColumns,
   {
     accessorKey: "status",
     header: () => <div className="text-center">Статус</div>,

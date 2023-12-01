@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function BookGenres({
   defaultBookGenres,
   formValueName,
+  className
 }: {
   defaultBookGenres: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultBookGenres.length > 0
@@ -69,6 +71,7 @@ export default function BookGenres({
         defaultValues={defaultBookGenres}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

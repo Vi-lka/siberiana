@@ -6,9 +6,10 @@ import type { MaterialForTable } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getMaterials } from "~/lib/queries/artifacts";
-import { columns, updateColumns } from "./columns";
+import { columns } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
+import { updateColumns } from "./updateColumns";
 
 export default async function TablesMaterials({
   searchParams,

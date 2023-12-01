@@ -11,12 +11,14 @@ import { FormSelectMulti } from "../inputs/FormSelectMulti";
 export default function Sets({
   defaultSets,
   formValueName,
+  className
 }: {
   defaultSets: {
     id: string;
     displayName: string;
   }[];
   formValueName: string;
+  className?: string;
 }) {
   const defaultItems =
     defaultSets.length > 0 ? defaultSets : [{ id: "", displayName: "__" }];
@@ -67,6 +69,7 @@ export default function Sets({
         defaultValues={defaultSets}
         formValueName={formValueName}
         isLoading={isFetching && isPending}
+        className={className}
         onClick={handleClick}
       />
     </div>

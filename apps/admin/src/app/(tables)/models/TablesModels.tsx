@@ -11,12 +11,11 @@ import { getModels } from "~/lib/queries/artifacts";
 import getStatusName from "~/lib/utils/getStatusName";
 import {
   columns,
-  moderatorsColumns,
-  moderatorsUpdateColumns,
-  updateColumns,
+  moderatorsColumns
 } from "./columns";
 import CreateTable from "./CreateTable";
 import UpdateTable from "./UpdateTable";
+import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
 
 export default async function TablesModels({
   searchParams,

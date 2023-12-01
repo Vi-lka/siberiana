@@ -17,7 +17,7 @@ export default function BooksPage({
   const collection = searchParams["collection"] as string | undefined;
 
   return (
-    <div key={Math.random()} className="font-OpenSans px-2 py-10 md:ml-[14rem]">
+    <div key={Math.random()} className="font-OpenSans px-2 md:py-10 py-3 md:ml-[14rem]">
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-1 flex-col gap-2 text-sm md:flex-row">
           <div className="">
