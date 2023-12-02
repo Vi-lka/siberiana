@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { TechSupportDict } from "@siberiana/schemas";
+import type { TechSupportDict } from "@siberiana/schemas";
 import {
   Checkbox,
   Dialog,
@@ -26,7 +26,7 @@ import {
 } from "@siberiana/ui";
 
 import ButtonComponent from "../ui/ButtonComponent";
-import sendMailAction from "./sendMailAction";
+import { sendMailAction } from "./sendMailAction";
 
 export default function FeedbackForm({ dict }: { dict: TechSupportDict }) {
   const [personal, setPersonal] = useState(false);
