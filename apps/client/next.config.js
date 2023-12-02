@@ -6,6 +6,7 @@ const nextConfig = {
   output: "standalone",
   experimental: {
     outputFileTracingRoot: path.join(__dirname, "../../"),
+    serverActions: true,
   },
   reactStrictMode: true,
   transpilePackages: ["@siberiana/tailwind-config", "@siberiana/ui"],

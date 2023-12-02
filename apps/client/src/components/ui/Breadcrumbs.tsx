@@ -35,6 +35,7 @@ export default function Breadcrumbs({
             account: dict.account,
             settings: dict.settings,
             faq: dict.faq,
+            techSupport: dict.techSupport,
           }[subpath];
       }
     },

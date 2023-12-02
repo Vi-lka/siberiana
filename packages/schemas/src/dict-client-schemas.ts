@@ -20,6 +20,7 @@ export const BreadcrumbsDict = z.object({
   account: z.string(),
   settings: z.string(),
   faq: z.string(),
+  techSupport: z.string(),
 });
 export type BreadcrumbsDict = z.infer<typeof BreadcrumbsDict>;
 
@@ -250,6 +251,27 @@ export const FAQDict = z.object({
 });
 export type FAQDict = z.infer<typeof FAQDict>;
 
+//.........................TECH-SUPPORT.........................//
+export const TechSupportDict = z.object({
+  title: z.string(),
+  subTitle: z.string(),
+  faqLink: z.string(),
+  name: z.string(),
+  emali: z.string(),
+  reason: z.string(),
+  text: z.string(),
+  submit: z.string(),
+  personalData: z.string(),
+  successTitle: z.string(),
+  successSubtitle: z.string(),
+  backHomeButton: z.string(),
+  errors: z.object({
+    required: z.string(),
+    email: z.string(),
+  }),
+});
+export type TechSupportDict = z.infer<typeof TechSupportDict>;
+
 //.........................FOOTER.........................//
 export const FooterDict = z.object({
   links: z
@@ -285,6 +307,7 @@ export const Dictionary = z.object({
   tooltips: TooltipsDict,
   account: AccountDict,
   faq: FAQDict,
+  techSupport: TechSupportDict,
   footer: FooterDict,
 });
 export type Dictionary = z.infer<typeof Dictionary>;
