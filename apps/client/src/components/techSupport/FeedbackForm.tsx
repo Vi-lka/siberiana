@@ -74,8 +74,8 @@ export default function FeedbackForm({
     },
   });
 
-  const handleSubmit = async (data: z.infer<typeof FeedbackFormSchema>) => {
-    await sendMailAction(data);
+  const handleSubmit = (data: z.infer<typeof FeedbackFormSchema>) => {
+    sendMailAction(data);
     form.reset();
     setSuccessModal(true);
   };
