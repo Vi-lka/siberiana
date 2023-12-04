@@ -10,7 +10,7 @@ export const Item = z.object({
 export type Item = z.infer<typeof Item>;
 
 export const EntityEnum = z.enum([
-  "art",
+  // "art",
   "artifacts",
   "cultures",
   "materials",
@@ -19,7 +19,9 @@ export const EntityEnum = z.enum([
   "monuments",
   "models",
   "books",
-  "protected_area_pictures",
+  "bookGenres",
+  "periodicals",
+  // "protected_area_pictures",
 ]);
 export type EntityEnum = z.infer<typeof EntityEnum>;
 

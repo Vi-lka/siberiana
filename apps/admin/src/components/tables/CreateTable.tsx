@@ -19,37 +19,41 @@ import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { MonumentForTable } from "@siberiana/schemas";
-import { MonumentsForm } from "@siberiana/schemas";
+import type { EntityEnum } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
-import { useCreateMonument } from "~/lib/mutations/additionals";
+import { getEntityType } from "~/lib/utils/getEntity";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import { useCreateMutation } from "~/lib/utils/useMutations";
 import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 
-const FORM_DATA_KEY = "monumentsCreate";
-
 interface DataTableProps<TData, TValue> {
+  entity: EntityEnum;
   columns: ColumnDef<TData, TValue>[];
-  data: MonumentForTable[] & TData[];
+  data: TData[];
+  defaultAdd: TData;
+  moderatorsColumns?: ColumnDef<TData, TValue>[];
   hasObjectsToUpdate?: boolean;
 }
 
 export default function CreateTable<TData, TValue>({
+  entity,
   columns,
   data,
+  defaultAdd,
+  moderatorsColumns,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-  const savedResult = getSavedData<MonumentForTable, TData>({
+  const formDataKey = `${entity}Create`;
+
+  const savedResult = getSavedData<TData>({
     data,
-    key: FORM_DATA_KEY,
+    key: formDataKey,
   });
 
-  const [dataState, setDataState] = React.useState<
-    MonumentForTable[] & TData[]
-  >(savedResult.data);
+  const [dataState, setDataState] = React.useState<TData[]>(savedResult.data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -66,11 +70,19 @@ export default function CreateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const mutation = useCreateMonument(session.data?.access_token);
+  const createMutation = useCreateMutation(entity, session.data?.access_token);
+
+  const isModerator = session.data?.user.roles?.includes("moderator");
+
+  const allowColumns: ColumnDef<TData, TValue>[] = isModerator
+    ? moderatorsColumns
+      ? moderatorsColumns
+      : columns
+    : columns;
 
   const table = useReactTable({
     data: dataState,
-    columns,
+    columns: allowColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -85,39 +97,38 @@ export default function CreateTable<TData, TValue>({
       rowSelection,
     },
   });
-  const form = useForm<z.infer<typeof MonumentsForm>>({
-    resolver: zodResolver(MonumentsForm),
+
+  const ZodType = getEntityType(entity);
+  type ZodTypeInfer = z.infer<typeof ZodType>;
+
+  const form = useForm<ZodTypeInfer>({
+    resolver: zodResolver(ZodType),
     mode: "all",
     defaultValues: {
-      monuments: dataState,
+      [entity]: dataState,
     },
   });
   const control = form.control;
   const { append, remove } = useFieldArray({
     control,
-    name: "monuments",
+    name: entity as keyof ZodTypeInfer,
   });
 
   React.useEffect(() => {
     const triggerValidation = async () => {
-      await form.trigger("monuments");
+      await form.trigger(entity);
     };
     triggerValidation().catch(console.error);
-  }, [form]);
+  }, [entity, form]);
 
-  usePersistForm<MonumentForTable[]>({
-    value: { data: form.getValues().monuments },
-    localStorageKey: FORM_DATA_KEY,
-    isLoading: loading || isPendingRouter,
+  const formData: Array<TData & { id?: string }> =
+    form.getValues()[entity as keyof ZodTypeInfer];
+
+  usePersistForm<TData[]>({
+    value: { data: formData },
+    localStorageKey: formDataKey,
+    isLoading: loading || isPendingRouter || !!createMutation?.isLoadingFiles,
   });
-
-  const defaultAdd = {
-    id: "random" + Math.random().toString(),
-    displayName: "",
-    description: "",
-    externalLink: "",
-    sets: [],
-  } as MonumentForTable & TData;
 
   const handleDeleteSaved = () => {
     startTransitionTable(() => {
@@ -125,11 +136,11 @@ export default function CreateTable<TData, TValue>({
     });
     startTransitionForm(() => {
       form.reset(
-        { monuments: data },
+        { [entity]: data },
         { keepValues: false, keepDirtyValues: false },
       );
     });
-    localStorage.removeItem(FORM_DATA_KEY);
+    localStorage.removeItem(formDataKey);
   };
 
   const handleAdd = () => {
@@ -145,11 +156,9 @@ export default function CreateTable<TData, TValue>({
   const handleDelete = () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
 
-    const filteredData = form
-      .getValues()
-      .monuments.filter(
-        (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as MonumentForTable[] & TData[];
+    const filteredData = formData.filter(
+      (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
+    );
 
     const deleteAll = filteredData.length === 0;
 
@@ -159,7 +168,7 @@ export default function CreateTable<TData, TValue>({
       });
       startTransitionForm(() => {
         form.reset(
-          { monuments: data },
+          { [entity]: data },
           { keepValues: false, keepDirtyValues: false },
         );
       });
@@ -184,24 +193,18 @@ export default function CreateTable<TData, TValue>({
     const params = new URLSearchParams(window.location.search);
     params.delete("mode");
     startTransitionGoToUpdate(() => {
-      router.push(`monuments?${params.toString()}`);
+      router.push(`${entity}?${params.toString()}`);
     });
-  }, [router]);
+  }, [entity, router]);
 
-  async function handleSave(dataForm: z.infer<typeof MonumentsForm>) {
+  async function handleSave(dataForm: ZodTypeInfer) {
     setLoading(true);
 
-    const noLines = dataForm.monuments.map((monument) => {
-      const { displayName, description, ...rest } = monument;
-
-      return {
-        displayName: displayName.replace(/\n/g, " "),
-        description: description?.replace(/\n/g, " "),
-        ...rest,
-      };
-    });
-
-    const mutationsArray = noLines.map((item) => mutation.mutateAsync(item));
+    const mutationsArray = createMutation
+      ? (dataForm[entity as keyof ZodTypeInfer] as TData[]).map((item) =>
+          createMutation.mutation.mutateAsync(item),
+        )
+      : [];
 
     const results = await Promise.allSettled(mutationsArray);
 
@@ -221,7 +224,7 @@ export default function CreateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Памятники добавлены",
+        description: "Объекты добавлены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -231,20 +234,26 @@ export default function CreateTable<TData, TValue>({
       params.delete("mode");
       startTransitionRouter(() => {
         router.refresh();
-        router.push(`monuments?${params.toString()}`);
+        router.push(`${entity}?${params.toString()}`);
       });
       setLoading(false);
-      localStorage.removeItem(FORM_DATA_KEY);
+      localStorage.removeItem(formDataKey);
     }
   }
 
   if (loading || isPendingRouter)
-    return <LoadingMutation isLoading={false} className="mt-12" />;
+    return (
+      <LoadingMutation
+        isLoadingFile={!!createMutation?.isLoadingFiles}
+        progress={createMutation?.progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable
       table={table}
-      columnsLength={columns.length}
+      columnsLength={allowColumns.length}
       form={form}
       isLoading={isPendingTable || isPendingForm}
       isPendingChangeMode={isPendingGoToUpdate}

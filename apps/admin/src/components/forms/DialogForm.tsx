@@ -7,11 +7,13 @@ import { useDoubleTap } from "use-double-tap";
 import type {
   ArtifactForTable,
   BookForTable,
+  BookGenreForTable,
   CultureForTable,
   EntityEnum,
   MaterialForTable,
   ModelForTable,
   MonumentForTable,
+  PeriodicalForTable,
   SetForTable,
   TechniqueForTable,
 } from "@siberiana/schemas";
@@ -30,11 +32,13 @@ import {
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import Artifacts from "./Artifacts";
+import BookGenres from "./BookGenres";
 import Books from "./Books";
 import Cultures from "./Cultures";
 import Materials from "./Materials";
 import Models from "./Models";
 import Monuments from "./Monuments";
+import Periodicals from "./Periodicals";
 import Sets from "./Sets";
 import Techniques from "./Techniques";
 
@@ -151,8 +155,12 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                 ),
                 models: <Models row={props.row as Row<ModelForTable>} />,
                 books: <Books row={props.row as Row<BookForTable>} />,
-                art: <div>art</div>,
-                protected_area_pictures: <div>protected_area_pictures</div>,
+                bookGenres: (
+                  <BookGenres row={props.row as Row<BookGenreForTable>} />
+                ),
+                periodicals: (
+                  <Periodicals row={props.row as Row<PeriodicalForTable>} />
+                ),
               }[props.dialogType]
             }
           </ScrollArea>

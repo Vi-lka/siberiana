@@ -1,7 +1,14 @@
 import { z } from "zod";
 
+//.........................STATUS.........................//
 export const StatusEnum = z.enum(["listed", "unlisted", "draft"]);
 export type StatusEnum = z.infer<typeof StatusEnum>;
+
+export const Status = z.object({
+  id: StatusEnum,
+  displayName: z.string(),
+});
+export type Status = z.infer<typeof Status>;
 
 //.........................CATEGORY.........................//
 export const Category = z.object({

@@ -1,32 +1,32 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { EntityEnum, TechniqueForTable } from "@siberiana/schemas";
+import type { BookGenreForTable, EntityEnum } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import CreateTable from "~/components/tables/CreateTable";
 import UpdateTable from "~/components/tables/UpdateTable";
-import { getTechniques } from "~/lib/queries/artifacts";
+import { getBookGenres } from "~/lib/queries/books";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
 
-export default async function TablesTechniques({
+export default async function TablesBookGenres({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "techniques";
+  const entity: EntityEnum = "bookGenres";
 
   const mode = searchParams["mode"] as string | undefined;
 
   const [dataResult] = await Promise.allSettled([
-    getTechniques({
+    getBookGenres({
       first: null,
     }),
   ]);
 
-  const defaultAdd: TechniqueForTable = {
+  const defaultAdd: BookGenreForTable = {
     id: "random" + Math.random().toString(),
     displayName: "",
     description: "",
@@ -67,24 +67,18 @@ export default async function TablesTechniques({
       );
   }
 
-  const dataForUpdate: TechniqueForTable[] = dataResult.value.edges.map(
+  const dataForUpdate: BookGenreForTable[] = dataResult.value.edges.map(
     (data) => {
       const node = data.node;
       const {
-        artifacts,
-        art,
-        petroglyphs,
+        books,
         ...rest // assigns remaining
       } = node;
 
-      const artifactsForTable = artifacts.length;
-      const artForTable = art.length;
-      const petroglyphsForTable = petroglyphs.length;
+      const booksForTable = books.length;
 
       return {
-        artifacts: artifactsForTable,
-        art: artForTable,
-        petroglyphs: petroglyphsForTable,
+        books: booksForTable,
         ...rest,
       };
     },

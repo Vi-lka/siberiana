@@ -1,21 +1,23 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { CultureForTable } from "@siberiana/schemas";
+import type { CultureForTable, EntityEnum } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getCultures } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
-import CreateTable from "./CreateTable";
 import { updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
 
 export default async function TablesCultures({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "cultures";
+
   const mode = searchParams["mode"] as string | undefined;
 
   const [dataResult] = await Promise.allSettled([
@@ -24,14 +26,14 @@ export default async function TablesCultures({
     }),
   ]);
 
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      displayName: "",
-      description: "",
-      externalLink: "",
-    },
-  ] as CultureForTable[];
+  const defaultAdd: CultureForTable = {
+    id: "random" + Math.random().toString(),
+    displayName: "",
+    description: "",
+    externalLink: "",
+  };
+
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -45,7 +47,12 @@ export default async function TablesCultures({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable columns={columns} data={dataForCreate} />
+            <CreateTable
+              entity={entity}
+              columns={columns}
+              data={dataForCreate}
+              defaultAdd={defaultAdd}
+            />
           </ClientHydration>
         </div>
       );
@@ -53,30 +60,32 @@ export default async function TablesCultures({
       return (
         <ErrorHandler
           error={dataResult.reason as unknown}
-          place="Cultures"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      petroglyphs,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: CultureForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        petroglyphs,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
-    const petroglyphsForTable = petroglyphs.length;
+      const artifactsForTable = artifacts.length;
+      const petroglyphsForTable = petroglyphs.length;
 
-    return {
-      artifacts: artifactsForTable,
-      petroglyphs: petroglyphsForTable,
-      ...rest,
-    } as CultureForTable;
-  });
+      return {
+        artifacts: artifactsForTable,
+        petroglyphs: petroglyphsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (
@@ -90,8 +99,10 @@ export default async function TablesCultures({
           }
         >
           <CreateTable
+            entity={entity}
             columns={columns}
             data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -106,7 +117,11 @@ export default async function TablesCultures({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} data={dataForUpdate} />
+        <UpdateTable
+          entity={entity}
+          columns={updateColumns}
+          data={dataForUpdate}
+        />
       </ClientHydration>
     </div>
   );

@@ -1,21 +1,23 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { SetForTable } from "@siberiana/schemas";
+import type { EntityEnum, SetForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getSets } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
-import CreateTable from "./CreateTable";
 import { updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
 
 export default async function TablesSets({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "sets";
+
   const mode = searchParams["mode"] as string | undefined;
 
   const [dataResult] = await Promise.allSettled([
@@ -24,15 +26,15 @@ export default async function TablesSets({
     }),
   ]);
 
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      displayName: "",
-      description: "",
-      externalLink: "",
-      monuments: [],
-    },
-  ] as SetForTable[];
+  const defaultAdd: SetForTable = {
+    id: "random" + Math.random().toString(),
+    displayName: "",
+    description: "",
+    externalLink: "",
+    monuments: [],
+  };
+
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -46,7 +48,12 @@ export default async function TablesSets({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable columns={columns} data={dataForCreate} />
+            <CreateTable
+              entity={entity}
+              columns={columns}
+              data={dataForCreate}
+              defaultAdd={defaultAdd}
+            />
           </ClientHydration>
         </div>
       );
@@ -54,14 +61,14 @@ export default async function TablesSets({
       return (
         <ErrorHandler
           error={dataResult.reason as unknown}
-          place="Sets"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = dataResult.value.edges.map((data) => {
+  const dataForUpdate: SetForTable[] = dataResult.value.edges.map((data) => {
     const node = data.node;
     const {
       artifacts,
@@ -73,7 +80,7 @@ export default async function TablesSets({
     return {
       artifacts: artifactsForTable,
       ...rest,
-    } as SetForTable;
+    };
   });
 
   if (mode === "add")
@@ -88,8 +95,10 @@ export default async function TablesSets({
           }
         >
           <CreateTable
+            entity={entity}
             columns={columns}
             data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -104,7 +113,11 @@ export default async function TablesSets({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} data={dataForUpdate} />
+        <UpdateTable
+          entity={entity}
+          columns={updateColumns}
+          data={dataForUpdate}
+        />
       </ClientHydration>
     </div>
   );

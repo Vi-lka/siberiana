@@ -156,7 +156,7 @@ export default function AddCollection({ className }: { className?: string }) {
           <DialogDescription>Коллекцию</DialogDescription>
         </DialogHeader>
         {loading ? (
-          <LoadingMutation isLoading={isLoading} progress={progress} />
+          <LoadingMutation isLoadingFile={isLoading} progress={progress} />
         ) : (
           <Form {...form}>
             <form

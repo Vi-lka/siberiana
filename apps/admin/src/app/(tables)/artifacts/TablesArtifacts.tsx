@@ -2,24 +2,31 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-import type { ArtifactForTable } from "@siberiana/schemas";
+import type {
+  ArtifactForTable,
+  EntityEnum,
+  LocationEnum,
+  Status,
+} from "@siberiana/schemas";
 
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getArtifacts } from "~/lib/queries/artifacts";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
-import CreateTable from "./CreateTable";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
 
 export default async function TablesArtifacts({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "artifacts";
+
   const session = await getServerSession(authOptions);
 
   const roles = session?.user.roles;
@@ -47,7 +54,7 @@ export default async function TablesArtifacts({
     return (
       <ErrorHandler
         error={results[1].reason as unknown}
-        place="Artifacts"
+        place={entity}
         notFound
         goBack
       />
@@ -55,64 +62,65 @@ export default async function TablesArtifacts({
 
   const collectionFulfilled = results[1];
 
-  const statusForModerator = {
+  const statusForModerator: Status = {
     id: "listed",
     displayName: getStatusName("listed"),
   };
-  const statusForAdmin = {
+
+  const statusForAdmin: Status = {
     id: "draft",
     displayName: getStatusName("draft"),
   };
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      status: isModerator ? statusForModerator : statusForAdmin,
-      displayName: "",
-      description: "",
-      primaryImage: {
-        file: undefined,
-        url: "",
-      },
-      additionalImages: null,
-      chemicalComposition: "",
-      inventoryNumber: "",
-      kpNumber: "",
-      goskatalogNumber: "",
-      externalLink: "",
-      typology: "",
-      weight: "",
-      admissionDate: undefined,
-      sizes: {
-        width: 0,
-        height: 0,
-        length: 0,
-        depth: 0,
-        diameter: 0,
-      },
-      dating: "",
-      datingRow: {
-        datingStart: 0,
-        datingEnd: 0,
-      },
-      donor: null,
-      model: null,
-      license: null,
-      culturalAffiliation: null,
-      set: null,
-      monument: null,
-      organization: null,
-      location: null,
-      mediums: [],
-      techniques: [],
-      authors: [],
-      publications: [],
-      projects: [],
-      collection: {
-        id: collectionFulfilled.value.edges[0].node.id,
-        displayName: collectionFulfilled.value.edges[0].node.displayName,
-      },
+
+  const defaultAdd: ArtifactForTable = {
+    id: "random" + Math.random().toString(),
+    status: isModerator ? statusForModerator : statusForAdmin,
+    displayName: "",
+    description: "",
+    primaryImage: {
+      file: undefined,
+      url: "",
     },
-  ] as ArtifactForTable[];
+    additionalImages: null,
+    chemicalComposition: "",
+    inventoryNumber: "",
+    kpNumber: "",
+    goskatalogNumber: "",
+    externalLink: "",
+    typology: "",
+    weight: "",
+    admissionDate: undefined,
+    sizes: {
+      width: 0,
+      height: 0,
+      length: 0,
+      depth: 0,
+      diameter: 0,
+    },
+    dating: "",
+    datingRow: {
+      datingStart: 0,
+      datingEnd: 0,
+    },
+    donor: null,
+    model: null,
+    license: null,
+    culturalAffiliation: null,
+    set: null,
+    monument: null,
+    organization: null,
+    location: null,
+    mediums: [],
+    techniques: [],
+    authors: [],
+    publications: [],
+    projects: [],
+    collection: {
+      id: collectionFulfilled.value.edges[0].node.id,
+      displayName: collectionFulfilled.value.edges[0].node.displayName,
+    },
+  };
+  const dataForCreate = [defaultAdd];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
@@ -127,9 +135,11 @@ export default async function TablesArtifacts({
             }
           >
             <CreateTable
+              entity={entity}
+              data={dataForCreate}
               columns={columns}
               moderatorsColumns={moderatorsColumns}
-              data={dataForCreate}
+              defaultAdd={defaultAdd}
             />
           </ClientHydration>
         </div>
@@ -138,83 +148,89 @@ export default async function TablesArtifacts({
       return (
         <ErrorHandler
           error={results[0].reason as unknown}
-          place="Artifacts"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = results[0].value.edges.map((data) => {
-    const node = data.node;
-    const {
-      status,
-      primaryImageURL,
-      additionalImagesUrls,
-      collection,
-      location,
-      country,
-      region,
-      district,
-      settlement,
-      width,
-      height,
-      length,
-      depth,
-      diameter,
-      datingStart,
-      datingEnd,
-      ...rest // assigns remaining
-    } = node;
-
-    const additionalImages = additionalImagesUrls
-      ? additionalImagesUrls.map((url) => {
-          const file = null;
-          return { file, url };
-        })
-      : null;
-
-    const locationForTabel = location
-      ? { ...location, type: "location" }
-      : settlement
-      ? { ...settlement, type: "settlement" }
-      : district
-      ? { ...district, type: "district" }
-      : region
-      ? { ...region, type: "region" }
-      : country
-      ? { ...country, type: "country" }
-      : null;
-
-    return {
-      status: {
-        id: status,
-        displayName: getStatusName(status),
-      },
-      primaryImage: {
-        file: null,
-        url: primaryImageURL,
-      },
-      additionalImages,
-      collection: {
-        id: collection.id,
-        displayName: collection.displayName,
-      },
-      location: locationForTabel,
-      sizes: {
+  const dataForUpdate: ArtifactForTable[] = results[0].value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        status,
+        primaryImageURL,
+        additionalImagesUrls,
+        collection,
+        location,
+        country,
+        region,
+        district,
+        settlement,
         width,
         height,
         length,
         depth,
         diameter,
-      },
-      datingRow: {
         datingStart,
         datingEnd,
-      },
-      ...rest,
-    } as ArtifactForTable;
-  });
+        ...rest // assigns remaining
+      } = node;
+
+      const additionalImages = additionalImagesUrls
+        ? additionalImagesUrls.map((url) => {
+            const file = null;
+            return { file, url };
+          })
+        : null;
+
+      const locationForTabel: {
+        id: string;
+        displayName: string;
+        type: LocationEnum;
+      } | null = location
+        ? { ...location, type: "location" }
+        : settlement
+        ? { ...settlement, type: "settlement" }
+        : district
+        ? { ...district, type: "district" }
+        : region
+        ? { ...region, type: "region" }
+        : country
+        ? { ...country, type: "country" }
+        : null;
+
+      return {
+        status: {
+          id: status,
+          displayName: getStatusName(status),
+        },
+        primaryImage: {
+          file: null,
+          url: primaryImageURL,
+        },
+        additionalImages,
+        collection: {
+          id: collection.id,
+          displayName: collection.displayName,
+        },
+        location: locationForTabel,
+        sizes: {
+          width,
+          height,
+          length,
+          depth,
+          diameter,
+        },
+        datingRow: {
+          datingStart,
+          datingEnd,
+        },
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (
@@ -228,9 +244,11 @@ export default async function TablesArtifacts({
           }
         >
           <CreateTable
+            entity={entity}
+            data={dataForCreate}
             columns={columns}
             moderatorsColumns={moderatorsColumns}
-            data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -246,6 +264,7 @@ export default async function TablesArtifacts({
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
         <UpdateTable
+          entity={entity}
           columns={updateColumns}
           moderatorsColumns={moderatorsUpdateColumns}
           data={dataForUpdate}

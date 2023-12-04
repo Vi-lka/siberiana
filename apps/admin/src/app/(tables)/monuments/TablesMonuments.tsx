@@ -1,21 +1,23 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { MonumentForTable } from "@siberiana/schemas";
+import type { EntityEnum, MonumentForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getMonuments } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
-import CreateTable from "./CreateTable";
 import { updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
 
 export default async function TablesMonuments({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "monuments";
+
   const mode = searchParams["mode"] as string | undefined;
 
   const [dataResult] = await Promise.allSettled([
@@ -24,15 +26,15 @@ export default async function TablesMonuments({
     }),
   ]);
 
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      displayName: "",
-      description: "",
-      externalLink: "",
-      sets: [],
-    },
-  ] as MonumentForTable[];
+  const defaultAdd: MonumentForTable = {
+    id: "random" + Math.random().toString(),
+    displayName: "",
+    description: "",
+    externalLink: "",
+    sets: [],
+  };
+
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -46,7 +48,12 @@ export default async function TablesMonuments({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable columns={columns} data={dataForCreate} />
+            <CreateTable
+              entity={entity}
+              columns={columns}
+              data={dataForCreate}
+              defaultAdd={defaultAdd}
+            />
           </ClientHydration>
         </div>
       );
@@ -54,27 +61,29 @@ export default async function TablesMonuments({
       return (
         <ErrorHandler
           error={dataResult.reason as unknown}
-          place="Monuments"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: MonumentForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
+      const artifactsForTable = artifacts.length;
 
-    return {
-      artifacts: artifactsForTable,
-      ...rest,
-    } as MonumentForTable;
-  });
+      return {
+        artifacts: artifactsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (
@@ -88,8 +97,10 @@ export default async function TablesMonuments({
           }
         >
           <CreateTable
+            entity={entity}
             columns={columns}
             data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -104,7 +115,11 @@ export default async function TablesMonuments({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} data={dataForUpdate} />
+        <UpdateTable
+          entity={entity}
+          columns={updateColumns}
+          data={dataForUpdate}
+        />
       </ClientHydration>
     </div>
   );

@@ -2,24 +2,24 @@
 
 import { useEffect } from "react";
 
-interface PersistForm<TContent> {
+interface PersistForm<TData> {
   value: {
-    data: TContent;
+    data: TData;
   };
   localStorageKey: string;
   isLoading: boolean;
 }
 
-interface SavedData<TContent, TData> {
+interface SavedData<TData> {
   key: string;
-  data: TContent[] & TData[];
+  data: TData[];
 }
 
-export function usePersistForm<TContent>({
+export function usePersistForm<TData>({
   value,
   localStorageKey,
   isLoading,
-}: PersistForm<TContent>) {
+}: PersistForm<TData>) {
   useEffect(() => {
     if (!isLoading)
       localStorage.setItem(localStorageKey, JSON.stringify(value));
@@ -28,13 +28,10 @@ export function usePersistForm<TContent>({
   return;
 }
 
-export function getSavedData<TContent, TData>({
-  data,
-  key,
-}: SavedData<TContent, TData>) {
+export function getSavedData<TData>({ data, key }: SavedData<TData>) {
   const storageData = localStorage.getItem(key);
   if (storageData) {
-    const savedData = JSON.parse(storageData) as SavedData<TContent, TData>;
+    const savedData = JSON.parse(storageData) as SavedData<TData>;
     return { data: savedData.data, restored: true };
   }
 

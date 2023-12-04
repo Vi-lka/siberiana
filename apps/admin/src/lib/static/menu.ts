@@ -41,13 +41,13 @@ export const booksMenuItems = {
   list: [
     {
       id: 1,
-      name: "Жанры",
-      url: "/books-genres",
+      name: "Разделы/Жанры",
+      url: "/bookGenres",
     },
     {
       id: 2,
       name: "Издания",
-      url: "/periodical",
+      url: "/periodicals",
     },
     {
       id: 3,
