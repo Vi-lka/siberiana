@@ -106,21 +106,17 @@ export function FormSelect({
         <div className="flex items-center gap-0.5">
           <PopoverTriggerForModal asChild onClick={onClick}>
             <Button
-              variant={
-                form.getFieldState(formValueName).isDirty || customDirty
-                  ? "outline"
-                  : "ghost"
-              }
+              variant="outline"
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
-                "text-foreground relative h-fit w-full justify-between px-2 text-left text-xs font-normal",
+                "text-foreground relative h-fit w-full justify-between border-transparent px-2 text-left text-xs font-normal",
                 variant === "padding" ? "py-8" : "py-3",
                 form.getFieldState(formValueName).invalid
                   ? "border-red-600"
                   : form.getFieldState(formValueName).isDirty || customDirty
-                  ? "border-green-500"
-                  : "",
+                    ? "border-green-500"
+                    : "",
               )}
             >
               {selected

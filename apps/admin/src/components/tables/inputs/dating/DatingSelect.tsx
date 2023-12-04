@@ -315,15 +315,6 @@ export default function DatingSelect({
     }
   };
 
-  // const onIsADChange = (pressed: boolean, type: DatingType) => {
-  //   setDatingType(type);
-  //   setIsAD(pressed);
-  //   setValues({
-  //     datingStart: -values.datingEnd,
-  //     datingEnd: -values.datingStart,
-  //   });
-  // };
-
   function minus(isFirst: boolean, isAd: boolean, prefix: boolean) {
     if (prefix) return 0;
     // prevent collisions with prefixes
@@ -357,8 +348,8 @@ export default function DatingSelect({
           ? `${century - 1}${prefix.start}`
           : `${century + 1}${prefix.startBC}`
         : century >= 0
-        ? `${century - 1}00`
-        : `${century + 1}99`;
+          ? `${century - 1}00`
+          : `${century + 1}99`;
 
       const newNumber =
         Math.abs(century) > 1 ? Number(newString) : -Number(newString);
@@ -382,8 +373,8 @@ export default function DatingSelect({
           ? `${century - 1}${prefix.start}`
           : `${century + 1}${prefix.startBC}`
         : century >= 0
-        ? `${century - 1}99`
-        : `${century + 1}00`;
+          ? `${century - 1}99`
+          : `${century + 1}00`;
 
       const newNumber =
         Math.abs(century) > 1 ? Number(newString) : -Number(newString);
@@ -419,8 +410,8 @@ export default function DatingSelect({
           ? `${inputValue - 1}${prefixMulti.first.start}`
           : `${inputValue + 1}${prefixMulti.first.startBC}`
         : isAD
-        ? `${inputValue - 1}00`
-        : `${inputValue + 1}99`;
+          ? `${inputValue - 1}00`
+          : `${inputValue + 1}99`;
 
       const newNumber =
         Math.abs(inputValue) > 1 ? Number(newString) : -Number(newString);
@@ -443,8 +434,8 @@ export default function DatingSelect({
           ? `${inputValue - 1}${prefixMulti.second.start}`
           : `${inputValue + 1}${prefixMulti.second.startBC}`
         : isAD
-        ? `${inputValue - 1}99`
-        : `${inputValue + 1}00`;
+          ? `${inputValue - 1}99`
+          : `${inputValue + 1}00`;
 
       const newNumber =
         Math.abs(inputValue) > 1 ? Number(newString) : -Number(newString);
@@ -471,19 +462,17 @@ export default function DatingSelect({
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant={
-              form.getFieldState(formValueName).isDirty ? "outline" : "ghost"
-            }
+            variant="outline"
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "text-foreground relative h-fit w-full min-w-[12rem] max-w-[14rem] justify-between px-2 py-8 text-left text-xs font-normal",
+              "text-foreground relative h-fit w-full min-w-[12rem] max-w-[14rem] justify-between border-transparent px-2 py-8 text-left text-xs font-normal",
               className,
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"
                 : form.getFieldState(formValueName).isDirty
-                ? "border-green-500"
-                : "",
+                  ? "border-green-500"
+                  : "",
             )}
           >
             {isPending ? (

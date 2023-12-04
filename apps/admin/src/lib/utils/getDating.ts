@@ -188,16 +188,16 @@ export function getMultiPrefixData(
           start >= 0 ? "" : "до н.э."
         }`
     : isMillennium
-    ? `${startCentury} тыс. ${start >= 0 ? "" : "до н.э."}`
-    : `${startCentury} век ${start >= 0 ? "" : "до н.э."}`;
+      ? `${startCentury} тыс. ${start >= 0 ? "" : "до н.э."}`
+      : `${startCentury} век ${start >= 0 ? "" : "до н.э."}`;
 
   const endString = endPrefix
     ? isMillennium
       ? `${endPrefix.label} ${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
       : `${endPrefix.label} ${endCentury} века ${end >= 0 ? "" : "до н.э."}`
     : isMillennium
-    ? `${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
-    : `${endCentury} век ${end >= 0 ? "" : "до н.э."}`;
+      ? `${endCentury} тыс. ${end >= 0 ? "" : "до н.э."}`
+      : `${endCentury} век ${end >= 0 ? "" : "до н.э."}`;
 
   return `${startString} - ${endString}`;
 }
@@ -290,8 +290,8 @@ export function generateValues(value: string, prefix: Prefix | undefined) {
       ? "0" + value
       : "0" + (valueNumAbs - 1).toString()
     : isInMiddle
-    ? value
-    : (valueNumAbs - 1).toString();
+      ? value
+      : (valueNumAbs - 1).toString();
 
   return { forStart, forEnd };
 }

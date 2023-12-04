@@ -27,8 +27,8 @@ export default function PopoverDropzone({
     image.url.length > 0
       ? image.url
       : image.file
-      ? URL.createObjectURL(image.file)
-      : "/images/image-placeholder.png";
+        ? URL.createObjectURL(image.file)
+        : "/images/image-placeholder.png";
 
   const imageAlt =
     image.url.length > 0 ? image.url : image.file ? image.file.name : "No File";
@@ -42,8 +42,8 @@ export default function PopoverDropzone({
             form.getFieldState(formValueName).invalid
               ? "border-red-500"
               : form.getFieldState(formValueName).isDirty
-              ? "border-green-400"
-              : "",
+                ? "border-green-400"
+                : "",
           )}
         >
           <Image src={imageURL} alt={imageAlt} width={80} height={80} />

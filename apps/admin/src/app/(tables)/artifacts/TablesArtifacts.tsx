@@ -192,14 +192,14 @@ export default async function TablesArtifacts({
       } | null = location
         ? { ...location, type: "location" }
         : settlement
-        ? { ...settlement, type: "settlement" }
-        : district
-        ? { ...district, type: "district" }
-        : region
-        ? { ...region, type: "region" }
-        : country
-        ? { ...country, type: "country" }
-        : null;
+          ? { ...settlement, type: "settlement" }
+          : district
+            ? { ...district, type: "district" }
+            : region
+              ? { ...region, type: "region" }
+              : country
+                ? { ...country, type: "country" }
+                : null;
 
       return {
         status: {

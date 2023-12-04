@@ -40,9 +40,9 @@ export default function FormTextArea({
                 form.getFieldState(name).invalid
                   ? "border-red-600"
                   : form.getFieldState(name).isDirty ||
-                    field.value !== defaultValue
-                  ? "border-green-500"
-                  : "",
+                      field.value !== defaultValue
+                    ? "border-green-500"
+                    : "",
               )}
               placeholder={placeholder}
               onKeyDown={(event) => {

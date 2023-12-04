@@ -121,9 +121,9 @@ export default function InputMultiDropzone(props: InputProps) {
                 form.getFieldState(props.formValueName).invalid
                   ? "border-red-500"
                   : form.getFieldState(props.formValueName).isDirty ||
-                    customDirty
-                  ? "border-green-400"
-                  : "",
+                      customDirty
+                    ? "border-green-400"
+                    : "",
               ),
             })}
           >
@@ -223,9 +223,9 @@ export default function InputMultiDropzone(props: InputProps) {
                 form.getFieldState(props.formValueName).invalid
                   ? "border-red-500"
                   : form.getFieldState(props.formValueName).isDirty ||
-                    customDirty
-                  ? "border-green-400"
-                  : "",
+                      customDirty
+                    ? "border-green-400"
+                    : "",
               ),
             })}
           >

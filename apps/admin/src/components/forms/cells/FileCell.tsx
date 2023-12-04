@@ -36,8 +36,8 @@ export default function FileCell({
           form.getFieldState(name).invalid
             ? "border-red-500"
             : form.getFieldState(name).isDirty
-            ? "border-green-400"
-            : "",
+              ? "border-green-400"
+              : "",
         )}
       >
         <p className="mt-3 break-words text-center text-xs font-light">
@@ -69,8 +69,8 @@ export default function FileCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <Image

@@ -84,8 +84,8 @@ export default function DropzoneFile({
               form.getFieldState(formValueName).invalid
                 ? "border-red-500"
                 : form.getFieldState(formValueName).isDirty
-                ? "border-green-400"
-                : "",
+                  ? "border-green-400"
+                  : "",
             ),
           })}
         >
@@ -106,8 +106,8 @@ export default function DropzoneFile({
             form.getFieldState(formValueName).invalid
               ? "border-red-500"
               : form.getFieldState(formValueName).isDirty
-              ? "border-green-400"
-              : "",
+                ? "border-green-400"
+                : "",
           ),
         })}
       >

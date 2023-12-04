@@ -72,9 +72,6 @@ export default async function FAQ() {
                         className={"whitespace-pre-wrap"}
                         remarkPlugins={[remarkGfm]}
                         rehypePlugins={[rehypeRaw]}
-                        transformImageUri={(uri) =>
-                          `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${uri}`
-                        }
                       >
                         {item.answer}
                       </ReactMarkdown>

@@ -29,8 +29,8 @@ export default function LargeTextCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty || customDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <p className="w-max max-w-xs">

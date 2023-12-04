@@ -97,7 +97,7 @@ export default async function TablesBooks({
     },
   };
 
-  const dataForCreate = [ defaultAdd ];
+  const dataForCreate = [defaultAdd];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
@@ -170,14 +170,14 @@ export default async function TablesBooks({
     } | null = location
       ? { ...location, type: "location" }
       : settlement
-      ? { ...settlement, type: "settlement" }
-      : district
-      ? { ...district, type: "district" }
-      : region
-      ? { ...region, type: "region" }
-      : country
-      ? { ...country, type: "country" }
-      : null;
+        ? { ...settlement, type: "settlement" }
+        : district
+          ? { ...district, type: "district" }
+          : region
+            ? { ...region, type: "region" }
+            : country
+              ? { ...country, type: "country" }
+              : null;
 
     return {
       status: {

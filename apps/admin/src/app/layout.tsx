@@ -15,6 +15,7 @@ import Providers from "~/components/providers/Providers";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
   title: {
     template: "%s | Сибириана-Admin",
     default: "Сибириана-Admin",

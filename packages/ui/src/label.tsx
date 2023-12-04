@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
-// eslint-disable-next-line import/consistent-type-specifier-style
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 
 import { cn } from "./lib/utils";
 
