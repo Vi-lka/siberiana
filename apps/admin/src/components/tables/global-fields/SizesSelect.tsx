@@ -94,15 +94,11 @@ export default function SizesSelect({
       <DropdownMenu open={openCombobox} onOpenChange={handleOpen}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant={
-              form.getFieldState(formValueName).isDirty || customDirty
-                ? "outline"
-                : "ghost"
-            }
+            variant="outline"
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "text-foreground relative h-fit w-max min-w-[70px] justify-between px-2 py-8 text-left text-xs font-normal",
+              "text-foreground relative h-fit w-max min-w-[70px] justify-between px-2 py-8 text-left text-xs font-normal border-transparent",
               className,
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"

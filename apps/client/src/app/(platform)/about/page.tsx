@@ -36,9 +36,6 @@ export default async function About() {
             className={"whitespace-pre-wrap"}
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
-            transformImageUri={(uri) =>
-              `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${uri}`
-            }
           >
             {dataResult.value.description ? dataResult.value.description : ""}
           </ReactMarkdown>

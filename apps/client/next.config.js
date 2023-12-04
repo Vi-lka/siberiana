@@ -19,9 +19,15 @@ const nextConfig = {
     NEXT_PUBLIC_SIBERIANA_API_URL: process.env.NEXT_PUBLIC_SIBERIANA_API_URL,
   },
   images: {
-    domains: [
-      process.env.NEXT_PUBLIC_STRAPI_DOMAIN,
-      process.env.NEXT_PUBLIC_S3_DOMAIN,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_STRAPI_DOMAIN,
+      },
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_S3_DOMAIN,
+      },
     ],
   },
   async rewrites() {

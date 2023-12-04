@@ -143,7 +143,7 @@ export const columns: ColumnDef<BookForTable>[] = [
           name={`books[${row.index}].year`}
           defaultValue={row.original.year}
           type="number"
-          className="border-background bg-transparent text-center"
+          className="text-center"
           placeholder="__"
         />
       );

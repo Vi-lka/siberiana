@@ -33,6 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
     title: {
       default: dict.siteInfo.siteName,
       template: `%s | ${dict.siteInfo.siteName}`,

@@ -19,7 +19,12 @@ const nextConfig = {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL_ADMIN,
   },
   images: {
-    domains: [process.env.NEXT_PUBLIC_S3_DOMAIN],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.NEXT_PUBLIC_S3_DOMAIN,
+      },
+    ],
   },
 };
 

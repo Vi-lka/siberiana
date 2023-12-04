@@ -147,15 +147,11 @@ export default function Locations({
       <DropdownMenu open={openCombobox} onOpenChange={setOpenCombobox}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant={
-              form.getFieldState(formValueName).isDirty || customDirty
-                ? "outline"
-                : "ghost"
-            }
+            variant="outline"
             role="combobox"
             aria-expanded={openCombobox}
             className={cn(
-              "text-foreground relative h-fit w-full justify-between px-2 py-8 text-left text-xs font-normal",
+              "text-foreground relative h-fit w-full justify-between px-2 py-8 text-left text-xs font-normal border-transparent",
               form.getFieldState(formValueName).invalid
                 ? "border-red-600"
                 : form.getFieldState(formValueName).isDirty || customDirty
