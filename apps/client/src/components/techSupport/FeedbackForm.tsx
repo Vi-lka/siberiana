@@ -28,13 +28,21 @@ import {
 import ButtonComponent from "../ui/ButtonComponent";
 import { sendMailAction } from "./sendMailAction";
 
-export default function FeedbackForm({ dict }: { dict: TechSupportDict }) {
+export default function FeedbackForm({
+  dict,
+  name,
+  email,
+}: {
+  name?: string;
+  email?: string;
+  dict: TechSupportDict;
+}) {
   const [personal, setPersonal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
 
   const id = useId();
 
-  const TechSupportFormSchema = z.object({
+  const FeedbackFormSchema = z.object({
     name: z
       .string({
         required_error: dict.errors.required,
@@ -57,12 +65,16 @@ export default function FeedbackForm({ dict }: { dict: TechSupportDict }) {
       .min(1, dict.errors.required),
   });
 
-  const form = useForm<z.infer<typeof TechSupportFormSchema>>({
-    resolver: zodResolver(TechSupportFormSchema),
+  const form = useForm<z.infer<typeof FeedbackFormSchema>>({
+    resolver: zodResolver(FeedbackFormSchema),
     mode: "onChange",
+    defaultValues: {
+      name: name || "",
+      email: email || "",
+    },
   });
 
-  const handleSubmit = async (data: z.infer<typeof TechSupportFormSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof FeedbackFormSchema>) => {
     await sendMailAction(data);
     form.reset();
     setSuccessModal(true);

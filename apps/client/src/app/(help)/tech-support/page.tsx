@@ -1,14 +1,15 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
 
 import { Dictionary } from "@siberiana/schemas";
 
+import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import FeedbackForm from "~/components/techSupport/FeedbackForm";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getDictionary } from "~/lib/utils/getDictionary";
 
 export default async function TechSupport() {
-/*   const session = await getServerSession(authOptions);
-  if (!session) return <NoSession />; */
+  const session = await getServerSession(authOptions);
 
   const dict = await getDictionary();
   const dictResult = Dictionary.parse(dict);
@@ -37,7 +38,11 @@ export default async function TechSupport() {
         </div>
 
         <div>
-          <FeedbackForm dict={dictResult.techSupport} />
+          <FeedbackForm
+            dict={dictResult.techSupport}
+            name={session?.user.name}
+            email={session?.user.email}
+          />
         </div>
       </div>
     </div>
