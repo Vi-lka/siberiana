@@ -5,18 +5,18 @@ import type { EntityEnum, TechniqueForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getTechniques } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesTechniques({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "techniques"
+  const entity: EntityEnum = "techniques";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -31,9 +31,9 @@ export default async function TablesTechniques({
     displayName: "",
     description: "",
     externalLink: "",
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -67,26 +67,28 @@ export default async function TablesTechniques({
       );
   }
 
-  const dataForUpdate: TechniqueForTable[] = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      art,
-      petroglyphs,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: TechniqueForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        art,
+        petroglyphs,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
-    const artForTable = art.length;
-    const petroglyphsForTable = petroglyphs.length;
+      const artifactsForTable = artifacts.length;
+      const artForTable = art.length;
+      const petroglyphsForTable = petroglyphs.length;
 
-    return {
-      artifacts: artifactsForTable,
-      art: artForTable,
-      petroglyphs: petroglyphsForTable,
-      ...rest,
-    };
-  });
+      return {
+        artifacts: artifactsForTable,
+        art: artForTable,
+        petroglyphs: petroglyphsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (

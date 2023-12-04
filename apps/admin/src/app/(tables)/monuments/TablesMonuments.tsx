@@ -5,18 +5,18 @@ import type { EntityEnum, MonumentForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getMonuments } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesMonuments({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "monuments"
+  const entity: EntityEnum = "monuments";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -32,9 +32,9 @@ export default async function TablesMonuments({
     description: "",
     externalLink: "",
     sets: [],
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -68,20 +68,22 @@ export default async function TablesMonuments({
       );
   }
 
-  const dataForUpdate: MonumentForTable[] = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: MonumentForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
+      const artifactsForTable = artifacts.length;
 
-    return {
-      artifacts: artifactsForTable,
-      ...rest,
-    };
-  });
+      return {
+        artifacts: artifactsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (

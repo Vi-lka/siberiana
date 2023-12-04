@@ -2,25 +2,30 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-import type { ArtifactForTable, EntityEnum, LocationEnum, Status } from "@siberiana/schemas";
+import type {
+  ArtifactForTable,
+  EntityEnum,
+  LocationEnum,
+  Status,
+} from "@siberiana/schemas";
 
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getArtifacts } from "~/lib/queries/artifacts";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesArtifacts({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "artifacts"
+  const entity: EntityEnum = "artifacts";
 
   const session = await getServerSession(authOptions);
 
@@ -60,12 +65,12 @@ export default async function TablesArtifacts({
   const statusForModerator: Status = {
     id: "listed",
     displayName: getStatusName("listed"),
-  }
+  };
 
   const statusForAdmin: Status = {
     id: "draft",
     displayName: getStatusName("draft"),
-  }
+  };
 
   const defaultAdd: ArtifactForTable = {
     id: "random" + Math.random().toString(),
@@ -114,8 +119,8 @@ export default async function TablesArtifacts({
       id: collectionFulfilled.value.edges[0].node.id,
       displayName: collectionFulfilled.value.edges[0].node.displayName,
     },
-  }
-  const dataForCreate = [ defaultAdd ]
+  };
+  const dataForCreate = [defaultAdd];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
@@ -150,80 +155,82 @@ export default async function TablesArtifacts({
       );
   }
 
-  const dataForUpdate: ArtifactForTable[] = results[0].value.edges.map((data) => {
-    const node = data.node;
-    const {
-      status,
-      primaryImageURL,
-      additionalImagesUrls,
-      collection,
-      location,
-      country,
-      region,
-      district,
-      settlement,
-      width,
-      height,
-      length,
-      depth,
-      diameter,
-      datingStart,
-      datingEnd,
-      ...rest // assigns remaining
-    } = node;
-
-    const additionalImages = additionalImagesUrls
-      ? additionalImagesUrls.map((url) => {
-          const file = null;
-          return { file, url };
-        })
-      : null;
-
-    const locationForTabel: {
-      id: string,
-      displayName: string,
-      type: LocationEnum,
-    } | null = location
-      ? { ...location, type: "location" }
-      : settlement
-      ? { ...settlement, type: "settlement" }
-      : district
-      ? { ...district, type: "district" }
-      : region
-      ? { ...region, type: "region" }
-      : country
-      ? { ...country, type: "country" }
-      : null;
-
-    return {
-      status: {
-        id: status,
-        displayName: getStatusName(status),
-      },
-      primaryImage: {
-        file: null,
-        url: primaryImageURL,
-      },
-      additionalImages,
-      collection: {
-        id: collection.id,
-        displayName: collection.displayName,
-      },
-      location: locationForTabel,
-      sizes: {
+  const dataForUpdate: ArtifactForTable[] = results[0].value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        status,
+        primaryImageURL,
+        additionalImagesUrls,
+        collection,
+        location,
+        country,
+        region,
+        district,
+        settlement,
         width,
         height,
         length,
         depth,
         diameter,
-      },
-      datingRow: {
         datingStart,
         datingEnd,
-      },
-      ...rest,
-    };
-  });
+        ...rest // assigns remaining
+      } = node;
+
+      const additionalImages = additionalImagesUrls
+        ? additionalImagesUrls.map((url) => {
+            const file = null;
+            return { file, url };
+          })
+        : null;
+
+      const locationForTabel: {
+        id: string;
+        displayName: string;
+        type: LocationEnum;
+      } | null = location
+        ? { ...location, type: "location" }
+        : settlement
+        ? { ...settlement, type: "settlement" }
+        : district
+        ? { ...district, type: "district" }
+        : region
+        ? { ...region, type: "region" }
+        : country
+        ? { ...country, type: "country" }
+        : null;
+
+      return {
+        status: {
+          id: status,
+          displayName: getStatusName(status),
+        },
+        primaryImage: {
+          file: null,
+          url: primaryImageURL,
+        },
+        additionalImages,
+        collection: {
+          id: collection.id,
+          displayName: collection.displayName,
+        },
+        location: locationForTabel,
+        sizes: {
+          width,
+          height,
+          length,
+          depth,
+          diameter,
+        },
+        datingRow: {
+          datingStart,
+          datingEnd,
+        },
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (

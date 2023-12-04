@@ -5,18 +5,18 @@ import type { BookGenreForTable, EntityEnum } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
-import { columns } from "./columns";
-import { updateColumns } from "./updateColumns";
-import { getBookGenres } from "~/lib/queries/books";
 import CreateTable from "~/components/tables/CreateTable";
 import UpdateTable from "~/components/tables/UpdateTable";
+import { getBookGenres } from "~/lib/queries/books";
+import { columns } from "./columns";
+import { updateColumns } from "./updateColumns";
 
 export default async function TablesBookGenres({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "bookGenres"
+  const entity: EntityEnum = "bookGenres";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -31,9 +31,9 @@ export default async function TablesBookGenres({
     displayName: "",
     description: "",
     externalLink: "",
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -67,20 +67,22 @@ export default async function TablesBookGenres({
       );
   }
 
-  const dataForUpdate: BookGenreForTable[] = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
+  const dataForUpdate: BookGenreForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
         books,
-      ...rest // assigns remaining
-    } = node;
+        ...rest // assigns remaining
+      } = node;
 
-    const booksForTable = books.length;
+      const booksForTable = books.length;
 
-    return {
-      books: booksForTable,
-      ...rest,
-    };
-  });
+      return {
+        books: booksForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (

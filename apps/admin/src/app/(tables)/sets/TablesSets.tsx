@@ -5,18 +5,18 @@ import type { EntityEnum, SetForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getSets } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesSets({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "sets"
+  const entity: EntityEnum = "sets";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -32,9 +32,9 @@ export default async function TablesSets({
     description: "",
     externalLink: "",
     monuments: [],
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {

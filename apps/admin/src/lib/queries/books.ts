@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 
-import { BookGenresArray, BooksArray, PeriodicalsArray } from "@siberiana/schemas";
+import {
+  BookGenresArray,
+  BooksArray,
+  PeriodicalsArray,
+} from "@siberiana/schemas";
 
 //.........................BOOKS.........................//
 export const getBooks = async ({
@@ -298,7 +302,9 @@ export const getPeriodicals = async ({
     throw new Error(`Failed to fetch data 'Periodicals'`);
   }
 
-  const json = (await res.json()) as { data: { periodicals: PeriodicalsArray } };
+  const json = (await res.json()) as {
+    data: { periodicals: PeriodicalsArray };
+  };
   if (json.data.periodicals.totalCount === 0) {
     notFound();
   }

@@ -7,19 +7,19 @@ import type { EntityEnum, ModelForTable, Status } from "@siberiana/schemas";
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getModels } from "~/lib/queries/artifacts";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesModels({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "models"
+  const entity: EntityEnum = "models";
 
   const session = await getServerSession(authOptions);
 
@@ -56,9 +56,9 @@ export default async function TablesModels({
     externalLink: "",
     artifacts: [],
     petroglyphs: [],
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {

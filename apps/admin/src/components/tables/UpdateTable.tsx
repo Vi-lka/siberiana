@@ -19,17 +19,17 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
+import type { EntityEnum } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
+import { getEntityType } from "~/lib/utils/getEntity";
 import getShortDescription from "~/lib/utils/getShortDescription";
 import { useDeleteMutation, useUpdateMutation } from "~/lib/utils/useMutations";
-import { getEntityType } from "~/lib/utils/getEntity";
-import type { EntityEnum } from "@siberiana/schemas";
 
 interface DataTableProps<TData, TValue> {
-  entity: EntityEnum; 
+  entity: EntityEnum;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   moderatorsColumns?: ColumnDef<TData, TValue>[];
@@ -61,8 +61,9 @@ export default function UpdateTable<TData, TValue>({
   const isModerator = session.data?.user.roles?.includes("moderator");
 
   const allowColumns: ColumnDef<TData, TValue>[] = isModerator
-    ? moderatorsColumns 
-      ? moderatorsColumns : columns
+    ? moderatorsColumns
+      ? moderatorsColumns
+      : columns
     : columns;
 
   const table = useReactTable({
@@ -83,8 +84,8 @@ export default function UpdateTable<TData, TValue>({
     },
   });
 
-  const ZodType = getEntityType(entity)
-  type ZodTypeInfer = z.infer<typeof ZodType>
+  const ZodType = getEntityType(entity);
+  type ZodTypeInfer = z.infer<typeof ZodType>;
 
   const form = useForm<ZodTypeInfer>({
     resolver: zodResolver(ZodType),
@@ -94,7 +95,8 @@ export default function UpdateTable<TData, TValue>({
     },
   });
 
-  const formData: Array<TData & { id: string }> = form.getValues()[entity as keyof ZodTypeInfer]
+  const formData: Array<TData & { id: string }> =
+    form.getValues()[entity as keyof ZodTypeInfer];
 
   const handleGoToCreate = React.useCallback(() => {
     const params = new URLSearchParams(window.location.search);
@@ -109,8 +111,8 @@ export default function UpdateTable<TData, TValue>({
 
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const dataToDelete = formData.filter((item) =>
-        selectedRows.some((row) => row.getValue("id") === item.id),
-    )
+      selectedRows.some((row) => row.getValue("id") === item.id),
+    );
     const idsToDelete = dataToDelete.map((item) => item.id);
 
     const mutationsArray = idsToDelete.map((id) =>
@@ -119,9 +121,9 @@ export default function UpdateTable<TData, TValue>({
 
     const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(
-      (elem) => elem.status === "rejected",
-    ) as PromiseRejectedResult | undefined;
+    const rejected = results.find((elem) => elem.status === "rejected") as
+      | PromiseRejectedResult
+      | undefined;
 
     if (rejected) {
       toast({
@@ -151,11 +153,11 @@ export default function UpdateTable<TData, TValue>({
   async function handleUpdate(dataForm: ZodTypeInfer) {
     setLoading(true);
 
-    const entityKey = entity as keyof ZodTypeInfer
+    const entityKey = entity as keyof ZodTypeInfer;
 
-    const allData: Array<TData> = dataForm[entityKey]
+    const allData: Array<TData> = dataForm[entityKey];
 
-    const dirtyFields: Array<TData> = form.formState.dirtyFields[entityKey]
+    const dirtyFields: Array<TData> = form.formState.dirtyFields[entityKey];
 
     const dirtyFieldsArray = allData
       .map((item, index) => {
@@ -178,9 +180,9 @@ export default function UpdateTable<TData, TValue>({
 
     const results = await Promise.allSettled(mutationsArray);
 
-    const rejected = results.find(
-      (elem) => elem.status === "rejected",
-    ) as PromiseRejectedResult | undefined;
+    const rejected = results.find((elem) => elem.status === "rejected") as
+      | PromiseRejectedResult
+      | undefined;
 
     if (rejected) {
       toast({

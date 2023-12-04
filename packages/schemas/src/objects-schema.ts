@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 //.........................STATUS.........................//
 export const StatusEnum = z.enum(["listed", "unlisted", "draft"]);
 export type StatusEnum = z.infer<typeof StatusEnum>;

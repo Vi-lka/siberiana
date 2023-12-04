@@ -2,25 +2,30 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-import type { BookForTable, EntityEnum, LocationEnum, Status } from "@siberiana/schemas";
+import type {
+  BookForTable,
+  EntityEnum,
+  LocationEnum,
+  Status,
+} from "@siberiana/schemas";
 
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getBooks } from "~/lib/queries/books";
 import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesBooks({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "books"
+  const entity: EntityEnum = "books";
 
   const session = await getServerSession(authOptions);
 
@@ -90,9 +95,9 @@ export default async function TablesBooks({
       id: collectionFulfilled.value.edges[0].node.id,
       displayName: collectionFulfilled.value.edges[0].node.displayName,
     },
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
@@ -159,9 +164,9 @@ export default async function TablesBooks({
       : null;
 
     const locationForTabel: {
-      id: string,
-      displayName: string,
-      type: LocationEnum,
+      id: string;
+      displayName: string;
+      type: LocationEnum;
     } | null = location
       ? { ...location, type: "location" }
       : settlement

@@ -15,20 +15,19 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useSession } from "next-auth/react";
 import { useFieldArray, useForm } from "react-hook-form";
 import type { z } from "zod";
 
+import type { EntityEnum } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
-
-import getShortDescription from "~/lib/utils/getShortDescription";
-import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 import { getEntityType } from "~/lib/utils/getEntity";
-import { useSession } from "next-auth/react";
+import getShortDescription from "~/lib/utils/getShortDescription";
 import { useCreateMutation } from "~/lib/utils/useMutations";
-import type { EntityEnum } from "@siberiana/schemas";
+import { getSavedData, usePersistForm } from "~/lib/utils/usePersistForm";
 
 interface DataTableProps<TData, TValue> {
   entity: EntityEnum;
@@ -47,17 +46,14 @@ export default function CreateTable<TData, TValue>({
   moderatorsColumns,
   hasObjectsToUpdate,
 }: DataTableProps<TData, TValue>) {
-
-  const formDataKey = `${entity}Create`
+  const formDataKey = `${entity}Create`;
 
   const savedResult = getSavedData<TData>({
     data,
     key: formDataKey,
   });
 
-  const [dataState, setDataState] = React.useState<TData[]>(
-    savedResult.data,
-  );
+  const [dataState, setDataState] = React.useState<TData[]>(savedResult.data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -67,7 +63,8 @@ export default function CreateTable<TData, TValue>({
 
   const [isPendingTable, startTransitionTable] = React.useTransition();
   const [isPendingForm, startTransitionForm] = React.useTransition();
-  const [isPendingGoToUpdate, startTransitionGoToUpdate] = React.useTransition();
+  const [isPendingGoToUpdate, startTransitionGoToUpdate] =
+    React.useTransition();
   const [isPendingRouter, startTransitionRouter] = React.useTransition();
 
   const router = useRouter();
@@ -78,8 +75,9 @@ export default function CreateTable<TData, TValue>({
   const isModerator = session.data?.user.roles?.includes("moderator");
 
   const allowColumns: ColumnDef<TData, TValue>[] = isModerator
-    ? moderatorsColumns 
-      ? moderatorsColumns : columns
+    ? moderatorsColumns
+      ? moderatorsColumns
+      : columns
     : columns;
 
   const table = useReactTable({
@@ -100,8 +98,8 @@ export default function CreateTable<TData, TValue>({
     },
   });
 
-  const ZodType = getEntityType(entity)
-  type ZodTypeInfer = z.infer<typeof ZodType>
+  const ZodType = getEntityType(entity);
+  type ZodTypeInfer = z.infer<typeof ZodType>;
 
   const form = useForm<ZodTypeInfer>({
     resolver: zodResolver(ZodType),
@@ -123,7 +121,8 @@ export default function CreateTable<TData, TValue>({
     triggerValidation().catch(console.error);
   }, [entity, form]);
 
-  const formData: Array<TData & { id?: string }> = form.getValues()[entity as keyof ZodTypeInfer]
+  const formData: Array<TData & { id?: string }> =
+    form.getValues()[entity as keyof ZodTypeInfer];
 
   usePersistForm<TData[]>({
     value: { data: formData },
@@ -159,7 +158,7 @@ export default function CreateTable<TData, TValue>({
 
     const filteredData = formData.filter(
       (item) => !selectedRows.some((row) => row.getValue("id") === item.id),
-    )
+    );
 
     const deleteAll = filteredData.length === 0;
 
@@ -202,8 +201,10 @@ export default function CreateTable<TData, TValue>({
     setLoading(true);
 
     const mutationsArray = createMutation
-        ? (dataForm[entity as keyof ZodTypeInfer] as TData[]).map((item) => createMutation.mutation.mutateAsync(item))
-        : []
+      ? (dataForm[entity as keyof ZodTypeInfer] as TData[]).map((item) =>
+          createMutation.mutation.mutateAsync(item),
+        )
+      : [];
 
     const results = await Promise.allSettled(mutationsArray);
 
@@ -241,13 +242,13 @@ export default function CreateTable<TData, TValue>({
   }
 
   if (loading || isPendingRouter)
-  return (
-    <LoadingMutation
-      isLoadingFile={!!createMutation?.isLoadingFiles}
-      progress={createMutation?.progressFiles}
-      className="mt-12"
-    />
-  );
+    return (
+      <LoadingMutation
+        isLoadingFile={!!createMutation?.isLoadingFiles}
+        progress={createMutation?.progressFiles}
+        className="mt-12"
+      />
+    );
 
   return (
     <DataTable

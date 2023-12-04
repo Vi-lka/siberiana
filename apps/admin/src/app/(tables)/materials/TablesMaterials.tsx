@@ -5,18 +5,18 @@ import type { EntityEnum, MaterialForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getMaterials } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesMaterials({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "materials"
+  const entity: EntityEnum = "materials";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -31,9 +31,9 @@ export default async function TablesMaterials({
     displayName: "",
     description: "",
     externalLink: "",
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -67,20 +67,22 @@ export default async function TablesMaterials({
       );
   }
 
-  const dataForUpdate: MaterialForTable[] = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: MaterialForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
+      const artifactsForTable = artifacts.length;
 
-    return {
-      artifacts: artifactsForTable,
-      ...rest,
-    };
-  });
+      return {
+        artifacts: artifactsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (
@@ -112,7 +114,7 @@ export default async function TablesMaterials({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable 
+        <UpdateTable
           entity={entity}
           columns={updateColumns}
           data={dataForUpdate}

@@ -28,10 +28,7 @@ export function usePersistForm<TData>({
   return;
 }
 
-export function getSavedData<TData>({
-  data,
-  key,
-}: SavedData<TData>) {
+export function getSavedData<TData>({ data, key }: SavedData<TData>) {
   const storageData = localStorage.getItem(key);
   if (storageData) {
     const savedData = JSON.parse(storageData) as SavedData<TData>;

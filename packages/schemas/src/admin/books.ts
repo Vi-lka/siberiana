@@ -177,10 +177,10 @@ export const PeriodicalsList = z.object({
 });
 export type PeriodicalsList = z.infer<typeof PeriodicalsList>;
 
-export const PeriodicalsArray = BookGenresArray
+export const PeriodicalsArray = BookGenresArray;
 export type PeriodicalsArray = z.infer<typeof PeriodicalsArray>;
 
-export const PeriodicalForTable = BookGenreForTable
+export const PeriodicalForTable = BookGenreForTable;
 export type PeriodicalForTable = z.infer<typeof PeriodicalForTable>;
 
 export const PeriodicalsForm = z.object({

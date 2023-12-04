@@ -5,18 +5,18 @@ import type { CultureForTable, EntityEnum } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 import { getCultures } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
-import CreateTable from "~/components/tables/CreateTable";
-import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesCultures({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "cultures"
+  const entity: EntityEnum = "cultures";
 
   const mode = searchParams["mode"] as string | undefined;
 
@@ -31,9 +31,9 @@ export default async function TablesCultures({
     displayName: "",
     description: "",
     externalLink: "",
-  }
+  };
 
-  const dataForCreate = [ defaultAdd ]
+  const dataForCreate = [defaultAdd];
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -47,7 +47,7 @@ export default async function TablesCultures({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable 
+            <CreateTable
               entity={entity}
               columns={columns}
               data={dataForCreate}
@@ -67,23 +67,25 @@ export default async function TablesCultures({
       );
   }
 
-  const dataForUpdate: CultureForTable[] = dataResult.value.edges.map((data) => {
-    const node = data.node;
-    const {
-      artifacts,
-      petroglyphs,
-      ...rest // assigns remaining
-    } = node;
+  const dataForUpdate: CultureForTable[] = dataResult.value.edges.map(
+    (data) => {
+      const node = data.node;
+      const {
+        artifacts,
+        petroglyphs,
+        ...rest // assigns remaining
+      } = node;
 
-    const artifactsForTable = artifacts.length;
-    const petroglyphsForTable = petroglyphs.length;
+      const artifactsForTable = artifacts.length;
+      const petroglyphsForTable = petroglyphs.length;
 
-    return {
-      artifacts: artifactsForTable,
-      petroglyphs: petroglyphsForTable,
-      ...rest,
-    };
-  });
+      return {
+        artifacts: artifactsForTable,
+        petroglyphs: petroglyphsForTable,
+        ...rest,
+      };
+    },
+  );
 
   if (mode === "add")
     return (
