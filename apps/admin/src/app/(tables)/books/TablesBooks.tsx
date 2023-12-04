@@ -97,7 +97,7 @@ export default async function TablesBooks({
     },
   };
 
-  const dataForCreate = [defaultAdd];
+  const dataForCreate = [ defaultAdd ];
 
   if (results[0].status === "rejected") {
     if ((results[0].reason as Error).message === "NEXT_NOT_FOUND") {
