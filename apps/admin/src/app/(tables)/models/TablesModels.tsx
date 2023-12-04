@@ -2,7 +2,7 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 import { getServerSession } from "next-auth";
 
-import type { ModelForTable } from "@siberiana/schemas";
+import type { EntityEnum, ModelForTable, Status } from "@siberiana/schemas";
 
 import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
@@ -10,15 +10,17 @@ import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getModels } from "~/lib/queries/artifacts";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
-import CreateTable from "./CreateTable";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesModels({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "models"
+
   const session = await getServerSession(authOptions);
 
   const roles = session?.user.roles;
@@ -33,29 +35,30 @@ export default async function TablesModels({
     }),
   ]);
 
-  const statusForModerator = {
+  const statusForModerator: Status = {
     id: "listed",
     displayName: getStatusName("listed"),
   };
-  const statusForAdmin = {
+  const statusForAdmin: Status = {
     id: "draft",
     displayName: getStatusName("draft"),
   };
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      status: isModerator ? statusForModerator : statusForAdmin,
-      displayName: "",
-      file: {
-        file: null,
-        url: "",
-      },
-      description: "",
-      externalLink: "",
-      artifacts: [],
-      petroglyphs: [],
+
+  const defaultAdd: ModelForTable = {
+    id: "random" + Math.random().toString(),
+    status: isModerator ? statusForModerator : statusForAdmin,
+    displayName: "",
+    file: {
+      file: null,
+      url: "",
     },
-  ] as ModelForTable[];
+    description: "",
+    externalLink: "",
+    artifacts: [],
+    petroglyphs: [],
+  }
+
+  const dataForCreate = [ defaultAdd ]
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -70,9 +73,11 @@ export default async function TablesModels({
             }
           >
             <CreateTable
+              entity={entity}
               columns={columns}
               moderatorsColumns={moderatorsColumns}
               data={dataForCreate}
+              defaultAdd={defaultAdd}
             />
           </ClientHydration>
         </div>
@@ -81,14 +86,14 @@ export default async function TablesModels({
       return (
         <ErrorHandler
           error={dataResult.reason as unknown}
-          place="Cultures"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = dataResult.value.edges.map((data) => {
+  const dataForUpdate: ModelForTable[] = dataResult.value.edges.map((data) => {
     const node = data.node;
     const {
       status,
@@ -106,7 +111,7 @@ export default async function TablesModels({
         url: fileURL,
       },
       ...rest,
-    } as ModelForTable;
+    };
   });
 
   if (mode === "add")
@@ -121,9 +126,11 @@ export default async function TablesModels({
           }
         >
           <CreateTable
+            entity={entity}
             columns={columns}
             moderatorsColumns={moderatorsColumns}
             data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -139,6 +146,7 @@ export default async function TablesModels({
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
         <UpdateTable
+          entity={entity}
           columns={updateColumns}
           moderatorsColumns={moderatorsUpdateColumns}
           data={dataForUpdate}

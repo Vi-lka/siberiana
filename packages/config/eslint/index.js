@@ -11,6 +11,7 @@ const config = {
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "import", "@tanstack/query"],
   rules: {
+    "@typescript-eslint/switch-exhaustiveness-check": "warn",
     "@next/next/no-html-link-for-pages": "off",
     "turbo/no-undeclared-env-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",

@@ -7,11 +7,13 @@ import { useDoubleTap } from "use-double-tap";
 import type {
   ArtifactForTable,
   BookForTable,
+  BookGenreForTable,
   CultureForTable,
   EntityEnum,
   MaterialForTable,
   ModelForTable,
   MonumentForTable,
+  PeriodicalForTable,
   SetForTable,
   TechniqueForTable,
 } from "@siberiana/schemas";
@@ -37,6 +39,8 @@ import Models from "./Models";
 import Monuments from "./Monuments";
 import Sets from "./Sets";
 import Techniques from "./Techniques";
+import BookGenres from "./BookGenres";
+import Periodicals from "./Periodicals";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -135,24 +139,16 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
           >
             {
               {
-                artifacts: (
-                  <Artifacts row={props.row as Row<ArtifactForTable>} />
-                ),
-                cultures: <Cultures row={props.row as Row<CultureForTable>} />,
-                materials: (
-                  <Materials row={props.row as Row<MaterialForTable>} />
-                ),
-                techniques: (
-                  <Techniques row={props.row as Row<TechniqueForTable>} />
-                ),
-                sets: <Sets row={props.row as Row<SetForTable>} />,
-                monuments: (
-                  <Monuments row={props.row as Row<MonumentForTable>} />
-                ),
-                models: <Models row={props.row as Row<ModelForTable>} />,
-                books: <Books row={props.row as Row<BookForTable>} />,
-                art: <div>art</div>,
-                protected_area_pictures: <div>protected_area_pictures</div>,
+                artifacts:   <Artifacts row={props.row as Row<ArtifactForTable>} />,
+                cultures:    <Cultures row={props.row as Row<CultureForTable>} />,
+                materials:   <Materials row={props.row as Row<MaterialForTable>} />,
+                techniques:  <Techniques row={props.row as Row<TechniqueForTable>} />,
+                sets:        <Sets row={props.row as Row<SetForTable>} />,
+                monuments:   <Monuments row={props.row as Row<MonumentForTable>} />,
+                models:      <Models row={props.row as Row<ModelForTable>} />,
+                books:       <Books row={props.row as Row<BookForTable>} />,
+                bookGenres:  <BookGenres row={props.row as Row<BookGenreForTable>} />,
+                periodicals: <Periodicals row={props.row as Row<PeriodicalForTable>} />,
               }[props.dialogType]
             }
           </ScrollArea>

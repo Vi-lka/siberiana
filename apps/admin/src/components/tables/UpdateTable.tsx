@@ -19,25 +19,27 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
-import type { BookForTable } from "@siberiana/schemas";
-import { BooksForm } from "@siberiana/schemas";
 import { toast } from "@siberiana/ui";
 
 import LoadingMutation from "~/components/LoadingMutation";
 import DataTable from "~/components/tables/DataTable";
-import { useDeleteBook, useUpdateBook } from "~/lib/mutations/objects";
 import getShortDescription from "~/lib/utils/getShortDescription";
+import { useDeleteMutation, useUpdateMutation } from "~/lib/utils/useMutations";
+import { getEntityType } from "~/lib/utils/getEntity";
+import type { EntityEnum } from "@siberiana/schemas";
 
 interface DataTableProps<TData, TValue> {
+  entity: EntityEnum; 
   columns: ColumnDef<TData, TValue>[];
-  moderatorsColumns: ColumnDef<TData, TValue>[];
-  data: BookForTable[] & TData[];
+  data: TData[];
+  moderatorsColumns?: ColumnDef<TData, TValue>[];
 }
 
 export default function UpdateTable<TData, TValue>({
+  entity,
   columns,
-  moderatorsColumns,
   data,
+  moderatorsColumns,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -53,19 +55,18 @@ export default function UpdateTable<TData, TValue>({
   const router = useRouter();
   const session = useSession();
 
-  const deleteMutation = useDeleteBook(session.data?.access_token);
-  const { updateMutation, progressFiles, isLoadingFiles } = useUpdateBook(
-    session.data?.access_token,
-  );
+  const deleteMutation = useDeleteMutation(entity, session.data?.access_token);
+  const updateMutation = useUpdateMutation(entity, session.data?.access_token);
 
   const isModerator = session.data?.user.roles?.includes("moderator");
 
   const allowColumns: ColumnDef<TData, TValue>[] = isModerator
-    ? moderatorsColumns
+    ? moderatorsColumns 
+      ? moderatorsColumns : columns
     : columns;
 
   const table = useReactTable({
-    data: data,
+    data,
     columns: allowColumns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -82,31 +83,34 @@ export default function UpdateTable<TData, TValue>({
     },
   });
 
-  const form = useForm<z.infer<typeof BooksForm>>({
-    resolver: zodResolver(BooksForm),
+  const ZodType = getEntityType(entity)
+  type ZodTypeInfer = z.infer<typeof ZodType>
+
+  const form = useForm<ZodTypeInfer>({
+    resolver: zodResolver(ZodType),
     mode: "onChange",
     defaultValues: {
-      books: data,
+      [entity]: data,
     },
   });
+
+  const formData: Array<TData & { id: string }> = form.getValues()[entity as keyof ZodTypeInfer]
 
   const handleGoToCreate = React.useCallback(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("mode", "add");
     startTransitionGoToCreate(() => {
-      router.push(`books?${params.toString()}`);
+      router.push(`${entity}?${params.toString()}`);
     });
-  }, [router]);
+  }, [entity, router]);
 
   async function handleDelete() {
     setLoading(true);
 
     const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const dataToDelete = form
-      .getValues()
-      .books.filter((item) =>
+    const dataToDelete = formData.filter((item) =>
         selectedRows.some((row) => row.getValue("id") === item.id),
-      ) as BookForTable[] & TData[];
+    )
     const idsToDelete = dataToDelete.map((item) => item.id);
 
     const mutationsArray = idsToDelete.map((id) =>
@@ -117,7 +121,7 @@ export default function UpdateTable<TData, TValue>({
 
     const rejected = results.find(
       (elem) => elem.status === "rejected",
-    ) as PromiseRejectedResult;
+    ) as PromiseRejectedResult | undefined;
 
     if (rejected) {
       toast({
@@ -131,7 +135,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Книги удалены",
+        description: "Артефакты удалены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -144,34 +148,28 @@ export default function UpdateTable<TData, TValue>({
     }
   }
 
-  async function handleUpdate(dataForm: z.infer<typeof BooksForm>) {
+  async function handleUpdate(dataForm: ZodTypeInfer) {
     setLoading(true);
 
-    const noLines = dataForm.books.map((book) => {
-      const { displayName, description, ...rest } = book;
+    const entityKey = entity as keyof ZodTypeInfer
 
-      return {
-        displayName: displayName.replace(/\n/g, " "),
-        description: description?.replace(/\n/g, " "),
-        ...rest,
-      };
-    });
+    const allData: Array<TData> = dataForm[entityKey]
 
-    const dirtyFields = form.formState.dirtyFields.books;
+    const dirtyFields: Array<TData> = form.formState.dirtyFields[entityKey]
 
-    const dirtyFieldsArray = noLines
+    const dirtyFieldsArray = allData
       .map((item, index) => {
         if (!!dirtyFields && typeof dirtyFields[index] !== "undefined") {
           return { new: item, old: data[index] };
         }
       })
       .filter((item) => item !== undefined) as {
-      new: BookForTable;
-      old: BookForTable;
+      new: TData & { id: string };
+      old: TData & { id: string };
     }[];
 
     const mutationsArray = dirtyFieldsArray.map((item) =>
-      updateMutation.mutateAsync({
+      updateMutation?.updateMutation.mutateAsync({
         id: item.new.id,
         newValue: item.new,
         oldValue: item.old,
@@ -182,7 +180,7 @@ export default function UpdateTable<TData, TValue>({
 
     const rejected = results.find(
       (elem) => elem.status === "rejected",
-    ) as PromiseRejectedResult;
+    ) as PromiseRejectedResult | undefined;
 
     if (rejected) {
       toast({
@@ -196,7 +194,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Книги изменены",
+        description: "Артефакты изменены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -212,8 +210,8 @@ export default function UpdateTable<TData, TValue>({
   if (loading || isPendingRefresh)
     return (
       <LoadingMutation
-        isLoading={isLoadingFiles}
-        progress={progressFiles}
+        isLoadingFile={!!updateMutation?.isLoadingFiles}
+        progress={updateMutation?.progressFiles}
         className="mt-12"
       />
     );
@@ -233,7 +231,7 @@ export default function UpdateTable<TData, TValue>({
       isHasAdd={false}
       isChangeModeAvailable
       dialog
-      dialogType="books"
+      dialogType="artifacts"
     />
   );
 }

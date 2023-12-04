@@ -1,37 +1,34 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
-
-import type { EntityEnum, SetForTable } from "@siberiana/schemas";
-
+import type { EntityEnum, PeriodicalForTable } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
-import { getSets } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
 import { updateColumns } from "./updateColumns";
+import { getPeriodicals } from "~/lib/queries/books";
 import CreateTable from "~/components/tables/CreateTable";
 import UpdateTable from "~/components/tables/UpdateTable";
 
-export default async function TablesSets({
+export default async function TablesPeriodicals({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const entity: EntityEnum = "sets"
+  const entity: EntityEnum = "periodicals"
 
   const mode = searchParams["mode"] as string | undefined;
 
-  const [dataResult] = await Promise.allSettled([
-    getSets({
+  const [ dataResult ] = await Promise.allSettled([
+    getPeriodicals({
       first: null,
     }),
   ]);
 
-  const defaultAdd: SetForTable = {
+  const defaultAdd: PeriodicalForTable = {
     id: "random" + Math.random().toString(),
     displayName: "",
     description: "",
     externalLink: "",
-    monuments: [],
   }
 
   const dataForCreate = [ defaultAdd ]
@@ -50,8 +47,8 @@ export default async function TablesSets({
           >
             <CreateTable
               entity={entity}
-              columns={columns}
-              data={dataForCreate}
+              columns={columns} 
+              data={dataForCreate} 
               defaultAdd={defaultAdd}
             />
           </ClientHydration>
@@ -68,17 +65,17 @@ export default async function TablesSets({
       );
   }
 
-  const dataForUpdate: SetForTable[] = dataResult.value.edges.map((data) => {
+  const dataForUpdate: PeriodicalForTable[] = dataResult.value.edges.map((data) => {
     const node = data.node;
     const {
-      artifacts,
+        books,
       ...rest // assigns remaining
     } = node;
 
-    const artifactsForTable = artifacts.length;
+    const booksForTable = books.length;
 
     return {
-      artifacts: artifactsForTable,
+      books: booksForTable,
       ...rest,
     };
   });
@@ -113,10 +110,10 @@ export default async function TablesSets({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable
+        <UpdateTable 
           entity={entity}
-          columns={updateColumns}
-          data={dataForUpdate}
+          columns={updateColumns} 
+          data={dataForUpdate} 
         />
       </ClientHydration>
     </div>

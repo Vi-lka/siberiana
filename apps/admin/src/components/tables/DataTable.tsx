@@ -64,18 +64,18 @@ type NoHasAdd = {
   handleDelete: () => Promise<void>;
 };
 
-type DialogForm = {
+type DialogFormT = {
   dialog: true;
   dialogType: EntityEnum;
 };
-type TableForm = {
+type TableFormT = {
   dialog?: false;
 };
 
 export default function DataTable<TData, TFieldValues extends FieldValues>(
   props: DataTableProps<TData, TFieldValues> &
     (HasAdd | NoHasAdd) &
-    (DialogForm | TableForm),
+    (DialogFormT | TableFormT),
 ) {
   const [isPendingSearch, startTransitionSearch] = React.useTransition();
 

@@ -5,11 +5,11 @@ import { Progress } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 export default function LoadingMutation({
-  isLoading,
+  isLoadingFile,
   progress,
   className,
 }: {
-  isLoading: boolean;
+  isLoadingFile: boolean;
   progress?: number;
   className?: string;
 }) {
@@ -18,7 +18,7 @@ export default function LoadingMutation({
       <Loader2
         className={cn("mx-auto my-3 h-12 w-12 animate-spin", className)}
       />
-      {isLoading && progress && progress < 100 ? (
+      {isLoadingFile && progress && progress < 100 ? (
         <div className="mx-auto w-full max-w-xs">
           <h1 className="font-Inter mb-3 text-center text-xl">
             Загружаем файлы

@@ -116,6 +116,52 @@ export const BookGenresList = z.object({
 });
 export type BookGenresList = z.infer<typeof BookGenresList>;
 
+export const BookGenresArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type BookGenresArray = z.infer<typeof BookGenresArray>;
+
+export const BookGenreForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  books: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type BookGenreForTable = z.infer<typeof BookGenreForTable>;
+
+export const BookGenresForm = z.object({
+  bookGenres: BookGenreForTable.array(),
+});
+export type BookGenresForm = z.infer<typeof BookGenresForm>;
+
 //.........................PERIODICALS.........................//
 export const PeriodicalsList = z.object({
   periodicals: z.object({
@@ -130,6 +176,17 @@ export const PeriodicalsList = z.object({
   }),
 });
 export type PeriodicalsList = z.infer<typeof PeriodicalsList>;
+
+export const PeriodicalsArray = BookGenresArray
+export type PeriodicalsArray = z.infer<typeof PeriodicalsArray>;
+
+export const PeriodicalForTable = BookGenreForTable
+export type PeriodicalForTable = z.infer<typeof PeriodicalForTable>;
+
+export const PeriodicalsForm = z.object({
+  periodicals: PeriodicalForTable.array(),
+});
+export type PeriodicalsForm = z.infer<typeof PeriodicalsForm>;
 
 //.........................PUBLISHERS.........................//
 export const PublishersList = z.object({

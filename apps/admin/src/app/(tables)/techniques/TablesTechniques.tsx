@@ -1,21 +1,23 @@
 import React from "react";
 import { Loader2 } from "lucide-react";
 
-import type { TechniqueForTable } from "@siberiana/schemas";
+import type { EntityEnum, TechniqueForTable } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import { getTechniques } from "~/lib/queries/artifacts";
 import { columns } from "./columns";
-import CreateTable from "./CreateTable";
 import { updateColumns } from "./updateColumns";
-import UpdateTable from "./UpdateTable";
+import CreateTable from "~/components/tables/CreateTable";
+import UpdateTable from "~/components/tables/UpdateTable";
 
 export default async function TablesTechniques({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const entity: EntityEnum = "techniques"
+
   const mode = searchParams["mode"] as string | undefined;
 
   const [dataResult] = await Promise.allSettled([
@@ -24,14 +26,14 @@ export default async function TablesTechniques({
     }),
   ]);
 
-  const dataForCreate = [
-    {
-      id: "random" + Math.random().toString(),
-      displayName: "",
-      description: "",
-      externalLink: "",
-    },
-  ] as TechniqueForTable[];
+  const defaultAdd: TechniqueForTable = {
+    id: "random" + Math.random().toString(),
+    displayName: "",
+    description: "",
+    externalLink: "",
+  }
+
+  const dataForCreate = [ defaultAdd ]
 
   if (dataResult.status === "rejected") {
     if ((dataResult.reason as Error).message === "NEXT_NOT_FOUND") {
@@ -45,7 +47,12 @@ export default async function TablesTechniques({
               <Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />
             }
           >
-            <CreateTable columns={columns} data={dataForCreate} />
+            <CreateTable
+              entity={entity}
+              columns={columns}
+              data={dataForCreate}
+              defaultAdd={defaultAdd}
+            />
           </ClientHydration>
         </div>
       );
@@ -53,14 +60,14 @@ export default async function TablesTechniques({
       return (
         <ErrorHandler
           error={dataResult.reason as unknown}
-          place="Techniques"
+          place={entity}
           notFound
           goBack
         />
       );
   }
 
-  const dataForUpdate = dataResult.value.edges.map((data) => {
+  const dataForUpdate: TechniqueForTable[] = dataResult.value.edges.map((data) => {
     const node = data.node;
     const {
       artifacts,
@@ -78,7 +85,7 @@ export default async function TablesTechniques({
       art: artForTable,
       petroglyphs: petroglyphsForTable,
       ...rest,
-    } as TechniqueForTable;
+    };
   });
 
   if (mode === "add")
@@ -93,8 +100,10 @@ export default async function TablesTechniques({
           }
         >
           <CreateTable
+            entity={entity}
             columns={columns}
             data={dataForCreate}
+            defaultAdd={defaultAdd}
             hasObjectsToUpdate
           />
         </ClientHydration>
@@ -109,7 +118,11 @@ export default async function TablesTechniques({
       <ClientHydration
         fallback={<Loader2 className="mx-auto mt-12 h-12 w-12 animate-spin" />}
       >
-        <UpdateTable columns={updateColumns} data={dataForUpdate} />
+        <UpdateTable
+          entity={entity}
+          columns={updateColumns}
+          data={dataForUpdate}
+        />
       </ClientHydration>
     </div>
   );
