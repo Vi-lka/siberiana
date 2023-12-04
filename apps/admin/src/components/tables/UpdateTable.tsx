@@ -233,7 +233,7 @@ export default function UpdateTable<TData, TValue>({
       isHasAdd={false}
       isChangeModeAvailable
       dialog
-      dialogType="artifacts"
+      dialogType={entity}
     />
   );
 }
