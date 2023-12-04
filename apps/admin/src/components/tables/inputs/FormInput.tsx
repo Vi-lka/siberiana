@@ -43,9 +43,9 @@ export default function FormInput({
                 form.getFieldState(name).invalid
                   ? "border-red-500"
                   : form.getFieldState(name).isDirty ||
-                    field.value !== defaultValue
-                  ? "border-green-400"
-                  : "",
+                      field.value !== defaultValue
+                    ? "border-green-400"
+                    : "",
               )}
               placeholder={placeholder}
               {...field}

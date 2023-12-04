@@ -54,14 +54,14 @@ export default function DateSelect({
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-max max-w-[240px] px-3 py-8 text-left font-normal border-transparent",
+                    "w-max max-w-[240px] border-transparent px-3 py-8 text-left font-normal",
                     className,
                     !field.value && "text-muted-foreground",
                     form.getFieldState(name).invalid
                       ? "border-red-600"
                       : form.getFieldState(name).isDirty
-                      ? "border-green-500"
-                      : "",
+                        ? "border-green-500"
+                        : "",
                   )}
                 >
                   {field.value ? (

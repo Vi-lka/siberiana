@@ -102,8 +102,8 @@ export default function TypeSelect({ className }: { className?: string }) {
                   form.getFieldState(formValueName).invalid
                     ? "border-red-600"
                     : form.getFieldState(formValueName).isDirty
-                    ? "border-green-500"
-                    : "",
+                      ? "border-green-500"
+                      : "",
                 )}
               >
                 {selected ? getName(selected) : "__"}

@@ -75,8 +75,8 @@ export function FormSelectMulti({
     contains
       ? (newValues = selected.filter((elem) => elem.id !== item.id))
       : !!selected
-      ? (newValues = [...selected, item])
-      : (newValues = [item]);
+        ? (newValues = [...selected, item])
+        : (newValues = [item]);
 
     handleSelected(newValues);
 
@@ -129,12 +129,12 @@ export function FormSelectMulti({
               role="combobox"
               aria-expanded={openCombobox}
               className={cn(
-                "text-foreground relative h-fit w-full justify-between px-2 py-8 text-left text-xs font-normal border-transparent",
+                "text-foreground relative h-fit w-full justify-between border-transparent px-2 py-8 text-left text-xs font-normal",
                 form.getFieldState(formValueName).invalid
                   ? "border-red-600"
                   : form.getFieldState(formValueName).isDirty || customDirty
-                  ? "border-green-500"
-                  : "",
+                    ? "border-green-500"
+                    : "",
               )}
             >
               <div className="flex w-[85%] flex-col items-center gap-1">

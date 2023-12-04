@@ -93,8 +93,8 @@ export default async function Objects({
           {!!collectionSingle
             ? collectionSingle.node.displayName
             : !!categorySingle
-            ? categorySingle.node.displayName
-            : dictResult.breadcrumbs.objects}
+              ? categorySingle.node.displayName
+              : dictResult.breadcrumbs.objects}
         </h1>
       </div>
 

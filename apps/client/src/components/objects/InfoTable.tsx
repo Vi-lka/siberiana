@@ -29,7 +29,7 @@ export default function InfoTable({ children }: { children: React.ReactNode }) {
         </Table>
       </div>
       <div
-        className="font-Inter text-beaver dark:text-beaverLight flex cursor-pointer border-t-[1px] border-border items-center gap-1 text-sm uppercase hover:underline"
+        className="font-Inter text-beaver dark:text-beaverLight border-border flex cursor-pointer items-center gap-1 border-t-[1px] text-sm uppercase hover:underline"
         onClick={() => setMore((value) => !value)}
       >
         {height > 340 ? (

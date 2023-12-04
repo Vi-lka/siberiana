@@ -170,12 +170,13 @@ export default function UpdateTable<TData, TValue>({
       old: TData & { id: string };
     }[];
 
-    const mutationsArray = dirtyFieldsArray.map((item) =>
-      updateMutation?.updateMutation.mutateAsync({
-        id: item.new.id,
-        newValue: item.new,
-        oldValue: item.old,
-      }),
+    const mutationsArray = dirtyFieldsArray.map(
+      (item) =>
+        updateMutation?.updateMutation.mutateAsync({
+          id: item.new.id,
+          newValue: item.new,
+          oldValue: item.old,
+        }),
     );
 
     const results = await Promise.allSettled(mutationsArray);

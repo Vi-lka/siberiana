@@ -27,8 +27,8 @@ export default function TextCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty || customDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <p className="w-full break-words text-center">{value ? value : "__"}</p>

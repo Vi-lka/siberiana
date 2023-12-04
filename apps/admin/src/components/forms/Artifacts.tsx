@@ -250,7 +250,7 @@ export default function Artifacts({ row }: { row: Row<ArtifactForTable> }) {
             name={`artifacts[${row.index}].admissionDate`}
             placeholder="Выберите дату"
             defaultValue={row.original.admissionDate}
-            className="w-full max-w-xl py-10 border-border"
+            className="border-border w-full max-w-xl py-10"
             side="bottom"
           />
         </div>

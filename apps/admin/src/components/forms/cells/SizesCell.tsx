@@ -30,8 +30,8 @@ export default function SizesCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <p className="max-w-xs break-words text-center">{text}</p>

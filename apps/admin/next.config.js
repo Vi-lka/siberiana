@@ -21,7 +21,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: "https",
         hostname: process.env.NEXT_PUBLIC_S3_DOMAIN,
       },
     ],

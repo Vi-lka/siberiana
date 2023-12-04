@@ -81,7 +81,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormInput
           name={`artifacts[${row.index}].inventoryNumber`}
           defaultValue={row.original.inventoryNumber}
-          className="border-background text-center mx-auto"
+          className="border-background mx-auto text-center"
           placeholder="__"
         />
       );
@@ -103,7 +103,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormInput
           name={`artifacts[${row.index}].kpNumber`}
           defaultValue={row.original.kpNumber}
-          className="border-background text-center mx-auto"
+          className="border-background mx-auto text-center"
           placeholder="__"
         />
       );
@@ -125,7 +125,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormInput
           name={`artifacts[${row.index}].goskatalogNumber`}
           defaultValue={row.original.goskatalogNumber}
-          className="border-background text-center mx-auto"
+          className="border-background mx-auto text-center"
           placeholder="__"
         />
       );
@@ -337,7 +337,7 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <FormInput
           name={`artifacts[${row.index}].weight`}
           defaultValue={row.original.weight}
-          className="border-background text-center mx-auto"
+          className="border-background mx-auto text-center"
           placeholder="__"
         />
       );

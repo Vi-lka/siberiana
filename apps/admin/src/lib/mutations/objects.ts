@@ -241,8 +241,8 @@ export function useUpdateArtifact(access_token?: string) {
               primaryImageUpload !== null
                 ? primaryImageUpload.urls[0]
                 : newValue.primaryImage.url.length === 0
-                ? newValue.primaryImage.url
-                : oldValue.primaryImage.url,
+                  ? newValue.primaryImage.url
+                  : oldValue.primaryImage.url,
             additionalImagesUrls: handleFiles(
               newValue.additionalImages,
               oldValue.additionalImages,
@@ -528,8 +528,8 @@ export function useUpdateBook(access_token?: string) {
               primaryImageUpload !== null
                 ? primaryImageUpload.urls[0]
                 : newValue.primaryImage.url.length === 0
-                ? newValue.primaryImage.url
-                : oldValue.primaryImage.url,
+                  ? newValue.primaryImage.url
+                  : oldValue.primaryImage.url,
             description: newValue.description,
             additionalImagesUrls: handleFiles(
               newValue.additionalImages,

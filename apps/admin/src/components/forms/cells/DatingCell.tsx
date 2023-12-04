@@ -36,8 +36,8 @@ export default function DatingCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <p className="w-max text-center">{text}</p>

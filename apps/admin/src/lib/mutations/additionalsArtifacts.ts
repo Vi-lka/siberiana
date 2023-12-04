@@ -618,8 +618,8 @@ export function useUpdateModel(access_token?: string) {
               resUpload !== null
                 ? resUpload.urls[0]
                 : newValue.file.url.length === 0
-                ? newValue.file.url
-                : oldValue.file.url,
+                  ? newValue.file.url
+                  : oldValue.file.url,
             description: newValue.description,
             externalLink: newValue.externalLink,
           },

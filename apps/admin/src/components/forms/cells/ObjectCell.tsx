@@ -28,8 +28,8 @@ export default function ObjectCell({
         form.getFieldState(name).invalid
           ? "border-red-500"
           : form.getFieldState(name).isDirty || customDirty
-          ? "border-green-400"
-          : "",
+            ? "border-green-400"
+            : "",
       )}
     >
       <p className="max-w-xs break-words text-center">
