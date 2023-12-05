@@ -12,7 +12,7 @@ import MenuBar from "~/components/header/MenuBar";
 import LogoSvg from "~/components/LogoSvg";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import Providers from "~/components/providers/Providers";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./api/auth/[...nextauth]/auth";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),

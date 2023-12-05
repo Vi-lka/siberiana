@@ -4,9 +4,9 @@ import { getServerSession } from "next-auth";
 
 import { Dictionary } from "@siberiana/schemas";
 
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import NoSession from "~/components/errors/NoSession";
 import { getDictionary } from "~/lib/utils/getDictionary";
+import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 
 export const dynamic = "force-dynamic";
 

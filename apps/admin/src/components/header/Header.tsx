@@ -4,11 +4,11 @@ import { getServerSession } from "next-auth";
 
 import { Skeleton } from "@siberiana/ui";
 
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import LogoSvg from "../LogoSvg";
 import { ClientHydration } from "../providers/ClientHydration";
 import { ThemeToggle } from "../providers/ThemeToggle";
 import AccountBar from "./AccountBar";
+import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 
 export default async function Header() {
   const session = await getServerSession(authOptions);

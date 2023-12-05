@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@siberiana/ui";
 import LogInForm from "~/components/auth/LogInForm";
 import SignUpForm from "~/components/auth/SignUpForm";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 
 export default async function LoginUnused() {
   const dict = await getDictionary();
