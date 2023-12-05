@@ -9,7 +9,6 @@ import type {
   Status,
 } from "@siberiana/schemas";
 
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import CreateTable from "~/components/tables/CreateTable";
@@ -19,6 +18,7 @@ import { getCollections } from "~/lib/queries/collections";
 import getStatusName from "~/lib/utils/getStatusName";
 import { columns, moderatorsColumns } from "./columns";
 import { moderatorsUpdateColumns, updateColumns } from "./updateColumns";
+import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 
 export default async function TablesBooks({
   searchParams,

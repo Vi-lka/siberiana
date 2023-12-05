@@ -12,7 +12,6 @@ import {
   TooltipTrigger,
 } from "@siberiana/ui";
 
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
 import { SignOutIcon } from "~/components/auth/NextAuthButtons";
 import NoSession from "~/components/errors/NoSession";
 import ToastToken from "~/components/ui/ToastToken";
@@ -20,6 +19,7 @@ import { decrypt } from "~/lib/utils/encryption";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import getUserRoles from "~/lib/utils/getUserRoles";
 import AccountTabs from "./AccountTabs";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 
 export const dynamic = "force-dynamic";
 
