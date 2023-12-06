@@ -1,7 +1,6 @@
 "use client";
 
 import { useId, useState } from "react";
-import Error from "next/error";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-  toast,
   useToast,
 } from "@siberiana/ui";
 
