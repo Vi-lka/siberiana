@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 
 import { Dictionary } from "@siberiana/schemas";
 
-import { authOptions } from "~/app/api/auth/[...nextauth]/route";
+import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 import FeedbackForm from "~/components/techSupport/FeedbackForm";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
 import { getDictionary } from "~/lib/utils/getDictionary";

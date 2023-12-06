@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import Error from "next/error";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -23,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
+  toast,
+  useToast,
 } from "@siberiana/ui";
 
 import ButtonComponent from "../ui/ButtonComponent";
@@ -39,6 +42,8 @@ export default function FeedbackForm({
 }) {
   const [personal, setPersonal] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+
+  const { toast } = useToast();
 
   const id = useId();
 
@@ -74,10 +79,21 @@ export default function FeedbackForm({
     },
   });
 
-  const handleSubmit = (data: z.infer<typeof FeedbackFormSchema>) => {
-    sendMailAction(data);
-    form.reset();
-    setSuccessModal(true);
+  const handleSubmit = async (data: z.infer<typeof FeedbackFormSchema>) => {
+    try {
+      await sendMailAction({
+        ...data,
+        reason: dict.reasons.find((r, i) => i.toString() === data.reason)!,
+      });
+      form.reset();
+      setSuccessModal(true);
+    } catch (err) {
+      toast({
+        variant: "destructive",
+        title: dict.errors.submit,
+        className: "font-Inter",
+      });
+    }
   };
 
   return (
@@ -143,12 +159,15 @@ export default function FeedbackForm({
                     </SelectTrigger>
 
                     <SelectContent>
-                      <SelectItem
-                        value="1"
-                        className="font-Inter cursor-pointer"
-                      >
-                        Lorem ipsum dolor sit amet.
-                      </SelectItem>
+                      {dict.reasons.map((r, i) => (
+                        <SelectItem
+                          key={i}
+                          value={i.toString()}
+                          className="font-Inter cursor-pointer"
+                        >
+                          {r}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

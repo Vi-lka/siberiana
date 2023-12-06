@@ -270,7 +270,9 @@ export const TechSupportDict = z.object({
   errors: z.object({
     required: z.string(),
     email: z.string(),
+    submit: z.string(),
   }),
+  reasons: z.array(z.string()),
 });
 export type TechSupportDict = z.infer<typeof TechSupportDict>;
 

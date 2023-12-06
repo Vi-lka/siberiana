@@ -12,19 +12,19 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export function sendMailAction(data: {
+export async function sendMailAction(data: {
   name: string;
   email: string;
   reason: string;
   text: string;
 }) {
-  transporter
-    .sendMail({
+  try {
+    await transporter.sendMail({
       to: process.env.FEEDBACK_MAIL_TO,
       subject: "feedback",
       text: `Имя: ${data.name}\nE-mail: ${data.email}\nПричина обращения: ${data.reason}\nТекст обращения: ${data.text}`,
-    })
-    .catch((err) => {
-      console.log(err);
     });
+  } catch (error) {
+    throw new Error("oops");
+  }
 }
