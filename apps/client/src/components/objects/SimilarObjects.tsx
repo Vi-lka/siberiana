@@ -1,6 +1,6 @@
 "use client";
 
-import { SimilarObject } from "@siberiana/schemas";
+import type { SimilarObject } from "@siberiana/schemas";
 
 import ImgObject from "../thumbnails/ImgObject";
 

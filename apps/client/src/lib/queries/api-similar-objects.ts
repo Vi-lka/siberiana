@@ -1,4 +1,4 @@
-import { SimilarObject } from "@siberiana/schemas";
+import type { SimilarObject } from "@siberiana/schemas";
 
 export enum ObjectsTypes {
   PAP = "protectedAreaPictures",
