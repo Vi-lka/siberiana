@@ -367,3 +367,11 @@ export const ArtById = z.object({
   }).nullable(),
 });
 export type ArtById = z.infer<typeof ArtById>;
+
+//.........................SIMILAR OBJECTS.........................//
+export const SimilarObject = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  primaryImageURL: z.string(),
+});
+export type SimilarObject = z.infer<typeof SimilarObject>;

@@ -7,11 +7,13 @@ import ReadPDF from "~/components/objects/buttons/ReadPDF";
 import Description from "~/components/objects/Description";
 import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
+import SimilarObjects from "~/components/objects/SimilarObjects";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getBookById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
+import { ObjectsTypes, getSimilar } from "~/lib/queries/api-similar-objects";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +38,11 @@ export default async function Book({
         goBack
       />
     );
+
+  const similar = await getSimilar(
+    ObjectsTypes.books,
+    dataResult.value.primaryImageURL,
+  );
 
   const firstImage = {
     src: dataResult.value.primaryImageURL,
@@ -100,6 +107,15 @@ export default async function Book({
           <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
         </div>
       </div>
+
+      {!!similar.length && (
+        <div className="mb-20">
+          <h1 className="text-foreground mb-10 text-xl font-bold uppercase lg:text-2xl">
+            {dict.objects.similar}
+          </h1>
+          <SimilarObjects data={similar} />
+        </div>
+      )}
     </div>
   );
 }

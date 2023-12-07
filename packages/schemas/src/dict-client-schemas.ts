@@ -173,6 +173,7 @@ export const ObjectsDict = z.object({
   mainInfo: z.object({
     title: z.string(),
   }),
+  similar: z.string(),
 });
 export type ObjectsDict = z.infer<typeof ObjectsDict>;
 

@@ -1,14 +1,14 @@
-import React from "react";
-
 import { Dictionary } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import Description from "~/components/objects/Description";
 import PhotoZoom from "~/components/objects/PhotoZoom";
 import ShowOnMap from "~/components/objects/ShowOnMap";
+import SimilarObjects from "~/components/objects/SimilarObjects";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getPAPById } from "~/lib/queries/api-object";
+import { getSimilar, ObjectsTypes } from "~/lib/queries/api-similar-objects";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
 
@@ -26,6 +26,7 @@ export default async function ProtectedAreaPictures({
   // const haveSession = !!session
 
   const [dataResult] = await Promise.allSettled([getPAPById(id)]);
+
   if (dataResult.status === "rejected")
     return (
       <ErrorHandler
@@ -35,6 +36,11 @@ export default async function ProtectedAreaPictures({
         goBack
       />
     );
+
+  const similar = await getSimilar(
+    ObjectsTypes.PAP,
+    dataResult.value.primaryImageURL,
+  );
 
   return (
     <div className="relative">
@@ -87,6 +93,15 @@ export default async function ProtectedAreaPictures({
           {dataResult.value.geometry && <ShowOnMap data={dataResult.value} />}
         </div>
       </div>
+
+      {!!similar.length && (
+        <div className="mb-20">
+          <h1 className="text-foreground mb-10 text-xl font-bold uppercase lg:text-2xl">
+            {dict.objects.similar}
+          </h1>
+          <SimilarObjects data={similar} />
+        </div>
+      )}
     </div>
   );
 }

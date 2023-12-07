@@ -8,8 +8,10 @@ import Open3DModel from "~/components/objects/buttons/Open3DModel";
 import Description from "~/components/objects/Description";
 import PhotoSlider from "~/components/objects/PhotoSlider";
 import PhotoZoom from "~/components/objects/PhotoZoom";
+import SimilarObjects from "~/components/objects/SimilarObjects";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import { getArtifactById } from "~/lib/queries/api-object";
+import { getSimilar, ObjectsTypes } from "~/lib/queries/api-similar-objects";
 import { getDictionary } from "~/lib/utils/getDictionary";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +37,11 @@ export default async function Artifact({
         goBack
       />
     );
+
+  const similar = await getSimilar(
+    ObjectsTypes.artifacts,
+    dataResult.value.primaryImageURL,
+  );
 
   const firstImage = {
     src: dataResult.value.primaryImageURL,
@@ -95,6 +102,15 @@ export default async function Artifact({
           <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
         </div>
       </div>
+
+      {!!similar.length && (
+        <div className="mb-20">
+          <h1 className="text-foreground mb-10 text-xl font-bold uppercase lg:text-2xl">
+            {dict.objects.similar}
+          </h1>
+          <SimilarObjects data={similar} />
+        </div>
+      )}
     </div>
   );
 }
