@@ -364,6 +364,6 @@ export const ArtById = z.object({
     .array(),
   author: z.object({
     displayName: z.string(),
-  }),
+  }).nullable(),
 });
 export type ArtById = z.infer<typeof ArtById>;
