@@ -27,7 +27,7 @@ export default function MainInfoBlock({
         <SingleItemArray label="Жанр" value={data.artGenre} />
         <SingleItemArray label="Стиль" value={data.artStyle} />
         <SingleItemArray label="Техники" value={data.techniques} />
-        <SingleItem label="Автор" value={data.author.displayName} />
+        <SingleItem label="Автор" value={data.author?.displayName} />
         <SingleItem label="Датировка" value={data.dating} />
         <SingleItem label="Размеры" value={data.dimensions} />
         <SingleItem label="Номер" value={data.number} />

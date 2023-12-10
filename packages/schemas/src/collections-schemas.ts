@@ -5,6 +5,7 @@ export const CollectionTypeEnum = z.enum([
   "artifacts",
   "books",
   "protected_area_pictures",
+  "herbaria",
 ]);
 export type CollectionTypeEnum = z.infer<typeof CollectionTypeEnum>;
 
