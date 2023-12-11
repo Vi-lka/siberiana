@@ -2,14 +2,14 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import type { SetForTable } from "@siberiana/schemas";
+import type { MonumentForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
-import Monuments from "~/components/tables/artifacts/Monuments";
+import Sets from "~/components/tables/artifacts_petroglyphs/Sets";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 
-export const columns: ColumnDef<SetForTable>[] = [
+export const columns: ColumnDef<MonumentForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -59,7 +59,7 @@ export const columns: ColumnDef<SetForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`sets[${row.index}].displayName`}
+          name={`monuments[${row.index}].displayName`}
           defaultValue={row.original.displayName}
         />
       );
@@ -71,20 +71,20 @@ export const columns: ColumnDef<SetForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`sets[${row.index}].description`}
+          name={`monuments[${row.index}].description`}
           defaultValue={row.original.description}
         />
       );
     },
   },
   {
-    accessorKey: "monuments",
-    header: () => <div className="text-center">Памятники</div>,
+    accessorKey: "sets",
+    header: () => <div className="text-center">Комплексы</div>,
     cell: ({ row }) => {
       return (
-        <Monuments
-          formValueName={`sets[${row.index}].monuments`}
-          defaultMonuments={row.original.monuments}
+        <Sets
+          formValueName={`monuments[${row.index}].sets`}
+          defaultSets={row.original.sets}
         />
       );
     },
@@ -95,7 +95,7 @@ export const columns: ColumnDef<SetForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`sets[${row.index}].externalLink`}
+          name={`monuments[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );
