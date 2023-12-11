@@ -10,11 +10,12 @@ export enum ObjectsTypes {
 export async function getSimilar(
   type: ObjectsTypes,
   primaryImageURL: string,
+  removeLastPath?: boolean,
 ): Promise<SimilarObject[]> {
   const headers = { "Content-Type": "application/json" };
 
   const similarRes = await fetch(
-    `${process.env.NEXT_PUBLIC_ASIMILAR_API_URL}/inference?image_path=${primaryImageURL}&num_similar=${20}`,
+    `${process.env.NEXT_PUBLIC_ASIMILAR_API_URL}/inference?image_path=${primaryImageURL}&num_similar=${200}`,
     {
       headers,
       method: "POST",
@@ -28,7 +29,10 @@ export async function getSimilar(
 
   const similar = (await similarRes.json()) as { similar_images: string[] };
 
-  const url = primaryImageURL.split("/").slice(0, -1).join("/");
+  const url = primaryImageURL
+    .split("/")
+    .slice(0, removeLastPath ? -2 : -1)
+    .join("/");
   const filename = primaryImageURL.split("/").pop();
 
   const query = /* GraphGL */ `

@@ -38,11 +38,6 @@ export default async function Artifact({
       />
     );
 
-  const similar = await getSimilar(
-    ObjectsTypes.artifacts,
-    dataResult.value.primaryImageURL,
-  );
-
   const firstImage = {
     src: dataResult.value.primaryImageURL,
     alt: dataResult.value.displayName,
@@ -53,6 +48,12 @@ export default async function Artifact({
   const images = !!additionalImages
     ? [firstImage, ...additionalImages]
     : [firstImage];
+
+  const similar = await getSimilar(
+    ObjectsTypes.artifacts,
+    dataResult.value.primaryImageURL,
+    images.length > 1,
+  );
 
   return (
     <div className="relative">

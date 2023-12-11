@@ -11,9 +11,9 @@ import SimilarObjects from "~/components/objects/SimilarObjects";
 import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getBookById } from "~/lib/queries/api-object";
+import { getSimilar, ObjectsTypes } from "~/lib/queries/api-similar-objects";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
-import { ObjectsTypes, getSimilar } from "~/lib/queries/api-similar-objects";
 
 export const dynamic = "force-dynamic";
 
@@ -39,11 +39,6 @@ export default async function Book({
       />
     );
 
-  const similar = await getSimilar(
-    ObjectsTypes.books,
-    dataResult.value.primaryImageURL,
-  );
-
   const firstImage = {
     src: dataResult.value.primaryImageURL,
     alt: dataResult.value.displayName,
@@ -54,6 +49,12 @@ export default async function Book({
   const images = !!additionalImages
     ? [firstImage, ...additionalImages]
     : [firstImage];
+
+  const similar = await getSimilar(
+    ObjectsTypes.books,
+    dataResult.value.primaryImageURL,
+    images.length > 1,
+  );
 
   return (
     <div className="relative">
