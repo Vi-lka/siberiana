@@ -362,8 +362,69 @@ export const ArtById = z.object({
       displayName: z.string(),
     })
     .array(),
-  author: z.object({
-    displayName: z.string(),
-  }).nullable(),
+  author: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
 });
 export type ArtById = z.infer<typeof ArtById>;
+
+//.........................HERBARIA.........................//
+export const HerbariumById = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  description: z.string(),
+  primaryImageURL: z.string(),
+  additionalImagesUrls: z.string().array().nullable(),
+  date: z.preprocess((val) => new Date(val as string), z.date()).optional(),
+  location: z.string(),
+  externalLink: z.string(),
+  collection: Collection,
+  author: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  familia: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  genus: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  group: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  species: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  country: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  region: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  district: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+  settlement: z
+    .object({
+      displayName: z.string(),
+    })
+    .nullable(),
+});
+export type HerbariumById = z.infer<typeof HerbariumById>;

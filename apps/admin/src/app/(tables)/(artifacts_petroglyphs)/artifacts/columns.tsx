@@ -5,12 +5,12 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { ArtifactForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
-import Culture from "~/components/tables/artifacts/Culture";
-import Materials from "~/components/tables/artifacts/Materials";
-import Model from "~/components/tables/artifacts/Model";
-import Monument from "~/components/tables/artifacts/Monument";
-import Set from "~/components/tables/artifacts/Set";
-import Techniques from "~/components/tables/artifacts/Techniques";
+import Culture from "~/components/tables/artifacts_petroglyphs/Culture";
+import Materials from "~/components/tables/artifacts_petroglyphs/Materials";
+import Model from "~/components/tables/artifacts_petroglyphs/Model";
+import Monument from "~/components/tables/artifacts_petroglyphs/Monument";
+import Set from "~/components/tables/artifacts_petroglyphs/Set";
+import Techniques from "~/components/tables/artifacts_petroglyphs/Techniques";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import License from "~/components/tables/global-fields/License";
 import Locations from "~/components/tables/global-fields/Locations";

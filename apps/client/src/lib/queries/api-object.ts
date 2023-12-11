@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
 
-import { ArtById, ArtifactById, BookById, PAPById } from "@siberiana/schemas";
+import {
+  ArtById,
+  ArtifactById,
+  BookById,
+  HerbariumById,
+  PAPById,
+} from "@siberiana/schemas";
 
 //.........................ARTIFACT.........................//
 export const getArtifactById = async (id: string): Promise<ArtifactById> => {
@@ -502,4 +508,105 @@ export const getArtById = async (id: string): Promise<ArtById> => {
   const art = ArtById.parse(json.data?.arts.edges[0].node);
 
   return art;
+};
+
+//.........................HERBARIA.........................//
+export const getHerbariumById = async (id: string): Promise<HerbariumById> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query HerbariumById {
+      herbaria(where: { id: "${id}", status: listed }) {
+            totalCount
+            edges {
+              node {
+                id
+                displayName
+                description
+                primaryImageURL
+                additionalImagesUrls
+                date
+                location
+                externalLink
+                collection {
+                  id
+                  slug
+                  displayName
+                  category {
+                      slug
+                      displayName
+                  }
+                }
+                author {
+                  displayName
+                }
+                familia {
+                  displayName
+                }
+                genus {
+                  displayName
+                }
+                group {
+                  displayName
+                }
+                species {
+                  displayName
+                }
+                country {
+                  displayName
+                }
+                region {
+                  displayName  
+                }
+                district {
+                  displayName
+                }
+                settlement {
+                  displayName
+                }
+              }
+            }
+        }
+    }
+    `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Herbarium ${id}'`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      herbaria: {
+        totalCount: number;
+        edges: {
+          node: HerbariumById;
+        }[];
+      };
+    };
+  };
+
+  if (
+    json.data.herbaria.totalCount === 0 ||
+    json.data.herbaria.edges.length === 0
+  ) {
+    notFound();
+  }
+
+  const herbaria = HerbariumById.parse(json.data?.herbaria.edges[0].node);
+
+  return herbaria;
 };

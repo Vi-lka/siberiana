@@ -18,8 +18,8 @@ import ToastToken from "~/components/ui/ToastToken";
 import { decrypt } from "~/lib/utils/encryption";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import getUserRoles from "~/lib/utils/getUserRoles";
-import AccountTabs from "./AccountTabs";
 import { authOptions } from "../api/auth/[...nextauth]/auth";
+import AccountTabs from "./AccountTabs";
 
 export const dynamic = "force-dynamic";
 

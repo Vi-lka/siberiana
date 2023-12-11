@@ -1,7 +1,6 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
+
+import ImageComponent from "~/components/thumbnails/ImageComponent";
 
 export default function Member({
   title,
@@ -10,26 +9,15 @@ export default function Member({
 }: {
   title: string;
   description: string;
-  src?: string;
+  src: string | undefined;
 }) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
-
-  React.useEffect(() => {
-    if (src) {
-      setImage(src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [src]);
-
   return (
     <div className="flex h-fit flex-col gap-3">
       <div className="relative flex aspect-square w-full overflow-hidden rounded-md">
-        <Image
-          src={image}
+        <ImageComponent
+          src={src}
           fill
           sizes="(max-width: 1280px) 85vw, 40vw"
-          onError={() => setImage("/images/image-placeholder.png")}
           priority={true}
           className="aspect-square w-full object-cover"
           alt={title}

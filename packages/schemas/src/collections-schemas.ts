@@ -92,6 +92,7 @@ export const ObjectsEnum = z.enum([
   "Book",
   "ProtectedAreaPicture",
   "Art",
+  "Herbarium",
 ]);
 export type ObjectsEnum = z.infer<typeof ObjectsEnum>;
 
@@ -117,5 +118,6 @@ export const Objects = z.object({
   artifacts: ObjectsArray,
   books: ObjectsArray,
   protectedAreaPictures: ObjectsArray,
+  herbaria: ObjectsArray,
 });
 export type Objects = z.infer<typeof Objects>;

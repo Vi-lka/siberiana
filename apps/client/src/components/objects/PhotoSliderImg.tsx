@@ -1,9 +1,8 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 
 import { cn } from "@siberiana/ui/src/lib/utils";
+
+import ImageComponent from "../thumbnails/ImageComponent";
 
 export default function PhotoSliderImg({
   alt,
@@ -11,23 +10,12 @@ export default function PhotoSliderImg({
   sizes = "(min-width: 768px) 40vw, 85vw",
 }: {
   alt: string;
-  src: string;
+  src: string | undefined;
   sizes?: string;
 }) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
-
-  React.useEffect(() => {
-    if (!!src) {
-      setImage(src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [src]);
-
   return (
-    <Image
-      src={image}
-      onError={() => setImage("/images/image-placeholder.png")}
+    <ImageComponent
+      src={src}
       fill
       sizes={sizes}
       className={cn("mx-auto", !!src ? "object-contain" : "object-cover")}

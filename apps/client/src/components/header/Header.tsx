@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { Dictionary } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
 
+import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import { SignInButton } from "../auth/NextAuthButtons";
 import LogoSvg from "../LogoSvg";
@@ -13,7 +14,6 @@ import { ThemeToggle } from "../providers/ThemeToggle";
 import AccountBar from "./AccountBar";
 import NavMenu from "./NavMenu";
 import NavSheet from "./NavSheet";
-import { authOptions } from "~/app/api/auth/[...nextauth]/auth";
 
 export default async function Header() {
   const dict = await getDictionary();

@@ -55,14 +55,12 @@ export default function PaginationControls({
 
   const max_page = Math.ceil(length / Number(per));
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (Number(event.target.value) > max_page) {
+  const handleChangeInput = (value: string) => {
+    if (Number(value) > max_page) {
       setPageInput(max_page.toString());
-    } else if (!event.target.value) {
-      setPageInput(event.target.value);
-    } else if (Number(event.target.value) < 1) {
-      setPageInput("1");
-    } else setPageInput(event.target.value);
+    } else if (Number(value) <= 0) {
+      setPageInput("");
+    } else setPageInput(value);
   };
 
   const handlePageParams = React.useCallback(
@@ -73,11 +71,13 @@ export default function PaginationControls({
         startTransitionPage(() => {
           router.push(`${pathname}?${params.toString()}`);
         });
+      } else if (value.length === 0) {
+        setPageInput(page);
       } else {
         params.delete(pageP);
       }
     },
-    [pageP, pathname, router],
+    [page, pageP, pathname, router],
   );
 
   const handlePageSizeParams = React.useCallback(
@@ -136,7 +136,7 @@ export default function PaginationControls({
                 )}
                 type="number"
                 value={pageInput}
-                onChange={handleChangeInput}
+                onChange={(e) => handleChangeInput(e.target.value)}
                 onKeyDownCapture={(event) => {
                   if (event.key === "Enter") {
                     handlePageParams(pageInput);

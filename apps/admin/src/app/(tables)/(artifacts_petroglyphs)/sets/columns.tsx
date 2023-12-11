@@ -2,14 +2,14 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import type { MonumentForTable } from "@siberiana/schemas";
+import type { SetForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
-import Sets from "~/components/tables/artifacts/Sets";
+import Monuments from "~/components/tables/artifacts_petroglyphs/Monuments";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 
-export const columns: ColumnDef<MonumentForTable>[] = [
+export const columns: ColumnDef<SetForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -59,7 +59,7 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`monuments[${row.index}].displayName`}
+          name={`sets[${row.index}].displayName`}
           defaultValue={row.original.displayName}
         />
       );
@@ -71,20 +71,20 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`monuments[${row.index}].description`}
+          name={`sets[${row.index}].description`}
           defaultValue={row.original.description}
         />
       );
     },
   },
   {
-    accessorKey: "sets",
-    header: () => <div className="text-center">Комплексы</div>,
+    accessorKey: "monuments",
+    header: () => <div className="text-center">Памятники</div>,
     cell: ({ row }) => {
       return (
-        <Sets
-          formValueName={`monuments[${row.index}].sets`}
-          defaultSets={row.original.sets}
+        <Monuments
+          formValueName={`sets[${row.index}].monuments`}
+          defaultMonuments={row.original.monuments}
         />
       );
     },
@@ -95,7 +95,7 @@ export const columns: ColumnDef<MonumentForTable>[] = [
     cell: ({ row }) => {
       return (
         <FormTextArea
-          name={`monuments[${row.index}].externalLink`}
+          name={`sets[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );

@@ -1,43 +1,23 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+import ImageComponent from "./ImageComponent";
+
 type Props = {
   title: string | null;
-  children?: React.ReactNode;
   href: string;
+  src: string | undefined;
   target?: string;
-  src?: string;
   width?: number;
   height?: number;
   className?: string;
   classNameImage?: string;
+  children?: React.ReactNode;
 };
 
 export default function ImgTextBelow(props: Props) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
-  const [isPlaceholder, setIsPlaceholder] = React.useState(true);
-
-  React.useEffect(() => {
-    if (props.src) {
-      setImage(props.src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [props.src]);
-
-  React.useEffect(() => {
-    if (image === "/images/image-placeholder.png") {
-      setIsPlaceholder(true);
-    } else {
-      setIsPlaceholder(false);
-    }
-  }, [image]);
-
   return (
     <div className="flex h-fit flex-col gap-3">
       <Link
@@ -49,15 +29,15 @@ export default function ImgTextBelow(props: Props) {
         )}
       >
         <div className="relative flex w-full">
-          <Image
-            src={image}
+          <ImageComponent
+            src={props.src}
+            fill={false}
             width={props.width ? props.width : 400}
             height={props.height ? props.height : 400}
-            onError={() => setImage("/images/image-placeholder.png")}
             className={
-              props.classNameImage && !isPlaceholder
+              props.classNameImage
                 ? props.classNameImage
-                : "w-full object-cover"
+                : "w-full object-contain"
             }
             alt={props.title ? props.title : ""}
           />

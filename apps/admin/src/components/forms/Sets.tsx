@@ -4,7 +4,7 @@ import type { Row } from "@tanstack/react-table";
 import type { SetForTable } from "@siberiana/schemas";
 
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import Monuments from "../tables/artifacts/Monuments";
+import Monuments from "../tables/artifacts_petroglyphs/Monuments";
 
 export default function Sets({ row }: { row: Row<SetForTable> }) {
   return (

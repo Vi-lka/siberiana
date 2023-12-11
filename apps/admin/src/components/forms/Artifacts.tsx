@@ -4,11 +4,11 @@ import { useSession } from "next-auth/react";
 
 import type { ArtifactForTable } from "@siberiana/schemas";
 
-import Culture from "~/components/tables/artifacts/Culture";
-import Materials from "~/components/tables/artifacts/Materials";
-import Monument from "~/components/tables/artifacts/Monument";
-import Set from "~/components/tables/artifacts/Set";
-import Techniques from "~/components/tables/artifacts/Techniques";
+import Culture from "~/components/tables/artifacts_petroglyphs/Culture";
+import Materials from "~/components/tables/artifacts_petroglyphs/Materials";
+import Monument from "~/components/tables/artifacts_petroglyphs/Monument";
+import Set from "~/components/tables/artifacts_petroglyphs/Set";
+import Techniques from "~/components/tables/artifacts_petroglyphs/Techniques";
 import Locations from "~/components/tables/global-fields/Locations";
 import Persons from "~/components/tables/global-fields/Persons";
 import Projects from "~/components/tables/global-fields/Projects";
@@ -20,7 +20,7 @@ import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import Model from "../tables/artifacts/Model";
+import Model from "../tables/artifacts_petroglyphs/Model";
 import License from "../tables/global-fields/License";
 import Organization from "../tables/global-fields/Organization";
 import PersonSingle from "../tables/global-fields/PersonSingle";

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import NextAuth from "next-auth/next";
 import type { ProviderType } from "next-auth/providers/index";
+
 import { authOptions } from "./auth";
 
 // Create NextAuth handler using the defined authentication options
