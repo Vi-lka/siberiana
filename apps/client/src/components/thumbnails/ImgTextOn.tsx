@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 import {
@@ -13,11 +10,13 @@ import {
 } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+import ImageComponent from "./ImageComponent";
+
 type Props = {
   title: string;
   url: string;
+  src: string | undefined;
   target?: string;
-  src?: string;
   width?: number;
   height?: number;
   className?: string;
@@ -34,16 +33,6 @@ type FalseShowIconProps = {
 };
 
 export default function ImgTextOn(props: Props) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
-
-  React.useEffect(() => {
-    if (props.src) {
-      setImage(props.src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [props.src]);
-
   return (
     <Link
       href={props.url}
@@ -54,11 +43,11 @@ export default function ImgTextOn(props: Props) {
       )}
     >
       <div className="relative flex w-full">
-        <Image
-          src={image}
+        <ImageComponent
+          src={props.src}
+          fill={false}
           width={props.width ? props.width : 400}
           height={props.height ? props.height : 400}
-          onError={() => setImage("/images/image-placeholder.png")}
           className={"w-full object-cover"}
           alt={props.title}
         />

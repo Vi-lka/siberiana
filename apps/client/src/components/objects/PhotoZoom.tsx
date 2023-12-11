@@ -1,33 +1,37 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui";
+import { cn } from "@siberiana/ui/src/lib/utils";
 
-export default function PhotoZoom({ alt, src }: { alt: string; src: string }) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
+import ImageComponent from "../thumbnails/ImageComponent";
 
-  React.useEffect(() => {
-    if (!!src) {
-      setImage(src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [src]);
+export default function PhotoZoom({
+  alt,
+  src,
+}: {
+  alt: string;
+  src: string | undefined;
+}) {
+  const [loading, setLoading] = React.useState(true);
 
   return (
     <Dialog>
       <DialogTrigger className="max-h-fit w-full">
-        <Image
-          src={image}
-          onError={() => setImage("/images/image-placeholder.png")}
-          priority={true}
-          width={650}
-          height={650}
-          className="mx-auto max-h-[70vh] w-auto overflow-hidden rounded-md object-contain"
+        <ImageComponent
+          src={src}
+          fill={false}
+          width={600}
+          height={600}
+          className={cn(
+            "mx-auto max-h-[70vh] overflow-hidden rounded-md object-contain",
+            loading ? "" : "h-auto w-auto",
+          )}
           alt={alt}
+          priority={true}
+          onLoad={() => setLoading(false)}
         />
       </DialogTrigger>
       <DialogContent className="bg-accent h-[90vh] max-w-[95vw] overflow-hidden p-0 sm:max-w-[95vw]">
@@ -42,11 +46,10 @@ export default function PhotoZoom({ alt, src }: { alt: string; src: string }) {
             }}
           >
             <div className="relative h-full w-full">
-              <Image
-                src={image}
-                onError={() => setImage("/images/image-placeholder.png")}
+              <ImageComponent
+                src={src}
                 fill
-                sizes="150vw"
+                sizes={`100vw`}
                 quality={100}
                 className="object-contain"
                 alt={alt}

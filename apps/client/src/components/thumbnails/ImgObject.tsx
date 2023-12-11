@@ -1,41 +1,21 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@siberiana/ui/src/lib/utils";
 
+import ImageComponent from "./ImageComponent";
+
 type Props = {
   title: string | null;
   href: string;
+  src: string | undefined;
   target?: string;
-  src?: string;
   width?: number;
   height?: number;
   className?: string;
 };
 
 export default function ImgObject(props: Props) {
-  const [image, setImage] = React.useState("/images/image-placeholder.png");
-  const [isPlaceholder, setIsPlaceholder] = React.useState(true);
-
-  React.useEffect(() => {
-    if (props.src) {
-      setImage(props.src);
-    } else {
-      setImage("/images/image-placeholder.png");
-    }
-  }, [props.src]);
-
-  React.useEffect(() => {
-    if (image === "/images/image-placeholder.png") {
-      setIsPlaceholder(true);
-    } else {
-      setIsPlaceholder(false);
-    }
-  }, [image]);
-
   return (
     <Link
       href={props.href}
@@ -46,15 +26,12 @@ export default function ImgObject(props: Props) {
       )}
     >
       <div className="flex w-full flex-col gap-1">
-        <Image
-          src={image}
+        <ImageComponent
+          src={props.src}
+          fill={false}
           width={props.width ? props.width : 450}
           height={props.height ? props.height : 450}
-          onError={() => setImage("/images/image-placeholder.png")}
-          className={cn(
-            "outline-accent ring-ring ring-offset-background w-full overflow-hidden rounded-md shadow-md outline outline-1 outline-offset-1 transition-all duration-200",
-            !isPlaceholder ? "object-contain" : "object-cover",
-          )}
+          className="outline-accent ring-ring ring-offset-background w-full overflow-hidden rounded-md object-contain shadow-md outline outline-1 outline-offset-1 transition-all duration-200"
           alt={props.title ? props.title : ""}
           priority={true}
         />

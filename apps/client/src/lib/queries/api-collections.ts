@@ -763,3 +763,113 @@ export const getArts = async ({
 
   return arts;
 };
+
+//.........................HERBARIA.........................//
+export const getHerbariums = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+  categories,
+  collections,
+} // countryIds,
+// regionIds,
+// districtIds,
+// settlementIds,
+// licenseIds,
+// techniqueIds,
+: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+  categories?: string;
+  collections?: string;
+  countryIds?: string;
+  regionIds?: string;
+  districtIds?: string;
+  settlementIds?: string;
+  licenseIds?: string;
+  techniqueIds?: string;
+}): Promise<ObjectsArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+    query GetHerbaria {
+      herbaria(
+        first: ${first}, 
+        offset: ${offset}, 
+        orderBy: [{
+          field: ${sort.split(":")[0]},
+          direction: ${sort.split(":")[1]}
+        }],
+        where: {
+          status: listed,
+          hasCollectionWith: [
+            ${
+              !!collections ? `{slugIn: [${getMultiFilter(collections)}]},` : ""
+            }
+            ${
+              !!categories
+                ? `{
+              hasCategoryWith: [
+                {slugIn: [${getMultiFilter(categories)}]}
+              ]
+            },`
+                : ""
+            }
+          ],
+          or: [ 
+            {displayNameContainsFold: "${search}"}, 
+            {hasCollectionWith: [
+              {or: [
+                {displayNameContainsFold: "${search}"},
+                {hasCategoryWith: [
+                  {displayNameContainsFold: "${search}"}
+                ]}
+              ]}
+            ]}, 
+          ]
+        }
+      ) {
+        totalCount
+        edges {
+          node {
+            __typename
+            id
+            displayName
+            primaryImageURL
+          }
+        }
+      }
+    }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error("Failed to fetch data 'Herbaria'");
+  }
+
+  const json = (await res.json()) as { data: { herbaria: ObjectsArray } };
+
+  if (json.data.herbaria.totalCount === 0) {
+    notFound();
+  }
+
+  const herbariums = ObjectsArray.parse(json.data.herbaria);
+
+  return herbariums;
+};

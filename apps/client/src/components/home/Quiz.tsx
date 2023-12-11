@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import type { ZodError } from "zod";
 
@@ -12,6 +11,7 @@ import { useQuestions } from "~/lib/queries/strapi-client";
 import getLinkDir from "~/lib/utils/getLinkDir";
 import ErrorToast from "../errors/ErrorToast";
 import QuizSkeleton from "../skeletons/QuizSkeleton";
+import ImageComponent from "../thumbnails/ImageComponent";
 import ButtonComponent from "../ui/ButtonComponent";
 
 export default function Quiz({
@@ -84,12 +84,8 @@ export default function Quiz({
         {question.attributes.title}
       </h1>
       <div className="relative mx-auto h-[350px] w-[85%] max-w-[1000px] overflow-hidden rounded-md md:w-full 2xl:h-[400px]">
-        <Image
-          src={
-            question.attributes.image.data
-              ? question.attributes.image.data.attributes.url
-              : "/images/image-placeholder.png"
-          }
+        <ImageComponent
+          src={question.attributes.image.data?.attributes.url}
           fill
           className={"object-cover"}
           sizes="(max-width: 1280px) 90vw, 50vw"

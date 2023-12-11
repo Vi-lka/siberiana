@@ -16,6 +16,7 @@ export default function ObjectsGrid({
 }) {
   return (
     <ResponsiveMasonry
+      key={Math.random()}
       columnsCountBreakPoints={{
         270: 1,
         400: 2,

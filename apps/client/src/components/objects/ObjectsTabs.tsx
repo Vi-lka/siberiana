@@ -3,6 +3,7 @@
 import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAtom, useAtomValue } from "jotai";
+import { Loader2 } from "lucide-react";
 
 import type { Dictionary } from "@siberiana/schemas";
 import { Skeleton, Tabs, TabsList, TabsTrigger } from "@siberiana/ui";
@@ -12,10 +13,12 @@ import {
   artifactsCountAtom,
   artsCountAtom,
   booksCountAtom,
+  herbariumsCountAtom,
   PAPCountAtom,
   tabObjectsAtom,
 } from "~/lib/utils/atoms";
 import { ClientHydration } from "../providers/ClientHydration";
+import MasonrySkeleton from "../skeletons/MasonrySkeleton";
 
 export default function ObjectTabs({
   dict,
@@ -28,10 +31,11 @@ export default function ObjectTabs({
   const booksCount = useAtomValue(booksCountAtom);
   const PAPCount = useAtomValue(PAPCountAtom);
   const artsCount = useAtomValue(artsCountAtom);
+  const herbariumsCount = useAtomValue(herbariumsCountAtom);
 
   const [tabObject, setTabObject] = useAtom(tabObjectsAtom);
 
-  const [_, startTransition] = React.useTransition();
+  const [isPending, startTransition] = React.useTransition();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,6 +59,11 @@ export default function ObjectTabs({
       value: "arts",
       title: dict.objects.arts,
       count: artsCount,
+    },
+    {
+      value: "herbariums",
+      title: dict.objects.herbariums,
+      count: herbariumsCount,
     },
   ];
 
@@ -82,7 +91,15 @@ export default function ObjectTabs({
     else if (booksCount > 0) handleChangeTab("books");
     else if (PAPCount > 0) handleChangeTab("protected_area_pictures");
     else if (artsCount > 0) handleChangeTab("arts");
-  }, [PAPCount, artifactsCount, artsCount, booksCount, handleChangeTab]);
+    else if (herbariumsCount > 0) handleChangeTab("herbariums");
+  }, [
+    PAPCount,
+    artifactsCount,
+    artsCount,
+    booksCount,
+    herbariumsCount,
+    handleChangeTab,
+  ]);
 
   React.useEffect(() => {
     switch (type) {
@@ -100,6 +117,9 @@ export default function ObjectTabs({
       case "arts":
         artsCount > 0 ? handleChangeTab("arts") : goToFilledTab();
         break;
+      case "herbariums":
+        herbariumsCount > 0 ? handleChangeTab("herbariums") : goToFilledTab();
+        break;
       default:
         goToFilledTab();
         break;
@@ -109,6 +129,7 @@ export default function ObjectTabs({
     artifactsCount,
     artsCount,
     booksCount,
+    herbariumsCount,
     goToFilledTab,
     handleChangeTab,
     type,
@@ -137,6 +158,7 @@ export default function ObjectTabs({
                 {notEmptyTabs.map((tab, index) => (
                   <TabsTrigger
                     key={index}
+                    disabled={isPending}
                     value={tab.value}
                     className={isSingleTab() ? "cursor-default" : ""}
                   >
@@ -151,11 +173,20 @@ export default function ObjectTabs({
                     )}
                   </TabsTrigger>
                 ))}
+                {isPending ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : null}
               </TabsList>
             ) : null}
           </div>
         </ClientHydration>
-        {children}
+        {isPending ? (
+          <div className="w-full">
+            <MasonrySkeleton />
+          </div>
+        ) : (
+          children
+        )}
       </Tabs>
     </div>
   );

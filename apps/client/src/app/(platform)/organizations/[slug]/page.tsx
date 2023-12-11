@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { PiHandshakeLight } from "react-icons/pi";
@@ -13,6 +12,7 @@ import {
 } from "@siberiana/ui";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
+import ImageComponent from "~/components/thumbnails/ImageComponent";
 import ImgTextBelow from "~/components/thumbnails/ImgTextBelow";
 import ImgTextOn from "~/components/thumbnails/ImgTextOn";
 import Breadcrumbs from "~/components/ui/Breadcrumbs";
@@ -94,8 +94,9 @@ export default async function Organization({
 
           {dataResult.value.image.data ? (
             <div className="relative flex aspect-[2/1] w-full overflow-hidden rounded-md lg:w-[40%]">
-              <Image
+              <ImageComponent
                 src={dataResult.value.image.data.attributes.url}
+                fill={false}
                 width={800}
                 height={400}
                 priority={true}

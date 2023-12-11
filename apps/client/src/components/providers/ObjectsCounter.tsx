@@ -7,6 +7,7 @@ import {
   artifactsCountAtom,
   artsCountAtom,
   booksCountAtom,
+  herbariumsCountAtom,
   PAPCountAtom,
 } from "~/lib/utils/atoms";
 
@@ -15,16 +16,19 @@ export default function ObjectsCounter({
   booksCount,
   PAPCount,
   artsCount,
+  herbariumsCount,
 }: {
   artifactsCount?: number;
   booksCount?: number;
   PAPCount?: number;
   artsCount?: number;
+  herbariumsCount?: number;
 }) {
   const setArtifactsCount = useSetAtom(artifactsCountAtom);
   const setBooksCount = useSetAtom(booksCountAtom);
   const setPAPCount = useSetAtom(PAPCountAtom);
   const setArtsCount = useSetAtom(artsCountAtom);
+  const setHerbariumsCount = useSetAtom(herbariumsCountAtom);
 
   React.useEffect(() => {
     if (artifactsCount !== undefined) {
@@ -49,6 +53,12 @@ export default function ObjectsCounter({
       setArtsCount(artsCount);
     }
   }, [artsCount, setArtsCount]);
+
+  React.useEffect(() => {
+    if (herbariumsCount !== undefined) {
+      setHerbariumsCount(herbariumsCount);
+    }
+  }, [herbariumsCount, setHerbariumsCount]);
 
   return null;
 }

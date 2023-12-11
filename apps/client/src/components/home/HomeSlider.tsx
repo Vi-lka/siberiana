@@ -4,11 +4,12 @@ import React from "react";
 
 import "keen-slider/keen-slider.min.css";
 
-import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 
 import type { Slider } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
+
+import ImageComponent from "../thumbnails/ImageComponent";
 
 export default function HomeSlider({ data }: { data: Slider }) {
   const [created, setCreated] = React.useState<boolean>();
@@ -43,17 +44,17 @@ export default function HomeSlider({ data }: { data: Slider }) {
             className="keen-slider__slide h-[40vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[55vh]"
           >
             {created ? (
-              <Image
+              <ImageComponent
                 src={image.attributes.url}
-                className={"object-cover"}
+                fill
+                sizes="(max-width: 500px) 80vw, 90vw"
                 alt={
                   image.attributes.alternativeText
                     ? image.attributes.alternativeText
                     : ""
                 }
+                className={"object-cover"}
                 priority={true}
-                fill
-                sizes="(max-width: 500px) 80vw, 90vw"
               />
             ) : (
               <Skeleton className="h-full w-full" />
