@@ -3,8 +3,6 @@
 import React from "react";
 import Image from "next/image";
 
-import placeholderImage from "../../../public/images/image-placeholder.png";
-
 type Props = {
   src: string | undefined;
   alt: string;
@@ -25,6 +23,8 @@ type NotFill = {
 };
 
 export default function ImageComponent(props: Props) {
+  const placeholderImage = "/images/image-placeholder.png";
+
   const [image, setImage] = React.useState(
     !!props.src ? props.src : placeholderImage,
   );

@@ -772,13 +772,7 @@ export const getHerbariums = async ({
   sort = "CREATED_AT:DESC",
   categories,
   collections,
-} // countryIds,
-// regionIds,
-// districtIds,
-// settlementIds,
-// licenseIds,
-// techniqueIds,
-: {
+}: {
   first: number | null;
   offset?: number | null;
   search?: string;
