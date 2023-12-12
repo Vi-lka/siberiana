@@ -142,18 +142,25 @@ export default function FeedbackForm({
           <FormField
             control={form.control}
             name="reason"
+            defaultValue=""
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="mb-0 mt-6 p-5">
-                      <SelectValue
-                        placeholder={
-                          <span className="text-muted-foreground uppercase">
-                            {dict.reason}
-                          </span>
-                        }
-                      />
+                      {field.value ? (
+                        <SelectValue
+                          placeholder={
+                            <span className="text-muted-foreground uppercase">
+                              {dict.reason}
+                            </span>
+                          }
+                        />
+                      ) : (
+                        <span className="text-muted-foreground uppercase">
+                          {dict.reason}
+                        </span>
+                      )}
                     </SelectTrigger>
 
                     <SelectContent>
