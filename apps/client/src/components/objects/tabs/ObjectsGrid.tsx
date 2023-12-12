@@ -3,17 +3,25 @@
 import React from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-import type { ObjectsArray } from "@siberiana/schemas";
+import type { CollectionsEnum, ObjectsArray } from "@siberiana/schemas";
 
 import ImgObject from "~/components/thumbnails/ImgObject";
+import { useAtomValue } from "jotai";
+import { tabObjectsAtom } from "~/lib/utils/atoms";
 
 export default function ObjectsGrid({
   data,
   hrefTo,
+  type
 }: {
   data: ObjectsArray;
   hrefTo: string;
+  type: CollectionsEnum;
 }) {
+  const tab = useAtomValue(tabObjectsAtom);
+
+  if (type !== tab) return null // prevent images preload
+
   return (
     <ResponsiveMasonry
       key={Math.random()}

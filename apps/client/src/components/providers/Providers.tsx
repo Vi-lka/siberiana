@@ -10,7 +10,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider>
       <AuthProvider>
-        <ThemeProvider attribute="class" enableSystem={true}>
+        <ThemeProvider attribute="class" enableSystem={true} disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </AuthProvider>

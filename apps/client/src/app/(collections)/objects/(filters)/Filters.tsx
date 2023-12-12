@@ -3,12 +3,12 @@ import React from "react";
 import { Dictionary } from "@siberiana/schemas";
 import { Separator } from "@siberiana/ui";
 
-import FilterTab from "~/components/objects/FilterTab";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import ArtifactsFilters from "./ArtifactsFilters";
 import BooksFilters from "./BooksFilters";
 import GlobalFilters from "./GlobalFilters";
 import PAPFilters from "./PAPFilters";
+import FilterTab from "~/components/objects/tabs/FilterTab";
 
 export default async function Filters({
   searchParams,

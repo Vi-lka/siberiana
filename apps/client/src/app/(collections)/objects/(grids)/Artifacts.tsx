@@ -3,7 +3,7 @@ import React from "react";
 import { Dictionary } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
-import ObjectsGrid from "~/components/objects/ObjectsGrid";
+import ObjectsGrid from "~/components/objects/tabs/ObjectsGrid";
 import { ClientHydration } from "~/components/providers/ClientHydration";
 import ObjectsCounter from "~/components/providers/ObjectsCounter";
 import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
@@ -84,7 +84,7 @@ export default async function Artifacts({
   return (
     <div key={Math.random()} className="w-full">
       <ClientHydration fallback={<MasonrySkeleton />}>
-        <ObjectsGrid data={dataResult.value} hrefTo={"artifact"} />
+        <ObjectsGrid data={dataResult.value} hrefTo={"artifact"} type="artifacts" />
         <div className="mb-24 mt-6">
           <PaginationControls
             dict={dictResult.pagination}

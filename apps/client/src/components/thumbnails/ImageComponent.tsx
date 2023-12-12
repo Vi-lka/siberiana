@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 type Props = {
   src: string | undefined;
@@ -24,6 +25,7 @@ type NotFill = {
 
 export default function ImageComponent(props: Props) {
   const placeholderImage = "/images/image-placeholder.png";
+  const { theme } = useTheme()
 
   const [image, setImage] = React.useState(
     !!props.src ? props.src : placeholderImage,
@@ -33,16 +35,22 @@ export default function ImageComponent(props: Props) {
   const height = !props.fill ? props.height : undefined;
   const sizes = props.fill ? props.sizes : undefined;
 
+  const bgWhiteTheme = "#f0edeb";
+  const shimmerWhiteTheme = "#e9e5e2";
+
+  const bgBlackTheme = "#29293d";
+  const shimmerBlackTheme = "#2d2d43";
+
   const shimmer = (w: number, h: number) => `
         <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <defs>
             <linearGradient id="g">
-              <stop stop-color="#333" offset="20%" />
-              <stop stop-color="#222" offset="50%" />
-              <stop stop-color="#333" offset="70%" />
+              <stop stop-color="${theme === "dark" ? bgBlackTheme : bgWhiteTheme}" offset="20%" />
+              <stop stop-color="${theme === "dark" ? bgBlackTheme : bgWhiteTheme}" offset="50%" />
+              <stop stop-color="${theme === "dark" ? shimmerBlackTheme : shimmerWhiteTheme}" offset="70%" />
             </linearGradient>
           </defs>
-          <rect width="${w}" height="${h}" fill="#333" />
+          <rect width="${w}" height="${h}" fill="${theme === "dark" ? bgBlackTheme : bgWhiteTheme}" />
           <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
           <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
         </svg>

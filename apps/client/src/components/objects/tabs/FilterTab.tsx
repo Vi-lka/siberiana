@@ -6,20 +6,21 @@ import { useAtomValue } from "jotai";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import { tabObjectsAtom } from "~/lib/utils/atoms";
+import type { CollectionsEnum } from "@siberiana/schemas";
 
 export default function FilterTab({
   value,
   children,
   className,
 }: {
-  value: string;
+  value: CollectionsEnum;
   children: React.ReactNode;
   className?: string;
 }) {
-  const tabObject = useAtomValue(tabObjectsAtom);
+  const tab = useAtomValue(tabObjectsAtom);
 
   return (
-    <div className={cn(className, tabObject !== value && "hidden")}>
+    <div className={cn(className, tab !== value && "hidden")}>
       {children}
     </div>
   );
