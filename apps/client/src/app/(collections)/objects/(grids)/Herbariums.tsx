@@ -59,7 +59,11 @@ export default async function Herbariums({
   return (
     <div className="w-full">
       <ClientHydration fallback={<MasonrySkeleton />}>
-        <ObjectsGrid data={dataResult.value} hrefTo={"herbarium"} type="herbariums" />
+        <ObjectsGrid
+          data={dataResult.value}
+          hrefTo={"herbarium"}
+          type="herbariums"
+        />
         <div className="mb-24 mt-6">
           <PaginationControls
             dict={dictResult.pagination}

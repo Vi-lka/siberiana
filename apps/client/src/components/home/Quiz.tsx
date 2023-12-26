@@ -28,12 +28,11 @@ export default function Quiz({
   const { data, isLoading, error } = useQuestions();
 
   // Get random question
-  const { questionRandomId } = React.useMemo<{ questionRandomId: number }>(
-    () => ({
-      questionRandomId: data
+  const questionRandomId = React.useMemo<number>(
+    () =>
+      data
         ? Math.floor(Math.random() * data.questions.data.length)
         : Math.floor(Math.random() * 2),
-    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, tryAgain],
   );
@@ -123,8 +122,12 @@ export default function Quiz({
               {qiuzDict.right}
             </h1>
 
-            <Link href={getLinkDir(question.attributes.url)}>
-              <ButtonComponent className="w-fit px-8 py-6 text-xs lg:text-sm">
+            <Link
+              href={getLinkDir(question.attributes.url)}
+              className="mx-auto"
+              passHref
+            >
+              <ButtonComponent className="flex whitespace-normal px-8 py-6 text-xs lg:text-sm">
                 {question.attributes.urlName}
               </ButtonComponent>
             </Link>

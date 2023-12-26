@@ -84,7 +84,11 @@ export default async function Artifacts({
   return (
     <div key={Math.random()} className="w-full">
       <ClientHydration fallback={<MasonrySkeleton />}>
-        <ObjectsGrid data={dataResult.value} hrefTo={"artifact"} type="artifacts" />
+        <ObjectsGrid
+          data={dataResult.value}
+          hrefTo={"artifact"}
+          type="artifacts"
+        />
         <div className="mb-24 mt-6">
           <PaginationControls
             dict={dictResult.pagination}

@@ -1,8 +1,8 @@
 import "client-only";
 
-import type { CollectionsEnum } from "@siberiana/schemas";
-
 import { atom } from "jotai";
+
+import type { CollectionsEnum } from "@siberiana/schemas";
 
 export const tabAccountAtom = atom("favourites");
 export const tabObjectsAtom = atom<CollectionsEnum>("artifacts");

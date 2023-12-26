@@ -78,7 +78,11 @@ export default async function ProtectedAreaPictures({
   return (
     <div className="w-full">
       <ClientHydration fallback={<MasonrySkeleton />}>
-        <ObjectsGrid data={dataResult.value} hrefTo={"pap"} type="protected_area_pictures" />
+        <ObjectsGrid
+          data={dataResult.value}
+          hrefTo={"pap"}
+          type="protected_area_pictures"
+        />
 
         <div className="mb-24 mt-6">
           <PaginationControls

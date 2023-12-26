@@ -3,11 +3,11 @@
 import React from "react";
 import { useAtomValue } from "jotai";
 
+import type { CollectionsEnum } from "@siberiana/schemas";
 import { TabsContent } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
 import { tabObjectsAtom } from "~/lib/utils/atoms";
-import type { CollectionsEnum } from "@siberiana/schemas";
 
 export default function ObjectsContent({
   value,

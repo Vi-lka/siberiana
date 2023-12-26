@@ -5,6 +5,7 @@ import { Dictionary } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
+import ObjectsContent from "~/components/objects/tabs/ObjectsContent";
 import ObjectTabs from "~/components/objects/tabs/ObjectsTabs";
 import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
@@ -18,11 +19,10 @@ import Arts from "./(grids)/Arts";
 import Books from "./(grids)/Books";
 import Herbariums from "./(grids)/Herbariums";
 import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
-import ObjectsContent from "~/components/objects/tabs/ObjectsContent";
 
 export const dynamic = "force-dynamic";
 
-const DEFAULT_PAGE_SIZE = 24;
+const DEFAULT_PAGE_SIZE = 20;
 
 export default async function Objects({
   searchParams,

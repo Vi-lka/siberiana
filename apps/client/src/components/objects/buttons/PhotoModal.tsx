@@ -8,6 +8,7 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { Skeleton } from "@siberiana/ui";
 import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui/src/dialog";
 import { cn } from "@siberiana/ui/src/lib/utils";
+
 import ImageComponent from "~/components/thumbnails/ImageComponent";
 
 export default function PhotoModal({

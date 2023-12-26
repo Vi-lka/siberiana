@@ -95,6 +95,8 @@ export default function PaginationControls({
     [perP, pathname, router],
   );
 
+  const isPending = isPendingPage || isPendingMore;
+
   return (
     <div
       className={cn(
@@ -102,20 +104,20 @@ export default function PaginationControls({
         className,
       )}
     >
-      {Number(pageInput) === 1 ? (
+      {Number(page) === 1 ? (
         <ButtonComponent
           className={cn(
             "xl:absolute xl:left-1/2 xl:-translate-x-1/2",
             classNameMore,
           )}
           variant={Number(page) >= max_page ? "hidden" : "default"}
-          disabled={isPendingPage || isPendingMore}
+          disabled={isPending}
           onClick={() =>
             handlePageSizeParams((Number(per) + defaultPageSize).toString())
           }
         >
           <span className="sr-only">{dict.showMore}</span>
-          {isPendingMore ? <Loader2 className="animate-spin" /> : dict.showMore}
+          {isPending ? <Loader2 className="animate-spin" /> : dict.showMore}
         </ButtonComponent>
       ) : null}
 
@@ -124,7 +126,7 @@ export default function PaginationControls({
         style={{ display: Number(per) >= length ? "none" : "flex" }}
       >
         <p className="font-Inter flex items-center">
-          {isPendingPage ? (
+          {isPending ? (
             <Loader2 className="animate-spin" />
           ) : (
             <>
@@ -154,7 +156,7 @@ export default function PaginationControls({
           <Button
             variant="outline"
             className="h-10 w-10 p-0"
-            disabled={Number(page) <= 1 || isPendingPage || isPendingMore}
+            disabled={Number(page) <= 1 || isPending}
             onClick={() => handlePageParams("1")}
           >
             {/* For SEO */}
@@ -172,7 +174,7 @@ export default function PaginationControls({
           <Button
             variant="outline"
             className="h-10 w-10 p-0"
-            disabled={Number(page) <= 1 || isPendingPage || isPendingMore}
+            disabled={Number(page) <= 1 || isPending}
             onClick={() => handlePageParams((Number(page) - 1).toString())}
           >
             {/* For SEO */}
@@ -190,9 +192,7 @@ export default function PaginationControls({
           <Button
             variant="outline"
             className="h-10 w-10 p-0"
-            disabled={
-              Number(page) >= max_page || isPendingPage || isPendingMore
-            }
+            disabled={Number(page) >= max_page || isPending}
             onClick={() => handlePageParams((Number(page) + 1).toString())}
           >
             {/* For SEO */}
@@ -210,9 +210,7 @@ export default function PaginationControls({
           <Button
             variant="outline"
             className="h-10 w-10 p-0"
-            disabled={
-              Number(page) >= max_page || isPendingPage || isPendingMore
-            }
+            disabled={Number(page) >= max_page || isPending}
             onClick={() => handlePageParams(max_page.toString())}
           >
             {/* For SEO */}
