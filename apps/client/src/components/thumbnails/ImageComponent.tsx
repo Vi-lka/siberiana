@@ -32,7 +32,7 @@ export default function ImageComponent(props: Props) {
   );
 
   React.useEffect(() => {
-    if (props.src) setImage(props.src);
+    if (!!props.src) setImage(props.src);
   }, [props]);
 
   const width = !props.fill ? props.width : undefined;
