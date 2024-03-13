@@ -3,14 +3,15 @@ import React from "react";
 import { Dictionary } from "@siberiana/schemas";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
-import Description from "~/components/objects/Description";
-import PhotoZoom from "~/components/objects/PhotoZoom";
-import ShowOnMap from "~/components/objects/ShowOnMap";
-import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
+// import Description from "~/components/objects/Description";
+// import PhotoZoom from "~/components/objects/PhotoZoom";
+// import ShowOnMap from "~/components/objects/ShowOnMap";
+// import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
 import { getPAPById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
-import MainInfoBlock from "./MainInfoBlock";
+// import MainInfoBlock from "./MainInfoBlock";
+import NotFound from "~/components/errors/NotFound";
 
 export const dynamic = "force-dynamic";
 
@@ -37,43 +38,46 @@ export default async function ProtectedAreaPictures({
     );
 
   return (
+
     <div className="relative">
       <div className="absolute -top-10 left-0 sm:-left-8 sm:top-0 lg:-left-12">
         <GoBackButton />
       </div>
 
-      <BreadcrumbsObject
+      <NotFound dict={dictResult.errors} goBack />
+
+      {/* <BreadcrumbsObject
         dict={dictResult.breadcrumbs}
         title={dataResult.value.displayName}
         categorySlug={dataResult.value.collection.category?.slug}
         categoryTitle={dataResult.value.collection.category?.displayName}
         collectionSlug={dataResult.value.collection.slug}
         collectionTitle={dataResult.value.collection.displayName}
-      />
+      /> */}
 
       <div className="mb-24 mt-10 flex flex-col items-start gap-3 md:flex-row">
         <div className="w-full md:w-1/2">
-          <div className="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
+          {/* <div className="mb-4 flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <h1 className="text-foreground text-xl font-bold uppercase lg:text-2xl">
               {dataResult.value.displayName}
             </h1>
           </div>
 
-          <Description text={dataResult.value.description} />
+          <Description text={dataResult.value.description} /> */}
 
           {/* Desktop Main Info */}
-          <div className="mt-12 hidden md:block">
+          {/* <div className="mt-12 hidden md:block">
             <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
 
             {dataResult.value.geometry && <ShowOnMap data={dataResult.value} />}
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full md:w-1/2">
-          <PhotoZoom
+          {/* <PhotoZoom
             src={dataResult.value.primaryImageURL}
             alt={dataResult.value.displayName}
-          />
+          /> */}
           {/* <div className="mt-3 flex flex-wrap gap-3">
                         <AddFavorites session={haveSession} />
                         <UnloadCSV session={haveSession} />
@@ -81,11 +85,11 @@ export default async function ProtectedAreaPictures({
         </div>
 
         {/* Mobile Main Info */}
-        <div className="mt-3 block w-full md:hidden">
+        {/* <div className="mt-3 block w-full md:hidden">
           <MainInfoBlock dict={dictResult.objects} data={dataResult.value} />
 
           {dataResult.value.geometry && <ShowOnMap data={dataResult.value} />}
-        </div>
+        </div> */}
       </div>
     </div>
   );
