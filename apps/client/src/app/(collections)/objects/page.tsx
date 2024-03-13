@@ -18,7 +18,7 @@ import Artifacts from "./(grids)/Artifacts";
 import Arts from "./(grids)/Arts";
 import Books from "./(grids)/Books";
 import Herbariums from "./(grids)/Herbariums";
-import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
+// import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 
 export const dynamic = "force-dynamic";
 
@@ -150,12 +150,12 @@ export default async function Objects({
                   />
                 </ObjectsContent>
 
-                <ObjectsContent value="protected_area_pictures">
+                {/* <ObjectsContent value="protected_area_pictures">
                   <ProtectedAreaPictures
                     searchParams={searchParams}
                     defaultPageSize={DEFAULT_PAGE_SIZE}
                   />
-                </ObjectsContent>
+                </ObjectsContent> */}
 
                 <ObjectsContent value="arts">
                   <Arts
