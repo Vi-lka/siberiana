@@ -411,8 +411,6 @@ export const getPAPById = async (id: string): Promise<PAPById> => {
     };
   };
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-
   if (
     json.data.protectedAreaPictures.totalCount === 0 ||
     json.data.protectedAreaPictures.edges.length === 0

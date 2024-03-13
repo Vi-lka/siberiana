@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { useKeenSlider } from "keen-slider/react";
 import { ArrowLeft, ArrowRight, Maximize } from "lucide-react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
@@ -9,6 +8,8 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { Skeleton } from "@siberiana/ui";
 import { Dialog, DialogContent, DialogTrigger } from "@siberiana/ui/src/dialog";
 import { cn } from "@siberiana/ui/src/lib/utils";
+
+import ImageComponent from "~/components/thumbnails/ImageComponent";
 
 export default function PhotoModal({
   data,
@@ -70,7 +71,7 @@ export default function PhotoModal({
                     }}
                   >
                     <div className="relative h-full w-full">
-                      <Image
+                      <ImageComponent
                         src={image.src}
                         fill
                         sizes="100vw"

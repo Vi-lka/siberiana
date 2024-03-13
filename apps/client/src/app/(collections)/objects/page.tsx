@@ -5,8 +5,8 @@ import { Dictionary } from "@siberiana/schemas";
 import { Skeleton } from "@siberiana/ui";
 
 import ErrorHandler from "~/components/errors/ErrorHandler";
-import ObjectsContent from "~/components/objects/ObjectsContent";
-import ObjectTabs from "~/components/objects/ObjectsTabs";
+import ObjectsContent from "~/components/objects/tabs/ObjectsContent";
+import ObjectTabs from "~/components/objects/tabs/ObjectsTabs";
 import MasonrySkeleton from "~/components/skeletons/MasonrySkeleton";
 import BreadcrumbsCollections from "~/components/ui/BreadcrumbsCollections";
 import SearchField from "~/components/ui/filters/SearchField";
@@ -18,11 +18,11 @@ import Artifacts from "./(grids)/Artifacts";
 import Arts from "./(grids)/Arts";
 import Books from "./(grids)/Books";
 import Herbariums from "./(grids)/Herbariums";
-import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
+// import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 
 export const dynamic = "force-dynamic";
 
-const DEFAULT_PAGE_SIZE = 24;
+const DEFAULT_PAGE_SIZE = 20;
 
 export default async function Objects({
   searchParams,
@@ -150,12 +150,12 @@ export default async function Objects({
                   />
                 </ObjectsContent>
 
-                <ObjectsContent value="protected_area_pictures">
+                {/* <ObjectsContent value="protected_area_pictures">
                   <ProtectedAreaPictures
                     searchParams={searchParams}
                     defaultPageSize={DEFAULT_PAGE_SIZE}
                   />
-                </ObjectsContent>
+                </ObjectsContent> */}
 
                 <ObjectsContent value="arts">
                   <Arts

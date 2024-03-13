@@ -49,6 +49,8 @@ export const CollectionsEnum = z.enum([
   "artifacts",
   "books",
   "protected_area_pictures",
+  "arts",
+  "herbariums",
 ]);
 export type CollectionsEnum = z.infer<typeof CollectionsEnum>;
 

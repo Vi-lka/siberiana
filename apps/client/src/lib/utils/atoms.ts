@@ -2,8 +2,10 @@ import "client-only";
 
 import { atom } from "jotai";
 
+import type { CollectionsEnum } from "@siberiana/schemas";
+
 export const tabAccountAtom = atom("favourites");
-export const tabObjectsAtom = atom("artifacts");
+export const tabObjectsAtom = atom<CollectionsEnum>("artifacts");
 
 export const artifactsCountAtom = atom(0);
 export const booksCountAtom = atom(0);

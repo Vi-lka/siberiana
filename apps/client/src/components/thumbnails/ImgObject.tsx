@@ -33,7 +33,7 @@ export default function ImgObject(props: Props) {
           height={props.height ? props.height : 450}
           className="outline-accent ring-ring ring-offset-background w-full overflow-hidden rounded-md object-contain shadow-md outline outline-1 outline-offset-1 transition-all duration-200"
           alt={props.title ? props.title : ""}
-          priority={true}
+          priority
         />
 
         <p className="font-Inter decoration-primary text-sm font-normal decoration-[3px] underline-offset-4 transition-all duration-200 dark:decoration-2 lg:text-base">

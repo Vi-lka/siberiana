@@ -3,9 +3,8 @@
 import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAtom, useAtomValue } from "jotai";
-import { Loader2 } from "lucide-react";
 
-import type { Dictionary } from "@siberiana/schemas";
+import type { CollectionsEnum, Dictionary } from "@siberiana/schemas";
 import { Skeleton, Tabs, TabsList, TabsTrigger } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -17,8 +16,7 @@ import {
   PAPCountAtom,
   tabObjectsAtom,
 } from "~/lib/utils/atoms";
-import { ClientHydration } from "../providers/ClientHydration";
-import MasonrySkeleton from "../skeletons/MasonrySkeleton";
+import { ClientHydration } from "../../providers/ClientHydration";
 
 export default function ObjectTabs({
   dict,
@@ -33,17 +31,19 @@ export default function ObjectTabs({
   const artsCount = useAtomValue(artsCountAtom);
   const herbariumsCount = useAtomValue(herbariumsCountAtom);
 
-  const [tabObject, setTabObject] = useAtom(tabObjectsAtom);
-
-  const [isPending, startTransition] = React.useTransition();
+  const [tab, setTab] = useAtom(tabObjectsAtom);
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const type = searchParams.get("type") ?? undefined;
+  const type = (searchParams.get("type") as CollectionsEnum) ?? undefined;
 
-  const tabs = [
+  const tabs: Array<{
+    value: CollectionsEnum;
+    title: string;
+    count: number;
+  }> = [
     {
       value: "artifacts",
       title: dict.objects.artifacts,
@@ -75,15 +75,22 @@ export default function ObjectTabs({
   });
 
   const handleChangeTab = React.useCallback(
-    (value: string) => {
-      setTabObject(value);
+    (value: CollectionsEnum) => {
+      setTab(value);
       const params = new URLSearchParams(window.location.search);
       params.set("type", value);
-      startTransition(() => {
-        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-      });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [pathname, router, setTabObject],
+    [pathname, router, setTab],
+  );
+
+  const handlePrefetchTab = React.useCallback(
+    (value: CollectionsEnum) => {
+      const params = new URLSearchParams(window.location.search);
+      params.set("type", value);
+      router.prefetch(`${pathname}?${params.toString()}`);
+    },
+    [pathname, router],
   );
 
   const goToFilledTab = React.useCallback(() => {
@@ -143,8 +150,8 @@ export default function ObjectTabs({
     <div className="flex w-full flex-col">
       <Tabs
         className="w-full"
-        value={tabObject}
-        onValueChange={(value: string) => handleChangeTab(value)}
+        value={tab}
+        onValueChange={(value) => handleChangeTab(value as CollectionsEnum)}
       >
         <ClientHydration fallback={<Skeleton className="mt-2 h-10 w-full" />}>
           <div className="mt-2 flex flex-wrap items-center gap-3 lg:mr-40">
@@ -158,9 +165,9 @@ export default function ObjectTabs({
                 {notEmptyTabs.map((tab, index) => (
                   <TabsTrigger
                     key={index}
-                    disabled={isPending}
                     value={tab.value}
                     className={isSingleTab() ? "cursor-default" : ""}
+                    onMouseEnter={() => handlePrefetchTab(tab.value)}
                   >
                     {isSingleTab() ? (
                       <p key={Math.random()}>
@@ -173,20 +180,12 @@ export default function ObjectTabs({
                     )}
                   </TabsTrigger>
                 ))}
-                {isPending ? (
-                  <Loader2 className="h-6 w-6 animate-spin" />
-                ) : null}
               </TabsList>
             ) : null}
           </div>
         </ClientHydration>
-        {isPending ? (
-          <div className="w-full">
-            <MasonrySkeleton />
-          </div>
-        ) : (
-          children
-        )}
+
+        {children}
       </Tabs>
     </div>
   );

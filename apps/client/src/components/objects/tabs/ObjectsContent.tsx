@@ -3,6 +3,7 @@
 import React from "react";
 import { useAtomValue } from "jotai";
 
+import type { CollectionsEnum } from "@siberiana/schemas";
 import { TabsContent } from "@siberiana/ui";
 import { cn } from "@siberiana/ui/src/lib/utils";
 
@@ -12,16 +13,16 @@ export default function ObjectsContent({
   value,
   children,
 }: {
-  value: string;
+  value: CollectionsEnum;
   children: React.ReactNode;
 }) {
-  const tabObject = useAtomValue(tabObjectsAtom);
+  const tab = useAtomValue(tabObjectsAtom);
 
   return (
     <TabsContent
       value={value}
       forceMount
-      className={cn("mt-0", tabObject === value ? "flex" : "hidden")}
+      className={cn("mt-0", tab === value ? "flex" : "hidden")}
     >
       {children}
     </TabsContent>
