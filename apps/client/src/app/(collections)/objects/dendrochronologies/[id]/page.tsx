@@ -5,15 +5,15 @@ import { Dictionary } from "@siberiana/schemas";
 import ErrorHandler from "~/components/errors/ErrorHandler";
 import Description from "~/components/objects/Description";
 import PhotoZoom from "~/components/objects/PhotoZoom";
-import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
+// import BreadcrumbsObject from "~/components/ui/BreadcrumbsObject";
 import GoBackButton from "~/components/ui/GoBackButton";
-import { getHerbariumById } from "~/lib/queries/api-object";
+import { getDendrochronologyById } from "~/lib/queries/api-object";
 import { getDictionary } from "~/lib/utils/getDictionary";
 import MainInfoBlock from "./MainInfoBlock";
 
 export const dynamic = "force-dynamic";
 
-export default async function Herbarium({
+export default async function Dendrochronology({
   params: { id },
 }: {
   params: { id: string };
@@ -24,12 +24,12 @@ export default async function Herbarium({
   // const session = await getServerSession(authOptions);
   // const haveSession = !!session
 
-  const [dataResult] = await Promise.allSettled([getHerbariumById(id)]);
+  const [dataResult] = await Promise.allSettled([getDendrochronologyById(id)]);
   if (dataResult.status === "rejected")
     return (
       <ErrorHandler
         error={dataResult.reason as unknown}
-        place={`Herbarium ${id}`}
+        place={`Dendrochronology ${id}`}
         notFound
         goBack
       />
@@ -41,14 +41,14 @@ export default async function Herbarium({
         <GoBackButton />
       </div>
 
-      <BreadcrumbsObject
+      {/* <BreadcrumbsObject
         dict={dictResult.breadcrumbs}
         title={dataResult.value.displayName}
         categorySlug={dataResult.value.collection.category?.slug}
         categoryTitle={dataResult.value.collection.category?.displayName}
         collectionSlug={dataResult.value.collection.slug}
         collectionTitle={dataResult.value.collection.displayName}
-      />
+      /> */}
 
       <div className="items-start mb-24 mt-10 flex flex-col gap-6 md:flex-row">
         <div className="w-full md:w-1/2">

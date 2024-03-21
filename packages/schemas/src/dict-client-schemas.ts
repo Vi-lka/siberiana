@@ -171,6 +171,7 @@ export const ObjectsDict = z.object({
   protectedAreaPictures: z.string(),
   arts: z.string(),
   herbariums: z.string(),
+  dendrochronologies: z.string(),
   mainInfo: z.object({
     title: z.string(),
   }),

@@ -18,6 +18,7 @@ import Artifacts from "./(grids)/Artifacts";
 import Arts from "./(grids)/Arts";
 import Books from "./(grids)/Books";
 import Herbariums from "./(grids)/Herbariums";
+import Dendrochronologies from "./(grids)/Dendrochronologies";
 // import ProtectedAreaPictures from "./(grids)/ProtectedAreaPictures";
 
 export const dynamic = "force-dynamic";
@@ -166,6 +167,13 @@ export default async function Objects({
 
                 <ObjectsContent value="herbariums">
                   <Herbariums
+                    searchParams={searchParams}
+                    defaultPageSize={DEFAULT_PAGE_SIZE}
+                  />
+                </ObjectsContent>
+
+                <ObjectsContent value="dendrochronologies">
+                  <Dendrochronologies
                     searchParams={searchParams}
                     defaultPageSize={DEFAULT_PAGE_SIZE}
                   />

@@ -428,3 +428,18 @@ export const HerbariumById = z.object({
     .nullable(),
 });
 export type HerbariumById = z.infer<typeof HerbariumById>;
+
+//.........................DENDTOCHRONOLOGIES.........................//
+export const DendrochronologyById = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  description: z.string(),
+  datingStart: z.number().int(),
+  datingEnd: z.number().int(),
+  dating: z.string(),
+  primaryImageURL: z.string(),
+  additionalImagesUrls: z.string().array().nullable(),
+  analysisData: z.string(),
+  analysisURL: z.string(),
+});
+export type DendrochronologyById = z.infer<typeof DendrochronologyById>;

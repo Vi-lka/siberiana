@@ -12,6 +12,7 @@ import {
   artifactsCountAtom,
   artsCountAtom,
   booksCountAtom,
+  dendroCountAtom,
   herbariumsCountAtom,
   PAPCountAtom,
   tabObjectsAtom,
@@ -30,6 +31,7 @@ export default function ObjectTabs({
   const PAPCount = useAtomValue(PAPCountAtom);
   const artsCount = useAtomValue(artsCountAtom);
   const herbariumsCount = useAtomValue(herbariumsCountAtom);
+  const dendroCount = useAtomValue(dendroCountAtom);
 
   const [tab, setTab] = useAtom(tabObjectsAtom);
 
@@ -65,6 +67,11 @@ export default function ObjectTabs({
       title: dict.objects.herbariums,
       count: herbariumsCount,
     },
+    {
+      value: "dendrochronologies",
+      title: dict.objects.dendrochronologies,
+      count: dendroCount
+    }
   ];
 
   const notEmptyTabs = tabs.filter(function (el) {
@@ -99,12 +106,14 @@ export default function ObjectTabs({
     else if (PAPCount > 0) handleChangeTab("protected_area_pictures");
     else if (artsCount > 0) handleChangeTab("arts");
     else if (herbariumsCount > 0) handleChangeTab("herbariums");
+    else if (dendroCount > 0) handleChangeTab("dendrochronologies");
   }, [
     PAPCount,
     artifactsCount,
     artsCount,
     booksCount,
     herbariumsCount,
+    dendroCount,
     handleChangeTab,
   ]);
 
@@ -127,6 +136,9 @@ export default function ObjectTabs({
       case "herbariums":
         herbariumsCount > 0 ? handleChangeTab("herbariums") : goToFilledTab();
         break;
+      case "dendrochronologies":
+        dendroCount > 0 ? handleChangeTab("dendrochronologies") : goToFilledTab();
+        break;
       default:
         goToFilledTab();
         break;
@@ -137,6 +149,7 @@ export default function ObjectTabs({
     artsCount,
     booksCount,
     herbariumsCount,
+    dendroCount,
     goToFilledTab,
     handleChangeTab,
     type,
