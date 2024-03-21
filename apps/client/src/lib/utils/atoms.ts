@@ -12,3 +12,4 @@ export const booksCountAtom = atom(0);
 export const PAPCountAtom = atom(0); // Protected Area Pictures
 export const artsCountAtom = atom(0);
 export const herbariumsCountAtom = atom(0);
+export const dendroCountAtom = atom(0);
