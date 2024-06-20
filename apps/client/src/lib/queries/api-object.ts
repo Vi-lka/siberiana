@@ -121,6 +121,10 @@ export const getArtifactById = async (id: string): Promise<ArtifactById> => {
                         id
                         displayName
                     }
+                    ethnos {
+                        id
+                        displayName
+                    }
                     set {
                         id
                         displayName

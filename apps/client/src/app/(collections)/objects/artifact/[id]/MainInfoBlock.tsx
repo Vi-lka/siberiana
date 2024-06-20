@@ -33,6 +33,7 @@ export default function MainInfoBlock({
           label="Культура"
           value={data.culturalAffiliation?.displayName}
         />
+        <SingleItem label="Этнос" value={data.ethnos?.displayName} />
         <SingleItemArray label="Техника" value={data.techniques} />
         <SingleItemArray label="Материал изготовления" value={data.mediums} />
         <SingleItem
@@ -58,7 +59,7 @@ export default function MainInfoBlock({
           label="Населенный пункт"
           value={data.location?.settlement?.displayName}
         />
-
+        <SingleItem label="Донор" value={data.donor?.displayName} />
         <SingleItem label="Организация" value={data.organization?.displayName} />
         <SingleItemArray label="Автор" value={data.authors} />
         <SingleItemArray label="Проекты" value={data.projects} />
