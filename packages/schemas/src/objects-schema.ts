@@ -162,6 +162,12 @@ export const ArtifactById = z.object({
       displayName: z.string(),
     })
     .nullable(),
+  ethnos: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
   set: z
     .object({
       id: z.string(),

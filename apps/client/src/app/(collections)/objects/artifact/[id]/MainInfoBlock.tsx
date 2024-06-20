@@ -19,28 +19,30 @@ export default function MainInfoBlock({
       </h2>
 
       <InfoTable>
-        <SingleItem
-          label="Категория"
-          value={data.collection.category.displayName}
-        />
+        <SingleItem label="Категория" value={data.collection.category.displayName} />
         <SingleItem label="Коллекция" value={data.collection.displayName} />
-        <SingleItem
-          label="Права пользователя"
-          value={data.license?.displayName}
-        />
+        <SingleItem label="Инвентарный номер" value={data.inventoryNumber} />
+        <SingleItem label="КП номер" value={data.kpNumber} />
+        <SingleItem label="Госкатагол номер" value={data.goskatalogNumber} />
+
+        <SingleItem label="Права пользователя" value={data.license?.displayName} />
+
         <SingleItem label="Датировка" value={data.dating} />
         <SingleItem label="Типология" value={data.typology} />
         <SingleItem
           label="Культура"
           value={data.culturalAffiliation?.displayName}
         />
+        <SingleItem label="Этнос" value={data.ethnos?.displayName} />
         <SingleItemArray label="Техника" value={data.techniques} />
         <SingleItemArray label="Материал изготовления" value={data.mediums} />
         <SingleItem
           label="Химический состав"
           value={data.chemicalComposition}
         />
+        <SingleItem label="Размеры" value={data.dimensions} />
         <SingleItem label="Вес, г" value={data.weight} />
+        
         <SingleItem label="Расположение" value={data.location?.displayName} />
         <SingleItem label="Комплекс" value={data.set?.displayName} />
         <SingleItem label="Памятник" value={data.monument?.displayName} />
@@ -57,6 +59,8 @@ export default function MainInfoBlock({
           label="Населенный пункт"
           value={data.location?.settlement?.displayName}
         />
+        <SingleItem label="Донор" value={data.donor?.displayName} />
+        <SingleItem label="Организация" value={data.organization?.displayName} />
         <SingleItemArray label="Автор" value={data.authors} />
         <SingleItemArray label="Проекты" value={data.projects} />
         <SingleItemArray label="Публикации" value={data.publications} />
