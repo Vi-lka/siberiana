@@ -185,6 +185,18 @@ export const updateColumns: ColumnDef<ArtifactForTable>[] = [
     },
   },
   {
+    accessorKey: "ethnos",
+    header: () => <div className="text-center">Этнос</div>,
+    cell: ({ row }) => {
+      return (
+        <ObjectCell
+          name={`artifacts[${row.index}].ethnos`}
+          defaultValue={row.original.ethnos}
+        />
+      );
+    },
+  },
+  {
     accessorKey: "set",
     header: () => <div className="text-center">Комплекс</div>,
     cell: ({ row }) => {

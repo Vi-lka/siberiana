@@ -19,6 +19,25 @@ export function getCulturesQuery() {
   return query;
 }
 
+export function getEthnosSliceQuery() {
+  const query = `
+      query EthnosSlice() {
+        ethnosSlice(
+          orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+        ) {
+          totalCount
+          edges {
+            node {
+              id
+              displayName
+            }
+          }
+        }
+      }
+    `;
+  return query;
+}
+
 export function getSetsQuery() {
   const query = `
     query Sets() {

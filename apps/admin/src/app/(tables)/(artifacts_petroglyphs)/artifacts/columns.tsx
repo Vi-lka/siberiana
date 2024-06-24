@@ -27,6 +27,7 @@ import InputDropzone from "~/components/tables/inputs/dropzone/InputDropzone";
 import InputMultiDropzone from "~/components/tables/inputs/dropzone/InputMultiDropzone";
 import FormInput from "~/components/tables/inputs/FormInput";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
+import Ethnos from "~/components/tables/artifacts_petroglyphs/Ethnos";
 
 export const columns: ColumnDef<ArtifactForTable>[] = [
   {
@@ -203,6 +204,18 @@ export const columns: ColumnDef<ArtifactForTable>[] = [
         <Culture
           defaultCulture={row.original.culturalAffiliation}
           formValueName={`artifacts[${row.index}].culturalAffiliation`}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "ethnos",
+    header: () => <div className="text-center">Этнос</div>,
+    cell: ({ row }) => {
+      return (
+        <Ethnos
+          defaultEthnos={row.original.ethnos}
+          formValueName={`artifacts[${row.index}].ethnos`}
         />
       );
     },
