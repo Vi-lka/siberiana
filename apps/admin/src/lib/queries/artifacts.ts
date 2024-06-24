@@ -151,6 +151,10 @@ export const getArtifacts = async ({
             id
             displayName
           }
+          ethnos {
+            id
+            displayName
+          }
           set {
             id
             displayName

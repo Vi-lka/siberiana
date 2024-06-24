@@ -25,10 +25,13 @@ import License from "../tables/global-fields/License";
 import Organization from "../tables/global-fields/Organization";
 import PersonSingle from "../tables/global-fields/PersonSingle";
 import Status from "../tables/global-fields/Status";
+import Ethnos from "../tables/artifacts_petroglyphs/Ethnos";
 
 export default function Artifacts({ row }: { row: Row<ArtifactForTable> }) {
+  
   const session = useSession();
   const isModerator = session.data?.user.roles?.includes("moderator");
+
   return (
     <div className="flex w-full flex-col gap-6 pt-3">
       <div className="flex w-full flex-wrap items-center gap-6">
@@ -127,6 +130,15 @@ export default function Artifacts({ row }: { row: Row<ArtifactForTable> }) {
           <Culture
             formValueName={`artifacts[${row.index}].culturalAffiliation`}
             defaultCulture={row.original.culturalAffiliation}
+            className="border-border w-full max-w-md rounded-md border-[1px]"
+          />
+        </div>
+
+        <div className="min-w-full flex-1 sm:min-w-[15rem]">
+          <p className="mb-2 text-center font-medium">Этнос</p>
+          <Ethnos
+            formValueName={`artifacts[${row.index}].ethnos`}
+            defaultEthnos={row.original.ethnos}
             className="border-border w-full max-w-md rounded-md border-[1px]"
           />
         </div>

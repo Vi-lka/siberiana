@@ -79,6 +79,12 @@ export const ArtifactForTable = z.object({
       displayName: z.string(),
     })
     .nullable(),
+  ethnos: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
   set: z
     .object({
       id: z.string(),
@@ -224,6 +230,21 @@ export const CulturesForm = z.object({
   cultures: CultureForTable.array(),
 });
 export type CulturesForm = z.infer<typeof CulturesForm>;
+
+//.........................ETHNOS.........................//
+export const EthnosList = z.object({
+  ethnosSlice: z.object({
+    edges: z
+      .object({
+        node: z.object({
+          id: z.string(),
+          displayName: z.string(),
+        }),
+      })
+      .array(),
+  }),
+});
+export type EthnosList = z.infer<typeof EthnosList>;
 
 //.........................SETS.........................//
 export const SetsList = z.object({
