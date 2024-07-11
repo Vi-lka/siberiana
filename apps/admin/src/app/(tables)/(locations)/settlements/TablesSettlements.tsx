@@ -1,35 +1,36 @@
-import { DistrictsForTable, EntityEnum } from '@siberiana/schemas';
+import { SettlementsForTable, EntityEnum } from '@siberiana/schemas';
 import { Loader2 } from 'lucide-react';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { ClientHydration } from '~/components/providers/ClientHydration';
 import CreateTable from '~/components/tables/CreateTable';
 import UpdateTable from '~/components/tables/UpdateTable';
-import { getDistricts } from '~/lib/queries/locations';
+import { getSettlements } from '~/lib/queries/locations';
 import { columns } from './columns';
 import { updateColumns } from './updateColumns';
 
-export default async function TablesDistricts({
+export default async function TablesSettlements({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 })  {
-    const entity: EntityEnum = "districts";
+    const entity: EntityEnum = "settlements";
   
     const mode = searchParams["mode"] as string | undefined;
   
     const [dataResult] = await Promise.allSettled([
-      getDistricts({
+      getSettlements({
         first: null,
       }),
     ]);
   
-    const defaultAdd: DistrictsForTable = {
+    const defaultAdd: SettlementsForTable = {
       id: "random" + Math.random().toString(),
       displayName: "",
       description: "",
       externalLink: "",
       region: null,
+      district: null,
     };
   
     const dataForCreate = [defaultAdd];
@@ -66,27 +67,24 @@ export default async function TablesDistricts({
         );
     }
   
-    const dataForUpdate: DistrictsForTable[] = dataResult.value.edges.map(
+    const dataForUpdate: SettlementsForTable[] = dataResult.value.edges.map(
       (data) => {
         const node = data.node;
         const {
           artifacts,
           books,
           locations,
-          settlements,
           ...rest // assigns remaining
         } = node;
   
         const artifactsForTable = artifacts.length;
         const booksForTable = books.length;
         const locationsForTable = locations.length;
-        const settlementsForTable = settlements.length;
   
         return {
           artifacts: artifactsForTable,
           books: booksForTable,
           locations: locationsForTable,
-          settlements: settlementsForTable,
           ...rest,
         };
       },
