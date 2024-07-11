@@ -8,13 +8,19 @@ import type {
   ArtifactForTable,
   BookForTable,
   BookGenreForTable,
+  CountriesForTable,
   CultureForTable,
+  DistrictsForTable,
   EntityEnum,
+  EthnosForTable,
+  LocationsForTable,
   MaterialForTable,
   ModelForTable,
   MonumentForTable,
   PeriodicalForTable,
+  RegionsForTable,
   SetForTable,
+  SettlementsForTable,
   TechniqueForTable,
 } from "@siberiana/schemas";
 import {
@@ -41,6 +47,12 @@ import Monuments from "./Monuments";
 import Periodicals from "./Periodicals";
 import Sets from "./Sets";
 import Techniques from "./Techniques";
+import Ethnos from "./Ethnos";
+import Locations from "./Locations";
+import Countries from "./Countries";
+import Regions from "./Regions";
+import Districts from "./Districts";
+import Settlements from "./Settlements";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -143,6 +155,7 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                   <Artifacts row={props.row as Row<ArtifactForTable>} />
                 ),
                 cultures: <Cultures row={props.row as Row<CultureForTable>} />,
+                ethnosSlice: <Ethnos row={props.row as Row<EthnosForTable>} />,
                 materials: (
                   <Materials row={props.row as Row<MaterialForTable>} />
                 ),
@@ -160,6 +173,21 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                 ),
                 periodicals: (
                   <Periodicals row={props.row as Row<PeriodicalForTable>} />
+                ),
+                locations: (
+                  <Locations row={props.row as Row<LocationsForTable>} />
+                ),
+                countries: (
+                  <Countries row={props.row as Row<CountriesForTable>} />
+                ),
+                regions: (
+                  <Regions row={props.row as Row<RegionsForTable>} />
+                ),
+                districts: (
+                  <Districts row={props.row as Row<DistrictsForTable>} />
+                ),
+                settlements: (
+                  <Settlements row={props.row as Row<SettlementsForTable>} />
                 ),
               }[props.dialogType]
             }

@@ -145,6 +145,83 @@ export function useLocationsQuery() {
   return query;
 }
 
+export function getCountriesQuery() {
+  const query = `
+    query Countries() {
+      countries(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `;
+  return query;
+}
+
+export function getRegionsQuery() {
+  const query = `
+    query Regions() {
+      regions(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `;
+  return query;
+}
+
+export function  getDistrictsQuery() {
+  const query = `
+    query Districts() {
+      districts(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `;
+  return query;
+}
+
+export function  getSettlementsQuery() {
+  const query = `
+    query Settlements() {
+      settlements(
+        orderBy: [ {field: DISPLAY_NAME, direction: ASC} ],
+      ) {
+        totalCount
+        edges {
+          node {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  `;
+  return query;
+}
+
+
 export function getLicensesQuery() {
   const query = `
     query Licenses() {

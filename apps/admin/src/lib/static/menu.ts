@@ -9,26 +9,31 @@ export const artifactsMenuItems = {
     },
     {
       id: 2,
+      name: "Этнос",
+      url: "/ethnosSlice",
+    },
+    {
+      id: 3,
       name: "Материалы",
       url: "/materials",
     },
     {
-      id: 3,
+      id: 4,
       name: "Техники",
       url: "/techniques",
     },
     {
-      id: 4,
+      id: 5,
       name: "Комплексы",
       url: "/sets",
     },
     {
-      id: 5,
+      id: 6,
       name: "Памятники",
       url: "/monuments",
     },
     {
-      id: 6,
+      id: 7,
       name: "3D модели",
       url: "/models",
     },

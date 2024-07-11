@@ -246,6 +246,52 @@ export const EthnosList = z.object({
 });
 export type EthnosList = z.infer<typeof EthnosList>;
 
+export const EthnosArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type EthnosArray = z.infer<typeof EthnosArray>;
+
+export const EthnosForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  artifacts: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type EthnosForTable = z.infer<typeof EthnosForTable>;
+
+export const EthnosForm = z.object({
+  ethnosSlice: EthnosForTable.array(),
+});
+export type EthnosForm = z.infer<typeof EthnosForm>;
+
 //.........................SETS.........................//
 export const SetsList = z.object({
   sets: z.object({

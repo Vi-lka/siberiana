@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { CollectionTypeEnum } from "../collections-schemas";
-import { Location } from "../objects-schema";
+import { Country, District, Location, Region, Settlement } from "../objects-schema";
 
 export const Item = z.object({
   id: z.string(),
@@ -13,6 +13,7 @@ export const EntityEnum = z.enum([
   // "art",
   "artifacts",
   "cultures",
+  "ethnosSlice",
   "materials",
   "techniques",
   "sets",
@@ -22,6 +23,11 @@ export const EntityEnum = z.enum([
   "bookGenres",
   "periodicals",
   // "protected_area_pictures",
+  "locations",
+  "countries",
+  "regions",
+  "districts",
+  "settlements",
 ]);
 export type EntityEnum = z.infer<typeof EntityEnum>;
 
@@ -135,6 +141,454 @@ export const LocationsList = z.object({
   }),
 });
 export type LocationsList = z.infer<typeof LocationsList>;
+
+export const LocationsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        country: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        region: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        district: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        settlement: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type LocationsArray = z.infer<typeof LocationsArray>;
+
+export const LocationsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  country: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  region: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  district: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  settlement: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  artifacts: z.number().optional(),
+  books: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type LocationsForTable = z.infer<typeof LocationsForTable>;
+
+export const LocationsForm = z.object({
+  locations: LocationsForTable.array(),
+});
+export type LocationsForm = z.infer<typeof LocationsForm>;
+
+//.........................COUNTRIES.........................//
+export const CountriesList = z.object({
+  countries: z.object({
+    edges: z
+      .object({
+        node: Country,
+      })
+      .array(),
+  }),
+});
+export type CountriesList = z.infer<typeof CountriesList>;
+
+export const CountriesArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        locations: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        regions: z
+        .object({
+          id: z.string(),
+        })
+        .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type CountriesArray = z.infer<typeof CountriesArray>;
+
+export const CountriesForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  artifacts: z.number().optional(),
+  books: z.number().optional(),
+  locations: z.number().optional(),
+  regions: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type CountriesForTable = z.infer<typeof CountriesForTable>;
+
+export const CountriesForm = z.object({
+  countries: CountriesForTable.array(),
+});
+export type CountriesForm = z.infer<typeof CountriesForm>;
+
+//.........................REGIONS.........................//
+export const RegionsList = z.object({
+  regions: z.object({
+    edges: z
+      .object({
+        node: Region,
+      })
+      .array(),
+  }),
+});
+export type RegionsList = z.infer<typeof RegionsList>;
+
+export const RegionsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        country: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        locations: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        districts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type RegionsArray = z.infer<typeof RegionsArray>;
+
+export const RegionsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  country: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  artifacts: z.number().optional(),
+  books: z.number().optional(),
+  locations: z.number().optional(),
+  districts: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type RegionsForTable = z.infer<typeof RegionsForTable>;
+
+export const RegionsForm = z.object({
+  regions: RegionsForTable.array(),
+});
+export type RegionsForm = z.infer<typeof RegionsForm>;
+
+//.........................DISTRICTS.........................//
+export const DistrictsList = z.object({
+  districts: z.object({
+    edges: z
+      .object({
+        node: District,
+      })
+      .array(),
+  }),
+});
+export type DistrictsList = z.infer<typeof DistrictsList>;
+
+export const DistrictsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        region: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        locations: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        settlements: z
+          .object({
+            id: z.string()
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type DistrictsArray = z.infer<typeof DistrictsArray>;
+
+export const DistrictsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  region: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  artifacts: z.number().optional(),
+  books: z.number().optional(),
+  locations: z.number().optional(),
+  settlements: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type DistrictsForTable = z.infer<typeof DistrictsForTable>;
+
+export const DistrictsForm = z.object({
+  districts: DistrictsForTable.array(),
+});
+export type DistrictsForm = z.infer<typeof DistrictsForm>;
+
+//.........................SETTLEMENTS.........................//
+export const SettlementsList = z.object({
+  settlements: z.object({
+    edges: z
+      .object({
+        node: Settlement,
+      })
+      .array(),
+  }),
+});
+export type SettlementsList = z.infer<typeof SettlementsList>;
+
+export const SettlementsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        externalLink: z.string(),
+        region: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        district: z
+        .object({
+          id: z.string(),
+          displayName: z.string(),
+        })
+        .nullable(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        books: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        locations: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type SettlementsArray = z.infer<typeof SettlementsArray>;
+
+export const SettlementsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  region: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  district: z
+  .object({
+    id: z.string(),
+    displayName: z.string(),
+  })
+  .nullable(),
+  artifacts: z.number().optional(),
+  books: z.number().optional(),
+  locations: z.number().optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type SettlementsForTable = z.infer<typeof SettlementsForTable>;
+
+export const SettlementsForm = z.object({
+  settlements: SettlementsForTable.array(),
+});
+export type SettlementsForm = z.infer<typeof SettlementsForm>;
+
+
 
 //.........................LICENSE.........................//
 export const LicenseList = z.object({
