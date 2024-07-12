@@ -1,35 +1,45 @@
-import type { DistrictsForTable, EntityEnum } from '@siberiana/schemas';
+import type { EntityEnum, PersonsForTable } from '@siberiana/schemas';
 import { Loader2 } from 'lucide-react';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
 import { ClientHydration } from '~/components/providers/ClientHydration';
 import CreateTable from '~/components/tables/CreateTable';
 import UpdateTable from '~/components/tables/UpdateTable';
-import { getDistricts } from '~/lib/queries/locations';
+import { getPersons } from '~/lib/queries/persons';
 import { columns } from './columns';
 import { updateColumns } from './updateColumns';
+import getGenderName from '~/lib/utils/getGenderName';
 
-export default async function TablesDistricts({
+export default async function TablesPersons({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 })  {
-    const entity: EntityEnum = "districts";
+    const entity: EntityEnum = "persons";
   
     const mode = searchParams["mode"] as string | undefined;
   
     const [dataResult] = await Promise.allSettled([
-      getDistricts({
+      getPersons({
         first: null,
       }),
     ]);
   
-    const defaultAdd: DistrictsForTable = {
+    const defaultAdd: PersonsForTable = {
       id: "random" + Math.random().toString(),
       displayName: "",
+      givenName: "",
+      familyName: "",
+      patronymicName: "",
+      gender: {
+       id:  'male',
+       displayName: getGenderName('male')
+      },
       description: "",
+      affiliation: null,
+      occupation: "",
+      address: "",
       externalLink: "",
-      region: null,
     };
   
     const dataForCreate = [defaultAdd];
@@ -66,28 +76,16 @@ export default async function TablesDistricts({
         );
     }
   
-    const dataForUpdate: DistrictsForTable[] = dataResult.value.edges.map(
+    const dataForUpdate: PersonsForTable[] = dataResult.value.edges.map(
       (data) => {
         const node = data.node;
-        const {
-          artifacts,
-          books,
-          locations,
-          settlements,
-          ...rest // assigns remaining
-        } = node;
-  
-        const artifactsForTable = artifacts.length;
-        const booksForTable = books.length;
-        const locationsForTable = locations.length;
-        const settlementsForTable = settlements.length;
-  
+        const {gender, ...rest} = node
+
+        const genderForTable = {id: gender, displayName: getGenderName(gender)}
+
         return {
-          artifacts: artifactsForTable,
-          books: booksForTable,
-          locations: locationsForTable,
-          settlements: settlementsForTable,
-          ...rest,
+            gender: genderForTable,
+            ...rest
         };
       },
     );

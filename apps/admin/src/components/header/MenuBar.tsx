@@ -20,7 +20,6 @@ import {
   locationsMenuItems,
   ooptMenuItems,
   organizationsMenuItems,
-  personsMenuItems,
   projectsMenuItems,
 } from "~/lib/static/menu";
 import { MenuBarGroup, MenuBarSingle } from "./MenuBarItems";
@@ -98,7 +97,7 @@ export default function MenuBar() {
               menuItem={organizationsMenuItems}
               href="/organizations"
             />
-            <MenuBarGroup menuItem={personsMenuItems} href="/persons" />
+            <MenuBarSingle href="/persons">Личности</MenuBarSingle>
 
             <Separator className="bg-primary" />
 

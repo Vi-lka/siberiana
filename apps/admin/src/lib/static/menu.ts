@@ -152,18 +152,6 @@ export const holdersMenuItems = {
   ],
 };
 
-export const personsMenuItems = {
-  id: 8,
-  name: "Личности",
-  list: [
-    {
-      id: 1,
-      name: "Роли",
-      url: "/persons-roles",
-    },
-  ],
-};
-
 export const projectsMenuItems = {
   id: 9,
   name: "Проекты",

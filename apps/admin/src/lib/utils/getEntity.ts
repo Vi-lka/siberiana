@@ -11,6 +11,7 @@ import {
   ModelsForm,
   MonumentsForm,
   PeriodicalsForm,
+  PersonsForm,
   RegionsForm,
   SetsForm,
   SettlementsForm,
@@ -52,6 +53,8 @@ export function getEntityType(entity: EntityEnum) {
       return DistrictsForm;
     case "settlements":
       return SettlementsForm;
+    case "persons":
+      return PersonsForm;
 
     default:
       const exhaustiveCheck: never = entity;

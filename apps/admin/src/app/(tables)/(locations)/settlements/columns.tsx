@@ -8,6 +8,7 @@ import { Checkbox } from "@siberiana/ui";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Region from "~/components/tables/global-fields/Region";
+import District from "~/components/tables/global-fields/District";
 
 export const columns: ColumnDef<SettlementsForTable>[] = [
   {
@@ -94,8 +95,8 @@ export const columns: ColumnDef<SettlementsForTable>[] = [
     header: () => <div className="text-center">Район</div>,
     cell: ({ row }) => {
       return (
-        <Region
-          defaultRegion={row.original.district}
+        <District
+          defaultDistrict={row.original.district}
           formValueName={`settlements[${row.index}].district`}
         />
       );

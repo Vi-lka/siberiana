@@ -28,6 +28,7 @@ export const EntityEnum = z.enum([
   "regions",
   "districts",
   "settlements",
+  "persons",
 ]);
 export type EntityEnum = z.infer<typeof EntityEnum>;
 
@@ -42,6 +43,13 @@ export const LocationEnum = z.enum([
   "settlement",
 ]);
 export type LocationEnum = z.infer<typeof LocationEnum>;
+
+export const GenderEnum = z.enum([
+  "male",
+  "female",
+  ''
+]);
+export type GenderEnum = z.infer<typeof GenderEnum>;
 
 //.........................CATEGORIES.........................//
 export const CategoriesList = z.object({
@@ -619,6 +627,74 @@ export const PersonsList = z.object({
   }),
 });
 export type PersonsList = z.infer<typeof PersonsList>;
+
+export const PersonsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        givenName: z.string(),
+        familyName: z.string(),
+        patronymicName: z.string(),
+        gender: GenderEnum,
+        description: z.string(),
+        affiliation: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+          })
+          .nullable(),
+        occupation: z.string(),
+        address: z.string(),
+        externalLink: z.string(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type PersonsArray = z.infer<typeof PersonsArray>;
+
+export const PersonsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  givenName: z.string(),
+  familyName: z.string(),
+  patronymicName: z.string(),
+  gender: z.object({
+    id: GenderEnum,
+    displayName: z.string(),
+  }),
+  description: z.string().optional(),
+  affiliation: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .nullable(),
+  occupation: z.string(),
+  address: z.string(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type PersonsForTable = z.infer<typeof PersonsForTable>;
+
+export const PersonsForm = z.object({
+  persons: PersonsForTable.array(),
+});
+export type PersonsForm = z.infer<typeof PersonsForm>;
+
 
 //.........................PUBLICATIONS.........................//
 export const PublicationsList = z.object({

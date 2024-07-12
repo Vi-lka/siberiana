@@ -43,7 +43,7 @@ import {
   useUpdateArtifact,
   useUpdateBook,
 } from "../mutations/objects";
-import { useCreateCountry, useCreateDistrict, useCreateLocation, useCreateRegion, useCreateSettlement, useDeleteCountry, useDeleteDistrict, useDeleteLocation, useDeleteRegion, useDeleteSettlement, useUpdateCountry, useUpdateDistrict, useUpdateLocation, useUpdateRegion, useUpdateSettlement } from "../mutations/additionalsGlobal";
+import { useCreateCountry, useCreateDistrict, useCreateLocation, useCreatePerson, useCreateRegion, useCreateSettlement, useDeleteCountry, useDeleteDistrict, useDeleteLocation, useDeletePerson, useDeleteRegion, useDeleteSettlement, useUpdateCountry, useUpdateDistrict, useUpdateLocation, useUpdatePerson, useUpdateRegion, useUpdateSettlement } from "../mutations/additionalsGlobal";
 
 const progressFiles = 100;
 const isLoadingFiles = false;
@@ -75,6 +75,7 @@ export function useCreateMutation(
   const regionCreate = useCreateRegion(access_token);
   const districtCreate = useCreateDistrict(access_token);
   const settlementCreate = useCreateSettlement(access_token);
+  const personCreate = useCreatePerson(access_token);
 
   switch (entity) {
     case "artifacts":
@@ -109,6 +110,8 @@ export function useCreateMutation(
       return { mutation: districtCreate, progressFiles, isLoadingFiles };
     case "settlements":
       return { mutation: settlementCreate, progressFiles, isLoadingFiles };
+    case "persons":
+      return { mutation: personCreate, progressFiles, isLoadingFiles };
 
     default:
       const exhaustiveCheck: never = entity;
@@ -134,6 +137,7 @@ export function useDeleteMutation(entity: EntityEnum, access_token?: string) {
   const regionDelete = useDeleteRegion(access_token);
   const districtDelete = useDeleteDistrict(access_token);
   const settlementDelete = useDeleteSettlement(access_token);
+  const personDelete = useDeletePerson(access_token);
 
   switch (entity) {
     case "artifacts":
@@ -168,6 +172,8 @@ export function useDeleteMutation(entity: EntityEnum, access_token?: string) {
       return districtDelete;
     case "settlements":
       return settlementDelete;
+    case "persons":
+      return personDelete;
 
     default:
       const exhaustiveCheck: never = entity;
@@ -202,6 +208,7 @@ export function useUpdateMutation(
   const regionUpdate = useUpdateRegion(access_token);
   const districtUpdate = useUpdateDistrict(access_token);
   const settlementUpdate = useUpdateSettlement(access_token);
+  const personUpdate = useUpdatePerson(access_token);
 
 
   switch (entity) {
@@ -237,6 +244,8 @@ export function useUpdateMutation(
       return { updateMutation: districtUpdate, progressFiles, isLoadingFiles };
     case "settlements":
       return { updateMutation: settlementUpdate, progressFiles, isLoadingFiles };
+    case "persons":
+      return { updateMutation: personUpdate, progressFiles, isLoadingFiles };
 
     default:
       const exhaustiveCheck: never = entity;

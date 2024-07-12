@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { CountriesForTable, DistrictsForTable, LocationsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
+import type { CountriesForTable, DistrictsForTable, LocationsForTable, PersonsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
 
 //.........................LOCATION.........................//
 export function useCreateLocation(access_token?: string) {
@@ -223,7 +223,7 @@ export function useCreateRegion(access_token?: string) {
               displayName: value.displayName,
               description: value.description,
               externalLink: value.externalLink,
-              countryId: value.country?.id,
+              countryID: value.country?.id,
             },
           },
           requestHeaders,
@@ -285,7 +285,7 @@ export function useUpdateRegion(access_token?: string) {
               displayName: newValue.displayName,
               description: newValue.description,
               externalLink: newValue.externalLink,
-              countryId: newValue.country?.id,
+              countryID: newValue.country?.id,
             },
           },
           requestHeaders,
@@ -319,7 +319,7 @@ export function useCreateDistrict(access_token?: string) {
               displayName: value.displayName,
               description: value.description,
               externalLink: value.externalLink,
-              regionId: value.region?.id,
+              regionID: value.region?.id,
             },
           },
           requestHeaders,
@@ -381,7 +381,7 @@ export function useUpdateDistrict(access_token?: string) {
               displayName: newValue.displayName,
               description: newValue.description,
               externalLink: newValue.externalLink,
-              regionId: newValue.region?.id,
+              regionID: newValue.region?.id,
             },
           },
           requestHeaders,
@@ -415,8 +415,8 @@ export function useCreateSettlement(access_token?: string) {
               displayName: value.displayName,
               description: value.description,
               externalLink: value.externalLink,
-              regionId: value.region?.id,
-              districtId: value.district?.id,
+              regionID: value.region?.id,
+              districtID: value.district?.id,
             },
           },
           requestHeaders,
@@ -478,8 +478,8 @@ export function useUpdateSettlement(access_token?: string) {
               displayName: newValue.displayName,
               description: newValue.description,
               externalLink: newValue.externalLink,
-              regionId: newValue.region?.id,
-              districtId: newValue.district?.id,
+              regionID: newValue.region?.id,
+              districtID: newValue.district?.id,
             },
           },
           requestHeaders,
@@ -487,4 +487,113 @@ export function useUpdateSettlement(access_token?: string) {
       },
     });
     return mutation;
+}
+
+
+//.........................PERSON.........................//
+export function useCreatePerson(access_token?: string) {
+  const mutationString = `
+        mutation CreatePerson($input: CreatePersonInput!) {
+            createPerson(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: PersonsForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            givenName: value.givenName,
+            familyName: value.familyName,
+            patronymicName: value.patronymicName,
+            gender: value.gender.id,
+            description: value.description,
+            affiliationID: value.affiliation?.id,
+            occupation: value.occupation,
+            address: value.occupation,
+            externalLink: value.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeletePerson(access_token?: string) {
+  const mutationString = `
+        mutation DeletePerson($deletePersonId: ID!) {
+            deletePerson(id: $deletePersonId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deletePersonId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdatePerson(access_token?: string) {
+  const mutationString = `
+        mutation UpdatePerson($updatePersonId: ID!, $input: UpdatePersonInput!) {
+            updatePerson(id: $updatePersonId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+    }: {
+      id: string;
+      newValue: PersonsForTable;
+    }) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updatePersonId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            givenName: newValue.givenName,
+            familyName: newValue.familyName,
+            patronymicName: newValue.patronymicName,
+            gender: newValue.gender.id,
+            affiliationID: newValue.affiliation?.id,
+            occupation: newValue.occupation,
+            address: newValue.occupation,
+            externalLink: newValue.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
 }

@@ -18,6 +18,7 @@ import type {
   ModelForTable,
   MonumentForTable,
   PeriodicalForTable,
+  PersonsForTable,
   RegionsForTable,
   SetForTable,
   SettlementsForTable,
@@ -53,6 +54,7 @@ import Countries from "./Countries";
 import Regions from "./Regions";
 import Districts from "./Districts";
 import Settlements from "./Settlements";
+import Persons from "./Persons";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -188,6 +190,9 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                 ),
                 settlements: (
                   <Settlements row={props.row as Row<SettlementsForTable>} />
+                ),
+                persons: (
+                  <Persons row={props.row as Row<PersonsForTable>} />
                 ),
               }[props.dialogType]
             }
