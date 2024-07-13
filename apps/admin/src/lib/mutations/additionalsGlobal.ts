@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { CountriesForTable, DistrictsForTable, LocationsForTable, OrganizationsForTable, PersonsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
+import type { CountriesForTable, DistrictsForTable, LocationsForTable, OrganizationsForTable, PersonsForTable, ProjectsForTable, PublicationsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
+import { getIds, handleArrays } from "../utils/mutations-utils";
 
 //.........................LOCATION.........................//
 export function useCreateLocation(access_token?: string) {
@@ -690,6 +691,210 @@ export function useUpdateOrganization(access_token?: string) {
             description: newValue.description,
             isInAConsortium: newValue.isInAConsortium.id === "yes" ? true : false,
             externalLink: newValue.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................PUBLICATION.........................//
+export function useCreatePublication(access_token?: string) {
+  const mutationString = `
+        mutation CreatePublication($input: CreatePublicationInput!) {
+            createPublication(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: PublicationsForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            description: value.description,
+            authorIDs: getIds(value.authors),
+            externalLink: value.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeletePublication(access_token?: string) {
+  const mutationString = `
+        mutation DeletePublication($deletePublicationId: ID!) {
+            deletePublication(id: $deletePublicationId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deletePublicationId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdatePublication(access_token?: string) {
+  const mutationString = `
+        mutation UpdatePublication($updatePublicationId: ID!, $input: UpdatePublicationInput!) {
+            updatePublication(id: $updatePublicationId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+      oldValue
+    }: {
+      id: string;
+      newValue: PublicationsForTable;
+      oldValue: PublicationsForTable;
+    }) => {
+      const authorsIds = handleArrays(newValue.authors, oldValue.authors);
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updatePublicationId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+            addAuthorIDs: authorsIds.addValues,
+            removeAuthorIDs: authorsIds.removeValues,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+//.........................PROJECT.........................//
+export function useCreateProject(access_token?: string) {
+  const mutationString = `
+        mutation CreateProject($input: CreateProjectInput!) {
+            createProject(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: ProjectsForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            description: value.description,
+            teamIDs: getIds(value.team),
+            year: value.year,
+            externalLink: value.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteProject(access_token?: string) {
+  const mutationString = `
+        mutation DeleteProject($deleteProjectId: ID!) {
+            deleteProject(id: $deleteProjectId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteProjectId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateProject(access_token?: string) {
+  const mutationString = `
+        mutation UpdateProject($updateProjectId: ID!, $input: UpdateProjectInput!) {
+            updateProject(id: $updateProjectId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+      oldValue
+    }: {
+      id: string;
+      newValue: ProjectsForTable;
+      oldValue: ProjectsForTable;
+    }) => {
+      const teamIds = handleArrays(newValue.team, oldValue.team);
+
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateProjectId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            year: newValue.year,
+            externalLink: newValue.externalLink,
+            addTeamIDs: teamIds.addValues,
+            removeTeamIDs: teamIds.removeValues,
           },
         },
         requestHeaders,

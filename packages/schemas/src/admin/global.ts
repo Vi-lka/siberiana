@@ -30,6 +30,8 @@ export const EntityEnum = z.enum([
   "settlements",
   "persons",
   "organizations",
+  "publications",
+  "projects",
 ]);
 export type EntityEnum = z.infer<typeof EntityEnum>;
 
@@ -721,6 +723,64 @@ export const PublicationsList = z.object({
 });
 export type PublicationsList = z.infer<typeof PublicationsList>;
 
+export const PublicationsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        authors: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+          })
+          .array(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        externalLink: z.string(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type PublicationsArray = z.infer<typeof PublicationsArray>;
+
+export const PublicationsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  authors: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  artifacts: z.number().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type PublicationsForTable = z.infer<typeof PublicationsForTable>;
+
+export const PublicationsForm = z.object({
+  publications: PublicationsForTable.array(),
+});
+export type PublicationsForm = z.infer<typeof PublicationsForm>;
+
 //.........................PROJECTS.........................//
 export const ProjectsList = z.object({
   projects: z.object({
@@ -735,6 +795,66 @@ export const ProjectsList = z.object({
   }),
 });
 export type ProjectsList = z.infer<typeof ProjectsList>;
+
+export const ProjectsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        description: z.string(),
+        year: z.number().int(),
+        team: z
+          .object({
+            id: z.string(),
+            displayName: z.string(),
+          })
+          .array(),
+        artifacts: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        externalLink: z.string(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type ProjectsArray = z.infer<typeof ProjectsArray>;
+
+export const ProjectsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  description: z.string().optional(),
+  year: z.number().int(),
+  team: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .array(),
+  artifacts: z.number().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type ProjectsForTable = z.infer<typeof ProjectsForTable>;
+
+export const ProjectsForm = z.object({
+  projects: ProjectsForTable.array(),
+});
+export type ProjectsForm = z.infer<typeof ProjectsForm>;
 
 //.........................ORGANIZATION.........................//
 export const OrganizationsList = z.object({

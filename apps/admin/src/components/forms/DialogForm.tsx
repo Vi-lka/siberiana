@@ -20,6 +20,8 @@ import type {
   OrganizationsForTable,
   PeriodicalForTable,
   PersonsForTable,
+  ProjectsForTable,
+  PublicationsForTable,
   RegionsForTable,
   SetForTable,
   SettlementsForTable,
@@ -57,6 +59,8 @@ import Districts from "./Districts";
 import Settlements from "./Settlements";
 import Persons from "./Persons";
 import Organizations from "./Organizations";
+import Publications from "./Publications";
+import Projects from "./Projects";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -198,6 +202,12 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                 ),
                 organizations: (
                   <Organizations row={props.row as Row<OrganizationsForTable>} />
+                ),
+                publications: (
+                  <Publications row={props.row as Row<PublicationsForTable>} />
+                ),
+                projects: (
+                  <Projects row={props.row as Row<ProjectsForTable>} />
                 )
               }[props.dialogType]
             }

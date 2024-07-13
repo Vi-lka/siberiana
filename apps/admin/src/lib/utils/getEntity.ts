@@ -13,6 +13,8 @@ import {
   OrganizationsForm,
   PeriodicalsForm,
   PersonsForm,
+  ProjectsForm,
+  PublicationsForm,
   RegionsForm,
   SetsForm,
   SettlementsForm,
@@ -58,6 +60,10 @@ export function getEntityType(entity: EntityEnum) {
       return PersonsForm;
     case "organizations":
       return OrganizationsForm;
+    case "publications":
+      return PublicationsForm;
+    case "projects":
+      return ProjectsForm;
 
     default:
       const exhaustiveCheck: never = entity;

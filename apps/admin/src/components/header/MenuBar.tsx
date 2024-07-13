@@ -94,7 +94,7 @@ export default function MenuBar() {
 
             <MenuBarSingle href="/projects">Проекты</MenuBarSingle>
             <MenuBarSingle href="/publications">Публикации</MenuBarSingle>
-            <MenuBarSingle href="/licenses">Лицензии</MenuBarSingle>
+            {/* <MenuBarSingle href="/licenses">Лицензии</MenuBarSingle> */}
           </NavigationMenuList>
         </ScrollArea>
       </NavigationMenu>

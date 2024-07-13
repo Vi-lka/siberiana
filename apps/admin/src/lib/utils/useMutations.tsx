@@ -43,7 +43,7 @@ import {
   useUpdateArtifact,
   useUpdateBook,
 } from "../mutations/objects";
-import { useCreateCountry, useCreateDistrict, useCreateLocation, useCreateOrganization, useCreatePerson, useCreateRegion, useCreateSettlement, useDeleteCountry, useDeleteDistrict, useDeleteLocation, useDeleteOrganization, useDeletePerson, useDeleteRegion, useDeleteSettlement, useUpdateCountry, useUpdateDistrict, useUpdateLocation, useUpdateOrganization, useUpdatePerson, useUpdateRegion, useUpdateSettlement } from "../mutations/additionalsGlobal";
+import { useCreateCountry, useCreateDistrict, useCreateLocation, useCreateOrganization, useCreatePerson, useCreateProject, useCreatePublication, useCreateRegion, useCreateSettlement, useDeleteCountry, useDeleteDistrict, useDeleteLocation, useDeleteOrganization, useDeletePerson, useDeleteProject, useDeletePublication, useDeleteRegion, useDeleteSettlement, useUpdateCountry, useUpdateDistrict, useUpdateLocation, useUpdateOrganization, useUpdatePerson, useUpdateProject, useUpdatePublication, useUpdateRegion, useUpdateSettlement } from "../mutations/additionalsGlobal";
 
 const progressFiles = 100;
 const isLoadingFiles = false;
@@ -77,6 +77,8 @@ export function useCreateMutation(
   const settlementCreate = useCreateSettlement(access_token);
   const personCreate = useCreatePerson(access_token);
   const organizationCreate = useCreateOrganization(access_token);
+  const publicationCreate = useCreatePublication(access_token);
+  const projectCreate = useCreateProject(access_token);
 
   switch (entity) {
     case "artifacts":
@@ -115,6 +117,10 @@ export function useCreateMutation(
       return { mutation: personCreate, progressFiles, isLoadingFiles };
     case "organizations":
       return { mutation: organizationCreate, progressFiles, isLoadingFiles };
+    case "publications":
+      return { mutation: publicationCreate, progressFiles, isLoadingFiles };
+    case "projects":
+      return { mutation: projectCreate, progressFiles, isLoadingFiles };
 
     default:
       const exhaustiveCheck: never = entity;
@@ -141,7 +147,9 @@ export function useDeleteMutation(entity: EntityEnum, access_token?: string) {
   const districtDelete = useDeleteDistrict(access_token);
   const settlementDelete = useDeleteSettlement(access_token);
   const personDelete = useDeletePerson(access_token);
-  const organizationDelete = useDeleteOrganization(access_token)
+  const organizationDelete = useDeleteOrganization(access_token);
+  const publicationDelete = useDeletePublication(access_token);
+  const projectDelete = useDeleteProject(access_token);
 
   switch (entity) {
     case "artifacts":
@@ -180,6 +188,10 @@ export function useDeleteMutation(entity: EntityEnum, access_token?: string) {
       return personDelete;
     case "organizations":
       return organizationDelete;
+    case "publications":
+      return publicationDelete;
+    case "projects":
+      return projectDelete;
 
     default:
       const exhaustiveCheck: never = entity;
@@ -216,7 +228,8 @@ export function useUpdateMutation(
   const settlementUpdate = useUpdateSettlement(access_token);
   const personUpdate = useUpdatePerson(access_token);
   const organizationUpdate = useUpdateOrganization(access_token);
-
+  const publicationUpdate = useUpdatePublication(access_token);
+  const projectUpdate = useUpdateProject(access_token);
 
   switch (entity) {
     case "artifacts":
@@ -255,6 +268,10 @@ export function useUpdateMutation(
       return { updateMutation: personUpdate, progressFiles, isLoadingFiles };
     case "organizations":
       return { updateMutation: organizationUpdate, progressFiles, isLoadingFiles };
+    case "publications":
+      return { updateMutation: publicationUpdate, progressFiles, isLoadingFiles };
+    case "projects":
+      return { updateMutation: projectUpdate, progressFiles, isLoadingFiles };
 
     default:
       const exhaustiveCheck: never = entity;

@@ -1,8 +1,8 @@
-import { OrganizationsArray } from "@siberiana/schemas";
+import { PublicationsArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 
-//.........................ORGANIZATIONS.........................//
-export const getOrganizations = async ({
+//.........................PUBLICATIONS.........................//
+export const getPublications = async ({
   first,
   offset = 0,
   search = "",
@@ -12,11 +12,11 @@ export const getOrganizations = async ({
   offset?: number | null;
   search?: string;
   sort?: string;
-}): Promise<OrganizationsArray> => {
+}): Promise<PublicationsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
-  query GetOrganizations {
-    organizations(
+  query GetPublications {
+    publications(
       first: ${first}, 
       offset: ${offset}, 
       orderBy: {
@@ -32,12 +32,13 @@ export const getOrganizations = async ({
         node {
           id
           displayName
-          type
-          address
           description
-          isInAConsortium
-          people {
+          artifacts {
             id
+          }
+          authors {
+            id
+            displayName
           }
           externalLink
           createdBy
@@ -66,16 +67,16 @@ export const getOrganizations = async ({
     const err = await res.text();
     console.log(err);
     // Throw an error
-    throw new Error(`Failed to fetch data 'Organizations'`);
+    throw new Error(`Failed to fetch data 'Publications'`);
   }
 
-  const json = (await res.json()) as { data: { organizations: OrganizationsArray } };
+  const json = (await res.json()) as { data: { publications: PublicationsArray } };
   
-  if (json.data.organizations.totalCount === 0) {
+  if (json.data.publications.totalCount === 0) {
     notFound();
   }
 
-  const organizations = OrganizationsArray.parse(json.data.organizations);
+  const publications = PublicationsArray.parse(json.data.publications);
 
-  return organizations;
+  return publications;
 };

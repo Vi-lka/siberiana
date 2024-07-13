@@ -2,11 +2,11 @@ import React, { Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 import RefreshPage from "~/components/RefreshPage";
-import TablesPublications from "./TablesPublications";
+import TablesProjects from "./TablesProjects";
 
 export const dynamic = "force-dynamic";
 
-export default function PublicationsPage({
+export default function ProjectsPage({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -18,14 +18,14 @@ export default function PublicationsPage({
     >
       <div className="flex items-start justify-between gap-3">
         <h1 className="mb-4 w-full text-center text-2xl font-semibold md:mb-0 md:w-fit">
-            Публикации
+            Проекты
         </h1>
         <RefreshPage />
       </div>
       <Suspense
         fallback={<Loader2 className="mx-auto h-12 w-12 animate-spin" />}
       >
-        <TablesPublications searchParams={searchParams} />
+        <TablesProjects searchParams={searchParams} />
       </Suspense>
     </div>
   );

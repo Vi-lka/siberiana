@@ -1,8 +1,8 @@
-import { OrganizationsArray } from "@siberiana/schemas";
+import { ProjectsArray } from "@siberiana/schemas";
 import { notFound } from "next/navigation";
 
-//.........................ORGANIZATIONS.........................//
-export const getOrganizations = async ({
+//.........................PROJECTS.........................//
+export const getProjects = async ({
   first,
   offset = 0,
   search = "",
@@ -12,11 +12,11 @@ export const getOrganizations = async ({
   offset?: number | null;
   search?: string;
   sort?: string;
-}): Promise<OrganizationsArray> => {
+}): Promise<ProjectsArray> => {
   const headers = { "Content-Type": "application/json" };
   const query = /* GraphGL */ `
-  query GetOrganizations {
-    organizations(
+  query GetProjects {
+    projects(
       first: ${first}, 
       offset: ${offset}, 
       orderBy: {
@@ -32,12 +32,14 @@ export const getOrganizations = async ({
         node {
           id
           displayName
-          type
-          address
           description
-          isInAConsortium
-          people {
+          year
+          artifacts {
             id
+          }
+          team {
+            id
+            displayName
           }
           externalLink
           createdBy
@@ -66,16 +68,16 @@ export const getOrganizations = async ({
     const err = await res.text();
     console.log(err);
     // Throw an error
-    throw new Error(`Failed to fetch data 'Organizations'`);
+    throw new Error(`Failed to fetch data 'Projects'`);
   }
 
-  const json = (await res.json()) as { data: { organizations: OrganizationsArray } };
+  const json = (await res.json()) as { data: { projects: ProjectsArray } };
   
-  if (json.data.organizations.totalCount === 0) {
+  if (json.data.projects.totalCount === 0) {
     notFound();
   }
 
-  const organizations = OrganizationsArray.parse(json.data.organizations);
+  const projects = ProjectsArray.parse(json.data.projects);
 
-  return organizations;
+  return projects;
 };
