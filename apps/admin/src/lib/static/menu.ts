@@ -9,26 +9,31 @@ export const artifactsMenuItems = {
     },
     {
       id: 2,
+      name: "Этнос",
+      url: "/ethnosSlice",
+    },
+    {
+      id: 3,
       name: "Материалы",
       url: "/materials",
     },
     {
-      id: 3,
+      id: 4,
       name: "Техники",
       url: "/techniques",
     },
     {
-      id: 4,
+      id: 5,
       name: "Комплексы",
       url: "/sets",
     },
     {
-      id: 5,
+      id: 6,
       name: "Памятники",
       url: "/monuments",
     },
     {
-      id: 6,
+      id: 7,
       name: "3D модели",
       url: "/models",
     },
@@ -49,11 +54,11 @@ export const booksMenuItems = {
       name: "Издания",
       url: "/periodicals",
     },
-    {
-      id: 3,
-      name: "Издатели",
-      url: "/publishers",
-    },
+    // {
+    //   id: 3,
+    //   name: "Издатели",
+    //   url: "/publishers",
+    // },
   ],
 };
 
@@ -119,54 +124,6 @@ export const locationsMenuItems = {
       id: 4,
       name: "Населенные пункты",
       url: "/settlements",
-    },
-  ],
-};
-
-export const organizationsMenuItems = {
-  id: 6,
-  name: "Организации",
-  list: [
-    {
-      id: 1,
-      name: "Типы",
-      url: "/organizations-types",
-    },
-  ],
-};
-
-export const holdersMenuItems = {
-  id: 7,
-  name: "Держатели",
-  list: [
-    {
-      id: 1,
-      name: "Ответственности",
-      url: "/holders-responsibilities",
-    },
-  ],
-};
-
-export const personsMenuItems = {
-  id: 8,
-  name: "Личности",
-  list: [
-    {
-      id: 1,
-      name: "Роли",
-      url: "/persons-roles",
-    },
-  ],
-};
-
-export const projectsMenuItems = {
-  id: 9,
-  name: "Проекты",
-  list: [
-    {
-      id: 1,
-      name: "Типы",
-      url: "/projects-types",
     },
   ],
 };

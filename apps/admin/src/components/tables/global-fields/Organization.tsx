@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { OrganizationList } from "@siberiana/schemas";
+import type { OrganizationsList } from "@siberiana/schemas";
 
 import ErrorToast from "~/components/errors/ErrorToast";
 import { getOrganizationsQuery } from "~/lib/queries/client/global";
@@ -25,7 +25,7 @@ export default function Organization({
     : { id: "", displayName: "__" };
 
   const { data, isFetching, isPending, isError, error, refetch } = useQuery<
-    OrganizationList,
+    OrganizationsList,
     Error
   >({
     queryKey: ["organizations"],

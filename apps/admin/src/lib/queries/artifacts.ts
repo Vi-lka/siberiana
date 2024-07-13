@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import {
   ArtifactsArray,
   CulturesArray,
+  EthnosArray,
   MaterialsArray,
   ModelsArray,
   MonumentsArray,
@@ -287,6 +288,81 @@ export const getCultures = async ({
   const cultures = CulturesArray.parse(json.data.cultures);
 
   return cultures;
+};
+
+//.........................ETHNOS.........................//
+export const getEthnos = async ({
+  first,
+  offset = 0,
+  search = "",
+  sort = "CREATED_AT:DESC",
+}: {
+  first: number | null;
+  offset?: number | null;
+  search?: string;
+  sort?: string;
+}): Promise<EthnosArray> => {
+  const headers = { "Content-Type": "application/json" };
+  const query = /* GraphGL */ `
+  query GetEthnos {
+    ethnosSlice(
+      first: ${first}, 
+      offset: ${offset}, 
+      orderBy: [{
+        field: ${sort.split(":")[0]},
+        direction: ${sort.split(":")[1]}
+      }],
+      where: {
+        displayNameContainsFold: "${search}"
+      }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          displayName
+          description
+          externalLink
+          artifacts {
+            id
+          }
+          createdBy
+          createdAt
+          updatedBy
+          updatedAt
+        }
+      }
+    }
+  }
+  `;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+    {
+      headers,
+      method: "POST",
+      body: JSON.stringify({
+        query,
+      }),
+      cache: "no-store",
+    },
+  );
+
+  if (!res.ok) {
+    // Log the error to an error reporting service
+    const err = await res.text();
+    console.log(err);
+    // Throw an error
+    throw new Error(`Failed to fetch data 'Ethnos'`);
+  }
+
+  const json = (await res.json()) as { data: { ethnosSlice: EthnosArray } };
+  if (json.data.ethnosSlice.totalCount === 0) {
+    notFound();
+  }
+
+  const ethnosSlice = EthnosArray.parse(json.data.ethnosSlice);
+
+  return ethnosSlice;
 };
 
 //.........................MATERIALS.........................//

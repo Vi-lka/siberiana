@@ -61,6 +61,34 @@ export const Location = z.object({
 });
 export type Location = z.infer<typeof Location>;
 
+//.........................COUNTRY.........................//
+export const Country = z.object({
+  id: z.string(),
+  displayName: z.string()
+});
+export type Country = z.infer<typeof Country>;
+
+//.........................REGION.........................//
+export const Region = z.object({
+  id: z.string(),
+  displayName: z.string(),
+});
+export type Region = z.infer<typeof Region>;
+
+//.........................DISTRICT.........................//
+export const District = z.object({
+  id: z.string(),
+  displayName: z.string(),
+});
+export type District = z.infer<typeof District>;
+
+//.........................SETTLEMENT.........................//
+export const Settlement = z.object({
+  id: z.string(),
+  displayName: z.string(),
+});
+export type Settlement = z.infer<typeof Settlement>;
+
 //.........................ARTIFACT.........................//
 export const ArtifactById = z.object({
   id: z.string(),

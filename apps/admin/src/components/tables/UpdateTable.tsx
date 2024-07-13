@@ -137,7 +137,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты удалены",
+        description: "Объекты удалены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });
@@ -197,7 +197,7 @@ export default function UpdateTable<TData, TValue>({
     } else {
       toast({
         title: "Успешно!",
-        description: "Артефакты изменены",
+        description: "Объекты изменены",
         className:
           "font-Inter text-background dark:text-foreground bg-lime-600 dark:bg-lime-800 border-none",
       });

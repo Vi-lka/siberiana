@@ -3,6 +3,7 @@ import request from "graphql-request";
 
 import type {
   CultureForTable,
+  EthnosForTable,
   MaterialForTable,
   ModelForTable,
   MonumentForTable,
@@ -106,6 +107,101 @@ export function useUpdateCulture(access_token?: string) {
   });
   return mutation;
 }
+
+//.........................ETHNOS.........................//
+export function useCreateEthnos(access_token?: string) {
+  const mutationString = `
+        mutation CreateEthnos($input: CreateEthnosInput!) {
+            createEthnos(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: EthnosForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            description: value.description,
+            externalLink: value.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteEthnos(access_token?: string) {
+  const mutationString = `
+        mutation DeleteEthnos($deleteEthnosId: ID!) {
+            deleteEthnos(id: $deleteEthnosId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteEthnosId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateEthnos(access_token?: string) {
+  const mutationString = `
+        mutation UpdateEthnos($updateEthnosId: ID!, $input: UpdateEthnosInput!) {
+            updateEthnos(id: $updateEthnosId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+    }: {
+      id: string;
+      newValue: EthnosForTable;
+    }) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateEthnosId: id,
+          input: {
+            displayName: newValue.displayName,
+            description: newValue.description,
+            externalLink: newValue.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
 
 //.........................MATERIAL.........................//
 export function useCreateMaterial(access_token?: string) {
