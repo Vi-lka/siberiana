@@ -54,11 +54,11 @@ export const booksMenuItems = {
       name: "Издания",
       url: "/periodicals",
     },
-    {
-      id: 3,
-      name: "Издатели",
-      url: "/publishers",
-    },
+    // {
+    //   id: 3,
+    //   name: "Издатели",
+    //   url: "/publishers",
+    // },
   ],
 };
 
@@ -124,42 +124,6 @@ export const locationsMenuItems = {
       id: 4,
       name: "Населенные пункты",
       url: "/settlements",
-    },
-  ],
-};
-
-export const organizationsMenuItems = {
-  id: 6,
-  name: "Организации",
-  list: [
-    {
-      id: 1,
-      name: "Типы",
-      url: "/organizations-types",
-    },
-  ],
-};
-
-export const holdersMenuItems = {
-  id: 7,
-  name: "Держатели",
-  list: [
-    {
-      id: 1,
-      name: "Ответственности",
-      url: "/holders-responsibilities",
-    },
-  ],
-};
-
-export const projectsMenuItems = {
-  id: 9,
-  name: "Проекты",
-  list: [
-    {
-      id: 1,
-      name: "Типы",
-      url: "/projects-types",
     },
   ],
 };

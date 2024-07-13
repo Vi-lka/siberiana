@@ -37,20 +37,20 @@ export default function Settlements({ row }: { row: Row<SettlementsForTable> }) 
           </div>
 
           <div className="flex flex-wrap items-center gap-6">
-            <div className="min-w-full flex-1 sm:min-w-[15rem]">
+            <div className="min-w-full flex-1 sm:min-w-[20rem]">
               <p className="mb-2 text-center font-medium">Регион</p>
               <Region
                 formValueName={`settlements[${row.index}].region`}
                 defaultRegion={row.original.region}
-                className="border-border w-full max-w-md rounded-md border-[1px]"
+                className="border-border w-full max-w-xl rounded-md border-[1px]"
               />
             </div>
-            <div className="min-w-full flex-1 sm:min-w-[15rem]">
+            <div className="min-w-full flex-1 sm:min-w-[20rem]">
               <p className="mb-2 text-center font-medium">Регион</p>
               <District
                 formValueName={`settlements[${row.index}].district`}
                 defaultDistrict={row.original.district}
-                className="border-border w-full max-w-md rounded-md border-[1px]"
+                className="border-border w-full max-w-xl rounded-md border-[1px]"
               />
             </div>
           </div>

@@ -4,7 +4,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
-import type { PersonsForTable } from "@siberiana/schemas";
+import type { OrganizationsForTable } from "@siberiana/schemas";
 import { Checkbox } from "@siberiana/ui";
 
 import LargeTextCell from "~/components/forms/cells/LargeTextCell";
@@ -12,7 +12,7 @@ import TextCell from "~/components/forms/cells/TextCell";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import ObjectCell from "~/components/forms/cells/ObjectCell";
 
-export const updateColumns: ColumnDef<PersonsForTable>[] = [
+export const updateColumns: ColumnDef<OrganizationsForTable>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -51,13 +51,13 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     },
   },
   {
-    accessorKey: "gender",
-    header: () => <div className="text-center">Пол</div>,
+    accessorKey: "type",
+    header: () => <div className="text-center">Тип</div>,
     cell: ({ row }) => {
       return (
         <ObjectCell
-          name={`persons[${row.index}].gender`}
-          defaultValue={row.original.gender}
+          name={`organizations[${row.index}].type`}
+          defaultValue={row.original.type}
         />
       );
     },
@@ -68,7 +68,7 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
       return (
         <DataTableColumnHeader
           column={column}
-          title="ФИО"
+          title="Название"
           className="ml-2"
         />
       );
@@ -76,7 +76,7 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     cell: ({ row }) => {
       return (
         <TextCell
-          name={`persons[${row.index}].displayName`}
+          name={`organizations[${row.index}].displayName`}
           defaultValue={row.original.displayName}
           className="mx-auto w-max max-w-md text-sm"
         />
@@ -84,98 +84,23 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     },
   },
   {
-    accessorKey: "givenName",
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Имя"
-          className="ml-2"
-        />
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <TextCell
-          name={`persons[${row.index}].givenName`}
-          defaultValue={row.original.givenName}
-          className="mx-auto w-max max-w-md text-sm"
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "familyName",
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Фамилия"
-          className="ml-2"
-        />
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <TextCell
-          name={`persons[${row.index}].familyName`}
-          defaultValue={row.original.familyName}
-          className="mx-auto w-max max-w-md text-sm"
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "patronymicName",
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Отчество"
-          className="ml-2"
-        />
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <TextCell
-          name={`persons[${row.index}].patronymicName`}
-          defaultValue={row.original.patronymicName}
-          className="mx-auto w-max max-w-md text-sm"
-        />
-      );
-    },
-  },
-  {
-    accessorKey: "affiliation",
-    header: ({ column }) => {
-      return (
-        <DataTableColumnHeader
-          column={column}
-          title="Организация"
-          className="ml-2"
-        />
-      );
-    },
+    accessorKey: "isInAConsortium",
+    header: () => <div className="text-center">Входит в Консорциум?</div>,
     cell: ({ row }) => {
       return (
         <ObjectCell
-          name={`persons[${row.index}].affiliation`}
-          defaultValue={row.original.affiliation}
+          name={`organizations[${row.index}].isInAConsortium`}
+          defaultValue={row.original.isInAConsortium}
         />
       );
     },
   },
   {
-    accessorKey: "occupation",
-    header: () => <div className="text-center">Должность</div>,
+    accessorKey: "people",
+    header: () => <div className="text-center">Личностей</div>,
     cell: ({ row }) => {
-      return (
-        <TextCell
-          name={`persons[${row.index}].occupation`}
-          defaultValue={row.original.occupation}
-        />
-      );
+      const count = row.original.people;
+      return <div className="text-center">{count}</div>;
     },
   },
   {
@@ -184,7 +109,7 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     cell: ({ row }) => {
       return (
         <TextCell
-          name={`persons[${row.index}].address`}
+          name={`organizations[${row.index}].address`}
           defaultValue={row.original.address}
         />
       );
@@ -196,7 +121,7 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     cell: ({ row }) => {
       return (
         <LargeTextCell
-          name={`persons[${row.index}].description`}
+          name={`organizations[${row.index}].description`}
           defaultValue={row.original.description}
         />
       );
@@ -208,7 +133,7 @@ export const updateColumns: ColumnDef<PersonsForTable>[] = [
     cell: ({ row }) => {
       return (
         <TextCell
-          name={`persons[${row.index}].externalLink`}
+          name={`organizations[${row.index}].externalLink`}
           defaultValue={row.original.externalLink}
         />
       );

@@ -6,6 +6,7 @@ import type { PersonsForTable } from "@siberiana/schemas";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import FormInput from "../tables/inputs/FormInput";
 import Gender from "../tables/global-fields/Gender";
+import Organization from "../tables/global-fields/Organization";
 
 export default function Persons({ row }: { row: Row<PersonsForTable> }) {
     return (
@@ -15,6 +16,7 @@ export default function Persons({ row }: { row: Row<PersonsForTable> }) {
               ID: {row.original.id}
             </p>
             <div className="min-w-full flex-1 sm:min-w-[20rem]">
+              <p className="mb-2 text-center font-medium">Пол</p>
              <Gender
                defaultGender={row.original.gender}
                formValueName={`persons[${row.index}].gender`}
@@ -66,7 +68,16 @@ export default function Persons({ row }: { row: Row<PersonsForTable> }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6">    
+          <div className="flex flex-wrap items-center gap-6">
+            <div className="min-w-full flex-1 sm:min-w-[20rem]">
+              <p className="mb-2 text-center font-medium">Организация</p>
+              <Organization
+                formValueName={`persons[${row.index}].affiliation`}
+                defaultOrganization={row.original.affiliation}
+                className="border-border w-full max-w-xl rounded-md border-[1px]"
+              />
+            </div>
+
             <div className="min-w-full flex-1 sm:min-w-[20rem]">
               <p className="mb-2 text-center font-medium">Должность</p>
               <FormTextArea
@@ -78,7 +89,7 @@ export default function Persons({ row }: { row: Row<PersonsForTable> }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-6">
-          <div className="min-w-full flex-1 sm:min-w-[20rem]">
+            <div className="min-w-full flex-1 sm:min-w-[20rem]">
               <p className="mb-2 text-center font-medium">Адрес</p>
               <FormTextArea
                 name={`persons[${row.index}].address`}

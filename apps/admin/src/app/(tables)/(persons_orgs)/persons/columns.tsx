@@ -8,6 +8,7 @@ import { Checkbox } from "@siberiana/ui";
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
 import Gender from "~/components/tables/global-fields/Gender";
+import Organization from "~/components/tables/global-fields/Organization";
 
 export const columns: ColumnDef<PersonsForTable>[] = [
   {
@@ -133,6 +134,18 @@ export const columns: ColumnDef<PersonsForTable>[] = [
         <FormTextArea
           name={`persons[${row.index}].patronymicName`}
           defaultValue={row.original.patronymicName}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "affiliation",
+    header: () => <div className="text-center">Организация</div>,
+    cell: ({ row }) => {
+      return (
+        <Organization
+          defaultOrganization={row.original.affiliation}
+          formValueName={`persons[${row.index}].affiliation`}
         />
       );
     },

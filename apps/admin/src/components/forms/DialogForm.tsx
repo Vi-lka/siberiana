@@ -17,6 +17,7 @@ import type {
   MaterialForTable,
   ModelForTable,
   MonumentForTable,
+  OrganizationsForTable,
   PeriodicalForTable,
   PersonsForTable,
   RegionsForTable,
@@ -55,6 +56,7 @@ import Regions from "./Regions";
 import Districts from "./Districts";
 import Settlements from "./Settlements";
 import Persons from "./Persons";
+import Organizations from "./Organizations";
 
 interface DialogFormProps<TData> {
   table: TableTanstack<TData>;
@@ -194,6 +196,9 @@ export default function DialogForm<TData>(props: DialogFormProps<TData>) {
                 persons: (
                   <Persons row={props.row as Row<PersonsForTable>} />
                 ),
+                organizations: (
+                  <Organizations row={props.row as Row<OrganizationsForTable>} />
+                )
               }[props.dialogType]
             }
           </ScrollArea>

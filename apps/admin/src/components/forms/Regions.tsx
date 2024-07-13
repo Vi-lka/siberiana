@@ -36,12 +36,12 @@ export default function Regions({ row }: { row: Row<RegionsForTable> }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-6">
-            <div className="min-w-full flex-1 sm:min-w-[15rem]">
+            <div className="min-w-full flex-1 sm:min-w-[20rem]">
               <p className="mb-2 text-center font-medium">Страна</p>
               <Country
                 formValueName={`regions[${row.index}].country`}
                 defaultCountry={row.original.country}
-                className="border-border w-full max-w-md rounded-md border-[1px]"
+                className="border-border w-full max-w-none rounded-md border-[1px]"
               />
             </div>
           </div>

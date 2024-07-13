@@ -29,6 +29,7 @@ export const EntityEnum = z.enum([
   "districts",
   "settlements",
   "persons",
+  "organizations",
 ]);
 export type EntityEnum = z.infer<typeof EntityEnum>;
 
@@ -50,6 +51,15 @@ export const GenderEnum = z.enum([
   ''
 ]);
 export type GenderEnum = z.infer<typeof GenderEnum>;
+
+export const OrganizationTypeEnum = z.enum([
+  "museum",
+  "library",
+  "archive",
+  "other",
+  ''
+]);
+export type OrganizationTypeEnum = z.infer<typeof OrganizationTypeEnum>;
 
 //.........................CATEGORIES.........................//
 export const CategoriesList = z.object({
@@ -727,7 +737,7 @@ export const ProjectsList = z.object({
 export type ProjectsList = z.infer<typeof ProjectsList>;
 
 //.........................ORGANIZATION.........................//
-export const OrganizationList = z.object({
+export const OrganizationsList = z.object({
   organizations: z.object({
     edges: z
       .object({
@@ -739,4 +749,62 @@ export const OrganizationList = z.object({
       .array(),
   }),
 });
-export type OrganizationList = z.infer<typeof OrganizationList>;
+export type OrganizationsList = z.infer<typeof OrganizationsList>;
+
+export const OrganizationsArray = z.object({
+  totalCount: z.number(),
+  edges: z
+    .object({
+      node: z.object({
+        id: z.string(),
+        displayName: z.string().min(1),
+        type: OrganizationTypeEnum,
+        address: z.string(),
+        description: z.string(),
+        isInAConsortium: z.boolean(),
+        people: z
+          .object({
+            id: z.string(),
+          })
+          .array(),
+        externalLink: z.string(),
+        createdBy: z.string().optional(),
+        createdAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+        updatedBy: z.string().optional(),
+        updatedAt: z
+          .preprocess((val) => new Date(val as string), z.date())
+          .optional(),
+      }),
+    })
+    .array(),
+});
+export type OrganizationsArray = z.infer<typeof OrganizationsArray>;
+
+export const OrganizationsForTable = z.object({
+  id: z.string(),
+  displayName: z.string().min(1),
+  type: z.object({
+    id: OrganizationTypeEnum,
+    displayName: z.string(),
+  }),
+  address: z.string(),
+  description: z.string().optional(),
+  isInAConsortium: z.object({
+    id: z.string(),
+    displayName: z.string(),
+  }),
+  people: z.number().optional(),
+  externalLink: z.union([z.literal(""), z.string().trim().url()]).optional(),
+  createdBy: z.string().optional(),
+  createdAt: z.date().optional(),
+  updatedBy: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+export type OrganizationsForTable = z.infer<typeof OrganizationsForTable>;
+
+export const OrganizationsForm = z.object({
+  organizations: OrganizationsForTable.array(),
+});
+export type OrganizationsForm = z.infer<typeof OrganizationsForm>;

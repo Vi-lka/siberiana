@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import request from "graphql-request";
 
-import type { CountriesForTable, DistrictsForTable, LocationsForTable, PersonsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
+import type { CountriesForTable, DistrictsForTable, LocationsForTable, OrganizationsForTable, PersonsForTable, RegionsForTable, SettlementsForTable } from "@siberiana/schemas";
 
 //.........................LOCATION.........................//
 export function useCreateLocation(access_token?: string) {
@@ -519,7 +519,7 @@ export function useCreatePerson(access_token?: string) {
             description: value.description,
             affiliationID: value.affiliation?.id,
             occupation: value.occupation,
-            address: value.occupation,
+            address: value.address,
             externalLink: value.externalLink,
           },
         },
@@ -587,7 +587,108 @@ export function useUpdatePerson(access_token?: string) {
             gender: newValue.gender.id,
             affiliationID: newValue.affiliation?.id,
             occupation: newValue.occupation,
-            address: newValue.occupation,
+            address: newValue.address,
+            externalLink: newValue.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+
+//.........................ORGANIZATIONS.........................//
+export function useCreateOrganization(access_token?: string) {
+  const mutationString = `
+        mutation CreateOrganization($input: CreateOrganizationInput!) {
+            createOrganization(input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: OrganizationsForTable) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          input: {
+            displayName: value.displayName,
+            type: value.type.id,
+            address: value.address,
+            description: value.description,
+            isInAConsortium: value.isInAConsortium.id === "yes" ? true : false,
+            externalLink: value.externalLink,
+          },
+        },
+        requestHeaders,
+      );
+    },
+  });
+  return mutation;
+}
+
+export function useDeleteOrganization(access_token?: string) {
+  const mutationString = `
+        mutation DeleteOrganization($deleteOrganizationId: ID!) {
+            deleteOrganization(id: $deleteOrganizationId)
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: (value: string) =>
+      request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        { deleteOrganizationId: value },
+        requestHeaders,
+      ),
+  });
+  return mutation;
+}
+
+export function useUpdateOrganization(access_token?: string) {
+  const mutationString = `
+        mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!) {
+            updateOrganization(id: $updateOrganizationId, input: $input) {
+                id
+                displayName
+            }
+        }
+    `;
+  const requestHeaders = {
+    Authorization: `Bearer ${access_token}`,
+    "Content-Type": "application/json",
+  };
+  const mutation = useMutation({
+    mutationFn: ({
+      id,
+      newValue,
+    }: {
+      id: string;
+      newValue: OrganizationsForTable;
+    }) => {
+      return request(
+        `${process.env.NEXT_PUBLIC_SIBERIANA_API_URL}/graphql`,
+        mutationString,
+        {
+          updateOrganizationId: id,
+          input: {
+            displayName: newValue.displayName,
+            type: newValue.type.id,
+            address: newValue.address,
+            description: newValue.description,
+            isInAConsortium: newValue.isInAConsortium.id === "yes" ? true : false,
             externalLink: newValue.externalLink,
           },
         },

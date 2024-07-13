@@ -14,13 +14,8 @@ import { cn } from "@siberiana/ui/src/lib/utils";
 
 import {
   artifactsMenuItems,
-  artsMenuItems,
   booksMenuItems,
-  holdersMenuItems,
   locationsMenuItems,
-  ooptMenuItems,
-  organizationsMenuItems,
-  projectsMenuItems,
 } from "~/lib/static/menu";
 import { MenuBarGroup, MenuBarSingle } from "./MenuBarItems";
 
@@ -83,8 +78,8 @@ export default function MenuBar() {
 
             <MenuBarGroup menuItem={artifactsMenuItems} href="/artifacts" />
             <MenuBarGroup menuItem={booksMenuItems} href="/books" />
-            <MenuBarGroup menuItem={ooptMenuItems} href="/oopt" />
-            <MenuBarGroup menuItem={artsMenuItems} href="/arts" />
+            {/* <MenuBarGroup menuItem={ooptMenuItems} href="/oopt" /> */}
+            {/* <MenuBarGroup menuItem={artsMenuItems} href="/arts" /> */}
 
             <Separator className="bg-primary" />
 
@@ -92,16 +87,12 @@ export default function MenuBar() {
 
             <Separator className="bg-primary" />
 
-            <MenuBarGroup menuItem={holdersMenuItems} href="/holders" />
-            <MenuBarGroup
-              menuItem={organizationsMenuItems}
-              href="/organizations"
-            />
+            <MenuBarSingle href="/organizations">Организации</MenuBarSingle>
             <MenuBarSingle href="/persons">Личности</MenuBarSingle>
 
             <Separator className="bg-primary" />
 
-            <MenuBarGroup menuItem={projectsMenuItems} href="/projects" />
+            <MenuBarSingle href="/projects">Проекты</MenuBarSingle>
             <MenuBarSingle href="/publications">Публикации</MenuBarSingle>
             <MenuBarSingle href="/licenses">Лицензии</MenuBarSingle>
           </NavigationMenuList>
