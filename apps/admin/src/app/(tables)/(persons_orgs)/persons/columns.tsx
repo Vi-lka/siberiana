@@ -7,8 +7,6 @@ import { Checkbox } from "@siberiana/ui";
 
 import { DataTableColumnHeader } from "~/components/tables/DataTableColumnHeader";
 import FormTextArea from "~/components/tables/inputs/FormTextArea";
-import Region from "~/components/tables/global-fields/Region";
-import District from "~/components/tables/global-fields/District";
 import Gender from "~/components/tables/global-fields/Gender";
 
 export const columns: ColumnDef<PersonsForTable>[] = [

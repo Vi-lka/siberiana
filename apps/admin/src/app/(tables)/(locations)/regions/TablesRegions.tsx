@@ -1,4 +1,4 @@
-import { EntityEnum, RegionsForTable } from '@siberiana/schemas';
+import type { EntityEnum, RegionsForTable } from '@siberiana/schemas';
 import { Loader2 } from 'lucide-react';
 import React from 'react'
 import ErrorHandler from '~/components/errors/ErrorHandler';
