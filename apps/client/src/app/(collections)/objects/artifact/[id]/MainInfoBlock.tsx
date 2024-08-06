@@ -23,7 +23,7 @@ export default function MainInfoBlock({
         <SingleItem label="Коллекция" value={data.collection.displayName} />
         <SingleItem label="Инвентарный номер" value={data.inventoryNumber} />
         <SingleItem label="КП номер" value={data.kpNumber} />
-        <SingleItem label="Госкатагол номер" value={data.goskatalogNumber} />
+        <SingleItem label="Госкаталог номер" value={data.goskatalogNumber} />
 
         <SingleItem label="Права пользователя" value={data.license?.displayName} />
 
